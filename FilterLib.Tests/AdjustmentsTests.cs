@@ -6,6 +6,7 @@ namespace FilterLib.Tests
     public class AdjustmentsTests
     {
         readonly string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
+
         [Test]
         public void TestBrightness()
         {

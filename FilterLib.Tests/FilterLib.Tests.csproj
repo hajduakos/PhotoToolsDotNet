@@ -32,6 +32,9 @@
     <None Update="TestImages\input.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestImages\Invert.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestImages\_input.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
