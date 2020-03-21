@@ -4,6 +4,9 @@ using System.Drawing.Imaging;
 
 namespace FilterLib.Util
 {
+    /// <summary>
+    /// Wraps a BitmapData into an automatically disposable interface.
+    /// </summary>
     public sealed class DisposableBitmapData : IDisposable
     {
         private Bitmap image;

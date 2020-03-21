@@ -1,10 +1,22 @@
 ﻿namespace FilterLib
 {
+    /// <summary>
+    /// Base class for filters that process each R,G,B component independently.
+    /// </summary>
     public abstract class PerComponentFilterBase : PerPixelFilterBase
     {
         private byte[] map = null;
+
+        /// <summary>
+        /// Map a single (R/G/B) component.
+        /// </summary>
+        /// <param name="comp">Input value</param>
+        /// <returns>Output value by applying the filter</returns>
         protected abstract byte MapComponent(byte comp);
 
+        /// <summary>
+        /// Gets called when filter starts applying.
+        /// </summary>
         protected override void ApplyStart()
         {
             base.ApplyStart();
@@ -16,6 +28,12 @@
             } while (i++ != 255);
         }
 
+        /// <summary>
+        /// Gets called for each pixel independently.
+        /// </summary>
+        /// <param name="r">Pointer to red value</param>
+        /// <param name="g">Pointer to green value</param>
+        /// <param name="b">Pointer to blue value</param>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             *r = map[*r];
@@ -23,11 +41,13 @@
             *b = map[*b];
         }
 
+        /// <summary>
+        /// Gets called when filter finishes applying.
+        /// </summary>
         protected override void ApplyEnd()
         {
             map = null;
             base.ApplyEnd();
         }
-
     }
 }

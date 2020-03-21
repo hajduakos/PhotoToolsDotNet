@@ -5,8 +5,16 @@ using FilterLib.Util;
 
 namespace FilterLib
 {
+    /// <summary>
+    /// Base class for filters that process each pixel individually.
+    /// </summary>
     public abstract class PerPixelFilterBase : FilterInPlaceBase
     {
+        /// <summary>
+        /// Apply filter by modifying the original image.
+        /// </summary>
+        /// <param name="image">Input image</param>
+        /// <param name="reporter">Reporter (optional)</param>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             ApplyStart();
@@ -35,10 +43,22 @@ namespace FilterLib
             ApplyEnd();
         }
 
+        /// <summary>
+        /// Gets called when filter starts applying.
+        /// </summary>
         protected virtual void ApplyStart() { }
 
+        /// <summary>
+        /// Gets called for each pixel independently.
+        /// </summary>
+        /// <param name="r">Pointer to red value</param>
+        /// <param name="g">Pointer to green value</param>
+        /// <param name="b">Pointer to blue value</param>
         protected abstract unsafe void ProcessPixel(byte* r, byte* g, byte* b);
 
+        /// <summary>
+        /// Gets called when filter finishes applying.
+        /// </summary>
         protected virtual void ApplyEnd() { }
     }
 }
