@@ -3,6 +3,7 @@
     /// <summary>
     /// Invert filter.
     /// </summary>
+    [Filter]
     public sealed class InvertFilter : PerComponentFilterBase
     {
         /// <summary>

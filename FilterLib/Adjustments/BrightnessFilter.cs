@@ -5,6 +5,7 @@ namespace FilterLib.Adjustments
     /// <summary>
     /// Brightness adjustment filter.
     /// </summary>
+    [Filter]
     public sealed class BrightnessFilter : PerComponentFilterBase
     {
         private int brightness;
@@ -12,6 +13,9 @@ namespace FilterLib.Adjustments
         /// <summary>
         /// Brightness adjustment property [-255;255]
         /// </summary>
+        [FilterParam]
+        [FilterParamMin(-255)]
+        [FilterParamMax(255)]
         public int Brightness
         {
             get { return brightness; }
