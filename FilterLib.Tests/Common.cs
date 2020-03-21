@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using FilterLib.Util;
+using NUnit.Framework;
 
 namespace FilterLib.Tests
 {
@@ -9,9 +10,11 @@ namespace FilterLib.Tests
     {
         public static bool CheckFilter(string original, string expected, IFilter filter, int tolerance = 0)
         {
-            using Bitmap bmpOriginal = new Bitmap(original);
+            string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
+
+            using Bitmap bmpOriginal = new Bitmap(path + original);
             using Bitmap bmpActual = filter.Apply(bmpOriginal);
-            using Bitmap bmpExpected = new Bitmap(expected);
+            using Bitmap bmpExpected = new Bitmap(path + expected);
             return Compare(bmpActual, bmpExpected, tolerance);
         }
 
