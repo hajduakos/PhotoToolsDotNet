@@ -29,6 +29,18 @@
     <None Update="TestImages\Brightness_50.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestImages\ColorRGB_0_0_100.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ColorRGB_0_100_0.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ColorRGB_100_0_0.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ColorRGB_50_-40_30.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestImages\Contrast_-50.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

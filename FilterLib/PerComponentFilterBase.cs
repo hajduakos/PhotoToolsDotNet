@@ -17,7 +17,7 @@
         /// <summary>
         /// Gets called when filter starts applying.
         /// </summary>
-        protected override void ApplyStart()
+        protected override sealed void ApplyStart()
         {
             base.ApplyStart();
             map = new byte[256];
@@ -34,7 +34,7 @@
         /// <param name="r">Pointer to red value</param>
         /// <param name="g">Pointer to green value</param>
         /// <param name="b">Pointer to blue value</param>
-        protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
+        protected override sealed unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             *r = map[*r];
             *g = map[*g];
@@ -44,7 +44,7 @@
         /// <summary>
         /// Gets called when filter finishes applying.
         /// </summary>
-        protected override void ApplyEnd()
+        protected override sealed void ApplyEnd()
         {
             map = null;
             base.ApplyEnd();

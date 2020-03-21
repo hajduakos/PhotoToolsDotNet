@@ -14,6 +14,16 @@ namespace FilterLib.Tests
         }
 
         [Test]
+        public void TestColorRGB()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new ColorRGBFilter(0, 0, 0), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorRGB_0_0_100.bmp", new ColorRGBFilter(0, 0, 100), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorRGB_0_100_0.bmp", new ColorRGBFilter(0, 100, 0), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorRGB_100_0_0.bmp", new ColorRGBFilter(100, 0, 0), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorRGB_50_-40_30.bmp", new ColorRGBFilter(50, -40, 30), 0));
+        }
+
+        [Test]
         public void TestContrast()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new ContrastFilter(0), 1));

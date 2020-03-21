@@ -15,7 +15,7 @@ namespace FilterLib
         /// </summary>
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override sealed void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             ApplyStart();
 
