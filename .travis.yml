@@ -8,4 +8,4 @@ addons:
     - libc6-dev
     - libgdiplus
 script:
-- dotnet test -c release -v n
+- dotnet test -c release
