@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 
 namespace FilterLib.Util
 {
-    internal sealed class DisposableBitmapData : IDisposable
+    public sealed class DisposableBitmapData : IDisposable
     {
         private Bitmap image;
         private readonly BitmapData bitmapData;
