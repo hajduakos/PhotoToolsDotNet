@@ -29,6 +29,12 @@
     <None Update="TestImages\Brightness_50.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestImages\Contrast_-50.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\Contrast_50.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestImages\input.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
