@@ -5,6 +5,7 @@ namespace FilterLib.Filters.Adjustments
     /// <summary>
     /// Color adjustment in red-green-blue color space.
     /// </summary>
+    [Filter]
     public sealed class ColorRGBFilter : PerPixelFilterBase
     {
         private int red, green, blue;
