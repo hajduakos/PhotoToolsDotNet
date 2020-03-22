@@ -7,6 +7,14 @@ namespace FilterLib.Tests.ParsingTests
     public class AdjustmentsParsingTests
     {
         [Test]
+        public void TestAutoLevelsParse()
+        {
+            var filters = Parser.Parse(new string[] { "AutoLevels" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<AutoLevelsFilter>(filters[0]);
+        }
+
+        [Test]
         public void TestBrightnessParse()
         {
             var filters = Parser.Parse(new string[] { "Brightness" });

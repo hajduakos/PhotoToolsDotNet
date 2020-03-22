@@ -20,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TestImages\AutoLevels.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestImages\Brightness_-100.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

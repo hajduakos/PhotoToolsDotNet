@@ -42,12 +42,12 @@ namespace FilterLib.Tests
         {
             // Main reporter
             ReporterStub rs = new ReporterStub();
-            // Subreporter for 0-50 within 0-100
-            IReporter sub = new SubReporter(rs, 0, 50, 0, 100);
-            // Sub-sub reporter for 50-100
-            IReporter sub2 = new SubReporter(sub, 50, 100, 0, 100);
+            // Subreporter for 0-500 within 0-1000
+            IReporter sub = new SubReporter(rs, 0, 500, 0, 1000);
+            // Sub-sub reporter for 500-1000
+            IReporter sub2 = new SubReporter(sub, 500, 1000, 0, 1000);
             sub2.Report(500, 0, 1000); // Report into middle --> 37.5
-            Assert.AreEqual(new List<int> { 37 }, rs.Reports);
+            Assert.AreEqual(new List<int> { 375 }, rs.Reports);
 
         }
     }
