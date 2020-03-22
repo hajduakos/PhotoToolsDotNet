@@ -38,5 +38,13 @@ namespace FilterLib.Tests
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Gamma_0.4.bmp", new GammaFilter(0.4f), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Gamma_1.5.bmp", new GammaFilter(1.5f), 1));
         }
+
+        [Test]
+        public void TestLevels()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new LevelsFilter(0, 255), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Levels_30_200.bmp", new LevelsFilter(30, 200), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Levels_120_125.bmp", new LevelsFilter(120, 125), 1));
+        }
     }
 }

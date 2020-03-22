@@ -5,6 +5,7 @@ namespace FilterLib.Adjustments
     /// <summary>
     /// Gamma adjustment filter.
     /// </summary>
+    [Filter]
     public sealed class GammaFilter : PerComponentFilterBase
     {
         private float gamma;
