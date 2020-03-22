@@ -47,6 +47,12 @@
     <None Update="TestImages\Contrast_50.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestImages\Gamma_0.4.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\Gamma_1.5.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestImages\input.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

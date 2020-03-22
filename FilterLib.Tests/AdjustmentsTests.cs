@@ -30,5 +30,13 @@ namespace FilterLib.Tests
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Contrast_50.bmp", new ContrastFilter(50), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Contrast_-50.bmp", new ContrastFilter(-50), 1));
         }
+
+        [Test]
+        public void TestGamma()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new GammaFilter(1f), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Gamma_0.4.bmp", new GammaFilter(0.4f), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Gamma_1.5.bmp", new GammaFilter(1.5f), 1));
+        }
     }
 }

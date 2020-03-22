@@ -36,4 +36,26 @@ namespace FilterLib
 
         public FilterParamMaxAttribute(int value) => this.Value = value;
     }
+
+    /// <summary>
+    /// Attribute for marking the minimum value for a parameter.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class FilterParamMinFAttribute : Attribute
+    {
+        public float Value { get; private set; }
+
+        public FilterParamMinFAttribute(float value) => this.Value = value;
+    }
+
+    /// <summary>
+    /// Attribute for marking the maximum value for a parameter.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class FilterParamMaxFAttribute : Attribute
+    {
+        public float Value { get; private set; }
+
+        public FilterParamMaxFAttribute(float value) => this.Value = value;
+    }
 }
