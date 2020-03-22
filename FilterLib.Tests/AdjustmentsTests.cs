@@ -58,5 +58,14 @@ namespace FilterLib.Tests
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Levels_30_200.bmp", new LevelsFilter(30, 200), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Levels_120_125.bmp", new LevelsFilter(120, 125), 1));
         }
+
+        [Test]
+        public void TestShadowsHighlights()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new ShadowsHighlightsFilter(0, 0), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ShadowsHighlights_10_40.bmp", new ShadowsHighlightsFilter(10, 40), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ShadowsHighlights_100_0.bmp", new ShadowsHighlightsFilter(100, 0), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ShadowsHighlights_0_100.bmp", new ShadowsHighlightsFilter(0, 100), 1));
+        }
     }
 }

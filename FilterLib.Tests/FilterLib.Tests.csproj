@@ -83,6 +83,15 @@
     <None Update="TestImages\Levels_30_200.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestImages\ShadowsHighlights_0_100.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ShadowsHighlights_100_0.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ShadowsHighlights_10_40.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestImages\_input.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

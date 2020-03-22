@@ -121,6 +121,21 @@ namespace FilterLib.Tests
             Assert.AreEqual(10, f.Dark);
             Assert.AreEqual(240, f.Light);
         }
+
+        [Test]
+        public void TestShadowsHighlightsParse()
+        {
+            var filters = Parser.Parse(new string[] { "ShadowsHighlights" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<ShadowsHighlightsFilter>(filters[0]);
+
+            filters = Parser.Parse(new string[] { "ShadowsHighlights", "- Brighten: 10", "- Darken: 40" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<ShadowsHighlightsFilter>(filters[0]);
+            ShadowsHighlightsFilter f = filters[0] as ShadowsHighlightsFilter;
+            Assert.AreEqual(10, f.Brighten);
+            Assert.AreEqual(40, f.Darken);
+        }
         #endregion
 
         #region Color
