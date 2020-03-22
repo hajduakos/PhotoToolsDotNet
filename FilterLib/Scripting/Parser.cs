@@ -26,25 +26,30 @@ namespace FilterLib.Scripting
             for (int i = 0; i < script.Length; ++i)
             {
                 string line = script[i].Trim();
+                int lineNo = i + 1;
 
                 if (line.StartsWith("- ")) // Parameter
                 {
-                    if (currentFilter == null) throw new SyntaxException(i, "Expected filter but got parameter.");
+                    if (currentFilter == null) throw new SyntaxException(lineNo, "Expected filter but got parameter.");
                     // Remove '- ' from beginning
                     line = line.Substring(2);
                     // Split to 'Name: value'
                     int colon = line.IndexOf(':');
-                    if (colon == -1) throw new SyntaxException(i, "Expected format 'Name: value'.");
+                    if (colon == -1) throw new SyntaxException(lineNo, "Expected format 'Name: value'.");
                     string name = line.Substring(0, colon).Trim();
                     string value = line.Substring(colon + 1).Trim();
                     // Try to get parameter by name
-                    PropertyInfo pi = GetFilterParamByName(i, currentFilter.GetType(), name);
-                    // Try to parse and set value
-                    pi.SetValue(currentFilter, ParseParamValue(i, pi, value));
+                    PropertyInfo pi = GetFilterParamByName(lineNo, currentFilter.GetType(), name);
+                    // Try to parse
+                    object valueObj = ParseParamValue(lineNo, pi, value);
+                    // Check range
+                    RangeCheck(lineNo, pi, valueObj);
+                    // Set value
+                    pi.SetValue(currentFilter, valueObj);
                 }
                 else // Filter
                 {
-                    currentFilter = GetFilterByName(i, line);
+                    currentFilter = GetFilterByName(lineNo, line);
                     filters.Add(currentFilter);
                 }
             }
@@ -111,10 +116,23 @@ namespace FilterLib.Scripting
             {
                 throw new ParseException(line, e);
             }
-
-            // TODO: range checks
-
             throw new SyntaxException(line, "Parsing type '" + pi.PropertyType + "' is not yet supported.");
+        }
+
+        private static void RangeCheck(int line, PropertyInfo pi, object value)
+        {
+            foreach (var attr in pi.GetCustomAttributes<FilterParamMinAttribute>())
+                if (Convert.ToInt32(value) < attr.Value)
+                    throw new ParamRangeException(line, "Parameter value " + value + " is less than minimum (" + attr.Value + ")");
+            foreach (var attr in pi.GetCustomAttributes<FilterParamMaxAttribute>())
+                if (Convert.ToInt32(value) > attr.Value)
+                    throw new ParamRangeException(line, "Parameter value " + value + " is greater than maximum (" + attr.Value + ")");
+            foreach (var attr in pi.GetCustomAttributes<FilterParamMinFAttribute>())
+                if (Convert.ToDouble(value) < attr.Value)
+                    throw new ParamRangeException(line, "Parameter value " + value + " is less than minimum (" + attr.Value + ")");
+            foreach (var attr in pi.GetCustomAttributes<FilterParamMaxFAttribute>())
+                if (Convert.ToDouble(value) > attr.Value)
+                    throw new ParamRangeException(line, "Parameter value " + value + " is greater than maximum (" + attr.Value + ")");
         }
     }
 }
