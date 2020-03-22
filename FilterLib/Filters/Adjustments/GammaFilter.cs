@@ -1,6 +1,6 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Adjustments
+namespace FilterLib.Filters.Adjustments
 {
     /// <summary>
     /// Gamma adjustment filter.

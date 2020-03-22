@@ -3,7 +3,7 @@ using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using IReporter = FilterLib.Reporting.IReporter;
 using FilterLib.Util;
 
-namespace FilterLib
+namespace FilterLib.Filters
 {
     /// <summary>
     /// Base class for filters that process each pixel individually.

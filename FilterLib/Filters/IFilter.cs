@@ -1,6 +1,6 @@
 ﻿using Bitmap = System.Drawing.Bitmap;
 
-namespace FilterLib
+namespace FilterLib.Filters
 {
     /// <summary>
     /// The basic interface for image filters.

@@ -1,4 +1,4 @@
-﻿namespace FilterLib
+﻿namespace FilterLib.Filters
 {
     /// <summary>
     /// Base class for filters that process each R,G,B component independently.

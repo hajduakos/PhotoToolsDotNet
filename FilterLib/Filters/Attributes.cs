@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FilterLib
+namespace FilterLib.Filters
 {
     /// <summary>
     /// Attribute for marking classes that are filters.

@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using FilterLib.Color;
+using FilterLib.Filters.Color;
 
 namespace FilterLib.Tests
 {

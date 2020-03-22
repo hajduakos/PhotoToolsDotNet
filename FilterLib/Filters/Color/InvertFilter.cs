@@ -1,4 +1,4 @@
-﻿namespace FilterLib.Color
+﻿namespace FilterLib.Filters.Color
 {
     /// <summary>
     /// Invert filter.
