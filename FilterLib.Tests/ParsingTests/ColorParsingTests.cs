@@ -29,5 +29,19 @@ namespace FilterLib.Tests.ParsingTests
             Assert.AreEqual(1, filters.Count);
             Assert.IsInstanceOf<InvertFilter>(filters[0]);
         }
+
+        [Test]
+        public void TestPosterizeParse()
+        {
+            var filters = Parser.Parse(new string[] { "Posterize" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<PosterizeFilter>(filters[0]);
+
+            filters = Parser.Parse(new string[] { "Posterize", "- Levels: 8" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<PosterizeFilter>(filters[0]);
+            PosterizeFilter f = filters[0] as PosterizeFilter;
+            Assert.AreEqual(8, f.Levels);
+        }
     }
 }
