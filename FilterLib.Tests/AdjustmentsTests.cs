@@ -14,6 +14,18 @@ namespace FilterLib.Tests
         }
 
         [Test]
+        public void TestColorHSL()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new ColorHSLFilter(0, 0, 0), 5));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorHSL_0_0_50.bmp", new ColorHSLFilter(0, 0, 50), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorHSL_0_0_-50.bmp", new ColorHSLFilter(0, 0, -50), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorHSL_0_100_0.bmp", new ColorHSLFilter(0, 100, 0), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorHSL_0_-100_0.bmp", new ColorHSLFilter(0, -100, 0), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorHSL_50_40_-30.bmp", new ColorHSLFilter(50, 40, -30), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ColorHSL_180_0_0.bmp", new ColorHSLFilter(180, 0, 0), 1));
+        }
+
+        [Test]
         public void TestColorRGB()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new ColorRGBFilter(0, 0, 0), 0));

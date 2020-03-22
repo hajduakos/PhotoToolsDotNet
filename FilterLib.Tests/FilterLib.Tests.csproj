@@ -29,6 +29,24 @@
     <None Update="TestImages\Brightness_50.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestImages\ColorHSL_0_-100_0.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ColorHSL_0_0_-50.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ColorHSL_0_0_50.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ColorHSL_0_100_0.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ColorHSL_180_0_0.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\ColorHSL_50_40_-30.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestImages\ColorRGB_0_0_100.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
