@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using FilterLib.Filters.Adjustments;
 
-namespace FilterLib.Tests
+namespace FilterLib.Tests.FilterTests
 {
     public class AdjustmentsTests
     {

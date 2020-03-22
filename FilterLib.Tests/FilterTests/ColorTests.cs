@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using FilterLib.Filters.Color;
 
-namespace FilterLib.Tests
+namespace FilterLib.Tests.FilterTests
 {
     public class ColorTests
     {

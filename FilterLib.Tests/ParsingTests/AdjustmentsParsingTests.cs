@@ -1,38 +1,11 @@
 ﻿using FilterLib.Filters.Adjustments;
-using FilterLib.Filters.Color;
 using FilterLib.Scripting;
 using NUnit.Framework;
 
-namespace FilterLib.Tests
+namespace FilterLib.Tests.ParsingTests
 {
-    public class ParsingSingleTests
+    public class AdjustmentsParsingTests
     {
-
-        #region Excpetions
-
-        [Test]
-        public void TestParamBeforeFilter() =>
-            Assert.Throws<SyntaxException>(() => Parser.Parse(new string[] { "- Brightness: 50", "Brightness" }));
-
-        [Test]
-        public void TestNonExistingFilter() =>
-            Assert.Throws<FilterNotFoundException>(() => Parser.Parse(new string[] { "NoSuchFilter" }));
-        
-        [Test]
-        public void TestNonExistingParam() =>
-            Assert.Throws<ParamNotFoundException>(() => Parser.Parse(new string[] { "Brightness", "- NoSuchParam: 0" }));
-        
-        [Test]
-        public void TestParamInvalidSyntax() =>
-            Assert.Throws<SyntaxException>(() => Parser.Parse(new string[] { "Brightness", "- Brightness" }));
-
-        [Test]
-        public void TestParamInvalidValue() =>
-            Assert.Throws<ParseException>(() => Parser.Parse(new string[] { "Brightness", "- Brightness: abc" }));
-
-        #endregion
-
-        #region Adjustments
         [Test]
         public void TestBrightnessParse()
         {
@@ -136,16 +109,5 @@ namespace FilterLib.Tests
             Assert.AreEqual(10, f.Brighten);
             Assert.AreEqual(40, f.Darken);
         }
-        #endregion
-
-        #region Color
-        [Test]
-        public void TestInvertParse()
-        {
-            var filters = Parser.Parse(new string[] { "Invert" });
-            Assert.AreEqual(1, filters.Count);
-            Assert.IsInstanceOf<InvertFilter>(filters[0]);
-        }
-        #endregion
     }
 }
