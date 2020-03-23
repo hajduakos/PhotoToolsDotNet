@@ -6,10 +6,8 @@ namespace FilterLib.Tests.FilterTests
     public class AdjustmentsTests
     {
         [Test]
-        public void TestAutoLevels()
-        {
+        public void TestAutoLevels() =>
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "AutoLevels.bmp", new AutoLevelsFilter(), 1));
-        }
 
         [Test]
         public void TestBrightness()
