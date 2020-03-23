@@ -3,7 +3,9 @@
 namespace FilterLib.Filters
 {
     /// <summary>
-    /// The basic interface for image filters.
+    /// The basic interface for image filters. If a filter can be applied on
+    /// the same image (in place) consider using the derived
+    /// <see cref="IFilterInPlace"/> interface.
     /// </summary>
     public interface IFilter
     {

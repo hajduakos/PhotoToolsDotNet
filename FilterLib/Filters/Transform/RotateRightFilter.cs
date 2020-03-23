@@ -1,0 +1,58 @@
+﻿using FilterLib.Reporting;
+using FilterLib.Util;
+using System.Drawing;
+using System.Drawing.Imaging;
+
+namespace FilterLib.Filters.Transform
+{
+    /// <summary>
+    /// Rotate right filter.
+    /// </summary>
+    [Filter]
+    public sealed class RotateRightFilter : IFilter
+    {
+        /// <summary>
+        /// Apply filter, the original image is not modified.
+        /// </summary>
+        /// <param name="image">Input image</param>
+        /// <param name="reporter">Reporter (optional)</param>
+        /// <returns>New image with filter applied</returns>
+        public Bitmap Apply(Bitmap image, IReporter reporter = null)
+        {
+            reporter?.Start();
+            Bitmap rotated = new Bitmap(image.Height, image.Width);
+            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdRot = new DisposableBitmapData(rotated, PixelFormat.Format24bppRgb))
+            {
+                int wMul3 = image.Width * 3; // Width of a row
+                int rotW = rotated.Width;
+                int rotStride = bmdRot.Stride;
+                int h = image.Height;
+                int x, y;
+                int idx;
+                unsafe
+                {
+                    byte* rotStart = (byte*)bmdRot.Scan0;
+
+                    // Iterate through rows
+                    for (y = 0; y < h; y++)
+                    {
+                        // Get row
+                        byte* row = (byte*)bmd.Scan0 + (rotW - 1 - y) * bmd.Stride;
+                        // Iterate through columns
+                        for (x = 0; x < wMul3; x += 3)
+                        {
+                            idx = x / 3 * rotStride + y * 3; // Index in rotated image
+                            rotStart[idx] = row[x];
+                            rotStart[idx + 1] = row[x + 1];
+                            rotStart[idx + 2] = row[x + 2];
+                        }
+                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                    }
+                }
+            }
+            reporter?.Done();
+            return rotated;
+        }
+    }
+}
