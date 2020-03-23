@@ -19,7 +19,7 @@ namespace FilterLib.Filters.Transform
         /// <returns>New image with filter applied</returns>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
-            if (reporter != null) reporter.Start();
+            reporter?.Start();
             using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
             {
                 int wMul3 = image.Width * 3; // Width of a row
@@ -42,11 +42,11 @@ namespace FilterLib.Filters.Transform
                             row1[x] = row2[x];
                             row2[x] = swap;
                         }
-                        if (reporter != null && ((y & 63) == 0)) reporter.Report(y, 0, hDiv2 - 1);
+                        if ((y & 63) == 0) reporter?.Report(y, 0, hDiv2 - 1);
                     }
                 }
             }
-            if (reporter != null) reporter.Done();
+            reporter?.Done();
         }
     }
 }

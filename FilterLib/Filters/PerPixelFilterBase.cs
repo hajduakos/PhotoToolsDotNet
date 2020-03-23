@@ -17,7 +17,7 @@ namespace FilterLib.Filters
         /// <param name="reporter">Reporter (optional)</param>
         public override sealed void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
-            if (reporter != null) reporter.Start();
+            reporter?.Start();
             ApplyStart();
 
             using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
@@ -36,13 +36,13 @@ namespace FilterLib.Filters
                         // Iterate through columns
                         for (x = 0; x < wMul3; x += 3)
                             ProcessPixel(row + x + 2, row + x + 1, row + x);
-                        if (reporter != null && ((y & 63) == 0)) reporter.Report(y, 0, h - 1);
+                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
                     }
                 }
             }
 
             ApplyEnd();
-            if (reporter != null) reporter.Done();
+            reporter?.Done();
         }
 
         /// <summary>

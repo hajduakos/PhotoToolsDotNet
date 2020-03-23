@@ -50,7 +50,7 @@ namespace FilterLib.Filters.Artistic
         /// <returns>New image with filter applied</returns>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
-            if (reporter != null) reporter.Start();
+            reporter?.Start();
             // Clone image (the clone won't be modified)
             using (Bitmap original = (Bitmap)image.Clone())
             using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
@@ -90,11 +90,11 @@ namespace FilterLib.Filters.Artistic
                             row[x + 1] = rowOrg[x + idx + 1];
                             row[x + 2] = rowOrg[x + idx + 2];
                         }
-                        if (reporter != null && ((y & 63) == 0)) reporter.Report(y, 0, h - 1);
+                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
                     }
                 }
             }
-            if (reporter != null) reporter.Done();
+            reporter?.Done();
         }
     }
 }

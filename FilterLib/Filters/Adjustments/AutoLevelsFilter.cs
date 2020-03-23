@@ -47,12 +47,12 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="reporter">Reporter (optional)</param>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
-            if (reporter != null) reporter.Start();
+            reporter?.Start();
             // Calculate cropping values
             GetCroppingValues(image, out int cropDark, out int cropLight);
-            if (reporter != null) reporter.Report(50, 0, 100);
+            reporter?.Report(50, 0, 100);
             new LevelsFilter(cropDark, 255 - cropLight).ApplyInPlace(image, new SubReporter(reporter, 50, 100, 0, 100));
-            if (reporter != null) reporter.Done();
+            reporter?.Done();
         }
     }
 }
