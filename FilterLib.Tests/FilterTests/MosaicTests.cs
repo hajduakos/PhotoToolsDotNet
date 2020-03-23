@@ -18,5 +18,13 @@ namespace FilterLib.Tests.FilterTests
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Lego_16.bmp", new LegoFilter(16), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Lego_32.bmp", new LegoFilter(32), 1));
         }
+
+        [Test]
+        public void TestPixelate()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new PixelateFilter(1), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Pixelate_10.bmp", new PixelateFilter(10), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Pixelate_25.bmp", new PixelateFilter(25), 1));
+        }
     }
 }

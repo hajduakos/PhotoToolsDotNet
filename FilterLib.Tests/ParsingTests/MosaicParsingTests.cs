@@ -35,5 +35,19 @@ namespace FilterLib.Tests.ParsingTests
             LegoFilter f = filters[0] as LegoFilter;
             Assert.AreEqual(30, f.Size);
         }
+
+        [Test]
+        public void TestPixelateParse()
+        {
+            var filters = Parser.Parse(new string[] { "Pixelate" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<PixelateFilter>(filters[0]);
+
+            filters = Parser.Parse(new string[] { "Pixelate", "- Size: 30" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<PixelateFilter>(filters[0]);
+            PixelateFilter f = filters[0] as PixelateFilter;
+            Assert.AreEqual(30, f.Size);
+        }
     }
 }
