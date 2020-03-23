@@ -26,14 +26,12 @@
             this.smin = smin;
             this.smax = smax;
         }
-        public void Done() { if (parent != null) parent.Report(smax, pmin, pmax); }
+        public void Done() => parent?.Report(smax, pmin, pmax);
 
-        public void Report(int value, int min = 0, int max = 100)
-        {
-            if (parent != null)
-                parent.Report((int)((value - min) / (float)(max - min) * (smax - smin) + smin), pmin, pmax);
-        }
+        public void Report(int value, int min = 0, int max = 100) =>
+            parent?.Report((int)((value - min) / (float)(max - min) * (smax - smin) + smin), pmin, pmax);
 
-        public void Start() { if (parent != null) parent.Report(smin, pmin, pmax); }
+
+        public void Start() => parent?.Report(smin, pmin, pmax);
     }
 }
