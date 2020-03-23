@@ -43,5 +43,13 @@ namespace FilterLib.Tests.ParsingTests
             PosterizeFilter f = filters[0] as PosterizeFilter;
             Assert.AreEqual(8, f.Levels);
         }
+
+        [Test]
+        public void TestSepiaParse()
+        {
+            var filters = Parser.Parse(new string[] { "Sepia" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<SepiaFilter>(filters[0]);
+        }
     }
 }

@@ -28,5 +28,11 @@ namespace FilterLib.Tests.FilterTests
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Posterize_8.bmp", new PosterizeFilter(8), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new PosterizeFilter(256), 1));
         }
+
+        [Test]
+        public void TestSepia()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Sepia.bmp", new SepiaFilter(), 1));
+        }
     }
 }
