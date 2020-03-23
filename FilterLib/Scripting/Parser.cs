@@ -112,6 +112,7 @@ namespace FilterLib.Scripting
             {
                 if (pi.PropertyType == typeof(Int32)) return Convert.ToInt32(value);
                 if (pi.PropertyType == typeof(Single)) return Convert.ToSingle(value, nfi);
+                if (pi.PropertyType == typeof(Boolean)) return Convert.ToBoolean(value);
             } catch(Exception e)
             {
                 throw new ParseException(line, e);
