@@ -5,7 +5,7 @@ namespace FilterLib.Filters
     /// <summary>
     /// Interface for image filters that can be applied on the original image.
     /// </summary>
-    public interface IFilterInPlace
+    public interface IFilterInPlace : IFilter
     {
         /// <summary>
         /// Apply filter by modifying the original image.

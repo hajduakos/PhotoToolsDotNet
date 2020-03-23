@@ -5,7 +5,7 @@ namespace FilterLib.Filters
     /// <summary>
     /// Base class for image filters that can be applied on the original image.
     /// </summary>
-    public abstract class FilterInPlaceBase : IFilter, IFilterInPlace
+    public abstract class FilterInPlaceBase : IFilterInPlace
     {
         /// <summary>
         /// Apply filter, the original image is not modified.
