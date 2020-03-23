@@ -33,5 +33,20 @@ namespace FilterLib.Tests.ParsingTests
             OilPaintFilter f = filters[0] as OilPaintFilter;
             Assert.AreEqual(8, f.Radius);
         }
+
+        [Test]
+        public void TestRandomJitterParse()
+        {
+            var filters = Parser.Parse(new string[] { "RandomJitter" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<RandomJitterFilter>(filters[0]);
+
+            filters = Parser.Parse(new string[] { "RandomJitter", "- Radius: 8", "- Seed: 1000" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<RandomJitterFilter>(filters[0]);
+            RandomJitterFilter f = filters[0] as RandomJitterFilter;
+            Assert.AreEqual(8, f.Radius);
+            Assert.AreEqual(1000, f.Seed);
+        }
     }
 }
