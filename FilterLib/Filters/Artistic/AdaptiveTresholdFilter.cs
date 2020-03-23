@@ -36,6 +36,11 @@ namespace FilterLib.Filters.Artistic
             this.SquareSize = squareSize;
         }
 
+        /// <summary>
+        /// Apply filter by modifying the original image.
+        /// </summary>
+        /// <param name="image">Input image</param>
+        /// <param name="reporter">Reporter (optional)</param>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             if (reporter != null) reporter.Start();
