@@ -34,5 +34,13 @@ namespace FilterLib.Tests.FilterTests
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Sepia.bmp", new SepiaFilter(), 1));
         }
+
+        [Test]
+        public void TestTreshold()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Treshold_63.bmp", new TresholdFilter(63), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Treshold_127.bmp", new TresholdFilter(127), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Treshold_191.bmp", new TresholdFilter(191), 1));
+        }
     }
 }

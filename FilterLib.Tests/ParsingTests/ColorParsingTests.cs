@@ -51,5 +51,19 @@ namespace FilterLib.Tests.ParsingTests
             Assert.AreEqual(1, filters.Count);
             Assert.IsInstanceOf<SepiaFilter>(filters[0]);
         }
+
+        [Test]
+        public void TestTresholdParse()
+        {
+            var filters = Parser.Parse(new string[] { "Treshold" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<TresholdFilter>(filters[0]);
+
+            filters = Parser.Parse(new string[] { "Treshold", "- Treshold: 127" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<TresholdFilter>(filters[0]);
+            TresholdFilter f = filters[0] as TresholdFilter;
+            Assert.AreEqual(127, f.Treshold);
+        }
     }
 }

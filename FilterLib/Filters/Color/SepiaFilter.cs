@@ -1,5 +1,8 @@
 ﻿namespace FilterLib.Filters.Color
 {
+    /// <summary>
+    /// Sepia filter.
+    /// </summary>
     [Filter]
     public sealed class SepiaFilter : PerPixelFilterBase
     {
