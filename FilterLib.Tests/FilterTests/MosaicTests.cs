@@ -1,5 +1,6 @@
-﻿using FilterLib.Filters.Mosaic;
+using FilterLib.Filters.Mosaic;
 using NUnit.Framework;
+using System.Runtime.InteropServices;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -15,8 +16,9 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         public void TestLego()
         {
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Lego_16.bmp", new LegoFilter(16), 1));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Lego_32.bmp", new LegoFilter(32), 1));
+            string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "l";
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Lego_16" + suffix + ".bmp", new LegoFilter(16), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Lego_32" + suffix + ".bmp", new LegoFilter(32), 1));
         }
 
         [Test]
@@ -28,3 +30,4 @@ namespace FilterLib.Tests.FilterTests
         }
     }
 }
+
