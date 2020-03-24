@@ -46,7 +46,7 @@ namespace FilterLib.Filters.Dither
                 int h = image.Height;
                 int x, y;
                 int xSub, ySub;
-                double intervalSize = 255.0 / (levels - 1); // Size of an interval
+                double intervalSize = 255f / (levels - 1); // Size of an interval
                 int roundedColor; // Color rounded to the nearest color level
                 float quantErr;
                 float[,] quantErrArray = new float[wMul3, h];

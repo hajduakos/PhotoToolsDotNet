@@ -7,6 +7,21 @@ namespace FilterLib.Tests.ParsingTests
     public class DitherParsingTests
     {
         [Test]
+        public void TestBayerDitherParse()
+        {
+            var filters = Parser.Parse(new string[] { "BayerDither" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<BayerDitherFilter>(filters[0]);
+
+            filters = Parser.Parse(new string[] { "BayerDither", "- Levels: 50", "- Size: 8" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<BayerDitherFilter>(filters[0]);
+            BayerDitherFilter f = filters[0] as BayerDitherFilter;
+            Assert.AreEqual(50, f.Levels);
+            Assert.AreEqual(8, f.Size);
+        }
+
+        [Test]
         public void TestFloydSteinbergDitherParse()
         {
             var filters = Parser.Parse(new string[] { "FloydSteinbergDither" });
