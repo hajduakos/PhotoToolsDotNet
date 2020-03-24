@@ -65,5 +65,19 @@ namespace FilterLib.Tests.ParsingTests
             TresholdFilter f = filters[0] as TresholdFilter;
             Assert.AreEqual(127, f.Treshold);
         }
+
+        [Test]
+        public void TestVintageParse()
+        {
+            var filters = Parser.Parse(new string[] { "Vintage" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<VintageFilter>(filters[0]);
+
+            filters = Parser.Parse(new string[] { "Vintage", "- Strength: 80" });
+            Assert.AreEqual(1, filters.Count);
+            Assert.IsInstanceOf<VintageFilter>(filters[0]);
+            VintageFilter f = filters[0] as VintageFilter;
+            Assert.AreEqual(80, f.Strength);
+        }
     }
 }

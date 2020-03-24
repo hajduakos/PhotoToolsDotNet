@@ -42,5 +42,12 @@ namespace FilterLib.Tests.FilterTests
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Treshold_127.bmp", new TresholdFilter(127), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Treshold_191.bmp", new TresholdFilter(191), 1));
         }
+
+        [Test]
+        public void TestVintage()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Vintage_80.bmp", new VintageFilter(80), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new VintageFilter(0), 1));
+        }
     }
 }
