@@ -3,6 +3,7 @@
     /// <summary>
     /// Multiply blend mode.
     /// </summary>
+    [Blend]
     public sealed class MultiplyBlend : PerComponentBlendBase
     {
         /// <summary>

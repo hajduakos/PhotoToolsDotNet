@@ -3,6 +3,7 @@
     /// <summary>
     /// Screen blend mode.
     /// </summary>
+    [Blend]
     public sealed class ScreenBlend : PerComponentBlendBase
     {
         /// <summary>

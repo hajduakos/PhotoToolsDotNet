@@ -5,6 +5,7 @@ namespace FilterLib.Blending
     /// <summary>
     /// Color dodge blend mode.
     /// </summary>
+    [Blend]
     public sealed class ColorDodgeBlend : PerComponentBlendBase
     {
         /// <summary>

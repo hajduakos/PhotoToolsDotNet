@@ -3,6 +3,7 @@
     /// <summary>
     /// Lighten blend mode.
     /// </summary>
+    [Blend]
     public sealed class LightenBlend : PerPixelBlendBase
     {
         /// <summary>

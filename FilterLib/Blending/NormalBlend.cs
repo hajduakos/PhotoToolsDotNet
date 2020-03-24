@@ -3,6 +3,7 @@
     /// <summary>
     /// Normal blend mode.
     /// </summary>
+    [Blend]
     public sealed class NormalBlend : PerComponentBlendBase
     {
         /// <summary>
