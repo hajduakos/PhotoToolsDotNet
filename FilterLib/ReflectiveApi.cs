@@ -1,4 +1,5 @@
-﻿using FilterLib.Filters;
+﻿using FilterLib.Blending;
+using FilterLib.Filters;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +9,7 @@ namespace FilterLib
 {
     public static class ReflectiveApi
     {
-        public static Type GetFilterTypeByName(string name)
+        private static Type GetFilterTypeByName(string name)
         {
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
                 if (type.GetCustomAttributes(typeof(FilterAttribute), false).Length > 0 &&
@@ -36,7 +37,7 @@ namespace FilterLib
             throw new ArgumentException("No parameterless constructor found for '" + name + "'.");
         }
     
-        public static PropertyInfo GetFilterPropertyByName(Type type, string name)
+        private static PropertyInfo GetFilterPropertyByName(Type type, string name)
         {
             foreach (PropertyInfo pi in type.GetProperties())
                 if (pi.GetCustomAttributes(typeof(FilterParamAttribute), false).Length > 0 && pi.Name == name)
@@ -45,7 +46,7 @@ namespace FilterLib
             throw new ArgumentException("Property '" + name + "' not found for '" + type.Name + "'.");
         }
 
-        public static object ParseParamValue(Type type, string value)
+        private static object ParseParamValue(Type type, string value)
         {
             NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
             if (type == typeof(Int32)) return Convert.ToInt32(value);
@@ -76,6 +77,35 @@ namespace FilterLib
             object valueObj = ParseParamValue(pi.PropertyType, value);
             RangeCheck(pi, valueObj);
             pi.SetValue(filter, valueObj);
+        }
+
+
+        private static Type GetBlendTypeByName(string name)
+        {
+            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+                if (type.GetCustomAttributes(typeof(BlendAttribute), false).Length > 0 &&
+                    (type.Name == name || type.Name == name + "Blend"))
+                    return type;
+
+            throw new ArgumentException("Blend '" + name + "' not found.");
+        }
+
+        public static IBlend ConstructBlendByName(string name)
+        {
+            Type type = GetBlendTypeByName(name);
+
+            foreach (var constr in type.GetConstructors())
+            {
+                List<object> parameters = new List<object>();
+                foreach (var param in constr.GetParameters())
+                    if (param.HasDefaultValue)
+                        parameters.Add(param.DefaultValue);
+
+                if (parameters.Count == constr.GetParameters().Length)
+                    return (IBlend)constr.Invoke(parameters.ToArray());
+            }
+
+            throw new ArgumentException("No parameterless constructor found for '" + name + "'.");
         }
     }
 }
