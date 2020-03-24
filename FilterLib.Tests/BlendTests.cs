@@ -18,6 +18,7 @@ namespace FilterLib.Tests
         {
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input.bmp", new ColorDodgeBlend(0), 2));
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "ColorDodgeBlend_80.bmp", new ColorDodgeBlend(80), 2));
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "ColorDodgeBlend_100.bmp", new ColorDodgeBlend(100), 2));
         }
 
         [Test]
@@ -25,6 +26,7 @@ namespace FilterLib.Tests
         {
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input.bmp", new LightenBlend(0), 2));
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "LightenBlend_80.bmp", new LightenBlend(80), 2));
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "LightenBlend_100.bmp", new LightenBlend(100), 2));
         }
 
         [Test]
@@ -32,6 +34,7 @@ namespace FilterLib.Tests
         {
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input.bmp", new MultiplyBlend(0), 2));
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "MultiplyBlend_80.bmp", new MultiplyBlend(80), 2));
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "MultiplyBlend_100.bmp", new MultiplyBlend(100), 2));
         }
 
         [Test]
@@ -39,6 +42,7 @@ namespace FilterLib.Tests
         {
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input.bmp", new ScreenBlend(0), 2));
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "ScreenBlend_80.bmp", new ScreenBlend(80), 2));
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "ScreenBlend_100.bmp", new ScreenBlend(100), 2));
         }
     }
 }
