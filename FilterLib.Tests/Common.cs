@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using FilterLib.Blending;
 using FilterLib.Filters;
 using FilterLib.Util;
 using NUnit.Framework;
@@ -16,6 +17,20 @@ namespace FilterLib.Tests
             using Bitmap bmpOriginal = new Bitmap(path + original);
             using Bitmap bmpActual = filter.Apply(bmpOriginal);
             using Bitmap bmpExpected = original == expected ? (Bitmap)bmpOriginal.Clone() : new Bitmap(path + expected);
+            bool ok = Compare(bmpActual, bmpExpected, tolerance);
+            if (!ok) bmpActual.Save(path + expected + "_actual.bmp");
+            return ok;
+        }
+
+        public static bool CheckBlend(string original1, string original2, string expected, IBlend blend, int tolerance = 0)
+        {
+            string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
+
+            using Bitmap bmpOriginal1 = new Bitmap(path + original1);
+            using Bitmap bmpOriginal2 = original1 == original2 ? (Bitmap)bmpOriginal1.Clone() : new Bitmap(path + original2);
+            using Bitmap bmpActual = blend.Apply(bmpOriginal1, bmpOriginal2);
+            using Bitmap bmpExpected = original1 == expected ? (Bitmap)bmpOriginal1.Clone() :
+                (original2 == expected ? (Bitmap)bmpOriginal2.Clone() : new Bitmap(path + expected));
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
             if (!ok) bmpActual.Save(path + expected + "_actual.bmp");
             return ok;

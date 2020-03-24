@@ -4,7 +4,7 @@
     /// Lighten blend mode.
     /// </summary>
     [Blend]
-    public sealed class LightenBlend : PerPixelBlendBase
+    public sealed class LightenBlend : PerComponentBlendBase
     {
         /// <summary>
         /// Constructor
@@ -24,26 +24,13 @@
         }
 
         /// <summary>
-        /// Blend an individual pixel.
+        /// Blend a component (R/G/B).
         /// </summary>
-        /// <param name="botR">Bottom red</param>
-        /// <param name="botG">Bottom green</param>
-        /// <param name="botB">Bottom blue</param>
-        /// <param name="topR">Top red</param>
-        /// <param name="topG">Top green</param>
-        /// <param name="topB">Top blue</param>
-        protected override unsafe void BlendPixel(byte* botR, byte* botG, byte* botB, byte* topR, byte* topG, byte* topB)
+        /// <param name="compBottom">Bottom component</param>
+        /// <param name="compTop">Top component</param>
+        protected override unsafe void BlendComponent(byte* compBottom, byte* compTop)
         {
-            // Calculate luminance: 0.299*R + 0.587*G + 0.114*B
-            float lum1 = .299f * (*botR) + .587f * (*botG) + .114f * (*botB);
-            float lum2 = .299f * (*topR) + .587f * (*topG) + .114f * (*topB);
-            // Set the lighter color as new
-            if (lum1 < lum2) // New value is the other image (with respect to opacity)
-            {
-                *botB = (byte)(op0 * (*botB) + op1 * (*topB));
-                *botG = (byte)(op0 * (*botG) + op1 * (*topG));
-                *botR = (byte)(op0 * (*botR) + op1 * (*botR));
-            }
+            *compBottom =(byte)(op0 * (*compBottom) + op1 * System.Math.Max(*compBottom, *compTop));
         }
     }
 }
