@@ -5,13 +5,6 @@ namespace FilterLib.Tests
 {
     public class BlendTests
     {
-        [Test]
-        public void TestNormalBlend()
-        {
-            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input.bmp", new NormalBlend(0), 1));
-            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "NormalBlend_50.bmp", new NormalBlend(50), 1));
-            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input2.bmp", new NormalBlend(100), 1));
-        }
 
         [Test]
         public void TestColorDodgeBlend()
@@ -19,6 +12,14 @@ namespace FilterLib.Tests
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input.bmp", new ColorDodgeBlend(0), 2));
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "ColorDodgeBlend_80.bmp", new ColorDodgeBlend(80), 2));
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "ColorDodgeBlend_100.bmp", new ColorDodgeBlend(100), 2));
+        }
+
+        [Test]
+        public void TestDarkenBlend()
+        {
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input.bmp", new DarkenBlend(0), 2));
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "DarkenBlend_80.bmp", new DarkenBlend(80), 2));
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "DarkenBlend_100.bmp", new DarkenBlend(100), 2));
         }
 
         [Test]
@@ -35,6 +36,14 @@ namespace FilterLib.Tests
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input.bmp", new MultiplyBlend(0), 2));
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "MultiplyBlend_80.bmp", new MultiplyBlend(80), 2));
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "MultiplyBlend_100.bmp", new MultiplyBlend(100), 2));
+        }
+
+        [Test]
+        public void TestNormalBlend()
+        {
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input.bmp", new NormalBlend(0), 1));
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "NormalBlend_50.bmp", new NormalBlend(50), 1));
+            Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", "_input2.bmp", new NormalBlend(100), 1));
         }
 
         [Test]
