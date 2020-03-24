@@ -10,6 +10,13 @@ namespace FilterLib.Blending
     /// </summary>
     public abstract class PerPixelBlendBase : BlendInPlaceBase
     {
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="opacity">Opacity[0;100]</param>
+        protected PerPixelBlendBase(int opacity) : base(opacity) { }
+
         /// <summary>
         /// Blend two images together, the result is in the bottom image.
         /// </summary>

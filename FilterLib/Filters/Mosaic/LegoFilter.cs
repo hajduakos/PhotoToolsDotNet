@@ -68,48 +68,44 @@ namespace FilterLib.Filters.Mosaic
 
                 }
                 // Clone original image for iteration
-                using (Bitmap original = (Bitmap)image.Clone())
-                using (DisposableBitmapData bmd = new DisposableBitmapData(original, PixelFormat.Format24bppRgb))
+                using Bitmap original = (Bitmap)image.Clone();
+                using DisposableBitmapData bmd = new DisposableBitmapData(original, PixelFormat.Format24bppRgb);
+                int wMul3 = original.Width * 3;
+                int h = original.Height;
+                int x, y, xSub, ySub, sizeMul3 = size * 3, rSum, gSum, bSum, n;
+                // Create graphics from image to draw on
+                using (Graphics gfx = Graphics.FromImage(image))
                 {
-                    int wMul3 = original.Width * 3;
-                    int h = original.Height;
-                    int x, y, xSub, ySub, sizeMul3 = size * 3, rSum, gSum, bSum, n;
-                    // Create graphics from image to draw on
-                    using (Graphics gfx = Graphics.FromImage(image))
+                    unsafe
                     {
-                        unsafe
+                        // Iterate through block rows
+                        for (y = 0; y < h; y += size)
                         {
-                            // Iterate through block rows
-                            for (y = 0; y < h; y += size)
+                            // Iterate through block columns
+                            for (x = 0; x < wMul3; x += sizeMul3)
                             {
-                                // Iterate through block columns
-                                for (x = 0; x < wMul3; x += sizeMul3)
+                                rSum = gSum = bSum = n = 0; // Clear sums
+                                for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
                                 {
-                                    rSum = gSum = bSum = n = 0; // Clear sums
-                                    for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
+                                    // Get row
+                                    byte* row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
+                                    for (xSub = 0; xSub < sizeMul3 && x + xSub < wMul3; xSub += 3)
                                     {
-                                        // Get row
-                                        byte* row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                                        for (xSub = 0; xSub < sizeMul3 && x + xSub < wMul3; xSub += 3)
-                                        {
-                                            rSum += row[x + xSub + 2];
-                                            gSum += row[x + xSub + 1];
-                                            bSum += row[x + xSub];
-                                            ++n;
-                                        }
-                                    }
-                                    // Get pixel color
-                                    using (Brush pixel = new SolidBrush(System.Drawing.Color.FromArgb(rSum / n, gSum / n, bSum / n)))
-                                    {
-                                        gfx.SmoothingMode = SmoothingMode.None;
-                                        gfx.FillRectangle(pixel, x / 3, y, size, size); // Pixelerate
-                                        gfx.DrawImage(pattern, x / 3, y, size, size); // Draw brick pattern
-                                        gfx.SmoothingMode = SmoothingMode.AntiAlias;
-                                        gfx.FillEllipse(pixel, x / 3 + size / 4, y + size / 4, size / 2, size / 2); // Fill center circle
+                                        rSum += row[x + xSub + 2];
+                                        gSum += row[x + xSub + 1];
+                                        bSum += row[x + xSub];
+                                        ++n;
                                     }
                                 }
-                                if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                                // Get pixel color
+                                using Brush pixel = new SolidBrush(System.Drawing.Color.FromArgb(rSum / n, gSum / n, bSum / n));
+                                gfx.SmoothingMode = SmoothingMode.None;
+                                gfx.FillRectangle(pixel, x / 3, y, size, size); // Pixelerate
+                                gfx.DrawImage(pattern, x / 3, y, size, size); // Draw brick pattern
+                                gfx.SmoothingMode = SmoothingMode.AntiAlias;
+                                gfx.FillEllipse(pixel, x / 3 + size / 4, y + size / 4, size / 2, size / 2); // Fill center circle
                             }
+                            if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
                         }
                     }
                 }

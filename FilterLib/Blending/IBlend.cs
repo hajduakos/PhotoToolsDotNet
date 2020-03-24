@@ -15,5 +15,10 @@ namespace FilterLib.Blending
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>Blended image</returns>
         Bitmap Apply(Bitmap bottom, Bitmap top, Reporting.IReporter reporter = null);
+
+        /// <summary>
+        /// Opacity of the top image [0:100]
+        /// </summary>
+        public int Opacity { get; set; }
     }
 }

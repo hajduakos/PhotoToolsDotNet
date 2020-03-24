@@ -7,23 +7,11 @@ namespace FilterLib.Blending
     /// </summary>
     public sealed class ColorDodgeBlend : PerComponentBlendBase
     {
-        private int opacity;
-
-        /// <summary> Opacity [0:100] </summary>
-        public int Opacity
-        {
-            get { return opacity; }
-            set { opacity = value.Clamp(0, 100); }
-        }
-
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public ColorDodgeBlend(int opacity)
-        {
-            Opacity = opacity;
-        }
+        public ColorDodgeBlend(int opacity = 100) : base(opacity) { }
 
         float op0, op1;
         int inv;
@@ -34,7 +22,7 @@ namespace FilterLib.Blending
         /// </summary>
         protected override void BlendStart()
         {
-            op1 = opacity / 100.0f;
+            op1 = Opacity / 100.0f;
             op0 = 1 - op1;
         }
 

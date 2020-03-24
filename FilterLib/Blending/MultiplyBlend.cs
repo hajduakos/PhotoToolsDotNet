@@ -1,29 +1,15 @@
-﻿using FilterLib.Util;
-
-namespace FilterLib.Blending
+﻿namespace FilterLib.Blending
 {
     /// <summary>
     /// Multiply blend mode.
     /// </summary>
     public sealed class MultiplyBlend : PerComponentBlendBase
     {
-        private int opacity;
-
-        /// <summary> Opacity [0:100] </summary>
-        public int Opacity
-        {
-            get { return opacity; }
-            set { opacity = value.Clamp(0, 100); }
-        }
-
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public MultiplyBlend(int opacity)
-        {
-            Opacity = opacity;
-        }
+        public MultiplyBlend(int opacity = 100) : base(opacity) { }
 
         float op0, op1;
 
@@ -32,7 +18,7 @@ namespace FilterLib.Blending
         /// </summary>
         protected override void BlendStart()
         {
-            op1 = opacity / 100.0f;
+            op1 = Opacity / 100.0f;
             op0 = 1 - op1;
         }
 

@@ -5,6 +5,13 @@
     /// </summary>
     public abstract class PerComponentBlendBase : PerPixelBlendBase
     {
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="opacity">Opacity[0;100]</param>
+        protected PerComponentBlendBase(int opacity) : base(opacity) { }
+
         /// <summary>
         /// Blend a component (R/G/B).
         /// </summary>
