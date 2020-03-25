@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilterLib", "FilterLib\FilterLib.csproj", "{3685D2FE-85CF-43DC-BD42-6D7BF90F71A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterLib.Tests", "FilterLib.Tests\FilterLib.Tests.csproj", "{FC247B60-29F8-4A13-B3F5-AEB0C1EEEF2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilterLib.Tests", "FilterLib.Tests\FilterLib.Tests.csproj", "{FC247B60-29F8-4A13-B3F5-AEB0C1EEEF2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterScript", "FilterScript\FilterScript.csproj", "{A6C19EE8-A2B7-4C2C-8E89-8A3B7E775CEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{FC247B60-29F8-4A13-B3F5-AEB0C1EEEF2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC247B60-29F8-4A13-B3F5-AEB0C1EEEF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC247B60-29F8-4A13-B3F5-AEB0C1EEEF2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6C19EE8-A2B7-4C2C-8E89-8A3B7E775CEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6C19EE8-A2B7-4C2C-8E89-8A3B7E775CEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6C19EE8-A2B7-4C2C-8E89-8A3B7E775CEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6C19EE8-A2B7-4C2C-8E89-8A3B7E775CEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

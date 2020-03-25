@@ -22,7 +22,7 @@ namespace FilterLib
             Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttributes(typeof(FilterAttribute), false).Length > 0);
 
         /// <summary>
-        /// Get a filter by its name. Throws an exception if not found.
+        /// Get a filter by its name. Returns null if not found.
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns>Filter type</returns>
@@ -32,8 +32,10 @@ namespace FilterLib
                 if (type.Name == name || type.Name == name + "Filter")
                     return type;
 
-            throw new ArgumentException("Filter '" + name + "' not found.");
+            return null;
         }
+
+        public static bool CheckFilterExists(string name) => GetFilterTypeByName(name) != null;
 
         /// <summary>
         /// Construct a filter by its name. Throws an exception if not found
@@ -44,6 +46,8 @@ namespace FilterLib
         public static IFilter ConstructFilterByName(string name)
         {
             Type type = GetFilterTypeByName(name);
+            if (type == null)
+                throw new ArgumentException("Filter '" + name + "' not found.");
 
             foreach (var constr in type.GetConstructors())
             {
@@ -141,7 +145,7 @@ namespace FilterLib
             Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttributes(typeof(BlendAttribute), false).Length > 0);
 
         /// <summary>
-        /// Get a blend by name. Throws exception if not found.
+        /// Get a blend by name. Returns null if not found.
         /// </summary>
         /// <param name="name">Blend name</param>
         /// <returns>Blend type</returns>
@@ -151,8 +155,10 @@ namespace FilterLib
                 if (type.Name == name || type.Name == name + "Blend")
                     return type;
 
-            throw new ArgumentException("Blend '" + name + "' not found.");
+            return null;
         }
+
+        public static bool CheckBlendExists(string name) => GetBlendTypeByName(name) != null;
 
         /// <summary>
         /// Construct a blend by its name. Throws an exception if not found
@@ -163,6 +169,8 @@ namespace FilterLib
         public static IBlend ConstructBlendByName(string name)
         {
             Type type = GetBlendTypeByName(name);
+            if (type == null)
+                throw new ArgumentException("Blend '" + name + "' not found.");
 
             foreach (var constr in type.GetConstructors())
             {
