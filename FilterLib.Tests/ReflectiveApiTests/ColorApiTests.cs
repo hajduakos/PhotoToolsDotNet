@@ -7,7 +7,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
     public class ColorApiTests
     {
         [Test]
-        public void TestGrayscaleParse()
+        public void TestGrayscale()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Grayscale" );
             Assert.IsInstanceOf<GrayscaleFilter>(f);
@@ -21,11 +21,11 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestInvertParse() => 
+        public void TestInvert() => 
             Assert.IsInstanceOf<InvertFilter>(ReflectiveApi.ConstructFilterByName("Invert"));
 
         [Test]
-        public void TestPosterizeParse()
+        public void TestPosterize()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Posterize");
             Assert.IsInstanceOf<PosterizeFilter>(f);
@@ -35,11 +35,11 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestSepiaParse() =>
+        public void TestSepia() =>
             Assert.IsInstanceOf<SepiaFilter>(ReflectiveApi.ConstructFilterByName("Sepia"));
 
         [Test]
-        public void TestTresholdParse()
+        public void TestTreshold()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Treshold");
             Assert.IsInstanceOf<TresholdFilter>(f);
@@ -49,7 +49,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestVintageParse()
+        public void TestVintage()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Vintage");
             Assert.IsInstanceOf<VintageFilter>(f);

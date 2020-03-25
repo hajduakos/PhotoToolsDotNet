@@ -8,7 +8,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
     {
 
         [Test]
-        public void TestAddNoiseParse()
+        public void TestAddNoise()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("AddNoise");
             Assert.IsInstanceOf<AddNoiseFilter>(f);
@@ -25,7 +25,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
 
         [Test]
-        public void TestMedianParse()
+        public void TestMedian()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Median");
             Assert.IsInstanceOf<MedianFilter>(f);

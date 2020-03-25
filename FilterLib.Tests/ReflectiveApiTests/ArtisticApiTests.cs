@@ -7,7 +7,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
     public class ArtisticApiTests
     {
         [Test]
-        public void TestAdaptiveTresholdParse()
+        public void TestAdaptiveTreshold()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("AdaptiveTreshold");
             Assert.IsInstanceOf<AdaptiveTresholdFilter>(f);
@@ -17,7 +17,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestOilPaintParse()
+        public void TestOilPaint()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("OilPaint");
             Assert.IsInstanceOf<OilPaintFilter>(f);
@@ -27,7 +27,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestRandomJitterParse()
+        public void TestRandomJitter()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("RandomJitter");
             Assert.IsInstanceOf<RandomJitterFilter>(f);

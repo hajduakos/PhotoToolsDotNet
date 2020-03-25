@@ -38,6 +38,15 @@ namespace FilterLib.Tests.FilterTests
         }
 
         [Test]
+        public void TestRandomDither()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "RandomDither_2.bmp", new RandomDitherFilter(2), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "RandomDither_4.bmp", new RandomDitherFilter(4), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new FloydSteinbergDitherFilter(256), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new FloydSteinbergDitherFilter(128), 2));
+        }
+
+        [Test]
         public void TestSierraDither()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "SierraDither_2.bmp", new SierraDitherFilter(2), 1));

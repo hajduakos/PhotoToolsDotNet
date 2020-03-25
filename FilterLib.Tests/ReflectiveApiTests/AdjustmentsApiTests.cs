@@ -21,7 +21,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestColorHSLParse()
+        public void TestColorHSL()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ColorHSL");
             Assert.IsInstanceOf<ColorHSLFilter>(f);
@@ -35,7 +35,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestColorRGBParse()
+        public void TestColorRGB()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ColorRGB");
             Assert.IsInstanceOf<ColorRGBFilter>(f);
@@ -49,7 +49,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestContrastParse()
+        public void TestContrast()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Contrast");
             Assert.IsInstanceOf<ContrastFilter>(f);
@@ -59,7 +59,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestGammaParse()
+        public void TestGamma()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Gamma");
             Assert.IsInstanceOf<GammaFilter>(f);
@@ -69,7 +69,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestLevelsParse()
+        public void TestLevels()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Levels");
             Assert.IsInstanceOf<LevelsFilter>(f);
@@ -81,7 +81,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestShadowsHighlightsParse()
+        public void TestShadowsHighlights()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ShadowsHighlights");
             Assert.IsInstanceOf<ShadowsHighlightsFilter>(f);

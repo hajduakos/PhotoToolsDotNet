@@ -7,7 +7,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
     public class MosaicApiTests
     {
         [Test]
-        public void TestCrystallizeParse()
+        public void TestCrystallize()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Crystallize");
             Assert.IsInstanceOf<CrystallizeFilter>(f);
@@ -21,7 +21,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestLegoParse()
+        public void TestLego()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Lego");
             Assert.IsInstanceOf<LegoFilter>(f);
@@ -31,7 +31,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestPixelateParse()
+        public void TestPixelate()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Pixelate");
             Assert.IsInstanceOf<PixelateFilter>(f);

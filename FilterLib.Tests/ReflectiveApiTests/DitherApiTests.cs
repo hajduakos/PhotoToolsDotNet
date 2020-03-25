@@ -7,7 +7,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
     public class DitherApiTests
     {
         [Test]
-        public void TestBayerDitherParse()
+        public void TestBayerDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("BayerDither");
             Assert.IsInstanceOf<BayerDitherFilter>(f);
@@ -19,7 +19,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestFloydSteinbergDitherParse()
+        public void TestFloydSteinbergDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("FloydSteinbergDither");
             Assert.IsInstanceOf<FloydSteinbergDitherFilter>(f);
@@ -29,7 +29,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestJarvisJudiceNinkeDitherParse()
+        public void TestJarvisJudiceNinkeDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("JarvisJudiceNinkeDither");
             Assert.IsInstanceOf<JarvisJudiceNinkeDitherFilter>(f);
@@ -39,7 +39,17 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
-        public void TestSierraDitherParse()
+        public void TestRandomDither()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("RandomDither");
+            Assert.IsInstanceOf<RandomDitherFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
+            RandomDitherFilter ff = f as RandomDitherFilter;
+            Assert.AreEqual(50, ff.Levels);
+        }
+
+        [Test]
+        public void TestSierraDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("SierraDither");
             Assert.IsInstanceOf<SierraDitherFilter>(f);

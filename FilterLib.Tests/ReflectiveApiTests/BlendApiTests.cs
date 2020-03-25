@@ -6,27 +6,27 @@ namespace FilterLib.Tests.ReflectiveApiTests
     public class BlendApiTests
     {
         [Test]
-        public void ColorDodgeBlend() =>
+        public void TestColorDodgeBlend() =>
             Assert.IsInstanceOf<ColorDodgeBlend>(ReflectiveApi.ConstructBlendByName("ColorDodge"));
 
         [Test]
-        public void DarkenBlend() =>
+        public void TestDarkenBlend() =>
             Assert.IsInstanceOf<DarkenBlend>(ReflectiveApi.ConstructBlendByName("Darken"));
 
         [Test]
-        public void LightenBlend() =>
+        public void TestLightenBlend() =>
             Assert.IsInstanceOf<LightenBlend>(ReflectiveApi.ConstructBlendByName("Lighten"));
 
         [Test]
-        public void MultiplyBlend() =>
+        public void TestMultiplyBlend() =>
             Assert.IsInstanceOf<MultiplyBlend>(ReflectiveApi.ConstructBlendByName("Multiply"));
 
         [Test]
-        public void NormalBlend() =>
+        public void TestNormalBlend() =>
             Assert.IsInstanceOf<NormalBlend>(ReflectiveApi.ConstructBlendByName("Normal"));
 
         [Test]
-        public void ScreenBlend() =>
+        public void TestScreenBlend() =>
             Assert.IsInstanceOf<ScreenBlend>(ReflectiveApi.ConstructBlendByName("Screen"));
     }
 }
