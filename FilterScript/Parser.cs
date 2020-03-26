@@ -45,7 +45,7 @@ namespace FilterScript
                     if (currentBlend != null) // Or blend
                     {
                         if (propName != "Opacity") // Currently only opacity is supported for blends
-                            throw new ParseException(lineNo, "Unsupported property '" + propName + "' for blend.");
+                            throw new ParseException(lineNo, $"Unsupported property '{propName}' for blend.");
                         currentBlend.Opacity = int.Parse(propValue);
                     }
                 }
@@ -65,13 +65,13 @@ namespace FilterScript
                     {
                         newVarName = line.Substring(0, assign); // ID by user
                         if (!newVarName.StartsWith(VARPREFIX))
-                            throw new ParseException(lineNo, "Variable name must start with '" + VARPREFIX + "'.");
+                            throw new ParseException(lineNo, $"Variable name must start with '{VARPREFIX}'.");
                     }
                     // Check variable name
                     if (vars.ContainsKey(newVarName))
-                        throw new ParseException(lineNo, "Redefinition of variable '" + newVarName + "'.");
+                        throw new ParseException(lineNo, $"Redefinition of variable '{newVarName}'.");
                     if (newVarName == INPUTTASK)
-                        throw new ParseException(lineNo, "Redefinition of reserved input variable '" + newVarName + "'.");
+                        throw new ParseException(lineNo, $"Redefinition of reserved input variable '{newVarName}'.");
 
                     // Take the rest of the line and split into name and arguments
                     line = line.Substring(assign + ASSIGNOP.Length).Trim();
@@ -89,7 +89,7 @@ namespace FilterScript
                         if (tokens.Length == 1) // But if there is an argument, we take that
                         {
                             if (!vars.ContainsKey(tokens[0]))
-                                throw new ParseException(lineNo, "Undeclared variable.");
+                                throw new ParseException(lineNo, $"Undeclared variable '{tokens[0]}'.");
                             parentTask = vars[tokens[0]];
                         }
                         FilterTask ft = new FilterTask(currentFilter, parentTask);
@@ -110,9 +110,9 @@ namespace FilterScript
                         if (tokens.Length == 2) // But if there are arguments, we take those
                         {
                             if (!vars.ContainsKey(tokens[0]))
-                                throw new ParseException(lineNo, "Undeclared variable.");
+                                throw new ParseException(lineNo, $"Undeclared variable '{tokens[0]}'.");
                             if (!vars.ContainsKey(tokens[1]))
-                                throw new ParseException(lineNo, "Undeclared variable.");
+                                throw new ParseException(lineNo, $"Undeclared variable '{tokens[1]}'.");
                             parentTask1 = vars[tokens[0]];
                             parentTask2 = vars[tokens[1]];
                         }
@@ -123,7 +123,7 @@ namespace FilterScript
                         tasks.Add(bt);
                     }
                     else
-                        throw new ParseException(lineNo, "No filter or blend found with name '" + name + "'.");
+                        throw new ParseException(lineNo, $"No filter or blend found with name '{name}'.");
                 }
             }
 
