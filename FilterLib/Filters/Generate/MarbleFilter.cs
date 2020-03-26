@@ -1,0 +1,110 @@
+﻿using FilterLib.Reporting;
+using FilterLib.Util;
+using System.Drawing;
+using System.Drawing.Imaging;
+using Math = System.Math;
+
+namespace FilterLib.Filters.Generate
+{
+    /// <summary>
+    /// Marble generating filter.
+    /// </summary>
+    [Filter]
+    public sealed class MarbleFilter : GeneratorBase
+    {
+        private int horizLines, vertLines; // Number of horizontal/vertical lines
+        private float twist; // Twist factor
+
+        /// <summary>
+        /// Number of horizontal lines.
+        /// </summary>
+        [FilterParam]
+        [FilterParamMin(0)]
+        public int HorizontalLines
+        {
+            get { return horizLines; }
+            set { horizLines = Math.Max(0, value); }
+        }
+
+        /// <summary>
+        /// Number of vertical lines.
+        /// </summary>
+        [FilterParam]
+        [FilterParamMin(0)]
+        public int VerticalLines
+        {
+            get { return vertLines; }
+            set { vertLines = Math.Max(0, value); }
+        }
+
+        /// <summary>
+        /// Twist factor.
+        /// </summary>
+        [FilterParam]
+        [FilterParamMin(0)]
+        public float Twist
+        {
+            get { return twist; }
+            set { twist = Math.Max(0, value); }
+        }
+
+        /// <summary>
+        /// Constructor with iterations and random number seed
+        /// </summary>
+        /// <param name="horizLines">Number of horizontal lines [0;...]</param>
+        /// <param name="vertLines">Number of vertical lines [0;...]</param>
+        /// <param name="twist">Twist factor [0;...]</param>
+        /// <param name="iterations">Number of iterations [1;...]</param>
+        /// <param name="seed">Random number generator seed</param>
+        public MarbleFilter(int horizLines = 0, int vertLines = 0, float twist = 0, int iterations = 1, int seed = 0)
+            : base(iterations, seed)
+        {
+            this.HorizontalLines = horizLines;
+            this.VerticalLines = vertLines;
+            this.Twist = twist;
+        }
+
+        /// <summary>
+        /// Apply filter by modifying the original image.
+        /// </summary>
+        /// <param name="image">Input image</param>
+        /// <param name="reporter">Reporter (optional)</param>
+        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        {
+            reporter?.Start();
+            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
+            {
+                int x, y, xDiv3;
+                int w = image.Width;
+                int wMul3 = w * 3;
+                int h = image.Height;
+                float xMultiplier = horizLines / (float)w;
+                float yMultiplier = vertLines / (float)h;
+                reporter?.Report(0, 0, 2 * h - 1);
+                float[,] turbulence = GenerateTurbulence(w, h);
+                reporter?.Report(h, 0, 2 * h - 1);
+
+
+                unsafe
+                {
+                    // Iterate through rows
+                    for (y = 0; y < h; ++y)
+                    {
+                        // Get row
+                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        // Iterate through columns
+                        for (x = 0; x < wMul3; x += 3)
+                        {
+                            xDiv3 = x / 3;
+                            row[x] = row[x + 1] = row[x + 2] =
+                                (byte)(255 * Math.Abs(Math.Sin(Math.PI * (xDiv3 * xMultiplier + y * yMultiplier + twist * turbulence[xDiv3, y]))));
+                        }
+                        if ((y & 63) == 0) reporter?.Report(h + y, 0, 2 * h - 1);
+                    }
+                }
+
+            }
+            reporter?.Done();
+        }
+    }
+}
