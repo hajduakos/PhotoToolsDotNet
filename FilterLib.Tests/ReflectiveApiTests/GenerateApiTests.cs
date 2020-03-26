@@ -24,5 +24,17 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(4, ff.Iterations);
             Assert.AreEqual(5, ff.Seed);
         }
+
+        [Test]
+        public void TestTurbulence()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Turbulence");
+            Assert.IsInstanceOf<TurbulenceFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Iterations", "4");
+            ReflectiveApi.SetFilterPropertyByName(f, "Seed", "5");
+            TurbulenceFilter ff = f as TurbulenceFilter;
+            Assert.AreEqual(4, ff.Iterations);
+            Assert.AreEqual(5, ff.Seed);
+        }
     }
 }
