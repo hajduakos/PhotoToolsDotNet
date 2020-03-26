@@ -1,10 +1,9 @@
-﻿using FilterLib.Filters;
-using FilterLib.Reporting;
+﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace FilterLib.Other
+namespace FilterLib.Filters.Other
 {
     /// <summary>
     /// Convolution filter.

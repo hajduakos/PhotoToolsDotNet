@@ -1,4 +1,4 @@
-﻿using FilterLib.Other;
+﻿using FilterLib.Filters.Other;
 using NUnit.Framework;
 
 namespace FilterLib.Tests.FilterTests
