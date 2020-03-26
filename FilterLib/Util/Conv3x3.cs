@@ -40,7 +40,7 @@ namespace FilterLib.Util
         /// <param name="br">Bottom right element</param>
         /// <param name="divisor">Divisor value</param>
         /// <param name="bias">Bias value</param>
-        public Conv3x3(int tl, int tm, int tr, int ml, int mm, int mr, int bl, int bm, int br, int divisor = 1, int bias = 0)
+        public Conv3x3(int tl = 0, int tm = 0, int tr = 0, int ml = 0, int mm = 1, int mr = 0, int bl = 0, int bm = 0, int br = 0, int divisor = 1, int bias = 0)
         {
             matrix = new int[3, 3]; // 2D New array
             matrix[0, 0] = tl; matrix[1, 0] = tm; matrix[2, 0] = tr; // Assign elements

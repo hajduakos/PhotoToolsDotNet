@@ -94,10 +94,17 @@ namespace FilterLib
         /// <returns>Value as type</returns>
         private static object ParseStringToType(Type type, string value)
         {
+            // Try some common types
             NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
             if (type == typeof(Int32)) return Convert.ToInt32(value);
             if (type == typeof(Single)) return Convert.ToSingle(value, nfi);
             if (type == typeof(Boolean)) return Convert.ToBoolean(value);
+
+            // Try string constructor
+            foreach (ConstructorInfo ci in type.GetConstructors())
+                if (ci.GetParameters().Length == 1 && ci.GetParameters()[0].ParameterType == typeof(string))
+                    return ci.Invoke(new object[] { value });
+
             throw new ArgumentException("Parsing type '" + type.Name + "' is not yet supported.");
         }
 
