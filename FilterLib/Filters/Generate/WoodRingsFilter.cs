@@ -1,41 +1,19 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using Math = System.Math;
 
 namespace FilterLib.Filters.Generate
 {
     /// <summary>
-    /// Marble generating filter.
+    /// Wood rings generating filter.
     /// </summary>
     [Filter]
-    public sealed class MarbleFilter : GeneratorBase
+    public sealed class WoodRingsFilter : GeneratorBase
     {
-        private int horizLines, vertLines; // Number of horizontal/vertical lines
+        private int rings; // Number of rings
         private float twist; // Twist factor
-
-        /// <summary>
-        /// Number of horizontal lines.
-        /// </summary>
-        [FilterParam]
-        [FilterParamMin(0)]
-        public int HorizontalLines
-        {
-            get { return horizLines; }
-            set { horizLines = Math.Max(0, value); }
-        }
-
-        /// <summary>
-        /// Number of vertical lines.
-        /// </summary>
-        [FilterParam]
-        [FilterParamMin(0)]
-        public int VerticalLines
-        {
-            get { return vertLines; }
-            set { vertLines = Math.Max(0, value); }
-        }
 
         /// <summary>
         /// Twist factor.
@@ -49,18 +27,27 @@ namespace FilterLib.Filters.Generate
         }
 
         /// <summary>
+        /// Number of rings.
+        /// </summary>
+        [FilterParam]
+        [FilterParamMin(0)]
+        public int Rings
+        {
+            get { return rings; }
+            set { rings = Math.Max(0, value); }
+        }
+
+        /// <summary>
         /// Constructor with iterations and random number seed
         /// </summary>
-        /// <param name="horizLines">Number of horizontal lines [0;...]</param>
-        /// <param name="vertLines">Number of vertical lines [0;...]</param>
+        /// <param name="rings">Number of rings [0;...]</param>
         /// <param name="twist">Twist factor [0;...]</param>
         /// <param name="iterations">Number of iterations [1;...]</param>
         /// <param name="seed">Random number generator seed</param>
-        public MarbleFilter(int horizLines = 0, int vertLines = 0, float twist = 0, int iterations = 1, int seed = 0)
+        public WoodRingsFilter(int rings = 0, float twist = 0, int iterations = 1, int seed = 0)
             : base(iterations, seed)
         {
-            this.HorizontalLines = horizLines;
-            this.VerticalLines = vertLines;
+            this.Rings = rings;
             this.Twist = twist;
         }
 
@@ -78,12 +65,11 @@ namespace FilterLib.Filters.Generate
                 int w = image.Width;
                 int wMul3 = w * 3;
                 int h = image.Height;
-                float xMultiplier = horizLines / (float)w;
-                float yMultiplier = vertLines / (float)h;
+                float xShifted, yShifted;
+                float sin_mult = (float)(Math.PI * 2 * rings);
                 reporter?.Report(0, 0, 2 * h - 1);
                 float[,] turbulence = GenerateTurbulence(w, h);
                 reporter?.Report(h, 0, 2 * h - 1);
-
 
                 unsafe
                 {
@@ -96,8 +82,12 @@ namespace FilterLib.Filters.Generate
                         for (x = 0; x < wMul3; x += 3)
                         {
                             xDiv3 = x / 3;
-                            row[x] = row[x + 1] = row[x + 2] =
-                                (byte)(255 * Math.Abs(Math.Sin(Math.PI * (xDiv3 * xMultiplier + y * yMultiplier + twist * turbulence[xDiv3, y]))));
+                            xShifted = (xDiv3 - w / 2) / (float)w;
+                            yShifted = (y - h / 2) / (float)h;
+
+                            row[x] = row[x + 1] = row[x + 2] = (byte)(
+                                255 * Math.Abs(Math.Sin(sin_mult * (Math.Sqrt(xShifted * xShifted + yShifted * yShifted) + twist * turbulence[xDiv3, y])
+                                )));
                         }
                         if ((y & 63) == 0) reporter?.Report(h + y, 0, 2 * h - 1);
                     }

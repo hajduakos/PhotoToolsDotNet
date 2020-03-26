@@ -36,5 +36,21 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(4, ff.Iterations);
             Assert.AreEqual(5, ff.Seed);
         }
+
+        [Test]
+        public void TestWoodRings()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("WoodRings");
+            Assert.IsInstanceOf<WoodRingsFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Rings", "1");
+            ReflectiveApi.SetFilterPropertyByName(f, "Twist", "3");
+            ReflectiveApi.SetFilterPropertyByName(f, "Iterations", "4");
+            ReflectiveApi.SetFilterPropertyByName(f, "Seed", "5");
+            WoodRingsFilter ff = f as WoodRingsFilter;
+            Assert.AreEqual(1, ff.Rings);
+            Assert.AreEqual(3, ff.Twist);
+            Assert.AreEqual(4, ff.Iterations);
+            Assert.AreEqual(5, ff.Seed);
+        }
     }
 }
