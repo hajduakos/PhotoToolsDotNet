@@ -59,5 +59,22 @@ namespace FilterLib.Tests
             Assert.AreEqual(new RGB(28, 38, 47), new HSL(210, 25, 15).ToRGB());
             Assert.AreEqual(new RGB(255, 255, 255), new HSL(0, 0, 100).ToRGB());
         }
+
+        [Test]
+        public void TestConv3x3Parse()
+        {
+            Conv3x3 c = new Conv3x3("[1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11");
+            Assert.AreEqual(1, c[0, 0]);
+            Assert.AreEqual(2, c[1, 0]);
+            Assert.AreEqual(3, c[2, 0]);
+            Assert.AreEqual(4, c[0, 1]);
+            Assert.AreEqual(5, c[1, 1]);
+            Assert.AreEqual(6, c[2, 1]);
+            Assert.AreEqual(7, c[0, 2]);
+            Assert.AreEqual(8, c[1, 2]);
+            Assert.AreEqual(9, c[2, 2]);
+            Assert.AreEqual(10, c.Divisor);
+            Assert.AreEqual(11, c.Bias);
+        }
     }
 }
