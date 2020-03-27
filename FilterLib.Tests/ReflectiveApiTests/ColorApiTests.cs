@@ -25,6 +25,18 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<InvertFilter>(ReflectiveApi.ConstructFilterByName("Invert"));
 
         [Test]
+        public void TestOrton()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Orton");
+            Assert.IsInstanceOf<OrtonFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Strength", "50");
+            ReflectiveApi.SetFilterPropertyByName(f, "Radius", "10");
+            OrtonFilter ff = f as OrtonFilter;
+            Assert.AreEqual(50, ff.Strength);
+            Assert.AreEqual(10, ff.Radius);
+        }
+
+        [Test]
         public void TestPosterize()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Posterize");

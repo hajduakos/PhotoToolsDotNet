@@ -21,6 +21,13 @@ namespace FilterLib.Tests.FilterTests
         }
 
         [Test]
+        public void TestOrton()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new OrtonFilter(0, 3), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Orton_80_5.bmp", new OrtonFilter(80, 5), 1));
+        }
+
+        [Test]
         public void TestPosterize()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Posterize_2.bmp", new PosterizeFilter(2), 1));

@@ -17,5 +17,12 @@ namespace FilterLib.Tests.FilterTests
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "BoxBlur_0_5.bmp", new BoxBlurFilter(0, 5), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "BoxBlur_10_20.bmp", new BoxBlurFilter(10, 20), 1));
         }
+
+        [Test]
+        public void TestGaussianBlur()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new GaussianBlurFilter(0), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "GaussianBlur_5.bmp", new GaussianBlurFilter(5), 1));
+        }
     }
 }

@@ -22,5 +22,15 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(10, ff.RadiusX);
             Assert.AreEqual(20, ff.RadiusY);
         }
+
+        [Test]
+        public void TestGaussianBlur()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("GaussianBlur");
+            Assert.IsInstanceOf<GaussianBlurFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Radius", "10");
+            GaussianBlurFilter ff = f as GaussianBlurFilter;
+            Assert.AreEqual(10, ff.Radius);
+        }
     }
 }
