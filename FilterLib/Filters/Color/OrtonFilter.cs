@@ -55,10 +55,12 @@ namespace FilterLib.Filters.Color
         /// <param name="reporter">Reporter (optional)</param>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
-            using Bitmap screened = new ScreenBlend(100).Apply(image, (Bitmap)image.Clone());
-            using Bitmap blurred = new GaussianBlurFilter(radius).Apply(screened, reporter);
-            using Bitmap multiplied = new MultiplyBlend(100).Apply(screened, blurred);
-            new NormalBlend(strength).ApplyInPlace(image, multiplied);
+            reporter?.Start();
+            using Bitmap screened = new ScreenBlend(100).Apply(image, (Bitmap)image.Clone(), new SubReporter(reporter, 0, 25, 0, 100));
+            using Bitmap blurred = new GaussianBlurFilter(radius).Apply(screened, new SubReporter(reporter, 25, 50, 0, 100));
+            using Bitmap multiplied = new MultiplyBlend(100).Apply(screened, blurred, new SubReporter(reporter, 50, 75, 0, 100));
+            new NormalBlend(strength).ApplyInPlace(image, multiplied, new SubReporter(reporter, 75, 100, 0, 100));
+            reporter?.Done();
         }
     }
 }
