@@ -32,5 +32,17 @@ namespace FilterLib.Tests.ReflectiveApiTests
             GaussianBlurFilter ff = f as GaussianBlurFilter;
             Assert.AreEqual(10, ff.Radius);
         }
+
+        [Test]
+        public void TestMotionBlur()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("MotionBlur");
+            Assert.IsInstanceOf<MotionBlurFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Length", "10");
+            ReflectiveApi.SetFilterPropertyByName(f, "Angle", "12.34");
+            MotionBlurFilter ff = f as MotionBlurFilter;
+            Assert.AreEqual(10, ff.Length);
+            Assert.AreEqual(12.34f, ff.Angle, 0.01f);
+        }
     }
 }
