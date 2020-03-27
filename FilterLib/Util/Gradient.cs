@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace FilterLib.Util
 {
@@ -22,20 +24,7 @@ namespace FilterLib.Util
         {
             this.colors = new List<RGB>(colors);
             this.stops = new List<float>(stops);
-            if (this.colors.Count != this.stops.Count)
-                throw new ArgumentException("Length of colors and stops must be equal.");
-            if (this.colors.Count < 2)
-                throw new ArgumentException("At least two colors are required.");
-            for (int i = 0; i < this.stops.Count - 1; ++i)
-                if (this.stops[i] >= this.stops[i + 1])
-                    throw new ArgumentException("Stops must be increasing.");
-            // Normalize
-            float first = this.stops[0];
-            for (int i = 0; i < this.stops.Count; ++i)
-                this.stops[i] -= first;
-            float last = this.stops[^1];
-            for (int i = 0; i < this.stops.Count; ++i)
-                this.stops[i] /= last;
+            CheckAndNormalize();
         }
 
         /// <summary>
@@ -52,6 +41,46 @@ namespace FilterLib.Util
         /// <param name="mid">Midpoint color</param>
         /// <param name="end">End color</param>
         public Gradient(RGB start, RGB mid, RGB end) : this(new RGB[] { start, mid, end }, new float[] { 0, 0.5f, 1 }) { }
+
+        /// <summary>
+        /// Parse a gradient from a string of form s (r g b), s (r g b), ..., s (r g b).
+        /// </summary>
+        /// <param name="str">String to be parsed</param>
+        public Gradient(string str)
+        {
+            colors = new List<RGB>();
+            stops = new List<float>();
+            str = Regex.Replace(str, @"\s+", " ").Trim();
+            string[] tokens = str.Split(',');
+            if (tokens.Length < 2) throw new FormatException("Expected at least two components.");
+            foreach(string comp in tokens)
+            {
+                string[] compTokens = comp.Trim().Replace("(", "").Replace(")", "").Split(' ');
+                if (compTokens.Length != 4)
+                    throw new FormatException("Expected exactly four numbers 'stop (r g b)' per component.");
+                stops.Add(float.Parse(compTokens[0], CultureInfo.InvariantCulture.NumberFormat));
+                colors.Add(new RGB(int.Parse(compTokens[1]), int.Parse(compTokens[2]), int.Parse(compTokens[3])));
+            }
+            CheckAndNormalize();
+        }
+
+        private void CheckAndNormalize()
+        {
+            if (this.colors.Count != this.stops.Count)
+                throw new ArgumentException("Length of colors and stops must be equal.");
+            if (this.colors.Count < 2)
+                throw new ArgumentException("At least two colors are required.");
+            for (int i = 0; i < this.stops.Count - 1; ++i)
+                if (this.stops[i] >= this.stops[i + 1])
+                    throw new ArgumentException("Stops must be increasing.");
+            // Normalize
+            float first = this.stops[0];
+            for (int i = 0; i < this.stops.Count; ++i)
+                this.stops[i] -= first;
+            float last = this.stops[^1];
+            for (int i = 0; i < this.stops.Count; ++i)
+                this.stops[i] /= last;
+        }
 
         /// <summary>
         /// Create a map of 256 colors for the range of the gradient.
