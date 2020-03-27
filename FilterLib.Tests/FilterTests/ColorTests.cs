@@ -1,10 +1,18 @@
 ﻿using NUnit.Framework;
 using FilterLib.Filters.Color;
+using FilterLib.Util;
 
 namespace FilterLib.Tests.FilterTests
 {
     public class ColorTests
     {
+        [Test]
+        public void TestGradientMap()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "GradientMap_r_y_g.bmp", new GradientMapFilter(new Gradient(
+                new RGB(255, 0, 0), new RGB(255, 255, 0), new RGB(0, 255, 0))), 1));
+        }
+
         [Test]
         public void TestGrayscale()
         {

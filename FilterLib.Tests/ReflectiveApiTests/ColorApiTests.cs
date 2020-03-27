@@ -1,11 +1,24 @@
 ﻿using FilterLib.Filters;
 using FilterLib.Filters.Color;
+using FilterLib.Util;
 using NUnit.Framework;
 
 namespace FilterLib.Tests.ReflectiveApiTests
 {
     public class ColorApiTests
     {
+        [Test]
+        public void TestGradientMap()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("GradientMap");
+            Assert.IsInstanceOf<GradientMapFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "GradientMap", "0 (255 0 0), 0.5 (255 255 0), 1 (0 255 0)");
+            GradientMapFilter ff = f as GradientMapFilter;
+            Assert.AreEqual(new RGB(255, 0, 0), ff.GradientMap.GetColor(0));
+            Assert.AreEqual(new RGB(255, 255, 0), ff.GradientMap.GetColor(0.5f));
+            Assert.AreEqual(new RGB(0, 255, 0), ff.GradientMap.GetColor(1));
+        }
+
         [Test]
         public void TestGrayscale()
         {
