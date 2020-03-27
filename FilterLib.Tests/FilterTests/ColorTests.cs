@@ -9,8 +9,21 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         public void TestGradientMap()
         {
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "GradientMap_r_y_g.bmp", new GradientMapFilter(new Gradient(
-                new RGB(255, 0, 0), new RGB(255, 255, 0), new RGB(0, 255, 0))), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "GradientMap_r_y_g.bmp", new GradientMapFilter(
+                new Gradient(new RGB(255, 0, 0), new RGB(255, 255, 0), new RGB(0, 255, 0))), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "GradientMap_b_r_y.bmp", new GradientMapFilter(
+                new Gradient(new RGB(0, 0, 255), new RGB(255, 0, 0), new RGB(255, 255, 0))), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "GradientMap_rainbow.bmp", new GradientMapFilter(
+                new Gradient(
+                    new RGB[]{
+                        new RGB(255,0,0),
+                        new RGB(255,0,255),
+                        new RGB(0,0,255),
+                        new RGB(0,255,255),
+                        new RGB(0,255,0),
+                        new RGB(255,255,0),
+                        new RGB(255,0,0)},
+                    new float[] { 1, 2, 3, 4, 5, 6, 7 })), 1));
         }
 
         [Test]
