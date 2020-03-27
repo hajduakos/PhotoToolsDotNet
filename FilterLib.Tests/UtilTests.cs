@@ -76,5 +76,26 @@ namespace FilterLib.Tests
             Assert.AreEqual(10, c.Divisor);
             Assert.AreEqual(11, c.Bias);
         }
+
+        [Test]
+        public void TestGradientOf2()
+        {
+            Gradient g = new Gradient(new RGB(255, 100, 0), new RGB(0, 50, 255));
+            Assert.AreEqual(new RGB(255, 100, 0), g.GetColor(0f));
+            Assert.AreEqual(new RGB(127, 75, 127), g.GetColor(0.5f));
+            Assert.AreEqual(new RGB(51, 60, 204), g.GetColor(0.8f));
+            Assert.AreEqual(new RGB(0, 50, 255), g.GetColor(1f));
+        }
+
+        [Test]
+        public void TestGradientOf3()
+        {
+            Gradient g = new Gradient(new RGB(255, 0, 0), new RGB(255, 255, 0), new RGB(0, 255, 0));
+            Assert.AreEqual(new RGB(255, 0, 0), g.GetColor(0f));
+            Assert.AreEqual(new RGB(255, 127, 0), g.GetColor(0.25f));
+            Assert.AreEqual(new RGB(255, 255, 0), g.GetColor(0.5f));
+            Assert.AreEqual(new RGB(127, 255, 0), g.GetColor(0.75f));
+            Assert.AreEqual(new RGB(0, 255, 0), g.GetColor(1f));
+        }
     }
 }
