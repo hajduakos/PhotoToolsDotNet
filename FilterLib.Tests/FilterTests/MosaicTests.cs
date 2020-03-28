@@ -17,8 +17,8 @@ namespace FilterLib.Tests.FilterTests
         public void TestLego()
         {
             string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "l";
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Lego_16" + suffix + ".bmp", new LegoFilter(16), 1));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Lego_32" + suffix + ".bmp", new LegoFilter(32), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"Lego_16{suffix}.bmp", new LegoFilter(16), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"Lego_32{suffix}.bmp", new LegoFilter(32), 1));
         }
 
         [Test]
