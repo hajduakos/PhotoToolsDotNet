@@ -18,7 +18,7 @@ namespace FilterLib.Tests
             using Bitmap bmpActual = filter.Apply(bmpOriginal);
             using Bitmap bmpExpected = original == expected ? (Bitmap)bmpOriginal.Clone() : new Bitmap(path + expected);
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
-            if (!ok) bmpActual.Save(path + expected + "_actual.bmp");
+            if (!ok) bmpActual.Save(path + expected + "_actual.bmp", ImageFormat.Bmp);
             return ok;
         }
 
