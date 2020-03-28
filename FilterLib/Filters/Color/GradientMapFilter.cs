@@ -18,12 +18,15 @@ namespace FilterLib.Filters.Color
         /// Constructor.
         /// </summary>
         /// <param name="gradientMap">Gradient</param>
-        public GradientMapFilter(Gradient gradientMap = null)
+        public GradientMapFilter(Gradient gradientMap)
         {
             GradientMap = gradientMap;
-            if (GradientMap == null)
-                GradientMap = new Gradient(new RGB(0, 0, 0), new RGB(255, 255, 255));
         }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public GradientMapFilter() : this(new Gradient(new RGB(0, 0, 0), new RGB(255, 255, 255))) { }
 
         private RGB[] map;
 
