@@ -15,7 +15,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
         [Test]
         public void TestPrewitt() =>
-            Assert.IsInstanceOf<SobelFilter>(ReflectiveApi.ConstructFilterByName("Prewitt"));
+            Assert.IsInstanceOf<PrewittFilter>(ReflectiveApi.ConstructFilterByName("Prewitt"));
 
         [Test]
         public void TestSobel() =>
