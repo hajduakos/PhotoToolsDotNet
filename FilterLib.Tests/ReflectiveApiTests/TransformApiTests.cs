@@ -7,6 +7,23 @@ namespace FilterLib.Tests.ReflectiveApiTests
     public class TransformApiTests
     {
         [Test]
+        public void TestCrop()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Crop");
+            Assert.IsInstanceOf<CropFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "X", "10px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Y", "25%");
+            ReflectiveApi.SetFilterPropertyByName(f, "Width", "100px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Height", "50%");
+            CropFilter ff = f as CropFilter;
+            Assert.AreEqual(10, ff.X.ToAbsolute(500));
+            Assert.AreEqual(125, ff.Y.ToAbsolute(500));
+            Assert.AreEqual(100, ff.Width.ToAbsolute(500));
+            Assert.AreEqual(250, ff.Height.ToAbsolute(500));
+        }
+
+
+        [Test]
         public void TestFlipHorizontal() =>
             Assert.IsInstanceOf<FlipHorizontalFilter>(ReflectiveApi.ConstructFilterByName("FlipHorizontal"));
 
