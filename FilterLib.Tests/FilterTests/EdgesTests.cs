@@ -12,6 +12,9 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         public void TestEmboss() =>
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Emboss.bmp", new EmbossFilter(), 1));
+        [Test]
+        public void TestPrewitt() =>
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Prewitt.bmp", new PrewittFilter(), 1));
 
         [Test]
         public void TestSobel() =>

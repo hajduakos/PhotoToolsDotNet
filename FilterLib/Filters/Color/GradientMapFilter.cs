@@ -1,5 +1,4 @@
-﻿using System;
-using FilterLib.Util;
+﻿using FilterLib.Util;
 
 namespace FilterLib.Filters.Color
 {

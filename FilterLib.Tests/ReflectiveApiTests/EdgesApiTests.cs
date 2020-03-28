@@ -14,6 +14,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<EmbossFilter>(ReflectiveApi.ConstructFilterByName("Emboss"));
 
         [Test]
+        public void TestPrewitt() =>
+            Assert.IsInstanceOf<SobelFilter>(ReflectiveApi.ConstructFilterByName("Prewitt"));
+
+        [Test]
         public void TestSobel() =>
             Assert.IsInstanceOf<SobelFilter>(ReflectiveApi.ConstructFilterByName("Sobel"));
     }
