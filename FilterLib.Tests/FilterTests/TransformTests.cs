@@ -38,6 +38,15 @@ namespace FilterLib.Tests.FilterTests
         }
 
         [Test]
+        public void TestRotate()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new RotateFilter(0, false), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new RotateFilter(0, true), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Rotate_30_false.bmp", new RotateFilter(30, false), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Rotate_30_true.bmp", new RotateFilter(30, true), 1));
+        }
+
+        [Test]
         public void TestRotate180() =>
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Rotate180.bmp", new Rotate180Filter(), 0));
 

@@ -55,6 +55,7 @@ namespace FilterLib.Filters.Transform
         /// <returns>New image with filter applied</returns>
         public Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
+            reporter?.Start();
             int newWidth = Width.ToAbsolute(image.Width);
             int newHeight = Height.ToAbsolute(image.Height);
 
@@ -67,6 +68,7 @@ namespace FilterLib.Filters.Transform
                 gfx.InterpolationMode = Interpolation;
                 gfx.DrawImage(image, 0, 0, resized.Width, resized.Height);
             }
+            reporter?.Done();
             return resized;
         }
     }

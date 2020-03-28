@@ -67,6 +67,7 @@ namespace FilterLib.Filters.Transform
         /// <returns>New image with filter applied</returns>
         public Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
+            reporter?.Start();
             int x0 = X.ToAbsolute(image.Width);
             int y0 = Y.ToAbsolute(image.Height);
             int w0 = Width.ToAbsolute(image.Width);
@@ -81,6 +82,7 @@ namespace FilterLib.Filters.Transform
             {
                 gfx.DrawImage(image, -x0, -y0, image.Width, image.Height);
             }
+            reporter?.Done();
             return cropped;
         }
     }

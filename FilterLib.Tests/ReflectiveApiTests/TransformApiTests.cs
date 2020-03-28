@@ -46,6 +46,18 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestRotate()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Rotate");
+            Assert.IsInstanceOf<RotateFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Angle", "123.45");
+            ReflectiveApi.SetFilterPropertyByName(f, "Crop", "true");
+            RotateFilter ff = f as RotateFilter;
+            Assert.AreEqual(123.45f, ff.Angle);
+            Assert.AreEqual(true, ff.Crop);
+        }
+
+        [Test]
         public void TestRotate180() => 
             Assert.IsInstanceOf<Rotate180Filter>(ReflectiveApi.ConstructFilterByName("Rotate180"));
 
