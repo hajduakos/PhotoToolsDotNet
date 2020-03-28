@@ -20,9 +20,9 @@ namespace FilterLib.Tests.FilterTests
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp",
                 new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(1), itp), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Resize_200pct_30px_HQB.bmp",
-                new ResizeFilter(Util.Size.Relative(2), Util.Size.Absolute(30), itp), 2));
+                new ResizeFilter(Util.Size.Relative(2), Util.Size.Absolute(30), itp), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Resize_25pct_50pct_HQB.bmp",
-                new ResizeFilter(Util.Size.Relative(.25f), Util.Size.Relative(.5f), itp), 2));
+                new ResizeFilter(Util.Size.Relative(.25f), Util.Size.Relative(.5f), itp), 1));
         }
 
         [Test]
