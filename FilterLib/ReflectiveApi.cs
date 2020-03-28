@@ -99,6 +99,7 @@ namespace FilterLib
             if (type == typeof(Int32)) return Convert.ToInt32(value);
             if (type == typeof(Single)) return Convert.ToSingle(value, nfi);
             if (type == typeof(Boolean)) return Convert.ToBoolean(value);
+            if (type.IsEnum) return Enum.Parse(type, value);
 
             // Try string constructor
             foreach (ConstructorInfo ci in type.GetConstructors())

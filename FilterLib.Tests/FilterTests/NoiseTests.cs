@@ -1,5 +1,6 @@
 ﻿using FilterLib.Filters.Noise;
 using NUnit.Framework;
+using static FilterLib.Filters.Noise.AddNoiseFilter;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -8,10 +9,10 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         public void TestAddNoise()
         {
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new AddNoiseFilter(1000, 0, true, 0), 0));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new AddNoiseFilter(0, 255, false, 0), 0));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "AddNoise_500_200_False_0.bmp", new AddNoiseFilter(500, 200, false, 0), 0));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "AddNoise_500_200_True_0.bmp", new AddNoiseFilter(500, 200, true, 0), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new AddNoiseFilter(1000, 0, NoiseType.Monochrome, 0), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new AddNoiseFilter(0, 255, NoiseType.Color, 0), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "AddNoise_500_200_Color_0.bmp", new AddNoiseFilter(500, 200, NoiseType.Color, 0), 0));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "AddNoise_500_200_Mono_0.bmp", new AddNoiseFilter(500, 200, NoiseType.Monochrome, 0), 0));
         }
 
         [Test]

@@ -12,6 +12,11 @@ namespace FilterLib.Filters.Noise
         private int intensity, strength;
 
         /// <summary>
+        /// Possible noise types.
+        /// </summary>
+        public enum NoiseType { Monochrome, Color }
+
+        /// <summary>
         /// Intensity of the noise [0;1000].
         /// </summary>
         [FilterParam]
@@ -36,10 +41,10 @@ namespace FilterLib.Filters.Noise
         }
 
         /// <summary>
-        /// Is the noise monochrome.
+        /// Type of noise.
         /// </summary>
         [FilterParam]
-        public bool Monochrome { get; set; }
+        public NoiseType Type { get; set; }
 
         /// <summary>
         /// Random number generator seed.
@@ -52,13 +57,13 @@ namespace FilterLib.Filters.Noise
         /// </summary>
         /// <param name="intensity">Intensity of the noise [0;1000]</param>
         /// <param name="strength">Strength of the noise [0;255]</param>
-        /// <param name="monochrome">Is the noise monochrome</param>
+        /// <param name="type">Type of noise</param>
         /// <param name="seed">Random number generator seed</param>
-        public AddNoiseFilter(int intensity = 0, int strength = 0, bool monochrome = false, int seed = 0)
+        public AddNoiseFilter(int intensity = 0, int strength = 0, NoiseType type = NoiseType.Color, int seed = 0)
         {
             Intensity = intensity;
             Strength = strength;
-            Monochrome = monochrome;
+            Type = type;
             Seed = seed;
         }
 
@@ -85,7 +90,7 @@ namespace FilterLib.Filters.Noise
             // Decide to add noise to this pixel or not
             if (rnd.Next(1000) < intensity)
             {
-                if (Monochrome) // Monochrome noise -> same noise added to each channel
+                if (Type == NoiseType.Monochrome) // Monochrome noise -> same noise added to each channel
                 {
                     int noise = (int)((rnd.NextDouble() * 2 - 1) * strength);
                     rn = *r + noise;

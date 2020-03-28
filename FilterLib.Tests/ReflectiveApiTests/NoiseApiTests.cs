@@ -15,12 +15,12 @@ namespace FilterLib.Tests.ReflectiveApiTests
             ReflectiveApi.SetFilterPropertyByName(f, "Intensity", "50");
             ReflectiveApi.SetFilterPropertyByName(f, "Strength", "60");
             ReflectiveApi.SetFilterPropertyByName(f, "Seed", "70");
-            ReflectiveApi.SetFilterPropertyByName(f, "Monochrome", "true");
+            ReflectiveApi.SetFilterPropertyByName(f, "Type", "Monochrome");
             AddNoiseFilter ff = f as AddNoiseFilter;
             Assert.AreEqual(50, ff.Intensity);
             Assert.AreEqual(60, ff.Strength);
             Assert.AreEqual(70, ff.Seed);
-            Assert.IsTrue(ff.Monochrome);
+            Assert.AreEqual(AddNoiseFilter.NoiseType.Monochrome, ff.Type);
         }
 
 
