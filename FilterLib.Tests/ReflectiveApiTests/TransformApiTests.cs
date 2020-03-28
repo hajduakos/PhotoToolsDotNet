@@ -1,4 +1,5 @@
-﻿using FilterLib.Filters.Transform;
+﻿using FilterLib.Filters;
+using FilterLib.Filters.Transform;
 using NUnit.Framework;
 
 namespace FilterLib.Tests.ReflectiveApiTests
@@ -12,6 +13,20 @@ namespace FilterLib.Tests.ReflectiveApiTests
         [Test]
         public void TestFlipVertical() =>
             Assert.IsInstanceOf<FlipVerticalFilter>(ReflectiveApi.ConstructFilterByName("FlipVertical"));
+
+        [Test]
+        public void TestResize()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Resize");
+            Assert.IsInstanceOf<ResizeFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Width", "100px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Height", "50%");
+            ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "HighQualityBicubic");
+            ResizeFilter ff = f as ResizeFilter;
+            Assert.AreEqual(100, ff.Width.ToAbsolute(500));
+            Assert.AreEqual(250, ff.Height.ToAbsolute(500));
+            Assert.AreEqual(System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic, ff.Interpolation);
+        }
 
         [Test]
         public void TestRotate180() => 

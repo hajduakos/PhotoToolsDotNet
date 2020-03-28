@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using FilterLib.Util;
+using System;
 
 namespace FilterLib.Tests
 {
@@ -117,6 +118,29 @@ namespace FilterLib.Tests
             Assert.AreEqual(new RGB(255, 255, 0), g.GetColor(0.5f));
             Assert.AreEqual(new RGB(127, 255, 0), g.GetColor(0.75f));
             Assert.AreEqual(new RGB(0, 255, 0), g.GetColor(1f));
+        }
+
+        [Test]
+        public void TestSize()
+        {
+            Assert.AreEqual(25, Size.Absolute(25).ToAbsolute(0));
+            Assert.AreEqual(0, Size.Relative(.25f).ToAbsolute(0));
+            Assert.AreEqual(25, Size.Relative(.25f).ToAbsolute(100));
+            Assert.AreEqual(200, Size.Relative(2f).ToAbsolute(100));
+        }
+
+        [Test]
+        public void TestSizeParse()
+        {
+            Assert.AreEqual(25, Size.FromString("25px").ToAbsolute(0));
+            Assert.AreEqual(0, Size.FromString("25%").ToAbsolute(0));
+            Assert.AreEqual(25, Size.FromString("25 %").ToAbsolute(100));
+            Assert.AreEqual(200, Size.FromString("200   %").ToAbsolute(100));
+
+            Assert.Throws<FormatException>(() => Size.FromString("abc"));
+            Assert.Throws<FormatException>(() => Size.FromString("123"));
+            Assert.Throws<FormatException>(() => Size.FromString("123percent"));
+            Assert.Throws<FormatException>(() => Size.FromString("123pixels"));
         }
     }
 }
