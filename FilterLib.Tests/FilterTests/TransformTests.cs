@@ -40,10 +40,11 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         public void TestRotate()
         {
+            string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new RotateFilter(0, false), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new RotateFilter(0, true), 1));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Rotate_30_false.bmp", new RotateFilter(30, false), 1));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Rotate_30_true.bmp", new RotateFilter(30, true), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"Rotate_30_false{suffix}.bmp", new RotateFilter(30, false), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"Rotate_30_true{suffix}.bmp", new RotateFilter(30, true), 1));
         }
 
         [Test]
