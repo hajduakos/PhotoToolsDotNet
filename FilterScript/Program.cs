@@ -10,6 +10,12 @@ namespace FilterScript
     {
         static void Main(string[] args)
         {
+            if (args.Length == 1 && args[0] == "--doc")
+            {
+                using StreamWriter sw = new StreamWriter(Console.OpenStandardOutput());
+                new DocGen(sw).Write();
+                return;
+            }
             string scriptPath = ParseArg(args, "s");
             string inputPath = ParseArg(args, "i");
             string outputPath = ParseArg(args, "o");
@@ -23,7 +29,7 @@ namespace FilterScript
         static string ParseArg(string[] args, string flag)
         {
             flag = "-" + flag;
-            for(int i = 0; i < args.Length; ++i)
+            for (int i = 0; i < args.Length; ++i)
             {
                 if (args[i] == flag)
                 {
