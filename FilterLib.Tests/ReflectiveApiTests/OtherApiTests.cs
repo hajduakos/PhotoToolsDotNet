@@ -25,5 +25,17 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(10, ff.Matrix.Divisor);
             Assert.AreEqual(11, ff.Matrix.Bias);
         }
+
+        [Test]
+        public void TestEquirectangularToStereographic()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("EquirectangularToStereographic");
+            Assert.IsInstanceOf<EquirectangularToStereographicFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "AOV", "123.45");
+            ReflectiveApi.SetFilterPropertyByName(f, "Spin", "67.89");
+            EquirectangularToStereographicFilter ff = f as EquirectangularToStereographicFilter;
+            Assert.AreEqual(123.45f, ff.AOV);
+            Assert.AreEqual(67.89f, ff.Spin);
+        }
     }
 }
