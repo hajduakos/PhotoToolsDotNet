@@ -1,6 +1,7 @@
 ﻿using FilterLib.Filters.Other;
 using FilterLib.Util;
 using NUnit.Framework;
+using System;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -41,6 +42,9 @@ namespace FilterLib.Tests.FilterTests
                 new WavesFilter(Size.Relative(.5f), Size.Absolute(9), WavesFilter.WaveDirection.Horizontal), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Waves_10pct_16px_Vertical.bmp",
                 new WavesFilter(Size.Relative(.1f), Size.Absolute(16), WavesFilter.WaveDirection.Vertical), 1));
+            // Exceptions
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", "_input.bmp",
+                new WavesFilter(Size.Absolute(0), Size.Relative(1), WavesFilter.WaveDirection.Horizontal), 1));
         }
     }
 }

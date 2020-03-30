@@ -1,5 +1,6 @@
 ﻿using FilterLib.Filters.Transform;
 using NUnit.Framework;
+using System;
 using System.Runtime.InteropServices;
 
 namespace FilterLib.Tests.FilterTests
@@ -13,6 +14,15 @@ namespace FilterLib.Tests.FilterTests
                 new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(1)), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "Crop_25pct_45px_50pct_40px.bmp",
                 new CropFilter(Util.Size.Relative(.25f), Util.Size.Absolute(45), Util.Size.Relative(.5f), Util.Size.Absolute(40)), 1));
+            // Exceptions
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", "_input.bmp",
+                new CropFilter(Util.Size.Absolute(-1), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(1)), 1));
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", "_input.bmp",
+                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(-1), Util.Size.Relative(1), Util.Size.Relative(1)), 1));
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", "_input.bmp",
+                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(0), Util.Size.Relative(1)), 1));
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", "_input.bmp",
+                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(0)), 1));
         }
 
         [Test]
@@ -35,6 +45,11 @@ namespace FilterLib.Tests.FilterTests
                 new ResizeFilter(Util.Size.Relative(2), Util.Size.Absolute(30), itp), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", $"Resize_25pct_50pct_NN{suffix}.bmp",
                 new ResizeFilter(Util.Size.Relative(.25f), Util.Size.Relative(.5f), itp), 1));
+            // Exceptions
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", "_input.bmp",
+                new ResizeFilter(Util.Size.Relative(0), Util.Size.Relative(1), itp), 1));
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", "_input.bmp",
+                new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(0), itp), 1));
         }
 
         [Test]
