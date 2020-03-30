@@ -75,6 +75,6 @@
 
         public static bool operator !=(HSL c1, HSL c2) => !(c1 == c2);
 
-        public override string ToString() => "(" + H + ", " + S + ", " + L + ")";
+        public override string ToString() => $"HSL({H}, {S}, {L})";
     }
 }

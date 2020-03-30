@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FilterLib.Util
+namespace FilterLib.Filters.Dither
 {
     /// <summary>
     /// Error diffusion matrix, e.g.,

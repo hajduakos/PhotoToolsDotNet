@@ -1,4 +1,4 @@
-﻿namespace FilterLib.Util
+﻿namespace FilterLib.Filters.Dither
 {
 
     /// <summary>

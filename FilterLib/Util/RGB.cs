@@ -66,6 +66,6 @@
 
         public static bool operator !=(RGB c1, RGB c2) => !(c1 == c2);
 
-        public override string ToString() => "(" + R + ", " + G + ", " + B + ")";
+        public override string ToString() => $"RGB({R}, {G}, {B})";
     }
 }

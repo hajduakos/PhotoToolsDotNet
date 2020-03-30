@@ -51,6 +51,8 @@ namespace FilterLib.Util
             public AbsoluteSize(int val) => this.val = val;
 
             public override int ToAbsolute(int reference) => val;
+
+            public override string ToString() => $"{val}px";
         }
 
         private class RelativeSize : Size
@@ -59,6 +61,8 @@ namespace FilterLib.Util
             public RelativeSize(float percentage) => this.pct = percentage;
 
             public override int ToAbsolute(int reference) => (int)(reference * pct);
+
+            public override string ToString() => $"{pct*100}%";
         }
     }
 }
