@@ -1,14 +1,16 @@
 ﻿using FilterLib;
+using FilterLib.Filters;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Reflection;
+using System.Linq;
 
 namespace FilterScript
 {
     sealed class DocGen
     {
-        private StreamWriter sw;
+        private readonly StreamWriter sw;
         public DocGen(StreamWriter sw)
         {
             this.sw = sw;
@@ -47,14 +49,41 @@ namespace FilterScript
 
         private void WriteFilter(Type fType)
         {
-            sw.WriteLine($"*{fType.Name.Replace("Filter", "")}*");
+            sw.WriteLine($"**{fType.Name.Replace("Filter", "")}**");
             foreach (var prop in ReflectiveApi.GetFilterProperties(fType)) WriteProperty(prop);
             sw.WriteLine();
         }
 
-        private void WriteProperty(System.Reflection.PropertyInfo prop)
+        private void WriteProperty(PropertyInfo prop)
         {
-            sw.WriteLine($"- {prop.Name}: {prop.PropertyType.Name}");
+            string min = GetMin(prop);
+            string max = GetMax(prop);
+            string range = "";
+            if (min != "" || max != "")
+            {
+                if (min == "") min = "...";
+                if (max == "") max = "...";
+                range = $"[{min};{max}]";
+            }
+            sw.WriteLine($"- {prop.Name}: {prop.PropertyType.Name}{range}");
+        }
+
+        private string GetMin(PropertyInfo prop)
+        {
+            var min = prop.GetCustomAttributes<FilterParamMinAttribute>().FirstOrDefault();
+            if (min != null) return min.Value.ToString();
+            var minf = prop.GetCustomAttributes<FilterParamMinFAttribute>().FirstOrDefault();
+            if (minf != null) return minf.Value.ToString();
+            return "";
+        }
+
+        private string GetMax(PropertyInfo prop)
+        {
+            var max = prop.GetCustomAttributes<FilterParamMaxAttribute>().FirstOrDefault();
+            if (max != null) return max.Value.ToString();
+            var maxf = prop.GetCustomAttributes<FilterParamMaxFAttribute>().FirstOrDefault();
+            if (maxf != null) return maxf.Value.ToString();
+            return "";
         }
     }
 }
