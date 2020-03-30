@@ -1,4 +1,5 @@
 ﻿using FilterLib.Filters.Other;
+using FilterLib.Util;
 using NUnit.Framework;
 
 namespace FilterLib.Tests.FilterTests
@@ -27,6 +28,19 @@ namespace FilterLib.Tests.FilterTests
                 new EquirectangularToStereographicFilter(100, 0), 1));
             Assert.IsTrue(Common.CheckFilter("_input_eq.bmp", "EquirectToStereo_120_150.bmp",
                 new EquirectangularToStereographicFilter(120, 150), 1));
+        }
+
+        [Test]
+        public void TestWaves()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp",
+                new WavesFilter(Size.Relative(1), Size.Absolute(0), WavesFilter.WaveDirection.Horizontal), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp",
+                new WavesFilter(Size.Relative(.5f), Size.Absolute(0), WavesFilter.WaveDirection.Vertical), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Waves_50pct_9px_Horizontal.bmp",
+                new WavesFilter(Size.Relative(.5f), Size.Absolute(9), WavesFilter.WaveDirection.Horizontal), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Waves_10pct_16px_Vertical.bmp",
+                new WavesFilter(Size.Relative(.1f), Size.Absolute(16), WavesFilter.WaveDirection.Vertical), 1));
         }
     }
 }

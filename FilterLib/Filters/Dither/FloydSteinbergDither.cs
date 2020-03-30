@@ -1,6 +1,4 @@
-﻿using FilterLib.Util;
-
-namespace FilterLib.Filters.Dither
+﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
     /// Floyd-Steinberg dither filter.

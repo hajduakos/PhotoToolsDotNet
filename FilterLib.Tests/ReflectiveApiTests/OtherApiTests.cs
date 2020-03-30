@@ -47,5 +47,19 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(123.45f, ff.AOV);
             Assert.AreEqual(67.89f, ff.Spin);
         }
+
+        [Test]
+        public void TestWaves()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Waves");
+            Assert.IsInstanceOf<WavesFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Wavelength", "50%");
+            ReflectiveApi.SetFilterPropertyByName(f, "Amplitude", "40px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Direction", "Vertical");
+            WavesFilter ff = f as WavesFilter;
+            Assert.AreEqual(200, ff.Wavelength.ToAbsolute(400));
+            Assert.AreEqual(40, ff.Amplitude.ToAbsolute(0));
+            Assert.AreEqual(WavesFilter.WaveDirection.Vertical, ff.Direction);
+        }
     }
 }
