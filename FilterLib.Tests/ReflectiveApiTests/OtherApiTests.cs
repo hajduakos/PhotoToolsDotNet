@@ -7,6 +7,16 @@ namespace FilterLib.Tests.ReflectiveApiTests
     public class OtherApiTests
     {
         [Test]
+        public void TestConvertToPolar()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("ConvertToPolar");
+            Assert.IsInstanceOf<ConvertToPolarFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Phase", "123.45");
+            ConvertToPolarFilter ff = f as ConvertToPolarFilter;
+            Assert.AreEqual(123.45f, ff.Phase);
+        }
+
+        [Test]
         public void TestConvolution()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Convolution");

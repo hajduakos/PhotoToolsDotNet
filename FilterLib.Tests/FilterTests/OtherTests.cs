@@ -6,6 +6,12 @@ namespace FilterLib.Tests.FilterTests
     public class OtherTests
     {
         [Test]
+        public void TestConvertToPolar()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input_eq.bmp", "ConvertToPolar_72.bmp", new ConvertToPolarFilter(72), 1));
+        }
+
+        [Test]
         public void TestConvolution()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp",
