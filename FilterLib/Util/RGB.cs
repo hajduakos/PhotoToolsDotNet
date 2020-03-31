@@ -28,6 +28,20 @@
         }
 
         /// <summary>
+        /// Constructor from string of format RGB(r, g, b) or (r, g, b).
+        /// </summary>
+        /// <param name="str">String to be parsed</param>
+        public RGB(string str)
+        {
+            str = str.Replace("RGB(", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+            string[] tokens = str.Split(',');
+            if (tokens.Length != 3) throw new System.ArgumentException("Expected three comma separated values for RGB.");
+            this.R = int.Parse(tokens[0]).Clamp(0, 255);
+            this.G = int.Parse(tokens[1]).Clamp(0, 255);
+            this.B = int.Parse(tokens[2]).Clamp(0, 255);
+        }
+
+        /// <summary>
         /// Convert to HSL color.
         /// </summary>
         /// <returns>HSL color</returns>
