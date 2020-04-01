@@ -41,9 +41,8 @@ namespace FilterLib.Filters.Other
             {
                 int wMul3 = image.Width * 3;
                 int h = image.Height;
-                int x, y, r, g, b, stride = bmd.Stride;
+                int x, y, nVal, stride = bmd.Stride;
                 int[,] convMatrix = Matrix.CopyMatrix();
-
 
                 unsafe
                 {
@@ -54,10 +53,9 @@ namespace FilterLib.Filters.Other
                         byte* row = (byte*)bmd.Scan0 + (y * stride);
                         byte* rowOrg = (byte*)bmdOrg.Scan0 + (y * stride);
                         // Iterate through columns
-                        for (x = 3; x < wMul3 - 3; x += 3)
+                        for (x = 3; x < wMul3 - 3; ++x)
                         {
-                            // Apply convolution on blue channel
-                            b = (rowOrg[x - stride - 3] * convMatrix[0, 0] +
+                            nVal = (rowOrg[x - stride - 3] * convMatrix[0, 0] +
                                 rowOrg[x - stride] * convMatrix[1, 0] +
                                 rowOrg[x - stride + 3] * convMatrix[2, 0] +
                                 rowOrg[x - 3] * convMatrix[0, 1] +
@@ -67,32 +65,7 @@ namespace FilterLib.Filters.Other
                                 rowOrg[x + stride] * convMatrix[1, 2] +
                                 rowOrg[x + stride + 3] * convMatrix[2, 2]) / Matrix.Divisor + Matrix.Bias;
 
-                            // Apply convolution on green channel
-                            g = (rowOrg[x + 1 - stride - 3] * convMatrix[0, 0] +
-                                rowOrg[x + 1 - stride] * convMatrix[1, 0] +
-                                rowOrg[x + 1 - stride + 3] * convMatrix[2, 0] +
-                                rowOrg[x + 1 - 3] * convMatrix[0, 1] +
-                                rowOrg[x + 1] * convMatrix[1, 1] +
-                                rowOrg[x + 1 + 3] * convMatrix[2, 1] +
-                                rowOrg[x + 1 + stride - 3] * convMatrix[0, 2] +
-                                rowOrg[x + 1 + stride] * convMatrix[1, 2] +
-                                rowOrg[x + 1 + stride + 3] * convMatrix[2, 2]) / Matrix.Divisor + Matrix.Bias;
-
-                            // Apply convolution on red channel
-                            r = (rowOrg[x + 2 - stride - 3] * convMatrix[0, 0] +
-                                rowOrg[x + 2 - stride] * convMatrix[1, 0] +
-                                rowOrg[x + 2 - stride + 3] * convMatrix[2, 0] +
-                                rowOrg[x + 2 - 3] * convMatrix[0, 1] +
-                                rowOrg[x + 2] * convMatrix[1, 1] +
-                                rowOrg[x + 2 + 3] * convMatrix[2, 1] +
-                                rowOrg[x + 2 + stride - 3] * convMatrix[0, 2] +
-                                rowOrg[x + 2 + stride] * convMatrix[1, 2] +
-                                rowOrg[x + 2 + stride + 3] * convMatrix[2, 2]) / Matrix.Divisor + Matrix.Bias;
-
-                            // New values
-                            row[x] = (byte)b.Clamp(0, 255);
-                            row[x + 1] = (byte)g.Clamp(0, 255);
-                            row[x + 2] = (byte)r.Clamp(0, 255);
+                            row[x] = (byte)nVal.Clamp(0, 255);
                         }
                         if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
                     }
