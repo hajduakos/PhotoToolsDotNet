@@ -47,23 +47,28 @@ namespace FilterLib.Filters.Other
                 unsafe
                 {
                     // Iterate through rows
-                    for (y = 1; y < h - 1; ++y)
+                    for (y = 0; y < h; ++y)
                     {
                         // Get rows
                         byte* row = (byte*)bmd.Scan0 + (y * stride);
                         byte* rowOrg = (byte*)bmdOrg.Scan0 + (y * stride);
                         // Iterate through columns
-                        for (x = 3; x < wMul3 - 3; ++x)
+                        for (x = 0; x < wMul3; ++x)
                         {
-                            nVal = (rowOrg[x - stride - 3] * convMatrix[0, 0] +
-                                rowOrg[x - stride] * convMatrix[1, 0] +
-                                rowOrg[x - stride + 3] * convMatrix[2, 0] +
-                                rowOrg[x - 3] * convMatrix[0, 1] +
-                                rowOrg[x] * convMatrix[1, 1] +
-                                rowOrg[x + 3] * convMatrix[2, 1] +
-                                rowOrg[x + stride - 3] * convMatrix[0, 2] +
-                                rowOrg[x + stride] * convMatrix[1, 2] +
-                                rowOrg[x + stride + 3] * convMatrix[2, 2]) / Matrix.Divisor + Matrix.Bias;
+                            byte mm = rowOrg[x];
+                            byte tl = y > 0 && x >= 3 ? rowOrg[x - stride - 3] : mm;
+                            byte tm = y > 0 ? rowOrg[x - stride] : mm;
+                            byte tr = y > 0 && x < wMul3 - 4 ? rowOrg[x - stride + 3] : mm;
+                            byte ml = x >= 3 ? rowOrg[x - 3] : mm;
+                            byte mr = x < wMul3 - 4 ? rowOrg[x + 3] : mm;
+                            byte bl = y < h - 1 && x >= 3 ? rowOrg[x + stride - 3] : mm;
+                            byte bm = y < h - 1 ? rowOrg[x + stride] : mm;
+                            byte br = y < h - 1 && x < wMul3 - 4 ? rowOrg[x + stride + 3] : mm;
+                            nVal = (
+                                tl * convMatrix[0, 0] + tm * convMatrix[1, 0] + tr * convMatrix[2, 0] +
+                                ml * convMatrix[0, 1] + mm * convMatrix[1, 1] + mr * convMatrix[2, 1] +
+                                bl * convMatrix[0, 2] + bm * convMatrix[1, 2] + br * convMatrix[2, 2])
+                                / Matrix.Divisor + Matrix.Bias;
 
                             row[x] = (byte)nVal.Clamp(0, 255);
                         }
