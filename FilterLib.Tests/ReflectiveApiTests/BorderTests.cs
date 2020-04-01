@@ -20,5 +20,16 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(new RGB(255, 0, 0), ff.Color);
             Assert.AreEqual(15, ff.Seed);
         }
+        [Test]
+        public void TestFadeBorder()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("FadeBorder");
+            Assert.IsInstanceOf<FadeBorderFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Width", "8px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Color", "(255, 0, 0)");
+            FadeBorderFilter ff = f as FadeBorderFilter;
+            Assert.AreEqual(8, ff.Width.ToAbsolute(0));
+            Assert.AreEqual(new RGB(255, 0, 0), ff.Color);
+        }
     }
 }
