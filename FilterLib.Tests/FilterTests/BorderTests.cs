@@ -28,13 +28,18 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         public void TestSimpleBorder()
         {
-            string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
-
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp",
                 new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside), 1));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"SimpleBorder_10pct_8px_Blue_Outside{suffix}.bmp",
-                new SimpleBorderFilter(Size.Relative(.1f), Size.Absolute(8), new RGB(0, 0, 255), BorderPosition.Outside), 1));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"SimpleBorder_20px_10pct_Red_Center{suffix}.bmp",
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "SimpleBorder_30px_0_Green_Inside.bmp",
+                new SimpleBorderFilter(Size.Absolute(30), Size.Absolute(0), new RGB(0, 255, 0), BorderPosition.Inside), 1));
+        }
+
+        [Test,Platform("Win")]
+        public void TestSimpleBorderRadius()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "SimpleBorder_10pct_8px_Blue_Outside.bmp",
+                    new SimpleBorderFilter(Size.Relative(.1f), Size.Absolute(8), new RGB(0, 0, 255), BorderPosition.Outside), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "SimpleBorder_20px_10pct_Red_Center.bmp",
                 new SimpleBorderFilter(Size.Absolute(20), Size.Relative(.1f), new RGB(255, 0, 0), BorderPosition.Center), 1));
         }
 
