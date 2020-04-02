@@ -1,7 +1,7 @@
 ﻿using FilterLib.Filters.Border;
 using FilterLib.Util;
 using NUnit.Framework;
-using System.Runtime.InteropServices;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -23,6 +23,26 @@ namespace FilterLib.Tests.FilterTests
                 new FadeBorderFilter(Size.Absolute(0), new RGB(0, 0, 0)), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "FadeBorder_20_Red.bmp",
                 new FadeBorderFilter(Size.Absolute(20), new RGB(255, 0, 0)), 1));
+        }
+
+        [Test]
+        public void TestPatternBorder()
+        {
+            using Bitmap pattern = new Bitmap(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp",
+                new PatternBorderFilter(Size.Absolute(0), Size.Absolute(0), pattern, BorderPosition.Inside), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "PatternBorder_30px_0_Green_Inside.bmp",
+                new PatternBorderFilter(Size.Absolute(30), Size.Absolute(0), pattern, BorderPosition.Inside), 1));
+        }
+
+        [Test, Platform("Win")]
+        public void TestPatternBorderRadius()
+        {
+            using Bitmap pattern = new Bitmap(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "PatternBorder_10pct_8px_Outside.bmp",
+                    new PatternBorderFilter(Size.Relative(.1f), Size.Absolute(8), pattern, BorderPosition.Outside), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "PatternBorder_20px_10pct_Center.bmp",
+                new PatternBorderFilter(Size.Absolute(20), Size.Relative(.1f), pattern, BorderPosition.Center), 1));
         }
 
         [Test]
