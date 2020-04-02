@@ -40,6 +40,25 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestFadeBorderParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(FadeBorderFilter)));
 
         [Test]
+        public void TestSimpleBorder()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("SimpleBorder");
+            Assert.IsInstanceOf<SimpleBorderFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Width", "10%");
+            ReflectiveApi.SetFilterPropertyByName(f, "Radius", "8px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Color", "(255, 0, 0)");
+            ReflectiveApi.SetFilterPropertyByName(f, "Position", "Outside");
+            SimpleBorderFilter ff = f as SimpleBorderFilter;
+            Assert.AreEqual(20, ff.Width.ToAbsolute(200));
+            Assert.AreEqual(8, ff.Radius.ToAbsolute(200));
+            Assert.AreEqual(new RGB(255, 0, 0), ff.Color);
+            Assert.AreEqual(BorderPosition.Outside, ff.Position);
+        }
+
+        [Test]
+        public void TestSimpleBorderParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(SimpleBorderFilter)));
+
+        [Test]
         public void TestVignette()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Vignette");
