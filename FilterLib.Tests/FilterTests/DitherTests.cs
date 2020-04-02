@@ -20,6 +20,15 @@ namespace FilterLib.Tests.FilterTests
         }
 
         [Test]
+        public void TestFanDither()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "FanDither_2.bmp", new FanDitherFilter(2), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "FanDither_4.bmp", new FanDitherFilter(4), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new FanDitherFilter(256), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new FanDitherFilter(128), 2));
+        }
+
+        [Test]
         public void TestFloydSteinbergDither()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "FloydSteinbergDither_2.bmp", new FloydSteinbergDitherFilter(2), 1));

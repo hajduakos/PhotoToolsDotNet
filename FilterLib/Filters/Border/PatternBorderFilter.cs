@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FilterLib.Reporting;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Text;
-using FilterLib.Reporting;
 
 namespace FilterLib.Filters.Border
 {
