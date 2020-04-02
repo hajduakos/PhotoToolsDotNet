@@ -17,6 +17,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestAdaptiveTresholdParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(AdaptiveTresholdFilter)));
+
+        [Test]
         public void TestOilPaint()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("OilPaint");
@@ -25,6 +28,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
             OilPaintFilter ff = f as OilPaintFilter;
             Assert.AreEqual(8, ff.Radius);
         }
+
+        [Test]
+        public void TestOilPaintParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(OilPaintFilter)));
 
         [Test]
         public void TestRandomJitter()
@@ -37,5 +43,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(8, ff.Radius);
             Assert.AreEqual(1000, ff.Seed);
         }
+
+        [Test]
+        public void TestRandomJitterParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(RandomJitterFilter)));
     }
 }

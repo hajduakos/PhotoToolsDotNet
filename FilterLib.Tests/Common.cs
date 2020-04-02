@@ -1,10 +1,11 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using FilterLib.Blending;
+﻿using FilterLib.Blending;
 using FilterLib.Filters;
 using FilterLib.Util;
 using NUnit.Framework;
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
 
 namespace FilterLib.Tests
 {
@@ -60,5 +61,7 @@ namespace FilterLib.Tests
             }
             return true;
         }
+
+        public static int ParamCount(Type type) => ReflectiveApi.GetFilterProperties(type).ToArray().Length;
     }
 }

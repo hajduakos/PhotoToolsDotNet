@@ -9,6 +9,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         [Test]
         public void TestAutoLevels() =>
             Assert.IsInstanceOf<AutoLevelsFilter>(ReflectiveApi.ConstructFilterByName("AutoLevels"));
+
+        [Test]
+        public void TestAutoLevelsParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(AutoLevelsFilter)));
         
         [Test]
         public void TestBrightness()
@@ -19,6 +22,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
             BrightnessFilter ff = f as BrightnessFilter;
             Assert.AreEqual(80, ff.Brightness);
         }
+
+        [Test]
+        public void TestBrightnessParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(BrightnessFilter)));
 
         [Test]
         public void TestColorHSL()
@@ -35,6 +41,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestColorHSLParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(ColorHSLFilter)));
+
+        [Test]
         public void TestColorRGB()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ColorRGB");
@@ -49,6 +58,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestColorRGBParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(ColorRGBFilter)));
+
+        [Test]
         public void TestContrast()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Contrast");
@@ -59,6 +71,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestContrastParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(ContrastFilter)));
+
+        [Test]
         public void TestGamma()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Gamma");
@@ -67,6 +82,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
             GammaFilter ff = f as GammaFilter;
             Assert.AreEqual(1.5f, ff.Gamma);
         }
+
+        [Test]
+        public void TestGammaParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(GammaFilter)));
 
         [Test]
         public void TestLevels()
@@ -81,6 +99,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestLevelsParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(LevelsFilter)));
+
+        [Test]
         public void TestShadowsHighlights()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ShadowsHighlights");
@@ -91,5 +112,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(10, ff.Brighten);
             Assert.AreEqual(40, ff.Darken);
         }
+
+        [Test]
+        public void TestShadowsHighlightsParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(ShadowsHighlightsFilter)));
     }
 }

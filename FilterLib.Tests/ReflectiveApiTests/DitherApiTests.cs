@@ -19,6 +19,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestBayerDitherParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(BayerDitherFilter)));
+
+        [Test]
         public void TestFloydSteinbergDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("FloydSteinbergDither");
@@ -27,6 +30,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
             FloydSteinbergDitherFilter ff = f as FloydSteinbergDitherFilter;
             Assert.AreEqual(50, ff.Levels);
         }
+
+        [Test]
+        public void TestFloydSteinbergDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(FloydSteinbergDitherFilter)));
 
         [Test]
         public void TestJarvisJudiceNinkeDither()
@@ -39,14 +45,22 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestJarvisJudiceNinkeDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(JarvisJudiceNinkeDitherFilter)));
+
+        [Test]
         public void TestRandomDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("RandomDither");
             Assert.IsInstanceOf<RandomDitherFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
+            ReflectiveApi.SetFilterPropertyByName(f, "Seed", "123");
             RandomDitherFilter ff = f as RandomDitherFilter;
             Assert.AreEqual(50, ff.Levels);
+            Assert.AreEqual(123, ff.Seed);
         }
+
+        [Test]
+        public void TestRandomDitherParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(RandomDitherFilter)));
 
         [Test]
         public void TestSierraDither()
@@ -57,5 +71,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             SierraDitherFilter ff = f as SierraDitherFilter;
             Assert.AreEqual(50, ff.Levels);
         }
+
+        [Test]
+        public void TestSierraDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(SierraDitherFilter)));
     }
 }

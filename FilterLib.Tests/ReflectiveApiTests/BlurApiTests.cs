@@ -12,6 +12,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<BlurFilter>(ReflectiveApi.ConstructFilterByName("Blur"));
 
         [Test]
+        public void TestBlurParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(BlurFilter)));
+
+        [Test]
         public void TestBoxBlur()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("BoxBlur");
@@ -24,6 +27,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestBoxBlurParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(BoxBlurFilter)));
+
+        [Test]
         public void TestGaussianBlur()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("GaussianBlur");
@@ -32,6 +38,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
             GaussianBlurFilter ff = f as GaussianBlurFilter;
             Assert.AreEqual(10, ff.Radius);
         }
+
+        [Test]
+        public void TestGaussianBlurParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(GaussianBlurFilter)));
 
         [Test]
         public void TestMotionBlur()
@@ -44,5 +53,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(10, ff.Length);
             Assert.AreEqual(12.34f, ff.Angle, 0.01f);
         }
+
+        [Test]
+        public void TestMotionBlurParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(MotionBlurFilter)));
     }
 }

@@ -20,6 +20,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestGradientMapParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(GradientMapFilter)));
+
+        [Test]
         public void TestGrayscale()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Grayscale" );
@@ -34,8 +37,14 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestGrayscaleParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(GrayscaleFilter)));
+
+        [Test]
         public void TestInvert() => 
             Assert.IsInstanceOf<InvertFilter>(ReflectiveApi.ConstructFilterByName("Invert"));
+
+        [Test]
+        public void TestInvertParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(InvertFilter)));
 
         [Test]
         public void TestOrton()
@@ -50,6 +59,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestOrtonParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(OrtonFilter)));
+
+        [Test]
         public void TestPosterize()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Posterize");
@@ -60,8 +72,14 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestPosterizeParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(PosterizeFilter)));
+
+        [Test]
         public void TestSepia() =>
             Assert.IsInstanceOf<SepiaFilter>(ReflectiveApi.ConstructFilterByName("Sepia"));
+
+        [Test]
+        public void TestSepiaParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(SepiaFilter)));
 
         [Test]
         public void TestTreshold()
@@ -74,6 +92,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestTresholdParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(TresholdFilter)));
+
+        [Test]
         public void TestVintage()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Vintage");
@@ -82,5 +103,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             VintageFilter ff = f as VintageFilter;
             Assert.AreEqual(80, ff.Strength);
         }
+
+        [Test]
+        public void TestVintageParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(VintageFilter)));
     }
 }

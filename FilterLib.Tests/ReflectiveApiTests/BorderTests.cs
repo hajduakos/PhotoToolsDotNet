@@ -22,6 +22,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestJitterBorderParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(JitterBorderFilter)));
+
+        [Test]
         public void TestFadeBorder()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("FadeBorder");
@@ -34,6 +37,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestFadeBorderParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(FadeBorderFilter)));
+
+        [Test]
         public void TestVignette()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Vignette");
@@ -44,5 +50,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(240, ff.Radius.ToAbsolute(200));
             Assert.AreEqual(40, ff.ClearRadius.ToAbsolute(200));
         }
+
+        [Test]
+        public void TestVignetteParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(VignetteFilter)));
     }
 }
