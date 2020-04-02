@@ -20,6 +20,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(new RGB(255, 0, 0), ff.Color);
             Assert.AreEqual(15, ff.Seed);
         }
+
         [Test]
         public void TestFadeBorder()
         {
@@ -30,6 +31,18 @@ namespace FilterLib.Tests.ReflectiveApiTests
             FadeBorderFilter ff = f as FadeBorderFilter;
             Assert.AreEqual(8, ff.Width.ToAbsolute(0));
             Assert.AreEqual(new RGB(255, 0, 0), ff.Color);
+        }
+
+        [Test]
+        public void TestVignette()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Vignette");
+            Assert.IsInstanceOf<VignetteFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Radius", "120%");
+            ReflectiveApi.SetFilterPropertyByName(f, "ClearRadius", "40px");
+            VignetteFilter ff = f as VignetteFilter;
+            Assert.AreEqual(240, ff.Radius.ToAbsolute(200));
+            Assert.AreEqual(40, ff.ClearRadius.ToAbsolute(200));
         }
     }
 }
