@@ -23,6 +23,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(AddNoiseFilter.NoiseType.Monochrome, ff.Type);
         }
 
+        [Test]
+        public void TestAddNoiseParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(AddNoiseFilter)));
+
 
         [Test]
         public void TestMedian()
@@ -33,5 +36,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             MedianFilter ff = f as MedianFilter;
             Assert.AreEqual(50, ff.Strength);
         }
+
+        [Test]
+        public void TestMedianParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(MedianFilter)));
     }
 }

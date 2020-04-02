@@ -21,6 +21,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestCrystallizerParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(CrystallizeFilter)));
+
+        [Test]
         public void TestLego()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Lego");
@@ -31,6 +34,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestLegoParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(LegoFilter)));
+
+        [Test]
         public void TestPixelate()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Pixelate");
@@ -39,5 +45,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             PixelateFilter ff = f as PixelateFilter;
             Assert.AreEqual(30, ff.Size);
         }
+
+        [Test]
+        public void TestPixelateParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(PixelateFilter)));
     }
 }

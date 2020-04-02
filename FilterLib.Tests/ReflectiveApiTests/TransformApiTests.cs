@@ -22,14 +22,23 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(250, ff.Height.ToAbsolute(500));
         }
 
+        [Test]
+        public void TestCropParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(CropFilter)));
+
 
         [Test]
         public void TestFlipHorizontal() =>
             Assert.IsInstanceOf<FlipHorizontalFilter>(ReflectiveApi.ConstructFilterByName("FlipHorizontal"));
 
         [Test]
+        public void TestFlipHorizontalParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(FlipHorizontalFilter)));
+
+        [Test]
         public void TestFlipVertical() =>
             Assert.IsInstanceOf<FlipVerticalFilter>(ReflectiveApi.ConstructFilterByName("FlipVertical"));
+
+        [Test]
+        public void TestFlipVerticalParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(FlipVerticalFilter)));
 
         [Test]
         public void TestResize()
@@ -46,6 +55,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestResizeParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(ResizeFilter)));
+
+        [Test]
         public void TestRotate()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Rotate");
@@ -58,15 +70,27 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestRotateParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(RotateFilter)));
+
+        [Test]
         public void TestRotate180() => 
             Assert.IsInstanceOf<Rotate180Filter>(ReflectiveApi.ConstructFilterByName("Rotate180"));
+
+        [Test]
+        public void TestRotate180ParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(Rotate180Filter)));
 
         [Test]
         public void TestRotateLeft() => 
             Assert.IsInstanceOf<RotateLeftFilter>(ReflectiveApi.ConstructFilterByName("RotateLeft"));
 
         [Test]
+        public void TestRotateLeftParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(RotateLeftFilter)));
+
+        [Test]
         public void TestRotateRight() => 
             Assert.IsInstanceOf<RotateRightFilter>(ReflectiveApi.ConstructFilterByName("RotateRight"));
+
+        [Test]
+        public void TestRotateRightParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(RotateRightFilter)));
     }
 }

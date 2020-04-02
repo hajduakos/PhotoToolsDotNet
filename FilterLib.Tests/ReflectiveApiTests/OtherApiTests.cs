@@ -17,6 +17,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestConvertToPolarParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(ConvertToPolarFilter)));
+
+        [Test]
         public void TestConvolution()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Convolution");
@@ -37,6 +40,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestConvolutionParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(ConvolutionFilter)));
+
+        [Test]
         public void TestEquirectangularToStereographic()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("EquirectangularToStereographic");
@@ -47,6 +53,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(123.45f, ff.AOV);
             Assert.AreEqual(67.89f, ff.Spin);
         }
+
+        [Test]
+        public void TestEquirectangularToStereographicParCnt() =>
+            Assert.AreEqual(2, Common.ParamCount(typeof(EquirectangularToStereographicFilter)));
 
         [Test]
         public void TestWaves()
@@ -61,5 +71,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(40, ff.Amplitude.ToAbsolute(0));
             Assert.AreEqual(WavesFilter.WaveDirection.Vertical, ff.Direction);
         }
+
+        [Test]
+        public void TestWavesParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(WavesFilter)));
     }
 }

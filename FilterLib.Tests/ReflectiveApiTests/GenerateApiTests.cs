@@ -26,6 +26,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestMarbleParCnt() => Assert.AreEqual(5, Common.ParamCount(typeof(MarbleFilter)));
+
+        [Test]
         public void TestTurbulence()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Turbulence");
@@ -36,6 +39,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(4, ff.Iterations);
             Assert.AreEqual(5, ff.Seed);
         }
+
+        [Test]
+        public void TestTurbulenceParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(TurbulenceFilter)));
 
         [Test]
         public void TestWoodRings()
@@ -52,5 +58,8 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.AreEqual(4, ff.Iterations);
             Assert.AreEqual(5, ff.Seed);
         }
+
+        [Test]
+        public void TestWoodRingsParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(WoodRingsFilter)));
     }
 }
