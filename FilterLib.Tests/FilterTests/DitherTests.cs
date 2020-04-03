@@ -8,9 +8,9 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         public void TestBayerDither()
         {
-            //Assert.IsTrue(Common.CheckFilter("_input.bmp", "BayerDither_2_1.bmp", new BayerDitherFilter(2, 1), 1));
-            //Assert.IsTrue(Common.CheckFilter("_input.bmp", "BayerDither_2_2.bmp", new BayerDitherFilter(2, 2), 1));
-            //Assert.IsTrue(Common.CheckFilter("_input.bmp", "BayerDither_2_5.bmp", new BayerDitherFilter(2, 5), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "BayerDither_2_1.bmp", new BayerDitherFilter(2, 1), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "BayerDither_2_2.bmp", new BayerDitherFilter(2, 2), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "BayerDither_2_5.bmp", new BayerDitherFilter(2, 5), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "BayerDither_4_4.bmp", new BayerDitherFilter(4, 4), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new BayerDitherFilter(256, 1), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new BayerDitherFilter(256, 2), 1));
