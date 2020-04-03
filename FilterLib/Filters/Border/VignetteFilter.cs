@@ -60,8 +60,8 @@ namespace FilterLib.Filters.Border
                 if (a1 < a0) throw new ArgumentException("Radius must be larger than clear zone radius.");
                 float halfWidth = w / 2f, halfHeight = h / 2f;
                 float ratioSquare = w * w / (float)(h * h);
-                double normalizer = Math.PI / (a1 - a0);
-                double op;
+                float normalizer = MathF.PI / (a1 - a0);
+                float op;
 
                 unsafe
                 {
@@ -77,13 +77,13 @@ namespace FilterLib.Filters.Border
                             xShifted = x / 3f - halfWidth;
                             yShifted = y - halfHeight;
                             // Calculate the radius (A) of the ellipse on which the point is
-                            ellipseRadius = (float)Math.Sqrt(xShifted * xShifted + yShifted * yShifted * ratioSquare);
+                            ellipseRadius = MathF.Sqrt(xShifted * xShifted + yShifted * yShifted * ratioSquare);
                             // If the point is outside the vignette area, set the color to black
                             if (ellipseRadius > a1) row[x] = row[x + 1] = row[x + 2] = 0;
                             // Else if the point is outside the clear zone, calculate opacity
                             else if (ellipseRadius >= a0)
                             {
-                                op = Math.Cos((ellipseRadius - a0) * normalizer) / 2f + 0.5f; // Cosine transition
+                                op = MathF.Cos((ellipseRadius - a0) * normalizer) / 2f + 0.5f; // Cosine transition
                                 //op = 1- (a_tmp - a0) / (a1 - a0); // Linear transition
                                 row[x] = (byte)(row[x] * op);
                                 row[x + 1] = (byte)(row[x + 1] * op);

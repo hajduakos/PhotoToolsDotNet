@@ -3,6 +3,7 @@ using FilterLib.Util;
 using System.Drawing.Imaging;
 using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
+using MathF = System.MathF;
 
 namespace FilterLib.Filters.Other
 {
@@ -65,7 +66,7 @@ namespace FilterLib.Filters.Other
                 int x0, y0, x1, y1; // Indexes in the original image (bilinear interpolation with 4 points)
                 float xOrg, yOrg; // Coordinates in the original image (float)
                 float xFrac, yFrac; // Fractional parts of the coordinates
-                float xMultiplier = (float)(1 / (2 * Math.PI) * (w - 1)); // Multiplier to convert to polar
+                float xMultiplier = (1 / (2 * MathF.PI) * (w - 1)); // Multiplier to convert to polar
                 float yMultiplier = 1 / halfHeight * (h - 1); // Multiplier to convert to polar
 
                 unsafe
@@ -83,32 +84,32 @@ namespace FilterLib.Filters.Other
                             xCorr = ((x / 3) - halfWidth) * xMult;
                             yCorr = halfHeight - y;
                             // Get radius and angle
-                            r = (float)Math.Sqrt(xCorr * xCorr + yCorr * yCorr);
-                            fi = (float)(-Math.Atan2(xCorr, yCorr) + Math.PI + phase / 180f * Math.PI);
+                            r = MathF.Sqrt(xCorr * xCorr + yCorr * yCorr);
+                            fi = (-MathF.Atan2(xCorr, yCorr) + MathF.PI + phase / 180f * MathF.PI);
 
-                            if (fi >= 2 * Math.PI) fi -= (float)(2 * Math.PI);
+                            if (fi >= 2 * MathF.PI) fi -= 2 * MathF.PI;
 
                             // Get X coordinate and points for interpolation in the original image
                             xOrg = fi * xMultiplier;
 
-                            x0 = (int)Math.Floor(xOrg);
+                            x0 = (int)MathF.Floor(xOrg);
                             xFrac = xOrg - x0;
                             if (x0 >= w) x0 = w - 1;
                             x0 *= 3;
 
-                            x1 = (int)Math.Ceiling(xOrg);
+                            x1 = (int)MathF.Ceiling(xOrg);
                             if (x1 >= w) x1 = w - 1;
                             x1 *= 3;
 
                             // Get Y coordinate and points for interpolation in the original image
                             yOrg = r * yMultiplier;
 
-                            y0 = (int)Math.Floor(yOrg);
+                            y0 = (int)MathF.Floor(yOrg);
                             yFrac = yOrg - y0;
 
                             if (y0 >= h) y0 = h - 1;
 
-                            y1 = (int)Math.Ceiling(yOrg);
+                            y1 = (int)MathF.Ceiling(yOrg);
                             if (y1 >= h) y1 = h - 1;
 
                             // Interpolation for R,G,B components

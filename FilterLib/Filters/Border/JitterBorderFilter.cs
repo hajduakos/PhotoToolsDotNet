@@ -67,7 +67,7 @@ namespace FilterLib.Filters.Border
                 int x, y, distanceFromNearestEdge;
                 int borderWidth = Width.ToAbsolute(Math.Max(w, h));
                 double[] map = new double[borderWidth + 1];
-                for (x = 0; x <= borderWidth; ++x) map[x] = Math.Sin(x / (double)borderWidth * Math.PI - Math.PI / 2) / 2 + 0.5;
+                for (x = 0; x <= borderWidth; ++x) map[x] = MathF.Sin(x / (float)borderWidth * MathF.PI - MathF.PI / 2) / 2 + 0.5;
                 unsafe
                 {
                     // Iterate through rows

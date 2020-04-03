@@ -48,7 +48,7 @@ namespace FilterLib.Filters.Sharpen
                     for (y = 0; y < 256; y++)
                     {
                         // Calculate new value
-                        nVal = (int)System.Math.Sqrt(x * x + y * y);
+                        nVal = (int)System.MathF.Sqrt(x * x + y * y);
                         // Correction
                         if (nVal > 255) nVal = 255;
                         // Overwrite original

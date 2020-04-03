@@ -2,6 +2,7 @@
 using FilterLib.Util;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Bitmap = System.Drawing.Bitmap;
+using MathF = System.MathF;
 using Math = System.Math;
 
 namespace FilterLib.Filters.Blur
@@ -61,8 +62,8 @@ namespace FilterLib.Filters.Blur
                 int w = image.Width, h = image.Height;
                 int stride = bmd.Stride;
                 int x, y, dx, dy, k;
-                float sinAngle = (float)Math.Sin(Angle * Math.PI / 180);
-                float cosAngle = (float)Math.Cos(Angle * Math.PI / 180);
+                float sinAngle = MathF.Sin(Angle * MathF.PI / 180);
+                float cosAngle = MathF.Cos(Angle * MathF.PI / 180);
                 int rSum, gSum, bSum, n;
                 int xAct, yAct, idx;
                 unsafe
@@ -80,8 +81,8 @@ namespace FilterLib.Filters.Blur
                             // Iterate through each pixel of the line
                             for (k = -length; k <= length; ++k)
                             {
-                                dx = (int)Math.Round(k * cosAngle); // Horizontal distance from the center pixel
-                                dy = (int)Math.Round(k * sinAngle); // Vertical distance from the center pixel
+                                dx = (int)MathF.Round(k * cosAngle); // Horizontal distance from the center pixel
+                                dy = (int)MathF.Round(k * sinAngle); // Vertical distance from the center pixel
                                 xAct = x / 3 + dx; // x coord. of the actual pixel
                                 yAct = y + dy; // y coord. of the actual pixel
                                 // If the pixel is in the bounds of the image

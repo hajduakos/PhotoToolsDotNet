@@ -32,6 +32,6 @@ namespace FilterLib.Filters.Adjustments
         /// </summary>
         /// <param name="comp">Input value</param>
         /// <returns>Output value by applying the filter</returns>
-        protected override byte MapComponent(byte comp) => (byte)(255 * System.Math.Pow(comp / 255f, 1f / gamma)).Clamp(0, 255);
+        protected override byte MapComponent(byte comp) => (byte)(255 * System.MathF.Pow(comp / 255f, 1f / gamma)).Clamp(0, 255);
     }
 }

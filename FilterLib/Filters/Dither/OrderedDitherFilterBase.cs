@@ -54,8 +54,8 @@ namespace FilterLib.Filters.Dither
                 int h = image.Height;
                 int x, y, xDiv3;
                 int mw = Matrix.Width, mh = Matrix.Height; // Width and height of matrix
-                double intervalSize = 255f / (levels - 1); // Size of an interval
-                double roundedColor; // Color rounded to the nearest color level
+                float intervalSize = 255f / (levels - 1); // Size of an interval
+                float roundedColor; // Color rounded to the nearest color level
                 unsafe
                 {
                     // Iterate through rows
@@ -68,7 +68,7 @@ namespace FilterLib.Filters.Dither
                         {
                             xDiv3 = x / 3;
                             // Get rounded color
-                            roundedColor = System.Math.Floor(row[x] / intervalSize) * intervalSize;
+                            roundedColor = System.MathF.Floor(row[x] / intervalSize) * intervalSize;
                             // Calculate new value using dither matrix
                             row[x] = (byte)((roundedColor + Matrix[xDiv3 % mw, y % mh] * intervalSize > row[x]) ? roundedColor : (roundedColor + intervalSize));
                         }

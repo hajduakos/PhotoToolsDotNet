@@ -66,7 +66,7 @@ namespace FilterLib.Filters.Other
             reporter?.Start();
             int size = Math.Min(image.Width, image.Height); // Size of the result
             Bitmap ret = new Bitmap(size, size);
-            float radius = size / 4f / (float)Math.Tan(aov * Math.PI / 360f); // Radius of the projection sphere
+            float radius = size / 4f / MathF.Tan(aov * MathF.PI / 360f); // Radius of the projection sphere
             float radiusMult2 = radius * 2;
             int sizeDiv2 = size / 2;
             int sizeMult3 = size * 3;
@@ -102,26 +102,26 @@ namespace FilterLib.Filters.Other
                             yCorr = sizeDiv2 - y;
 
                             // Get latitude and longitude on the sphere
-                            lat = (float)(180 - 2 * Math.Atan2(Math.Sqrt(xCorr * xCorr + yCorr * yCorr), radiusMult2) * 180 / Math.PI);
-                            lng = (float)(Math.Atan2(yCorr, xCorr) * 180 / Math.PI + 180) + spin;
+                            lat = 180 - 2 * MathF.Atan2(MathF.Sqrt(xCorr * xCorr + yCorr * yCorr), radiusMult2) * 180 / MathF.PI;
+                            lng = MathF.Atan2(yCorr, xCorr) * 180 / MathF.PI + 180 + spin;
                             if (lng > 360) lng -= 360;
 
                             // Get X coordinate and points for interpolation in the original image
                             xOrg = lng * xMultiplier; // Float point
-                            x0 = (int)Math.Floor(xOrg); // First point
+                            x0 = (int)MathF.Floor(xOrg); // First point
                             if (x0 >= w) x0 = w - 1;
                             xFrac = xOrg - x0; // Fraction part
                             x0 *= 3;
-                            x1 = (int)Math.Ceiling(xOrg);
+                            x1 = (int)MathF.Ceiling(xOrg);
                             if (x1 >= w) x1 = w - 1;
                             x1 *= 3; // Second point
 
                             // Get Y coordinate and points for interpolation in the original image
                             yOrg = lat * yMultiplier; // Float point
-                            y0 = (int)Math.Floor(yOrg); // First point
+                            y0 = (int)MathF.Floor(yOrg); // First point
                             if (y0 >= h) y0 = h - 1;
                             yFrac = yOrg - y0; // Fraction part
-                            y1 = (int)Math.Ceiling(yOrg); // Second point
+                            y1 = (int)MathF.Ceiling(yOrg); // Second point
                             if (y1 >= h) y1 = h - 1;
 
                             // Interpolation for R,G,B components

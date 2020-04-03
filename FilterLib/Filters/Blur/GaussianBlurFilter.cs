@@ -53,18 +53,18 @@ namespace FilterLib.Filters.Blur
                 int w = image.Width, h = image.Height;
                 int wMul3 = image.Width * 3;
                 int stride = bmd.Stride;
-                double sumR, sumG, sumB;
+                float sumR, sumG, sumB;
                 int xDiv3;
 
                 // Calculate the kernel
-                double[] kernel = new double[radius * 2 + 1];
+                float[] kernel = new float[radius * 2 + 1];
                 int r = -radius;
-                double sqrt2piR = 1.0 / (Math.Sqrt(2 * Math.PI) * radius);
-                double rsquare2 = 1.0 / (2 * radius * radius);
-                double kernelSum = 0;
+                float sqrt2piR = 1f / (MathF.Sqrt(2 * MathF.PI) * radius);
+                float rsquare2 = 1f / (2 * radius * radius);
+                float kernelSum = 0;
                 for (x = 0; x < kernel.Length; x++)
                 {
-                    kernel[x] = sqrt2piR * Math.Exp(-r * r * rsquare2);
+                    kernel[x] = sqrt2piR * MathF.Exp(-r * r * rsquare2);
                     kernelSum += kernel[x];
                     ++r;
                 }

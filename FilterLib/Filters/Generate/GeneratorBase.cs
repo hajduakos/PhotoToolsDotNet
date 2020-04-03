@@ -1,4 +1,5 @@
 ﻿using Math = System.Math;
+using MathF = System.MathF;
 
 namespace FilterLib.Filters.Generate
 {
@@ -68,11 +69,11 @@ namespace FilterLib.Filters.Generate
                     {
                         xFloat = x / (float)pow0;
                         yFloat = y / (float)pow0;
-                        x0 = (int)Math.Floor(xFloat);
-                        x1 = (int)Math.Ceiling(xFloat);
+                        x0 = (int)MathF.Floor(xFloat);
+                        x1 = (int)MathF.Ceiling(xFloat);
                         xFrac = xFloat - x0;
-                        y0 = (int)Math.Floor(yFloat);
-                        y1 = (int)Math.Ceiling(yFloat);
+                        y0 = (int)MathF.Floor(yFloat);
+                        y1 = (int)MathF.Ceiling(yFloat);
                         yFrac = yFloat - y0;
 
                         sum += pow0 * (

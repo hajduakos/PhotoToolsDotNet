@@ -1,5 +1,5 @@
 ﻿using FilterLib.Util;
-using Math = System.Math;
+using MathF = System.MathF;
 
 namespace FilterLib.Filters.Color
 {
@@ -39,9 +39,9 @@ namespace FilterLib.Filters.Color
         /// <returns>Output value by applying the filter</returns>
         protected override byte MapComponent(byte comp)
         {
-            double div = 255.0 / (levels - 1); // Divisor
-            double divRecip = 1.0 / div; // Reciprocial of divisor
-            return (byte)Math.Round(Math.Round(comp * divRecip) * div);
+            float div = 255f / (levels - 1); // Divisor
+            float divRecip = 1f / div; // Reciprocial of divisor
+            return (byte)MathF.Round(MathF.Round(comp * divRecip) * div);
         }
     }
 }

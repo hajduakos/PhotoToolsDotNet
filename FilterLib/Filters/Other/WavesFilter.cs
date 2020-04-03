@@ -88,7 +88,7 @@ namespace FilterLib.Filters.Other
 
 
                 int x, y, offset, offsetMul3, idx1, idx2, amplitudePxMul3 = amplitudePx * 3;
-                double freq = 2 * Math.PI / waveLengthPx;
+                float freq = 2 * MathF.PI / waveLengthPx;
                 unsafe
                 {
                     byte* bmdstart = (byte*)bmd.Scan0;
@@ -100,7 +100,7 @@ namespace FilterLib.Filters.Other
                         for (x = 0; x < wMul3; x += 3)
                         {
                             // Calculate offset
-                            offset = (int)Math.Round(Math.Sin(freq * x / 3) * amplitudePx);
+                            offset = (int)MathF.Round(MathF.Sin(freq * x / 3) * amplitudePx);
                             if (offset > 0) offset = Math.Min(amplitudePx, offset);
                             else offset = -Math.Min(amplitudePx, -offset);
 
@@ -123,7 +123,7 @@ namespace FilterLib.Filters.Other
                         for (y = 0; y < h; ++y)
                         {
                             // Calculate offset
-                            offset = (int)Math.Round(Math.Sin(freq * y) * amplitudePx);
+                            offset = (int)MathF.Round(MathF.Sin(freq * y) * amplitudePx);
                             if (offset > 0) offset = Math.Min(amplitudePx, offset);
                             else offset = -Math.Min(amplitudePx, -offset);
                             offsetMul3 = offset * 3;

@@ -46,7 +46,7 @@ namespace FilterLib.Filters.Dither
                 int h = image.Height;
                 int x, y;
                 int xSub, ySub;
-                double intervalSize = 255f / (levels - 1); // Size of an interval
+                float intervalSize = 255f / (levels - 1); // Size of an interval
                 int roundedColor; // Color rounded to the nearest color level
                 float quantErr;
                 float[,] quantErrArray = new float[wMul3, h];
@@ -69,7 +69,7 @@ namespace FilterLib.Filters.Dither
                             if (pxWithErrorAdded > 255) pxWithErrorAdded = 255;
                             else if (pxWithErrorAdded < 0) pxWithErrorAdded = 0;
                             // Get rounded color
-                            roundedColor = (int)(System.Math.Round(pxWithErrorAdded / intervalSize) * intervalSize);
+                            roundedColor = (int)(System.MathF.Round(pxWithErrorAdded / intervalSize) * intervalSize);
                             // Calculate quantization error
                             quantErr = pxWithErrorAdded - roundedColor;
                             // Sum quantization error

@@ -42,7 +42,7 @@ namespace FilterLib.Filters.Dither
         }
 
         Random rnd = null;
-        double intervalSize;
+        float intervalSize;
 
         /// <summary>
         /// Gets called when filter starts applying.
@@ -51,7 +51,7 @@ namespace FilterLib.Filters.Dither
         {
             base.ApplyStart();
             rnd = new Random(Seed);
-            intervalSize = 255.0 / (levels - 1);
+            intervalSize = 255f / (levels - 1);
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace FilterLib.Filters.Dither
         /// <param name="b">Pointer to blue value</param>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
-            double roundedColor, nextRnd;
+            float roundedColor, nextRnd;
 
-            nextRnd = rnd.NextDouble();
+            nextRnd = (float)rnd.NextDouble();
 
-            roundedColor = System.Math.Floor(*r / intervalSize) * intervalSize;
+            roundedColor = System.MathF.Floor(*r / intervalSize) * intervalSize;
             *r = (byte)((roundedColor + nextRnd * intervalSize > *r) ? roundedColor : (roundedColor + intervalSize));
             
-            roundedColor = System.Math.Floor(*g / intervalSize) * intervalSize;
+            roundedColor = System.MathF.Floor(*g / intervalSize) * intervalSize;
             *g = (byte)((roundedColor + nextRnd * intervalSize > *g) ? roundedColor : (roundedColor + intervalSize));
             
-            roundedColor = System.Math.Floor(*b / intervalSize) * intervalSize;
+            roundedColor = System.MathF.Floor(*b / intervalSize) * intervalSize;
             *b = (byte)((roundedColor + nextRnd * intervalSize > *b) ? roundedColor : (roundedColor + intervalSize));
         }
 

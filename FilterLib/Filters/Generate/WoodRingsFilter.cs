@@ -66,7 +66,7 @@ namespace FilterLib.Filters.Generate
                 int wMul3 = w * 3;
                 int h = image.Height;
                 float xShifted, yShifted;
-                float sin_mult = (float)(Math.PI * 2 * rings);
+                float sin_mult = (MathF.PI * 2 * rings);
                 reporter?.Report(0, 0, 2 * h - 1);
                 float[,] turbulence = GenerateTurbulence(w, h);
                 reporter?.Report(h, 0, 2 * h - 1);
@@ -86,7 +86,7 @@ namespace FilterLib.Filters.Generate
                             yShifted = (y - h / 2) / (float)h;
 
                             row[x] = row[x + 1] = row[x + 2] = (byte)(
-                                255 * Math.Abs(Math.Sin(sin_mult * (Math.Sqrt(xShifted * xShifted + yShifted * yShifted) + twist * turbulence[xDiv3, y])
+                                255 * Math.Abs(MathF.Sin(sin_mult * (MathF.Sqrt(xShifted * xShifted + yShifted * yShifted) + twist * turbulence[xDiv3, y])
                                 )));
                         }
                         if ((y & 63) == 0) reporter?.Report(h + y, 0, 2 * h - 1);

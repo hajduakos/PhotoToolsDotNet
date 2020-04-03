@@ -3,6 +3,7 @@ using FilterLib.Util;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Math = System.Math;
+using MathF = System.MathF;
 
 namespace FilterLib.Filters.Generate
 {
@@ -97,7 +98,7 @@ namespace FilterLib.Filters.Generate
                         {
                             xDiv3 = x / 3;
                             row[x] = row[x + 1] = row[x + 2] =
-                                (byte)(255 * Math.Abs(Math.Sin(Math.PI * (xDiv3 * xMultiplier + y * yMultiplier + twist * turbulence[xDiv3, y]))));
+                                (byte)(255 * Math.Abs(MathF.Sin(MathF.PI * (xDiv3 * xMultiplier + y * yMultiplier + twist * turbulence[xDiv3, y]))));
                         }
                         if ((y & 63) == 0) reporter?.Report(h + y, 0, 2 * h - 1);
                     }
