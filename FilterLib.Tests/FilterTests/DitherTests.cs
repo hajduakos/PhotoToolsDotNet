@@ -29,6 +29,15 @@ namespace FilterLib.Tests.FilterTests
         }
 
         [Test]
+        public void TestBurkesDither()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "BurkesDither_2.bmp", new BurkesDitherFilter(2), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "BurkesDither_4.bmp", new BurkesDitherFilter(4), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new BurkesDitherFilter(256), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new BurkesDitherFilter(128), 2));
+        }
+
+        [Test]
         public void TestFanDither()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "FanDither_2.bmp", new FanDitherFilter(2), 1));

@@ -35,6 +35,19 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestAtkinsonDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(AtkinsonDitherFilter)));
 
         [Test]
+        public void TestBurkesDither()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("BurkesDither");
+            Assert.IsInstanceOf<BurkesDitherFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
+            BurkesDitherFilter ff = f as BurkesDitherFilter;
+            Assert.AreEqual(50, ff.Levels);
+        }
+
+        [Test]
+        public void TestBurkesDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(BurkesDitherFilter)));
+
+        [Test]
         public void TestFanDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("FanDither");
