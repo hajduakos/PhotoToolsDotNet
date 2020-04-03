@@ -20,6 +20,15 @@ namespace FilterLib.Tests.FilterTests
         }
 
         [Test]
+        public void TestAtkinsonDither()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "AtkinsonDither_2.bmp", new AtkinsonDitherFilter(2), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "AtkinsonDither_4.bmp", new AtkinsonDitherFilter(4), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new AtkinsonDitherFilter(256), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new AtkinsonDitherFilter(128), 2));
+        }
+
+        [Test]
         public void TestFanDither()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "FanDither_2.bmp", new FanDitherFilter(2), 1));

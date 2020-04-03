@@ -39,7 +39,8 @@ namespace FilterLib.Filters.Dither
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="offset">Position of the actual pixel in the first row</param>
-        public ErrorDiffusionMatrix(float[,] matrix, int offset)
+        /// <param name="normalize">Normalize the sum of matrix to 1</param>
+        public ErrorDiffusionMatrix(float[,] matrix, int offset, bool normalize = true)
         {
             this.Width = matrix.GetLength(0);
             this.Height = matrix.GetLength(1);
@@ -52,13 +53,14 @@ namespace FilterLib.Filters.Dither
                 for (int y = 0; y < Height; ++y)
                 {
                     this.matrix[x, y] = matrix[x, y];
-                    sum += matrix[x, y];
+                    if (normalize) sum += matrix[x, y];
                 }
             }
 
-            for (int x = 0; x < Width; ++x)
-                for (int y = 0; y < Height; ++y)
-                    this.matrix[x, y] /= sum;
+            if (normalize)
+                for (int x = 0; x < Width; ++x)
+                    for (int y = 0; y < Height; ++y)
+                        this.matrix[x, y] /= sum;
         }
 
         /// <summary>
