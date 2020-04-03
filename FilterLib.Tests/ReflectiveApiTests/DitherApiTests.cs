@@ -113,5 +113,18 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
         [Test]
         public void TestSierraDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(SierraDitherFilter)));
+
+        [Test]
+        public void TestStuckiDither()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("StuckiDither");
+            Assert.IsInstanceOf<StuckiDitherFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
+            StuckiDitherFilter ff = f as StuckiDitherFilter;
+            Assert.AreEqual(50, ff.Levels);
+        }
+
+        [Test]
+        public void TestStuckiDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(StuckiDitherFilter)));
     }
 }

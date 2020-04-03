@@ -81,5 +81,14 @@ namespace FilterLib.Tests.FilterTests
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new SierraDitherFilter(256), 1));
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new SierraDitherFilter(128), 2));
         }
+
+        [Test]
+        public void TestStuckiDither()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "StuckiDither_2.bmp", new StuckiDitherFilter(2), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "StuckiDither_4.bmp", new StuckiDitherFilter(4), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new StuckiDitherFilter(256), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new StuckiDitherFilter(128), 2));
+        }
     }
 }
