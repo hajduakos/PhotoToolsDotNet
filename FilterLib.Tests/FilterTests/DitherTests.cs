@@ -29,6 +29,15 @@ namespace FilterLib.Tests.FilterTests
         }
 
         [Test]
+        public void TestShiauFanDither()
+        {
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ShiauFanDither_2.bmp", new ShiauFanDitherFilter(2), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "ShiauFanDither_4.bmp", new ShiauFanDitherFilter(4), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new ShiauFanDitherFilter(256), 1));
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp", new ShiauFanDitherFilter(128), 2));
+        }
+
+        [Test]
         public void TestFloydSteinbergDither()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "FloydSteinbergDither_2.bmp", new FloydSteinbergDitherFilter(2), 1));

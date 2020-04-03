@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace FilterLib.Tests.ReflectiveApiTests
 {
-    public class BorderTests
+    public class BorderApiTests
     {
         [Test]
         public void TestJitterBorder()
