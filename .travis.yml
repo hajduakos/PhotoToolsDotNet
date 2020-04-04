@@ -9,4 +9,11 @@ addons:
     - libc6-dev
     - libgdiplus
 script:
+# Build
+- dotnet build -c release
+# Unit tests
 - dotnet test -c release
+# Integration tests
+- cd FilterScript.Test
+- ./test-all.sh
+- cd ..
