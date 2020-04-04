@@ -1,0 +1,2 @@
+#1: Brightness #0
+- Brightness: 50

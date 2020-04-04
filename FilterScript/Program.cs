@@ -1,6 +1,7 @@
 ﻿using FilterScript.Model;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 
 namespace FilterScript
@@ -16,7 +17,7 @@ namespace FilterScript
             using Bitmap input = new Bitmap(inputPath);
             batch.InputTask.Input = input;
             using Bitmap output = batch.Execute();
-            output.Save(outputPath);
+            output.Save(outputPath, ImageFormat.Bmp);
         }
 
         static string ParseArg(string[] args, string flag)

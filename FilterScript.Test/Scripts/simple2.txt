@@ -1,0 +1,9 @@
+#1: Levels #0
+- Dark: 17
+- Light: 205
+
+#2: Gamma #1
+- Gamma: 0.75
+
+#3: ColorHSL #2
+- Saturation: 40
