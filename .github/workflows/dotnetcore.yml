@@ -24,4 +24,4 @@ jobs:
     - name: Unit tests
       run: dotnet test --no-restore --verbosity normal
     - name: Integration tests
-      run: cd cd FilterScript.Test; ./test-all.sh; cd ..
+      run: cd FilterScript.Test; ./test-all.sh; cd ..
