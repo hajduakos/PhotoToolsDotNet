@@ -23,5 +23,11 @@ namespace FilterScript.Model
             if (result == null) result = Blend.Apply(BottomParent.Execute(), TopParent.Execute());
             return result;
         }
+
+        public void Clear()
+        {
+            result?.Dispose();
+            result = null;
+        }
     }
 }

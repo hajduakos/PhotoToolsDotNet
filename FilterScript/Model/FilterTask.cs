@@ -7,6 +7,7 @@ namespace FilterScript.Model
     {
         public ITask Parent { get; private set; }
         public IFilter Filter { get; private set; }
+
         private Bitmap result;
         public FilterTask(IFilter filter, ITask parent)
         {
@@ -18,6 +19,12 @@ namespace FilterScript.Model
         {
             if (result == null) result = Filter.Apply(Parent.Execute());
             return result;
+        }
+
+        public void Clear()
+        {
+            result?.Dispose();
+            result = null;
         }
     }
 }

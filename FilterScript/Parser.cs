@@ -13,11 +13,11 @@ namespace FilterScript
         private const string VARPREFIX = "#";
         private const string INPUTTASK = VARPREFIX + "0";
         private const string ASSIGNOP = ":";
-        public static Batch Parse(string[] lines)
+        public static Script Parse(string[] lines)
         {
             Dictionary<string, ITask> vars = new Dictionary<string, ITask>();
             List<ITask> tasks = new List<ITask>();
-            Batch batch = new Batch();
+            Script batch = new Script();
             vars.Add(INPUTTASK, batch.InputTask);
             tasks.Add(batch.InputTask);
             IFilter currentFilter = null;

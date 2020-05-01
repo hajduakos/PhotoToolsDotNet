@@ -19,10 +19,9 @@ namespace FilterScript
             string scriptPath = ParseArg(args, "s");
             string inputPath = ParseArg(args, "i");
             string outputPath = ParseArg(args, "o");
-            Batch batch = Parser.Parse(File.ReadAllLines(scriptPath));
+            Script batch = Parser.Parse(File.ReadAllLines(scriptPath));
             using Bitmap input = new Bitmap(inputPath);
-            batch.InputTask.Input = input;
-            using Bitmap output = batch.Execute();
+            using Bitmap output = batch.Execute(input);
             output.Save(outputPath, ImageFormat.Bmp);
             switch(new FileInfo(outputPath).Extension.ToLower())
             {
@@ -41,7 +40,6 @@ namespace FilterScript
                 case ".jpg":
                 case ".jpeg":
                     EncoderParameters eps = new EncoderParameters(1) { Param = new EncoderParameter[] { new EncoderParameter(Encoder.Quality, 97L) } };
-                    if (GetEncoder(ImageFormat.Jpeg) == null) Console.WriteLine("NULL");
                     output.Save(outputPath, GetEncoder(ImageFormat.Jpeg), eps);
                     break;
                 default:

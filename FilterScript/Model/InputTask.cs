@@ -9,5 +9,7 @@ namespace FilterScript.Model
         public InputTask(Bitmap input = null) => this.Input = input;
 
         public Bitmap Execute() => Input;
+
+        public void Clear() { }
     }
 }
