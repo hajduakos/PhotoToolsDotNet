@@ -37,7 +37,7 @@ namespace FilterLib.Tests.FilterTests
         public void TestResize()
         {
             const System.Drawing.Drawing2D.InterpolationMode itp = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "l";
+            string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
 
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "_input.bmp",
                 new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(1), itp), 1));
