@@ -8,6 +8,8 @@ using InterpolationMode = System.Drawing.Drawing2D.InterpolationMode;
 
 namespace FilterLib.Tests.FilterTests
 {
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class TransformTests
     {
 
