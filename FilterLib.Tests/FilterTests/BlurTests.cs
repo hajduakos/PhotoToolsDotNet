@@ -9,7 +9,8 @@ namespace FilterLib.Tests.FilterTests
     [Parallelizable(ParallelScope.All)]
     public class BlurTests
     {
-        internal static IEnumerable<TestCaseData> Data() {
+        internal static IEnumerable<TestCaseData> Data()
+        {
             yield return new TestCaseData("Blur.bmp", new BlurFilter(), 1);
 
             yield return new TestCaseData("_input.bmp", new BoxBlurFilter(0, 0), 1);
