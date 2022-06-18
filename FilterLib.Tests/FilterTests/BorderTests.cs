@@ -2,6 +2,7 @@
 using FilterLib.Util;
 using NUnit.Framework;
 using Bitmap = System.Drawing.Bitmap;
+using System.Runtime.InteropServices;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -39,9 +40,10 @@ namespace FilterLib.Tests.FilterTests
         public void TestPatternBorderRadius()
         {
             using Bitmap pattern = new Bitmap(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "PatternBorder_10pct_8px_Outside.bmp",
+            string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"PatternBorder_10pct_8px_Outside{suffix}.bmp",
                     new PatternBorderFilter(Size.Relative(.1f), Size.Absolute(8), pattern, BorderPosition.Outside), 1));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "PatternBorder_20px_10pct_Center.bmp",
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"PatternBorder_20px_10pct_Center{suffix}.bmp",
                 new PatternBorderFilter(Size.Absolute(20), Size.Relative(.1f), pattern, BorderPosition.Center), 1));
         }
 
@@ -57,9 +59,10 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         public void TestSimpleBorderRadius()
         {
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "SimpleBorder_10pct_8px_Blue_Outside.bmp",
+            string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"SimpleBorder_10pct_8px_Blue_Outside{suffix}.bmp",
                     new SimpleBorderFilter(Size.Relative(.1f), Size.Absolute(8), new RGB(0, 0, 255), BorderPosition.Outside), 1));
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "SimpleBorder_20px_10pct_Red_Center.bmp",
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", $"SimpleBorder_20px_10pct_Red_Center{suffix}.bmp",
                 new SimpleBorderFilter(Size.Absolute(20), Size.Relative(.1f), new RGB(255, 0, 0), BorderPosition.Center), 1));
         }
 
