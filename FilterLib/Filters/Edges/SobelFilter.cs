@@ -13,10 +13,10 @@ namespace FilterLib.Filters.Sharpen
     public sealed class SobelFilter : FilterInPlaceBase
     {
         private readonly ConvolutionFilter conv1 =
-            new ConvolutionFilter(new Conv3x3(-1, -2, -1, 0, 0, 0, 1, 2, 1));
+            new(new Conv3x3(-1, -2, -1, 0, 0, 0, 1, 2, 1));
 
         private readonly ConvolutionFilter conv2 =
-            new ConvolutionFilter(new Conv3x3(-1, 0, 1, -2, 0, 2, -1, 0, 1));
+            new(new Conv3x3(-1, 0, 1, -2, 0, 2, -1, 0, 1));
 
         /// <summary>
         /// Apply filter by modifying the original image.
@@ -36,8 +36,8 @@ namespace FilterLib.Filters.Sharpen
                 IReporter subRep = new SubReporter(reporter, 67, 100, 0, 100);
 
                 // Lock bits
-                using DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb);
-                using DisposableBitmapData bmdTmp = new DisposableBitmapData(tmp, PixelFormat.Format24bppRgb);
+                using DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb);
+                using DisposableBitmapData bmdTmp = new(tmp, PixelFormat.Format24bppRgb);
                 int wMul3 = image.Width * 3;
                 int h = image.Height;
                 int x, y, nVal;

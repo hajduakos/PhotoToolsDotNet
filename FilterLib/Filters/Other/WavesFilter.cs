@@ -79,8 +79,8 @@ namespace FilterLib.Filters.Other
                 gfx.Clear(System.Drawing.Color.Black);
             }
             // Lock bits
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdNew = new DisposableBitmapData(wavesBmp, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdNew = new(wavesBmp, PixelFormat.Format24bppRgb))
             {
                 int wMul3 = image.Width * 3; // Width of a row
                 int stride = bmd.Stride;

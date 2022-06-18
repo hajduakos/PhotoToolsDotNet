@@ -72,7 +72,7 @@
             return new HSL((int)h, (int)s, (int)l);
         }
 
-        public override bool Equals(object obj) => obj is RGB && this == (RGB)obj;
+        public override bool Equals(object obj) => obj is RGB r && this == r;
 
         public override int GetHashCode() => R.GetHashCode() ^ G.GetHashCode() ^ B.GetHashCode();
 

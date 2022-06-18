@@ -20,7 +20,7 @@ namespace FilterLib.Filters
             reporter?.Start();
             ApplyStart();
 
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
                 int wMul3 = image.Width * 3; // Width of a row
                 int h = image.Height; // Image height

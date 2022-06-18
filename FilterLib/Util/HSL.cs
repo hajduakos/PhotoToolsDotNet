@@ -67,7 +67,7 @@
             }
             return new RGB((int)(r * 255), (int)(g * 255), (int)(b * 255));
         }
-        public override bool Equals(object obj) => obj is HSL && this == (HSL)obj;
+        public override bool Equals(object obj) => obj is HSL h && this == h;
 
         public override int GetHashCode() => H.GetHashCode() ^ S.GetHashCode() ^ L.GetHashCode();
 

@@ -75,7 +75,7 @@ namespace FilterLib.Util
             if (plus < slash) throw new FormatException("Expected '+' after '/'");
             Divisor = int.Parse(str.Substring(slash + 1, plus - slash - 1).Trim());
             if (Divisor == 0) Divisor = 1;
-            Bias = int.Parse(str.Substring(plus + 1).Trim());
+            Bias = int.Parse(str[(plus + 1)..].Trim());
         }
 
         /// <summary>

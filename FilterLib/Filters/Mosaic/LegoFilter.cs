@@ -44,13 +44,13 @@ namespace FilterLib.Filters.Mosaic
         {
             reporter?.Start();
             // Create shadow pattern for a brick
-            using (Bitmap pattern = new Bitmap(size, size))
+            using (Bitmap pattern = new(size, size))
             {
                 using (Graphics gfx = Graphics.FromImage(pattern))
                 {
                     gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                     // Top glow circle
-                    using (LinearGradientBrush lgb = new LinearGradientBrush(
+                    using (LinearGradientBrush lgb = new(
                         new Point(size / 4 - 1, size / 4 - 1), new Point(size / 4 - 1, size / 2 + 1),
                         System.Drawing.Color.FromArgb(255, 255, 255, 255), System.Drawing.Color.FromArgb(0, 255, 255, 255)))
                     {
@@ -58,7 +58,7 @@ namespace FilterLib.Filters.Mosaic
                         gfx.FillEllipse(lgb, size / 4 - 1, size / 4 - 1, size / 2 + 2, size / 2 + 2);
                     }
                     // Bottom shadow circle
-                    using (LinearGradientBrush lgb = new LinearGradientBrush(
+                    using (LinearGradientBrush lgb = new(
                             new Point(0, size / 2), new Point(0, 3 * size / 4 + 1),
                             System.Drawing.Color.FromArgb(0, 0, 0, 0), System.Drawing.Color.FromArgb(255, 0, 0, 0)))
                     {
@@ -69,7 +69,7 @@ namespace FilterLib.Filters.Mosaic
                 }
                 // Clone original image for iteration
                 using Bitmap original = (Bitmap)image.Clone();
-                using DisposableBitmapData bmd = new DisposableBitmapData(original, PixelFormat.Format24bppRgb);
+                using DisposableBitmapData bmd = new(original, PixelFormat.Format24bppRgb);
                 int wMul3 = original.Width * 3;
                 int h = original.Height;
                 int x, y, xSub, ySub, sizeMul3 = size * 3, rSum, gSum, bSum, n;

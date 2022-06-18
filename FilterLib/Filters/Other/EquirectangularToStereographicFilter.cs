@@ -65,14 +65,14 @@ namespace FilterLib.Filters.Other
         {
             reporter?.Start();
             int size = Math.Min(image.Width, image.Height); // Size of the result
-            Bitmap ret = new Bitmap(size, size);
+            Bitmap ret = new(size, size);
             float radius = size / 4f / MathF.Tan(aov * MathF.PI / 360f); // Radius of the projection sphere
             float radiusMult2 = radius * 2;
             int sizeDiv2 = size / 2;
             int sizeMult3 = size * 3;
 
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdRet = new DisposableBitmapData(ret, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdRet = new(ret, PixelFormat.Format24bppRgb))
             {
 
                 int w = image.Width, h = image.Height;

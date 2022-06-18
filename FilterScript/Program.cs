@@ -12,7 +12,7 @@ namespace FilterScript
         {
             if (args.Length == 1 && args[0] == "--doc")
             {
-                using StreamWriter sw = new StreamWriter(Console.OpenStandardOutput());
+                using StreamWriter sw = new(Console.OpenStandardOutput());
                 new DocGen(sw).Write();
                 return;
             }
@@ -20,7 +20,7 @@ namespace FilterScript
             string inputPath = ParseArg(args, "i");
             string outputPath = ParseArg(args, "o");
             Script batch = Parser.Parse(File.ReadAllLines(scriptPath));
-            using Bitmap input = new Bitmap(inputPath);
+            using Bitmap input = new(inputPath);
             using Bitmap output = batch.Execute(input);
             output.Save(outputPath, ImageFormat.Bmp);
             switch(new FileInfo(outputPath).Extension.ToLower())
@@ -39,7 +39,7 @@ namespace FilterScript
                     break;
                 case ".jpg":
                 case ".jpeg":
-                    EncoderParameters eps = new EncoderParameters(1) { Param = new EncoderParameter[] { new EncoderParameter(Encoder.Quality, 97L) } };
+                    EncoderParameters eps = new(1) { Param = new EncoderParameter[] { new EncoderParameter(Encoder.Quality, 97L) } };
                     output.Save(outputPath, GetEncoder(ImageFormat.Jpeg), eps);
                     break;
                 default:

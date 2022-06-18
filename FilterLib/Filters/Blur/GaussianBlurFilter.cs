@@ -46,8 +46,8 @@ namespace FilterLib.Filters.Blur
             // Clone image for temporary use
             using (Bitmap tmp = (Bitmap)image.Clone())
             // Lock bits
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdTmp = new DisposableBitmapData(tmp, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdTmp = new(tmp, PixelFormat.Format24bppRgb))
             {
                 int x, y;
                 int w = image.Width, h = image.Height;

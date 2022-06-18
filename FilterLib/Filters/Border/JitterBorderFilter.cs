@@ -57,10 +57,10 @@ namespace FilterLib.Filters.Border
         {
             reporter?.Start();
             // Lock bits
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
                 // Random number generator
-                Random rnd = new Random(Seed);
+                Random rnd = new(Seed);
                 int w = image.Width, h = image.Height;
                 int stride = bmd.Stride;
                 int wMul3 = image.Width * 3; // Width of a row

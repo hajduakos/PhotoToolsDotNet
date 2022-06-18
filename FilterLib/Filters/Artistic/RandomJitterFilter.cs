@@ -53,11 +53,11 @@ namespace FilterLib.Filters.Artistic
             reporter?.Start();
             // Clone image (the clone won't be modified)
             using (Bitmap original = (Bitmap)image.Clone())
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrg = new DisposableBitmapData(original, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdOrg = new(original, PixelFormat.Format24bppRgb))
             {
                 // Random number generator
-                Random rnd = new Random(Seed);
+                Random rnd = new(Seed);
                 int dx, dy, idx, w = image.Width, h = image.Height;
                 int stride = bmd.Stride;
                 int wMul3 = image.Width * 3; // Width of a row

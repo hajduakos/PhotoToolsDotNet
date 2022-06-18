@@ -27,11 +27,11 @@ namespace FilterScript
         {
             sw.WriteLine("## Filters");
             sw.WriteLine();
-            SortedDictionary<string, List<Type>> filters = new SortedDictionary<string, List<Type>>();
+            SortedDictionary<string, List<Type>> filters = new();
 
             foreach (var fType in ReflectiveApi.GetFilterTypes())
             {
-                string category = fType.Namespace.Substring(fType.Namespace.LastIndexOf('.') + 1);
+                string category = fType.Namespace[(fType.Namespace.LastIndexOf('.') + 1)..];
                 if (!filters.ContainsKey(category))
                     filters.Add(category, new List<Type>());
                 filters[category].Add(fType);
@@ -68,7 +68,7 @@ namespace FilterScript
             sw.WriteLine($"- {prop.Name}: {prop.PropertyType.Name}{range}");
         }
 
-        private string GetMin(PropertyInfo prop)
+        private static string GetMin(PropertyInfo prop)
         {
             var min = prop.GetCustomAttributes<FilterParamMinAttribute>().FirstOrDefault();
             if (min != null) return min.Value.ToString();
@@ -77,7 +77,7 @@ namespace FilterScript
             return "";
         }
 
-        private string GetMax(PropertyInfo prop)
+        private static string GetMax(PropertyInfo prop)
         {
             var max = prop.GetCustomAttributes<FilterParamMaxAttribute>().FirstOrDefault();
             if (max != null) return max.Value.ToString();

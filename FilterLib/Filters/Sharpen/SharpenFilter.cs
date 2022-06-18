@@ -11,7 +11,7 @@ namespace FilterLib.Filters.Sharpen
     public sealed class SharpenFilter : FilterInPlaceBase
     {
         private readonly Other.ConvolutionFilter conv =
-            new Other.ConvolutionFilter(new Conv3x3(0, -2, 0, -2, 11, -2, 0, -2, 0, 3, 0));
+            new(new Conv3x3(0, -2, 0, -2, 11, -2, 0, -2, 0, 3, 0));
 
         /// <summary>
         /// Apply filter by modifying the original image.

@@ -29,8 +29,8 @@ namespace FilterLib.Blending
             BlendStart();
 
             // Lock bits
-            using (DisposableBitmapData bmdBot = new DisposableBitmapData(bottom, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdTop = new DisposableBitmapData(top, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdBot = new(bottom, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdTop = new(top, PixelFormat.Format24bppRgb))
             {
                 int h = Math.Min(bottom.Height, top.Height);
                 int wMul3 = Math.Min(bottom.Width, top.Width) * 3;

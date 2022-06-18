@@ -11,7 +11,7 @@ namespace FilterLib.Filters.Sharpen
     public sealed class EmbossFilter : FilterInPlaceBase
     {
         private readonly Other.ConvolutionFilter conv =
-            new Other.ConvolutionFilter(new Conv3x3(1, 1, 1, 0, 0, 0, -1, -1, -1, 1, 127));
+            new(new Conv3x3(1, 1, 1, 0, 0, 0, -1, -1, -1, 1, 127));
 
         /// <summary>
         /// Apply filter by modifying the original image.

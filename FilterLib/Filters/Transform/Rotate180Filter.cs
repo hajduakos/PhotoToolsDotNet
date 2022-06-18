@@ -19,7 +19,7 @@ namespace FilterLib.Filters.Transform
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
                 int wMul3 = image.Width * 3;
                 int h = image.Height;

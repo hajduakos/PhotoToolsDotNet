@@ -52,7 +52,7 @@ namespace FilterLib
 
             foreach (var constr in type.GetConstructors())
             {
-                List<object> parameters = new List<object>();
+                List<object> parameters = new();
                 foreach (var param in constr.GetParameters())
                     if (param.HasDefaultValue)
                         parameters.Add(param.DefaultValue);
@@ -104,7 +104,7 @@ namespace FilterLib
             if (type == typeof(Util.Size)) return Util.Size.FromString(value);
             if (type == typeof(Bitmap))
             {
-                using Bitmap b = new Bitmap(value);
+                using Bitmap b = new(value);
                 return (Bitmap)b.Clone();
             }
 
@@ -189,7 +189,7 @@ namespace FilterLib
 
             foreach (var constr in type.GetConstructors())
             {
-                List<object> parameters = new List<object>();
+                List<object> parameters = new();
                 foreach (var param in constr.GetParameters())
                     if (param.HasDefaultValue)
                         parameters.Add(param.DefaultValue);

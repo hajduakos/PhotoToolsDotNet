@@ -22,7 +22,7 @@ namespace FilterScript.Model
         public Bitmap Execute(Bitmap input)
         {
             InputTask.Input = input;
-            Bitmap result = tasks[tasks.Count - 1].Execute();
+            Bitmap result = tasks[^1].Execute();
             foreach (ITask t in tasks.Take(tasks.Count - 1)) t.Clear();
             return result;
         }

@@ -11,7 +11,7 @@ namespace FilterLib.Filters.Blur
     public class BlurFilter : FilterInPlaceBase
     {
         private readonly Other.ConvolutionFilter conv =
-            new Other.ConvolutionFilter(new Conv3x3(1, 1, 1, 1, 8, 1, 1, 1, 1, 16, 0));
+            new(new Conv3x3(1, 1, 1, 1, 8, 1, 1, 1, 1, 16, 0));
 
         /// <summary>
         /// Apply filter by modifying the original image.

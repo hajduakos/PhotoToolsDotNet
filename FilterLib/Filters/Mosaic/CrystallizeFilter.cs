@@ -81,7 +81,7 @@ namespace FilterLib.Filters.Mosaic
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
                 int w = image.Width;
                 int wMul3 = image.Width * 3; // Width of a row
@@ -91,7 +91,7 @@ namespace FilterLib.Filters.Mosaic
                 float avg = averaging / 100.0f;
 
                 // Generate points
-                Random rnd = new Random(Seed);
+                Random rnd = new(Seed);
                 // Additional points required if the width/height is not dividible by the size
                 int crystalsX = w / size + ((w % size) == 0 ? 0 : 1);
                 int crystalsY = h / size + ((h % size) == 0 ? 0 : 1);

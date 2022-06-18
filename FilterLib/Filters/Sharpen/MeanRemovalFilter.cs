@@ -11,7 +11,7 @@ namespace FilterLib.Filters.Sharpen
     public sealed class MeanRemovalFilter : FilterInPlaceBase
     {
         private readonly Other.ConvolutionFilter conv =
-               new Other.ConvolutionFilter(new Conv3x3(-1, -1, -1, -1, 9, -1, -1, -1, -1, 1, 0));
+               new(new Conv3x3(-1, -1, -1, -1, 9, -1, -1, -1, -1, 1, 0));
 
         /// <summary>
         /// Apply filter by modifying the original image.

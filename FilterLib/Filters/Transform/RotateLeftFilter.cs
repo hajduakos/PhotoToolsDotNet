@@ -21,10 +21,10 @@ namespace FilterLib.Filters.Transform
         {
             reporter?.Start();
             // Rotated image
-            Bitmap rotated = new Bitmap(image.Height, image.Width);
+            Bitmap rotated = new(image.Height, image.Width);
             // Lock bits
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdRot = new DisposableBitmapData(rotated, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdRot = new(rotated, PixelFormat.Format24bppRgb))
             {
                 int wMul3 = image.Width * 3; // Width of a row
                 int rotH = rotated.Height;

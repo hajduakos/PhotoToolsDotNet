@@ -62,7 +62,7 @@ namespace FilterLib.Filters.Transform
             if (newWidth <= 0) throw new ArgumentException($"Invalid new width: {newWidth}.");
             if (newHeight <= 0) throw new ArgumentException($"Invalid new height: {newHeight}.");
 
-            Bitmap resized = new Bitmap(newWidth, newHeight);
+            Bitmap resized = new(newWidth, newHeight);
             using (Graphics gfx = Graphics.FromImage(resized))
             {
                 gfx.InterpolationMode = Interpolation;

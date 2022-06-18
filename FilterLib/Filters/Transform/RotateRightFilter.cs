@@ -20,9 +20,9 @@ namespace FilterLib.Filters.Transform
         public Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
-            Bitmap rotated = new Bitmap(image.Height, image.Width);
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdRot = new DisposableBitmapData(rotated, PixelFormat.Format24bppRgb))
+            Bitmap rotated = new(image.Height, image.Width);
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdRot = new(rotated, PixelFormat.Format24bppRgb))
             {
                 int wMul3 = image.Width * 3; // Width of a row
                 int rotW = rotated.Width;

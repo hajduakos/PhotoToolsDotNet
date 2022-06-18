@@ -26,7 +26,7 @@ namespace FilterLib.Filters.Generate
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
                 int x, y;
                 int w = image.Width;

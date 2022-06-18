@@ -64,7 +64,7 @@ namespace FilterLib.Tests
         [Test]
         public void TestConv3x3Parse()
         {
-            Conv3x3 c = new Conv3x3("[1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11");
+            Conv3x3 c = new("[1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11");
             Assert.AreEqual(1, c[0, 0]);
             Assert.AreEqual(2, c[1, 0]);
             Assert.AreEqual(3, c[2, 0]);
@@ -81,7 +81,7 @@ namespace FilterLib.Tests
         [Test]
         public void TestGradientOf2()
         {
-            Gradient g = new Gradient(new RGB(255, 100, 0), new RGB(0, 50, 255));
+            Gradient g = new(new RGB(255, 100, 0), new RGB(0, 50, 255));
             Assert.AreEqual(new RGB(255, 100, 0), g.GetColor(0f));
             Assert.AreEqual(new RGB(127, 75, 127), g.GetColor(0.5f));
             Assert.AreEqual(new RGB(51, 60, 204), g.GetColor(0.8f));
@@ -91,7 +91,7 @@ namespace FilterLib.Tests
         [Test]
         public void TestGradientOf3()
         {
-            Gradient g = new Gradient(new RGB(255, 0, 0), new RGB(255, 255, 0), new RGB(0, 255, 0));
+            Gradient g = new(new RGB(255, 0, 0), new RGB(255, 255, 0), new RGB(0, 255, 0));
             Assert.AreEqual(new RGB(255, 0, 0), g.GetColor(0f));
             Assert.AreEqual(new RGB(255, 127, 0), g.GetColor(0.25f));
             Assert.AreEqual(new RGB(255, 255, 0), g.GetColor(0.5f));
@@ -102,7 +102,7 @@ namespace FilterLib.Tests
         [Test]
         public void TestGradientParseOf2()
         {
-            Gradient g = new Gradient("0 (255 100 0), 1 (0 50 255)");
+            Gradient g = new("0 (255 100 0), 1 (0 50 255)");
             Assert.AreEqual(new RGB(255, 100, 0), g.GetColor(0f));
             Assert.AreEqual(new RGB(127, 75, 127), g.GetColor(0.5f));
             Assert.AreEqual(new RGB(51, 60, 204), g.GetColor(0.8f));
@@ -112,7 +112,7 @@ namespace FilterLib.Tests
         [Test]
         public void TestGradientParseOf3()
         {
-            Gradient g = new Gradient("0 (255 0 0), 0.5 (255 255 0), 1 (0 255 0)");
+            Gradient g = new("0 (255 0 0), 0.5 (255 255 0), 1 (0 255 0)");
             Assert.AreEqual(new RGB(255, 0, 0), g.GetColor(0f));
             Assert.AreEqual(new RGB(255, 127, 0), g.GetColor(0.25f));
             Assert.AreEqual(new RGB(255, 255, 0), g.GetColor(0.5f));

@@ -23,7 +23,7 @@ namespace FilterLib.Tests
         public void TestSubReporter()
         {
             // Main reporter
-            ReporterStub rs = new ReporterStub();
+            ReporterStub rs = new();
             // Subreporter for 0-50 within 0-100
             IReporter sub = new SubReporter(rs, 0, 50, 0, 100);
             sub.Start();
@@ -41,7 +41,7 @@ namespace FilterLib.Tests
         public void TestNestedSubReporters()
         {
             // Main reporter
-            ReporterStub rs = new ReporterStub();
+            ReporterStub rs = new();
             // Subreporter for 0-500 within 0-1000
             IReporter sub = new SubReporter(rs, 0, 500, 0, 1000);
             // Sub-sub reporter for 500-1000

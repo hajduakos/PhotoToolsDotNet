@@ -15,9 +15,9 @@ namespace FilterScript
         private const string ASSIGNOP = ":";
         public static Script Parse(string[] lines)
         {
-            Dictionary<string, ITask> vars = new Dictionary<string, ITask>();
-            List<ITask> tasks = new List<ITask>();
-            Script batch = new Script();
+            Dictionary<string, ITask> vars = new();
+            List<ITask> tasks = new();
+            Script batch = new();
             vars.Add(INPUTTASK, batch.InputTask);
             tasks.Add(batch.InputTask);
             IFilter currentFilter = null;
@@ -31,14 +31,14 @@ namespace FilterScript
 
                 if (line.StartsWith("- ")) // Property setter, expected form: - NAME: VALUE
                 {
-                    line = line.Substring(2);
+                    line = line[2..];
                     if (currentFilter == null && currentBlend == null)
                         throw new ParseException(lineNo, "Trying to set property without filter or blend.");
                     int colon = line.IndexOf(':');
                     if (colon <= 0)
                         throw new ParseException(lineNo, "Expected ':' in property setter.");
-                    string propName = line.Substring(0, colon);
-                    string propValue = line.Substring(colon + 1).Trim();
+                    string propName = line[..colon];
+                    string propValue = line[(colon + 1)..].Trim();
 
                     if (currentFilter != null) // Current task is either filter
                         ReflectiveApi.SetFilterPropertyByName(currentFilter, propName, propValue);
@@ -63,7 +63,7 @@ namespace FilterScript
                         newVarName = "_" + vars.Count; // Auto generated ID
                     else
                     {
-                        newVarName = line.Substring(0, assign); // ID by user
+                        newVarName = line[..assign]; // ID by user
                         if (!newVarName.StartsWith(VARPREFIX))
                             throw new ParseException(lineNo, $"Variable name must start with '{VARPREFIX}'.");
                     }
@@ -74,7 +74,7 @@ namespace FilterScript
                         throw new ParseException(lineNo, $"Redefinition of reserved input variable '{newVarName}'.");
 
                     // Take the rest of the line and split into name and arguments
-                    line = line.Substring(assign + ASSIGNOP.Length).Trim();
+                    line = line[(assign + ASSIGNOP.Length)..].Trim();
                     string[] tokens = line.Split(' ');
                     string name = tokens[0];
                     tokens = tokens.Skip(1).ToArray();
@@ -85,14 +85,14 @@ namespace FilterScript
                         if (tokens.Length > 1)
                             throw new ParseException(lineNo, "Too many arguments for filter.");
 
-                        ITask parentTask = tasks[tasks.Count - 1]; // By default we take the previous task
+                        ITask parentTask = tasks[^1]; // By default we take the previous task
                         if (tokens.Length == 1) // But if there is an argument, we take that
                         {
                             if (!vars.ContainsKey(tokens[0]))
                                 throw new ParseException(lineNo, $"Undeclared variable '{tokens[0]}'.");
                             parentTask = vars[tokens[0]];
                         }
-                        FilterTask ft = new FilterTask(currentFilter, parentTask);
+                        FilterTask ft = new(currentFilter, parentTask);
                         batch.AddTask(ft);
                         vars.Add(newVarName, ft);
                         tasks.Add(ft);
@@ -106,7 +106,7 @@ namespace FilterScript
 
                         // By default we take the previous two tasks (or the previous one twice if there is only one)
                         ITask parentTask1 = tasks[System.Math.Max(tasks.Count - 2, 0)];
-                        ITask parentTask2 = tasks[tasks.Count - 1];
+                        ITask parentTask2 = tasks[^1];
                         if (tokens.Length == 2) // But if there are arguments, we take those
                         {
                             if (!vars.ContainsKey(tokens[0]))
@@ -117,7 +117,7 @@ namespace FilterScript
                             parentTask2 = vars[tokens[1]];
                         }
 
-                        BlendTask bt = new BlendTask(currentBlend, parentTask1, parentTask2);
+                        BlendTask bt = new(currentBlend, parentTask1, parentTask2);
                         batch.AddTask(bt);
                         vars.Add(newVarName, bt);
                         tasks.Add(bt);

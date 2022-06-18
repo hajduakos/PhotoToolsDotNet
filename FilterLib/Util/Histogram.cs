@@ -15,7 +15,7 @@ namespace FilterLib.Util
             // Array containing histogram values
             int[] histogram = new int[256];
             for (int i = 0; i < 256; ++i) histogram[i] = 0;
-            using (DisposableBitmapData bmd = new DisposableBitmapData(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
                 int h = image.Height;
                 int wMul3 = image.Width * 3;

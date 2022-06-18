@@ -54,7 +54,7 @@ namespace FilterLib.Filters.Border
                 // Draw rectangles with decreasing alpha value
                 for (int k = 0; k < borderWidth; ++k)
                 {
-                    using Pen pen = new Pen(System.Drawing.Color.FromArgb((int)(255 - k / (float)(borderWidth - 1) * 255), Color.R, Color.G, Color.B));
+                    using Pen pen = new(System.Drawing.Color.FromArgb((int)(255 - k / (float)(borderWidth - 1) * 255), Color.R, Color.G, Color.B));
                     gfx.DrawLine(pen, 0, k, w, k);
                     gfx.DrawLine(pen, k, 0, k, h);
                     gfx.DrawLine(pen, 0, h - 1 - k, w, h - 1 - k);

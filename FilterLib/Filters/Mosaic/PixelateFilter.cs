@@ -44,7 +44,7 @@ namespace FilterLib.Filters.Mosaic
             reporter?.Start();
             // Clone original image for iteration
             using (Bitmap original = (Bitmap)image.Clone())
-            using (DisposableBitmapData bmd = new DisposableBitmapData(original, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmd = new(original, PixelFormat.Format24bppRgb))
             using (Graphics gfx = Graphics.FromImage(image))
             {
                 int wMul3 = original.Width * 3; // Width of a row

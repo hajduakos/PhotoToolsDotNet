@@ -101,7 +101,7 @@ namespace FilterLib.Util
         /// <returns>Color at the value</returns>
         public RGB GetColor(float at)
         {
-            if (at < 0 || at > 1) throw new ArgumentOutOfRangeException("at", "A value between 0 and 1 is required");
+            if (at < 0 || at > 1) throw new ArgumentOutOfRangeException(nameof(at), "A value between 0 and 1 is required");
             int gid = 0;
             while (at > stops[gid + 1] + 0.001f) gid++;
             float ratio = (at - stops[gid]) / (stops[gid + 1] - stops[gid]);

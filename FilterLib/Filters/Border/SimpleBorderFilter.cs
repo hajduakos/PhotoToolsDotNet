@@ -70,14 +70,14 @@ namespace FilterLib.Filters.Border
             if (Position == BorderPosition.Outside) { w += 2 * borderW; h += 2 * borderW; }
             else if (Position == BorderPosition.Center) { w += borderW; h += borderW; }
 
-            Bitmap imageWithBorder = new Bitmap(w, h);
+            Bitmap imageWithBorder = new(w, h);
             using (Graphics gfx = Graphics.FromImage(imageWithBorder))
             {
                 gfx.SmoothingMode = SmoothingMode.HighQuality;
                 gfx.Clear(System.Drawing.Color.FromArgb(Color.R, Color.G, Color.B));
                 gfx.SetClip(new Rectangle(borderW, borderW + borderRad, w - 2 * borderW, h - 2 * borderW - 2 * borderRad));
                 gfx.SetClip(new Rectangle(borderW + borderRad, borderW, w - 2 * borderW - 2 * borderRad, h - 2 * borderW), CombineMode.Union);
-                GraphicsPath clip = new GraphicsPath
+                GraphicsPath clip = new()
                 {
                     FillMode = FillMode.Winding
                 };

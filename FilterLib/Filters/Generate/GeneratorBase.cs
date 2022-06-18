@@ -54,7 +54,7 @@ namespace FilterLib.Filters.Generate
             float xFloat, yFloat, xFrac, yFrac;
             float[,] noise = new float[width, height];
             float[,] turbulence = new float[width, height];
-            System.Random rnd = new System.Random(Seed);
+            System.Random rnd = new(Seed);
             for (x = 0; x < width; ++x)
                 for (y = 0; y < height; ++y)
                     noise[x, y] = (float)rnd.NextDouble();

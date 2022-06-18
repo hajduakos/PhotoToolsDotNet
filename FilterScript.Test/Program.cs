@@ -9,8 +9,8 @@ namespace FilterScript.Test
     {
         static int Main(string[] args)
         {
-            using Bitmap expected = new Bitmap(args[0]);
-            using Bitmap actual = new Bitmap(args[1]);
+            using Bitmap expected = new(args[0]);
+            using Bitmap actual = new(args[1]);
             if (Compare(actual, expected, 3)) return 0;
             return 1;
         }
@@ -19,8 +19,8 @@ namespace FilterScript.Test
         {
             if (actual.Width != expected.Width) return false;
             if (actual.Height != expected.Height) return false;
-            using DisposableBitmapData bmdAct = new DisposableBitmapData(actual, PixelFormat.Format24bppRgb);
-            using DisposableBitmapData bmdExp = new DisposableBitmapData(expected, PixelFormat.Format24bppRgb);
+            using DisposableBitmapData bmdAct = new(actual, PixelFormat.Format24bppRgb);
+            using DisposableBitmapData bmdExp = new(expected, PixelFormat.Format24bppRgb);
             int wMul3 = actual.Width * 3;
             int h = actual.Height;
             int x, y;
