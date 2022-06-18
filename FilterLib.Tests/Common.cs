@@ -15,11 +15,11 @@ namespace FilterLib.Tests
         {
             string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
 
-            using Bitmap bmpOriginal = new Bitmap(path + original);
+            using Bitmap bmpOriginal = new(path + original);
             using Bitmap bmpActual = filter.Apply(bmpOriginal);
             using Bitmap bmpExpected = original == expected ? (Bitmap)bmpOriginal.Clone() : new Bitmap(path + expected);
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
-            if (!ok) bmpActual.Save(path + expected + "_actual.bmp", ImageFormat.Bmp);
+            if (!ok) bmpActual.Save(path + expected.Replace(".bmp", "") + "_actual.bmp", ImageFormat.Bmp);
             return ok;
         }
 
@@ -27,13 +27,13 @@ namespace FilterLib.Tests
         {
             string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
 
-            using Bitmap bmpOriginal1 = new Bitmap(path + original1);
+            using Bitmap bmpOriginal1 = new(path + original1);
             using Bitmap bmpOriginal2 = original1 == original2 ? (Bitmap)bmpOriginal1.Clone() : new Bitmap(path + original2);
             using Bitmap bmpActual = blend.Apply(bmpOriginal1, bmpOriginal2);
             using Bitmap bmpExpected = original1 == expected ? (Bitmap)bmpOriginal1.Clone() :
                 (original2 == expected ? (Bitmap)bmpOriginal2.Clone() : new Bitmap(path + expected));
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
-            if (!ok) bmpActual.Save(path + expected + "_actual.bmp");
+            if (!ok) bmpActual.Save(path + expected.Replace(".bmp", "") + "_actual.bmp");
             return ok;
         }
 
@@ -41,8 +41,8 @@ namespace FilterLib.Tests
         {
             if (actual.Width != expected.Width) return false;
             if (actual.Height != expected.Height) return false;
-            using DisposableBitmapData bmdAct = new DisposableBitmapData(actual, PixelFormat.Format24bppRgb);
-            using DisposableBitmapData bmdExp = new DisposableBitmapData(expected, PixelFormat.Format24bppRgb);
+            using DisposableBitmapData bmdAct = new(actual, PixelFormat.Format24bppRgb);
+            using DisposableBitmapData bmdExp = new(expected, PixelFormat.Format24bppRgb);
             int wMul3 = actual.Width * 3;
             int h = actual.Height;
             int x, y;
