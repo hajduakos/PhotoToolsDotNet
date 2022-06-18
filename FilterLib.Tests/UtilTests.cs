@@ -4,22 +4,22 @@ using System;
 
 namespace FilterLib.Tests
 {
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class UtilTests
     {
         [Test]
-        public void TestClamp()
-        {
-            Assert.AreEqual(0, (-1000).Clamp(0, 255));
-            Assert.AreEqual(0, (-1).Clamp(0, 255));
-            Assert.AreEqual(0, 0.Clamp(0, 255));
-            Assert.AreEqual(1, 1.Clamp(0, 255));
-            Assert.AreEqual(25, 25.Clamp(0, 255));
-            Assert.AreEqual(127, 127.Clamp(0, 255));
-            Assert.AreEqual(254, 254.Clamp(0, 255));
-            Assert.AreEqual(255, 255.Clamp(0, 255));
-            Assert.AreEqual(255, 256.Clamp(0, 255));
-            Assert.AreEqual(255, 1000.Clamp(0, 255));
-        }
+        [TestCase(0, (-1000))]
+        [TestCase(0, (-1))]
+        [TestCase(0, 0)]
+        [TestCase(1, 1)]
+        [TestCase(25, 25)]
+        [TestCase(127, 127)]
+        [TestCase(254, 254)]
+        [TestCase(255, 255)]
+        [TestCase(255, 256)]
+        [TestCase(255, 1000)]
+        public void TestClamp(int expected, int actual) => Assert.AreEqual(expected, actual.Clamp(0, 255));
 
         [Test]
         public void TestRGB()
