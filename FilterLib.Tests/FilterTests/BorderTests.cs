@@ -11,7 +11,7 @@ namespace FilterLib.Tests.FilterTests
     [TestFixture]
     public class BorderTests
     {
-        private static Bitmap pattern = new(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
+        private static readonly Bitmap pattern = new(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
         internal static IEnumerable<TestCaseData> Data()
         {
             string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";

@@ -77,7 +77,7 @@ namespace FilterLib.Filters.Transform
             if (w0 <= 0) throw new ArgumentException($"Ivalid Width: {w0}");
             if (h0 <= 0) throw new ArgumentException($"Ivalid Height: {h0}");
 
-            Bitmap cropped = new Bitmap(w0, h0);
+            Bitmap cropped = new(w0, h0);
             using (Graphics gfx = Graphics.FromImage(cropped))
             {
                 gfx.DrawImage(image, -x0, -y0, image.Width, image.Height);
