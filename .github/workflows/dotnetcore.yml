@@ -3,11 +3,11 @@ name: .NET Core
 on: [push, pull_request]
 
 jobs:
-  build-ubuntu:
+  build:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-20.04, ubuntu-18.04]
+        os: [ubuntu-latest, ubuntu-20.04, ubuntu-18.04, macos-11, windows-latest, windows-2019, windows-2022]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -18,49 +18,13 @@ jobs:
         dotnet-version: 6.0.x
     - name: Install dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Unit tests
-      run: dotnet test --no-restore --verbosity normal
-    - name: Integration tests
-      run: cd FilterScript.Test; ./test-all.sh; cd ..
-
-  build-mac:
-    runs-on: macos-11
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Install libgdiplus
+    - name: Install libgdiplus (Mac)
+      if: ${{ startsWith(matrix.os, 'macos') }}
       run: brew install mono-libgdiplus
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Unit tests
       run: dotnet test --no-restore --verbosity normal
-    - name: Integration tests
+    - name: Integration tests (Ubuntu/Mac)
+      if: ${{ startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu') }}
       run: cd FilterScript.Test; ./test-all.sh; cd ..
-
-  build-win:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, windows-2019, windows-2022]
-    runs-on: ${{ matrix.os }}
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Unit tests
-      run: dotnet test --no-restore --verbosity normal
