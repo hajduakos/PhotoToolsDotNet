@@ -1,23 +1,28 @@
-﻿using FilterLib.Filters.Sharpen;
+﻿using FilterLib.Filters;
+using FilterLib.Filters.Sharpen;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace FilterLib.Tests.FilterTests
 {
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class EdgesTests
     {
-        [Test]
-        public void TestEdgeDetection() =>
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "EdgeDetection.bmp", new EdgeDetectionFilter(), 1));
+        internal static IEnumerable<TestCaseData> Data()
+        {
+            yield return new TestCaseData("EdgeDetection.bmp", new EdgeDetectionFilter(), 1);
+
+            yield return new TestCaseData("Emboss.bmp", new EmbossFilter(), 1);
+
+            yield return new TestCaseData("Prewitt.bmp", new PrewittFilter(), 1);
+
+            yield return new TestCaseData("Sobel.bmp", new SobelFilter(), 1);
+        }
 
         [Test]
-        public void TestEmboss() =>
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Emboss.bmp", new EmbossFilter(), 1));
-        [Test]
-        public void TestPrewitt() =>
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Prewitt.bmp", new PrewittFilter(), 1));
-
-        [Test]
-        public void TestSobel() =>
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", "Sobel.bmp", new SobelFilter(), 1));
+        [TestCaseSource("Data")]
+        public void Test(string expected, IFilter filter, int tolerance) =>
+            Assert.IsTrue(Common.CheckFilter("_input.bmp", expected, filter, tolerance));
     }
 }
