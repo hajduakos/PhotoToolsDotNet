@@ -35,7 +35,7 @@ namespace FilterLib.Tests.FilterTests
                 new PatternBorderFilter(Size.Absolute(30), Size.Absolute(0), pattern, BorderPosition.Inside), 1));
         }
 
-        [Test, Platform("Win")]
+        [Test]
         public void TestPatternBorderRadius()
         {
             using Bitmap pattern = new Bitmap(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
@@ -54,7 +54,7 @@ namespace FilterLib.Tests.FilterTests
                 new SimpleBorderFilter(Size.Absolute(30), Size.Absolute(0), new RGB(0, 255, 0), BorderPosition.Inside), 1));
         }
 
-        [Test,Platform("Win")]
+        [Test]
         public void TestSimpleBorderRadius()
         {
             Assert.IsTrue(Common.CheckFilter("_input.bmp", "SimpleBorder_10pct_8px_Blue_Outside.bmp",
