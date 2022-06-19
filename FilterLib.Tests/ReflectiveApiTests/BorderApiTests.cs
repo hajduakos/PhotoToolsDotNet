@@ -84,12 +84,14 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<VignetteFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "Radius", "120%");
             ReflectiveApi.SetFilterPropertyByName(f, "ClearRadius", "40px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Color", "(255, 127, 0)");
             VignetteFilter ff = f as VignetteFilter;
             Assert.AreEqual(240, ff.Radius.ToAbsolute(200));
             Assert.AreEqual(40, ff.ClearRadius.ToAbsolute(200));
+            Assert.AreEqual(new RGB(255, 127, 0), ff.Color);
         }
 
         [Test]
-        public void TestVignetteParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(VignetteFilter)));
+        public void TestVignetteParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(VignetteFilter)));
     }
 }

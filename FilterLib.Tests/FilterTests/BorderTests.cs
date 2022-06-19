@@ -47,16 +47,19 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData($"SimpleBorder_20px_10pct_Red_Center{suffix}.bmp",
                 new SimpleBorderFilter(Size.Absolute(20), Size.Relative(.1f), new RGB(255, 0, 0), BorderPosition.Center), 1);
         
-            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Relative(3), Size.Relative(2)), 1);
-            yield return new TestCaseData("Vignette_150pct_60pct.bmp", new VignetteFilter(Size.Relative(1.5f), Size.Relative(0.6f)), 1);
-            yield return new TestCaseData("Vignette_150pct_60pct.bmp", new VignetteFilter(Size.Absolute(120), Size.Absolute(48)), 1);
-            yield return new TestCaseData("Vignette_100pct_90pct.bmp", new VignetteFilter(Size.Relative(1f), Size.Relative(0.9f)), 1);
+            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Relative(3), Size.Relative(2), new RGB(0, 0, 0)), 1);
+            yield return new TestCaseData("Vignette_150pct_60pct_Black.bmp", new VignetteFilter(Size.Relative(1.5f), Size.Relative(0.6f), new RGB(0, 0, 0)), 1);
+            yield return new TestCaseData("Vignette_150pct_60pct_Black.bmp", new VignetteFilter(Size.Absolute(120), Size.Absolute(48), new RGB(0, 0, 0)), 1);
+            yield return new TestCaseData("Vignette_100pct_90pct_Black.bmp", new VignetteFilter(Size.Relative(1f), Size.Relative(0.9f), new RGB(0, 0, 0)), 1);
+            yield return new TestCaseData("Vignette_100pct_50pct_Red.bmp", new VignetteFilter(Size.Relative(1f), Size.Relative(0.5f), new RGB(255, 0, 0)), 1);
+            yield return new TestCaseData("Vignette_100pct_50pct_Green.bmp", new VignetteFilter(Size.Relative(1f), Size.Relative(0.5f), new RGB(0, 255, 0)), 1);
+            yield return new TestCaseData("Vignette_100pct_50pct_Blue.bmp", new VignetteFilter(Size.Relative(1f), Size.Relative(0.5f), new RGB(0, 0, 255)), 1);
         }
 
         internal static IEnumerable<TestCaseData> Exceptions()
         {
-            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Relative(1), Size.Relative(2)));
-            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Absolute(5), Size.Absolute(10)));
+            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Relative(1), Size.Relative(2), new RGB(0, 0, 0)));
+            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Absolute(5), Size.Absolute(10), new RGB(0, 0, 0)));
         }
 
             [Test]

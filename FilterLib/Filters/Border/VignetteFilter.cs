@@ -14,7 +14,7 @@ namespace FilterLib.Filters.Border
     {
 
         /// <summary>
-        /// Radius of the vignette, outside is black.
+        /// Radius of the vignette, outside is filled with given color.
         /// </summary>
         [FilterParam]
         public Util.Size Radius { get; set; }
@@ -26,19 +26,27 @@ namespace FilterLib.Filters.Border
         public Util.Size ClearRadius { get; set; }
 
         /// <summary>
+        /// Vignette color.
+        /// </summary>
+        [FilterParam]
+        public RGB Color { get; set; }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
-        public VignetteFilter() : this(Util.Size.Relative(3), Util.Size.Relative(2)) { }
+        public VignetteFilter() : this(Util.Size.Relative(3), Util.Size.Relative(2), new RGB(0, 0, 0)) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="radius">Radius of the vignette</param>
         /// <param name="clearRadius">Radius of the clear zone</param>
-        public VignetteFilter(Util.Size radius, Util.Size clearRadius)
+        /// <param name="color">Color of the vignette</param>
+        public VignetteFilter(Util.Size radius, Util.Size clearRadius, RGB color)
         {
             this.Radius = radius;
             this.ClearRadius = clearRadius;
+            this.Color = color;
         }
 
         /// <summary>
@@ -62,7 +70,6 @@ namespace FilterLib.Filters.Border
                 float ratioSquare = w * w / (float)(h * h);
                 float normalizer = MathF.PI / (a1 - a0);
                 float op;
-
                 unsafe
                 {
                     // Iterate through rows
@@ -78,16 +85,21 @@ namespace FilterLib.Filters.Border
                             yShifted = y - halfHeight;
                             // Calculate the radius (A) of the ellipse on which the point is
                             ellipseRadius = MathF.Sqrt(xShifted * xShifted + yShifted * yShifted * ratioSquare);
-                            // If the point is outside the vignette area, set the color to black
-                            if (ellipseRadius > a1) row[x] = row[x + 1] = row[x + 2] = 0;
+                            // If the point is outside the vignette area, set the color to given one
+                            if (ellipseRadius > a1)
+                            {
+                                row[x] = (byte)Color.B;
+                                row[x + 1] = (byte)Color.G;
+                                row[x + 2] = (byte)Color.R;
+                            }
                             // Else if the point is outside the clear zone, calculate opacity
                             else if (ellipseRadius >= a0)
                             {
                                 op = MathF.Cos((ellipseRadius - a0) * normalizer) / 2f + 0.5f; // Cosine transition
                                 //op = 1- (a_tmp - a0) / (a1 - a0); // Linear transition
-                                row[x] = (byte)(row[x] * op);
-                                row[x + 1] = (byte)(row[x + 1] * op);
-                                row[x + 2] = (byte)(row[x + 2] * op);
+                                row[x] = (byte)(row[x] * op + Color.B * (1 - op));
+                                row[x + 1] = (byte)(row[x + 1] * op + Color.G * (1 - op));
+                                row[x + 2] = (byte)(row[x + 2] * op + Color.R * (1 - op));
                             }
                         }
                         if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
