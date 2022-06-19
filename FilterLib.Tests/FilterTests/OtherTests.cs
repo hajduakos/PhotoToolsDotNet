@@ -38,6 +38,8 @@ namespace FilterLib.Tests.FilterTests
         {
             yield return new TestCaseData("_input.bmp", "_input.bmp",
                 new WavesFilter(Size.Absolute(0), Size.Relative(1), WavesFilter.WaveDirection.Horizontal));
+            yield return new TestCaseData("_input.bmp", "_input.bmp",
+                new WavesFilter(Size.Relative(0), Size.Relative(1), WavesFilter.WaveDirection.Horizontal));
         }
 
         [Test]
