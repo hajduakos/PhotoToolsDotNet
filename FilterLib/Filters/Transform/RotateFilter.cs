@@ -44,6 +44,8 @@ namespace FilterLib.Filters.Transform
         /// <returns>New image with filter applied</returns>
         public Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
+            if (MathF.Abs(Angle) < 0.001f) return (Bitmap)image.Clone();
+
             reporter?.Start();
             float angRad = Angle / 180 * MathF.PI;
             float sinAng = MathF.Sin(angRad);
