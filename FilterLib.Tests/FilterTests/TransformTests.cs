@@ -50,18 +50,18 @@ namespace FilterLib.Tests.FilterTests
         internal static IEnumerable<TestCaseData> Exceptions()
         {
             yield return new TestCaseData("_input.bmp",
-                    new CropFilter(Util.Size.Absolute(-1), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(1)), 1);
+                    new CropFilter(Util.Size.Absolute(-1), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(1)));
             yield return new TestCaseData("_input.bmp",
-                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(-1), Util.Size.Relative(1), Util.Size.Relative(1)), 1);
+                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(-1), Util.Size.Relative(1), Util.Size.Relative(1)));
             yield return new TestCaseData("_input.bmp",
-                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(0), Util.Size.Relative(1)), 1);
+                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(0), Util.Size.Relative(1)));
             yield return new TestCaseData("_input.bmp",
-                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(0)), 1);
+                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(0)));
 
             yield return new TestCaseData("_input.bmp",
-                new ResizeFilter(Util.Size.Relative(0), Util.Size.Relative(1), itp), 1);
+                new ResizeFilter(Util.Size.Relative(0), Util.Size.Relative(1), itp));
             yield return new TestCaseData("_input.bmp",
-                new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(0), itp), 1);
+                new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(0), itp));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace FilterLib.Tests.FilterTests
 
         [Test]
         [TestCaseSource("Exceptions")]
-        public void TestEx(string expected, IFilter filter, int tolerance) =>
-            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", expected, filter, tolerance));
+        public void TestEx(string expected, IFilter filter) =>
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", expected, filter));
     }
 }

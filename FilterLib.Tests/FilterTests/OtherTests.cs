@@ -37,7 +37,7 @@ namespace FilterLib.Tests.FilterTests
         internal static IEnumerable<TestCaseData> Exceptions()
         {
             yield return new TestCaseData("_input.bmp", "_input.bmp",
-                new WavesFilter(Size.Absolute(0), Size.Relative(1), WavesFilter.WaveDirection.Horizontal), 1);
+                new WavesFilter(Size.Absolute(0), Size.Relative(1), WavesFilter.WaveDirection.Horizontal));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace FilterLib.Tests.FilterTests
 
         [Test]
         [TestCaseSource("Exceptions")]
-        public void TestEx(string input, string expected, IFilter filter, int tolerance) =>
-            Assert.Throws<ArgumentException>(() => Common.CheckFilter(input, expected, filter, tolerance));
+        public void TestEx(string input, string expected, IFilter filter) =>
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter(input, expected, filter));
     }
 }
