@@ -63,6 +63,7 @@ namespace FilterLib.Filters.Border
             int w = image.Width;
             int h = image.Height;
             int borderW = Width.ToAbsolute(Math.Max(w, h));
+            if (borderW == 0) return (Bitmap)image.Clone();
             int borderRad = Radius.ToAbsolute(Math.Max(w, h));
             if (Position == BorderPosition.Outside) { w += 2 * borderW; h += 2 * borderW; }
             else if (Position == BorderPosition.Center) { w += borderW; h += borderW; }
