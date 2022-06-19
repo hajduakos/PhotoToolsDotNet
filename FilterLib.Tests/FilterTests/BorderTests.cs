@@ -5,6 +5,7 @@ using Bitmap = System.Drawing.Bitmap;
 using System.Runtime.InteropServices;
 using FilterLib.Filters;
 using System.Collections.Generic;
+using System;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -52,10 +53,21 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("Vignette_100pct_90pct.bmp", new VignetteFilter(Size.Relative(1f), Size.Relative(0.9f)), 1);
         }
 
-        [Test]
+        internal static IEnumerable<TestCaseData> Exceptions()
+        {
+            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Relative(1), Size.Relative(2)));
+            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Absolute(5), Size.Absolute(10)));
+        }
+
+            [Test]
         [TestCaseSource("Data")]
         public void Test(string expected, IFilter filter, int tolerance) =>
             Assert.IsTrue(Common.CheckFilter("_input.bmp", expected, filter, tolerance));
+
+        [Test]
+        [TestCaseSource("Exceptions")]
+        public void TestEx(string expected, IFilter filter) =>
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", expected, filter));
 
         [OneTimeTearDown]
         public static void CleanUp() => pattern.Dispose();
