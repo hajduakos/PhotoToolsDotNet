@@ -1,5 +1,7 @@
 ﻿using FilterLib.Filters;
 using FilterLib.Filters.Adjustments;
+using FilterLib.Filters.Artistic;
+using FilterLib.Filters.Blur;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -20,6 +22,14 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new LevelsFilter(12, 34), "LevelsFilter(Dark: 12, Light: 34)");
             yield return new TestCaseData(new ShadowsHighlightsFilter(12, 34), "ShadowsHighlightsFilter(Brighten: 12, Darken: 34)");
 
+            yield return new TestCaseData(new AdaptiveTresholdFilter(4), "AdaptiveTresholdFilter(SquareSize: 4)");
+            yield return new TestCaseData(new OilPaintFilter(5), "OilPaintFilter(Radius: 5)");
+            yield return new TestCaseData(new RandomJitterFilter(12, 34), "RandomJitterFilter(Radius: 12, Seed: 34)");
+
+            yield return new TestCaseData(new BlurFilter(), "BlurFilter");
+            yield return new TestCaseData(new BoxBlurFilter(12, 34), "BoxBlurFilter(RadiusX: 12, RadiusY: 34)");
+            yield return new TestCaseData(new GaussianBlurFilter(12), "GaussianBlurFilter(Radius: 12)");
+            yield return new TestCaseData(new MotionBlurFilter(12, 34), "MotionBlurFilter(Length: 12, Angle: 34)");
         }
 
         [Test]
