@@ -110,5 +110,13 @@ namespace FilterLib.Util
                 (byte)(colors[gid].G + (colors[gid + 1].G - colors[gid].G) * ratio),
                 (byte)(colors[gid].B + (colors[gid + 1].B - colors[gid].B) * ratio));
         }
+
+        public override string ToString()
+        {
+            List<string> stopsStr = new();
+            for (int i = 0; i < stops.Count; i++)
+                stopsStr.Add($"{stops[i]} {colors[i]}");
+            return $"Gradient({string.Join(", ", stopsStr)})";
+        }
     }
 }

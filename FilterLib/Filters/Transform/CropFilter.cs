@@ -8,7 +8,7 @@ namespace FilterLib.Filters.Transform
     /// Crop filter.
     /// </summary>
     [Filter]
-    public sealed class CropFilter : IFilter
+    public sealed class CropFilter : FilterBase
     {
         /// <summary>
         /// Crop area left.
@@ -65,7 +65,7 @@ namespace FilterLib.Filters.Transform
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>New image with filter applied</returns>
-        public Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
             int x0 = X.ToAbsolute(image.Width);

@@ -1,5 +1,5 @@
 ﻿using FilterLib.Filters;
-using FilterLib.Filters.Sharpen;
+using FilterLib.Filters.Edges;
 using NUnit.Framework;
 using System.Collections.Generic;
 

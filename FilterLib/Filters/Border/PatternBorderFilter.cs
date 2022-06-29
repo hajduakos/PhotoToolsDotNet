@@ -9,7 +9,7 @@ namespace FilterLib.Filters.Border
     /// Pattern border filter.
     /// </summary>
     [Filter]
-    public sealed class PatternBorderFilter : IFilter
+    public sealed class PatternBorderFilter : FilterBase
     {
         /// <summary>
         /// Border width.
@@ -57,7 +57,7 @@ namespace FilterLib.Filters.Border
             this.Position = position;
         }
 
-        public Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
             int w = image.Width;
@@ -90,6 +90,16 @@ namespace FilterLib.Filters.Border
             }
             reporter?.Done();
             return imageWithBorder;
+        }
+
+        public override string ParamToString(object param)
+        {
+            if (param is Bitmap)
+            {
+                Bitmap bmp = param as Bitmap;
+                return $"Bitmap({bmp.Width}x{bmp.Height})";
+            };
+            return base.ParamToString(param);
         }
     }
 }

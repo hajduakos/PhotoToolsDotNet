@@ -4,7 +4,7 @@ using FilterLib.Util;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace FilterLib.Filters.Sharpen
+namespace FilterLib.Filters.Edges
 {
     /// <summary>
     /// Sobel filter.
@@ -61,8 +61,8 @@ namespace FilterLib.Filters.Sharpen
                     for (y = 1; y < h - 1; ++y)
                     {
                         // Get rows
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        byte* rowTmp = (byte*)bmdTmp.Scan0 + (y * bmdTmp.Stride);
+                        byte* row = (byte*)bmd.Scan0 + y * bmd.Stride;
+                        byte* rowTmp = (byte*)bmdTmp.Scan0 + y * bmdTmp.Stride;
                         // Iterate through columns
                         for (x = 3; x < wMul3 - 3; ++x)
                         {

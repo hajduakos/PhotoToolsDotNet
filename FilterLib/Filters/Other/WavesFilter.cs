@@ -10,7 +10,7 @@ namespace FilterLib.Filters.Other
     /// Waves filter.
     /// </summary>
     [Filter]
-    public sealed class WavesFilter : IFilter
+    public sealed class WavesFilter : FilterBase
     {
         /// <summary>
         /// Wave directions.
@@ -59,7 +59,7 @@ namespace FilterLib.Filters.Other
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>New image with filter applied</returns>
-        public Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
             Bitmap wavesBmp;
