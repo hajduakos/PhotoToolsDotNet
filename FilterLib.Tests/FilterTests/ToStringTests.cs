@@ -7,6 +7,7 @@ using FilterLib.Filters.Color;
 using FilterLib.Filters.Dither;
 using FilterLib.Filters.Edges;
 using FilterLib.Filters.Generate;
+using FilterLib.Filters.Mosaic;
 using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -73,6 +74,10 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new MarbleFilter(12, 34, 56, 78, 90), "MarbleFilter(HorizontalLines: 12, VerticalLines: 34, Twist: 56, Iterations: 78, Seed: 90)");
             yield return new TestCaseData(new TurbulenceFilter(12, 345), "TurbulenceFilter(Iterations: 12, Seed: 345)");
             yield return new TestCaseData(new WoodRingsFilter(12, 34, 56, 78), "WoodRingsFilter(Twist: 34, Rings: 12, Iterations: 56, Seed: 78)");
+
+            yield return new TestCaseData(new CrystallizeFilter(12, 34, 56), "CrystallizeFilter(Size: 12, Averaging: 34, Seed: 56)");
+            yield return new TestCaseData(new LegoFilter(12), "LegoFilter(Size: 12)");
+            yield return new TestCaseData(new PixelateFilter(12), "PixelateFilter(Size: 12)");
         }
 
         [Test]
