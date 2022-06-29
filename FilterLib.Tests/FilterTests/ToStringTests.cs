@@ -4,6 +4,7 @@ using FilterLib.Filters.Artistic;
 using FilterLib.Filters.Blur;
 using FilterLib.Filters.Border;
 using FilterLib.Filters.Color;
+using FilterLib.Filters.Dither;
 using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -50,6 +51,17 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new SepiaFilter(), "SepiaFilter");
             yield return new TestCaseData(new TresholdFilter(123), "TresholdFilter(Treshold: 123)");
             yield return new TestCaseData(new VintageFilter(12), "VintageFilter(Strength: 12)");
+
+            yield return new TestCaseData(new AtkinsonDitherFilter(123), "AtkinsonDitherFilter(Levels: 123)");
+            yield return new TestCaseData(new BayerDitherFilter(123, 45), "BayerDitherFilter(Size: 45, Levels: 123)");
+            yield return new TestCaseData(new BurkesDitherFilter(123), "BurkesDitherFilter(Levels: 123)");
+            yield return new TestCaseData(new FanDitherFilter(123), "FanDitherFilter(Levels: 123)");
+            yield return new TestCaseData(new FloydSteinbergDitherFilter(123), "FloydSteinbergDitherFilter(Levels: 123)");
+            yield return new TestCaseData(new JarvisJudiceNinkeDitherFilter(123), "JarvisJudiceNinkeDitherFilter(Levels: 123)");
+            yield return new TestCaseData(new RandomDitherFilter(12, 34), "RandomDitherFilter(Levels: 12, Seed: 34)");
+            yield return new TestCaseData(new ShiauFanDitherFilter(123), "ShiauFanDitherFilter(Levels: 123)");
+            yield return new TestCaseData(new SierraDitherFilter(123), "SierraDitherFilter(Levels: 123)");
+            yield return new TestCaseData(new StuckiDitherFilter(123), "StuckiDitherFilter(Levels: 123)");
         }
 
         [Test]
