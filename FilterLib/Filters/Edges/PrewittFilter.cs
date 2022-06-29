@@ -4,7 +4,7 @@ using FilterLib.Util;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace FilterLib.Filters.Sharpen
+namespace FilterLib.Filters.Edges
 {
     /// <summary>
     /// Prewitt filter.

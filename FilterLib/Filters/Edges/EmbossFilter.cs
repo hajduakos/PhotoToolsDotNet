@@ -2,7 +2,7 @@
 using FilterLib.Util;
 using System.Drawing;
 
-namespace FilterLib.Filters.Sharpen
+namespace FilterLib.Filters.Edges
 {
     /// <summary>
     /// Emboss filter.

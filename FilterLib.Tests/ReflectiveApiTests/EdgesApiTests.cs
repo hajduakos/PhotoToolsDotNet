@@ -1,4 +1,4 @@
-﻿using FilterLib.Filters.Sharpen;
+﻿using FilterLib.Filters.Edges;
 using NUnit.Framework;
 
 namespace FilterLib.Tests.ReflectiveApiTests

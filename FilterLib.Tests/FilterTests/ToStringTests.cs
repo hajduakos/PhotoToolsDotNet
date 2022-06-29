@@ -5,6 +5,7 @@ using FilterLib.Filters.Blur;
 using FilterLib.Filters.Border;
 using FilterLib.Filters.Color;
 using FilterLib.Filters.Dither;
+using FilterLib.Filters.Edges;
 using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -62,6 +63,11 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new ShiauFanDitherFilter(123), "ShiauFanDitherFilter(Levels: 123)");
             yield return new TestCaseData(new SierraDitherFilter(123), "SierraDitherFilter(Levels: 123)");
             yield return new TestCaseData(new StuckiDitherFilter(123), "StuckiDitherFilter(Levels: 123)");
+
+            yield return new TestCaseData(new EdgeDetectionFilter(), "EdgeDetectionFilter");
+            yield return new TestCaseData(new EmbossFilter(), "EmbossFilter");
+            yield return new TestCaseData(new PrewittFilter(), "PrewittFilter");
+            yield return new TestCaseData(new SobelFilter(), "SobelFilter");
         }
 
         [Test]
