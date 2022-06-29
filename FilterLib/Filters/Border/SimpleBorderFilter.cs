@@ -10,7 +10,7 @@ namespace FilterLib.Filters.Border
     /// Simple border filter.
     /// </summary>
     [Filter]
-    public sealed class SimpleBorderFilter : IFilter
+    public sealed class SimpleBorderFilter : FilterBase
     {
         /// <summary>
         /// Border width.
@@ -60,7 +60,7 @@ namespace FilterLib.Filters.Border
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>New image with filter applied</returns>
-        public Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
             int w = image.Width;

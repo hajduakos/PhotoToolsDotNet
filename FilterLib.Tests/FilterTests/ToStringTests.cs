@@ -3,6 +3,7 @@ using FilterLib.Filters.Adjustments;
 using FilterLib.Filters.Artistic;
 using FilterLib.Filters.Blur;
 using FilterLib.Filters.Border;
+using FilterLib.Filters.Color;
 using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -38,6 +39,17 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new FadeBorderFilter(Size.Absolute(12), new RGB(34, 56, 78)), "FadeBorderFilter(Width: 12px, Color: RGB(34, 56, 78))");
             yield return new TestCaseData(new JitterBorderFilter(Size.Absolute(12), new RGB(34, 56, 78), 9), "JitterBorderFilter(Width: 12px, Color: RGB(34, 56, 78), Seed: 9)");
             yield return new TestCaseData(new PatternBorderFilter(Size.Absolute(12), Size.Absolute(34), pattern, BorderPosition.Inside), "PatternBorderFilter(Width: 12px, Radius: 34px, Pattern: Bitmap(160x90), Position: Inside)");
+            yield return new TestCaseData(new SimpleBorderFilter(Size.Absolute(12), Size.Absolute(34), new RGB(56, 78, 90), BorderPosition.Outside), "SimpleBorderFilter(Width: 12px, Radius: 34px, Color: RGB(56, 78, 90), Position: Outside)");
+            yield return new TestCaseData(new VignetteFilter(Size.Relative(1), Size.Relative(0), new RGB(12, 34, 56)), "VignetteFilter(Radius: 100%, ClearRadius: 0%, Color: RGB(12, 34, 56))");
+
+            yield return new TestCaseData(new GradientMapFilter(new Gradient(new RGB(255, 0, 0), new RGB(255, 255, 0), new RGB(0, 255, 0))), "GradientMapFilter(GradientMap: Gradient(0 RGB(255, 0, 0), 0.5 RGB(255, 255, 0), 1 RGB(0, 255, 0)))");
+            yield return new TestCaseData(new GrayscaleFilter(12, 34, 56), "GrayscaleFilter(Red: 12, Green: 34, Blue: 56)");
+            yield return new TestCaseData(new InvertFilter(), "InvertFilter");
+            yield return new TestCaseData(new OrtonFilter(12, 34), "OrtonFilter(Strength: 12, Radius: 34)");
+            yield return new TestCaseData(new PosterizeFilter(123), "PosterizeFilter(Levels: 123)");
+            yield return new TestCaseData(new SepiaFilter(), "SepiaFilter");
+            yield return new TestCaseData(new TresholdFilter(123), "TresholdFilter(Treshold: 123)");
+            yield return new TestCaseData(new VintageFilter(12), "VintageFilter(Strength: 12)");
         }
 
         [Test]
