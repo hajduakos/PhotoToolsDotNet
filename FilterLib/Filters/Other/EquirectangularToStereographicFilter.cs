@@ -10,7 +10,7 @@ namespace FilterLib.Filters.Other
     /// Equirectangular to stereographic filter.
     /// </summary>
     [Filter]
-    public sealed class EquirectangularToStereographicFilter : IFilter
+    public sealed class EquirectangularToStereographicFilter : FilterBase
     {
         private float aov;
         private float spin;
@@ -61,7 +61,7 @@ namespace FilterLib.Filters.Other
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>New image with filter applied</returns>
-        public Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
             int size = Math.Min(image.Width, image.Height); // Size of the result

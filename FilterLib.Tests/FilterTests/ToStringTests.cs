@@ -9,6 +9,7 @@ using FilterLib.Filters.Edges;
 using FilterLib.Filters.Generate;
 using FilterLib.Filters.Mosaic;
 using FilterLib.Filters.Noise;
+using FilterLib.Filters.Other;
 using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -82,6 +83,11 @@ namespace FilterLib.Tests.FilterTests
 
             yield return new TestCaseData(new AddNoiseFilter(12, 34, AddNoiseFilter.NoiseType.Monochrome, 56), "AddNoiseFilter(Intensity: 12, Strength: 34, Type: Monochrome, Seed: 56)");
             yield return new TestCaseData(new MedianFilter(12), "MedianFilter(Strength: 12)");
+
+            yield return new TestCaseData(new ConvertToPolarFilter(12), "ConvertToPolarFilter(Phase: 12)");
+            yield return new TestCaseData(new ConvolutionFilter(new Conv3x3(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)), "ConvolutionFilter(Matrix: [1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11)");
+            yield return new TestCaseData(new EquirectangularToStereographicFilter(12, 34), "EquirectangularToStereographicFilter(AOV: 12, Spin: 34)");
+            yield return new TestCaseData(new WavesFilter(Size.Absolute(12), Size.Absolute(34), WavesFilter.WaveDirection.Vertical), "WavesFilter(Wavelength: 12px, Amplitude: 34px, Direction: Vertical)");
         }
 
         [Test]
