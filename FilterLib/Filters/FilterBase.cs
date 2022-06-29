@@ -28,9 +28,19 @@ namespace FilterLib.Filters
             sb.Append(GetType().Name);
             List<string> args = new();
             foreach(var pi in ReflectiveApi.GetFilterProperties(GetType()))
-                args.Add($"{pi.Name}: {pi.GetValue(this)}");
+                args.Add($"{pi.Name}: {ParamToString(pi.GetValue(this))}");
             if (args.Count > 0) sb.Append($"({string.Join(", ", args)})");
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Override this method to print parameters in custom format.
+        /// </summary>
+        /// <param name="param">Parameter to be printed</param>
+        /// <returns>String representation</returns>
+        public virtual string ParamToString(object param)
+        {
+            return param.ToString();
         }
     }
 }
