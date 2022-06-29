@@ -9,7 +9,7 @@ namespace FilterLib.Filters.Transform
     /// Rotate left filter.
     /// </summary>
     [Filter]
-    public sealed class RotateLeftFilter : IFilter
+    public sealed class RotateLeftFilter : FilterBase
     {
         /// <summary>
         /// Apply filter, the original image is not modified.
@@ -17,7 +17,7 @@ namespace FilterLib.Filters.Transform
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>New image with filter applied</returns>
-        public Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
             // Rotated image

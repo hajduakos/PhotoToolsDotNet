@@ -9,7 +9,7 @@ namespace FilterLib.Filters.Transform
     /// Resize filter.
     /// </summary>
     [Filter]
-    public sealed class ResizeFilter : IFilter
+    public sealed class ResizeFilter : FilterBase
     {
         /// <summary>
         /// New width.
@@ -53,7 +53,7 @@ namespace FilterLib.Filters.Transform
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>New image with filter applied</returns>
-        public Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
             int newWidth = Width.ToAbsolute(image.Width);

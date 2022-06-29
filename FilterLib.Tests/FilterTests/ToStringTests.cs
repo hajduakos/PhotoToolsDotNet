@@ -10,10 +10,13 @@ using FilterLib.Filters.Generate;
 using FilterLib.Filters.Mosaic;
 using FilterLib.Filters.Noise;
 using FilterLib.Filters.Other;
+using FilterLib.Filters.Sharpen;
+using FilterLib.Filters.Transform;
 using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Bitmap = System.Drawing.Bitmap;
+using System.Linq;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -88,12 +91,35 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new ConvolutionFilter(new Conv3x3(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)), "ConvolutionFilter(Matrix: [1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11)");
             yield return new TestCaseData(new EquirectangularToStereographicFilter(12, 34), "EquirectangularToStereographicFilter(AOV: 12, Spin: 34)");
             yield return new TestCaseData(new WavesFilter(Size.Absolute(12), Size.Absolute(34), WavesFilter.WaveDirection.Vertical), "WavesFilter(Wavelength: 12px, Amplitude: 34px, Direction: Vertical)");
+
+            yield return new TestCaseData(new MeanRemovalFilter(), "MeanRemovalFilter");
+            yield return new TestCaseData(new SharpenFilter(), "SharpenFilter");
+
+            yield return new TestCaseData(new CropFilter(Size.Absolute(12), Size.Absolute(34), Size.Absolute(56), Size.Absolute(78)), "CropFilter(X: 12px, Y: 34px, Width: 56px, Height: 78px)");
+            yield return new TestCaseData(new FlipHorizontalFilter(), "FlipHorizontalFilter");
+            yield return new TestCaseData(new FlipVerticalFilter(), "FlipVerticalFilter");
+            yield return new TestCaseData(new ResizeFilter(Size.Absolute(12), Size.Absolute(34), System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic), "ResizeFilter(Width: 12px, Height: 34px, Interpolation: HighQualityBicubic)");
+            yield return new TestCaseData(new Rotate180Filter(), "Rotate180Filter");
+            yield return new TestCaseData(new RotateFilter(12, true), "RotateFilter(Angle: 12, Crop: True)");
+            yield return new TestCaseData(new RotateLeftFilter(), "RotateLeftFilter");
+            yield return new TestCaseData(new RotateRightFilter(), "RotateRightFilter");
         }
 
         [Test]
         [TestCaseSource("Data")]
         public void Test(IFilter filter, string expected) =>
             Assert.AreEqual(expected, filter.ToString());
+
+        [Test]
+        public void TestCount()
+        {
+            var data = Data();
+            foreach (var filter in ReflectiveApi.GetFilterTypes())
+            {
+                bool found = Data().Any(tc => tc.Arguments[0].GetType() == filter);
+                Assert.IsTrue(found, $"ToString test not found for {filter.Name}");
+            }
+        }
 
         [OneTimeTearDown]
         public static void CleanUp() => pattern.Dispose();

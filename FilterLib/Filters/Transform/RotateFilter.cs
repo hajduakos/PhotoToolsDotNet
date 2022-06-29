@@ -9,7 +9,7 @@ namespace FilterLib.Filters.Transform
     /// Rotate filter.
     /// </summary>
     [Filter]
-    public sealed class RotateFilter : IFilter
+    public sealed class RotateFilter : FilterBase
     {
         /// <summary>
         /// Rotation angle [0;360].
@@ -42,7 +42,7 @@ namespace FilterLib.Filters.Transform
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>New image with filter applied</returns>
-        public Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             if (MathF.Abs(Angle) < 0.001f) return (Bitmap)image.Clone();
 
