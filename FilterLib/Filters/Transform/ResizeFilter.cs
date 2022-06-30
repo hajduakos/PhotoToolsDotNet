@@ -73,8 +73,11 @@ namespace FilterLib.Filters.Transform
                 int h = resized.Height;
                 int x, y;
                 int x0, y0;
-                float wScale = resized.Width / (float)image.Width;
-                float hScale = resized.Height / (float)image.Height;
+                // For sampling purposes, we assume that a pixel represents the color in the middle of
+                // the pixel. For example, for an image with width 3, pixels at 0, 1, 2 represent the
+                // colors at 0.5, 1.5 and 2.5 respectively. Hence the +0.5 and -0.5 adjustments.
+                float wScale = image.Width / (float)resized.Width;
+                float hScale = image.Height / (float)resized.Height;
 
                 unsafe
                 {
@@ -89,13 +92,15 @@ namespace FilterLib.Filters.Transform
                             switch (Interpolation)
                             {
                                 case InterpolationMode.NearestNeighbor:
-                                    y0 = (int)Math.Floor(y / hScale);
-                                    x0 = (int)Math.Floor(x / 3 / wScale) * 3;
+                                    y0 = (int)Math.Round((y + .5f) * hScale - .5f);
+                                    x0 = (int)Math.Round((x / 3 + .5f) * wScale - .5f) * 3;
                                     byte* rowOrg = (byte*)bmdOrg.Scan0 + (y0 * bmdOrg.Stride);
                                     row[x] = rowOrg[x0];
                                     row[x + 1] = rowOrg[x0 + 1];
                                     row[x + 2] = rowOrg[x0 + 2];
                                     break;
+                                default:
+                                    throw new ArgumentException($"Unknown interpolation mode: {Interpolation}");
                             }
                         }
                     }
