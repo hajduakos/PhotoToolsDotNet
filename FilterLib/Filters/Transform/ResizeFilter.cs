@@ -12,7 +12,7 @@ namespace FilterLib.Filters.Transform
     [Filter]
     public sealed class ResizeFilter : FilterBase
     {
-        public enum InterpolationMode { NearestNeighbor }
+        public enum InterpolationMode { NearestNeighbor, Bilinear }
 
         /// <summary>
         /// New width.
@@ -72,7 +72,7 @@ namespace FilterLib.Filters.Transform
                 int wMul3 = resized.Width * 3;
                 int h = resized.Height;
                 int x, y;
-                int x0, y0;
+                int x0, y0, x1, y1;
                 // We want to map [0; w-1] to [0; w'-1], hence the (-1) adjustment
                 float wScale = resized.Width > 1 ? (image.Width - 1) / (float)(resized.Width - 1) : 0;
                 float hScale = resized.Height > 1 ? (image.Height - 1) / (float)(resized.Height - 1) : 0;
@@ -93,9 +93,27 @@ namespace FilterLib.Filters.Transform
                                     y0 = (int)Math.Round(y * hScale);
                                     x0 = (int)Math.Round(x / 3 * wScale) * 3;
                                     byte* rowOrg = (byte*)bmdOrg.Scan0 + (y0 * bmdOrg.Stride);
-                                    row[x] = rowOrg[x0];
-                                    row[x + 1] = rowOrg[x0 + 1];
-                                    row[x + 2] = rowOrg[x0 + 2];
+                                    for (int i = 0; i < 3; i++) row[x + i] = rowOrg[x0 + i];
+                                    break;
+                                case InterpolationMode.Bilinear:
+                                    float yf = y * hScale;
+                                    y0 = (int)Math.Floor(yf);
+                                    y1 = (int)Math.Ceiling(yf);
+                                    float yRatio1 = yf - y0;
+                                    float yRatio0 = 1 - yRatio1;
+                                    float xf = x / 3 * wScale;
+                                    x0 = (int)Math.Floor(xf) * 3;
+                                    x1 = (int)Math.Ceiling(xf) * 3;
+                                    float xRatio1 = xf - x0 / 3;
+                                    float xRatio0 = 1 - xRatio1;
+                                    byte* rowOrg0 = (byte*)bmdOrg.Scan0 + (y0 * bmdOrg.Stride);
+                                    byte* rowOrg1 = (byte*)bmdOrg.Scan0 + (y1 * bmdOrg.Stride);
+                                    for (int i = 0; i < 3; i++)
+                                        row[x + i] = (byte)(
+                                            yRatio0 * xRatio0 * rowOrg0[x0 + i] +
+                                            yRatio1 * xRatio0 * rowOrg1[x0 + i] +
+                                            yRatio0 * xRatio1 * rowOrg0[x1 + i] +
+                                            yRatio1 * xRatio1 * rowOrg1[x1 + i]);
                                     break;
                                 default:
                                     throw new ArgumentException($"Unknown interpolation mode: {Interpolation}");

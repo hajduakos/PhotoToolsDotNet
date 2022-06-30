@@ -31,6 +31,12 @@ namespace FilterLib.Tests.FilterTests
                 new ResizeFilter(Util.Size.Relative(2), Util.Size.Absolute(30), ResizeFilter.InterpolationMode.NearestNeighbor), 1);
             yield return new TestCaseData("Resize_25pct_50pct_NN.bmp",
                 new ResizeFilter(Util.Size.Relative(.25f), Util.Size.Relative(.5f), ResizeFilter.InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("_input.bmp",
+                new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(1), ResizeFilter.InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Resize_200pct_30px_BL.bmp",
+                new ResizeFilter(Util.Size.Relative(2), Util.Size.Absolute(30), ResizeFilter.InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Resize_25pct_50pct_BL.bmp",
+                new ResizeFilter(Util.Size.Relative(.25f), Util.Size.Relative(.5f), ResizeFilter.InterpolationMode.Bilinear), 1);
 
             yield return new TestCaseData("_input.bmp", new RotateFilter(0, false), 1);
             yield return new TestCaseData("_input.bmp", new RotateFilter(0, true), 1);
