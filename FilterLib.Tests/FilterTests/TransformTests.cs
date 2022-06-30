@@ -12,9 +12,6 @@ namespace FilterLib.Tests.FilterTests
     [Parallelizable(ParallelScope.All)]
     public class TransformTests
     {
-
-        private const InterpolationMode itp = InterpolationMode.NearestNeighbor;
-
         internal static IEnumerable<TestCaseData> Data()
         {
             string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
@@ -29,11 +26,11 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("FlipVertical.bmp", new FlipVerticalFilter(), 0);
 
             yield return new TestCaseData("_input.bmp",
-                new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(1), itp), 1);
-            yield return new TestCaseData($"Resize_200pct_30px_NN{suffix}.bmp",
-                new ResizeFilter(Util.Size.Relative(2), Util.Size.Absolute(30), itp), 1);
-            yield return new TestCaseData($"Resize_25pct_50pct_NN{suffix}.bmp",
-                new ResizeFilter(Util.Size.Relative(.25f), Util.Size.Relative(.5f), itp), 1);
+                new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(1), ResizeFilter.InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Resize_200pct_30px_NN.bmp",
+                new ResizeFilter(Util.Size.Relative(2), Util.Size.Absolute(30), ResizeFilter.InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Resize_25pct_50pct_NN.bmp",
+                new ResizeFilter(Util.Size.Relative(.25f), Util.Size.Relative(.5f), ResizeFilter.InterpolationMode.NearestNeighbor), 1);
 
             yield return new TestCaseData("_input.bmp", new RotateFilter(0, false), 1);
             yield return new TestCaseData("_input.bmp", new RotateFilter(0, true), 1);
@@ -59,9 +56,9 @@ namespace FilterLib.Tests.FilterTests
                 new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(0)));
 
             yield return new TestCaseData("_input.bmp",
-                new ResizeFilter(Util.Size.Relative(0), Util.Size.Relative(1), itp));
+                new ResizeFilter(Util.Size.Relative(0), Util.Size.Relative(1), ResizeFilter.InterpolationMode.NearestNeighbor));
             yield return new TestCaseData("_input.bmp",
-                new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(0), itp));
+                new ResizeFilter(Util.Size.Relative(1), Util.Size.Relative(0), ResizeFilter.InterpolationMode.NearestNeighbor));
         }
 
         [Test]

@@ -47,11 +47,11 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<ResizeFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "Width", "100px");
             ReflectiveApi.SetFilterPropertyByName(f, "Height", "50%");
-            ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "HighQualityBicubic");
+            ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "NearestNeighbor");
             ResizeFilter ff = f as ResizeFilter;
             Assert.AreEqual(100, ff.Width.ToAbsolute(500));
             Assert.AreEqual(250, ff.Height.ToAbsolute(500));
-            Assert.AreEqual(System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic, ff.Interpolation);
+            Assert.AreEqual(ResizeFilter.InterpolationMode.NearestNeighbor, ff.Interpolation);
         }
 
         [Test]

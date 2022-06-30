@@ -1,7 +1,8 @@
 ﻿using FilterLib.Reporting;
+using FilterLib.Util;
 using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace FilterLib.Filters.Transform
 {
@@ -11,6 +12,8 @@ namespace FilterLib.Filters.Transform
     [Filter]
     public sealed class ResizeFilter : FilterBase
     {
+        public enum InterpolationMode { NearestNeighbor }
+
         /// <summary>
         /// New width.
         /// </summary>
@@ -35,7 +38,7 @@ namespace FilterLib.Filters.Transform
         /// <param name="width">New width</param>
         /// <param name="height">New height</param>
         /// <param name="interpolation">Interpolation mode</param>
-        public ResizeFilter(Util.Size width, Util.Size height, InterpolationMode interpolation = InterpolationMode.HighQualityBicubic)
+        public ResizeFilter(Util.Size width, Util.Size height, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
         {
             this.Width = width;
             this.Height = height;
@@ -63,11 +66,42 @@ namespace FilterLib.Filters.Transform
             if (newHeight <= 0) throw new ArgumentException($"Invalid new height: {newHeight}.");
 
             Bitmap resized = new(newWidth, newHeight);
-            using (Graphics gfx = Graphics.FromImage(resized))
+            using (DisposableBitmapData bmd = new(resized, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdOrg = new(image, PixelFormat.Format24bppRgb))
             {
-                gfx.InterpolationMode = Interpolation;
-                gfx.DrawImage(image, 0, 0, resized.Width, resized.Height);
+                int wMul3 = resized.Width * 3;
+                int h = resized.Height;
+                int x, y;
+                int x0, y0;
+                float wScale = resized.Width / (float)image.Width;
+                float hScale = resized.Height / (float)image.Height;
+
+                unsafe
+                {
+                    // Iterate through rows
+                    for (y = 0; y < h; ++y)
+                    {
+                        // Get row
+                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        // Iterate through columns
+                        for (x = 0; x < wMul3; x += 3)
+                        {
+                            switch (Interpolation)
+                            {
+                                case InterpolationMode.NearestNeighbor:
+                                    y0 = (int)Math.Floor(y / hScale);
+                                    x0 = (int)Math.Floor(x / 3 / wScale) * 3;
+                                    byte* rowOrg = (byte*)bmdOrg.Scan0 + (y0 * bmdOrg.Stride);
+                                    row[x] = rowOrg[x0];
+                                    row[x + 1] = rowOrg[x0 + 1];
+                                    row[x + 2] = rowOrg[x0 + 2];
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
+
             reporter?.Done();
             return resized;
         }
