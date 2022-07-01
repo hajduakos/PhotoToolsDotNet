@@ -42,11 +42,13 @@ namespace FilterLib.Tests.ReflectiveApiTests
             IFilter f = ReflectiveApi.ConstructFilterByName("Pixelate");
             Assert.IsInstanceOf<PixelateFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "Size", "30");
+            ReflectiveApi.SetFilterPropertyByName(f, "Mode", "Average");
             PixelateFilter ff = f as PixelateFilter;
             Assert.AreEqual(30, ff.Size);
+            Assert.AreEqual(PixelateFilter.PixelateMode.Average, ff.Mode);
         }
 
         [Test]
-        public void TestPixelateParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(PixelateFilter)));
+        public void TestPixelateParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(PixelateFilter)));
     }
 }

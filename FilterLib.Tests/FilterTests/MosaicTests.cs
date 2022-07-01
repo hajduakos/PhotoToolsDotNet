@@ -21,9 +21,12 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData($"Lego_16{suffix}.bmp", new LegoFilter(16), 1);
             yield return new TestCaseData($"Lego_32{suffix}.bmp", new LegoFilter(32), 1);
 
-            yield return new TestCaseData("_input.bmp", new PixelateFilter(1), 1);
-            yield return new TestCaseData("Pixelate_10.bmp", new PixelateFilter(10), 1);
-            yield return new TestCaseData("Pixelate_25.bmp", new PixelateFilter(25), 1);
+            yield return new TestCaseData("_input.bmp", new PixelateFilter(1, PixelateFilter.PixelateMode.Average), 1);
+            yield return new TestCaseData("Pixelate_10_A.bmp", new PixelateFilter(10, PixelateFilter.PixelateMode.Average), 1);
+            yield return new TestCaseData("Pixelate_25_A.bmp", new PixelateFilter(25, PixelateFilter.PixelateMode.Average), 1);
+            yield return new TestCaseData("_input.bmp", new PixelateFilter(1, PixelateFilter.PixelateMode.MidPoint), 1);
+            yield return new TestCaseData("Pixelate_10_MP.bmp", new PixelateFilter(10, PixelateFilter.PixelateMode.MidPoint), 1);
+            yield return new TestCaseData("Pixelate_25_MP.bmp", new PixelateFilter(25, PixelateFilter.PixelateMode.MidPoint), 1);
         }
 
         [Test]

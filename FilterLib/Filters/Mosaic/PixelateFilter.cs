@@ -12,6 +12,8 @@ namespace FilterLib.Filters.Mosaic
     [Filter]
     public sealed class PixelateFilter : FilterInPlaceBase
     {
+        public enum PixelateMode { Average, MidPoint }
+
         private int size;
 
         /// <summary>
@@ -26,10 +28,21 @@ namespace FilterLib.Filters.Mosaic
         }
 
         /// <summary>
-        /// Constructor with block size.
+        /// Pixelating mode.
+        /// </summary>
+        [FilterParam]
+        public PixelateMode Mode { get; set; }
+
+        /// <summary>
+        /// Constructor.
         /// </summary>
         /// <param name="size">Block size[1;...]</param>
-        public PixelateFilter(int size = 1) => Size = size;
+        /// <param name="mode">Pixelating mode</param>
+        public PixelateFilter(int size = 1, PixelateMode mode = PixelateMode.Average)
+        {
+            Size = size;
+            Mode = mode;
+        }
 
         /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
@@ -38,10 +51,10 @@ namespace FilterLib.Filters.Mosaic
             // Clone original image for iteration
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3; // Width of a row
-                int h = image.Height; // Image height
+                int wMul3 = image.Width * 3;
+                int h = image.Height;
                 int x, y, xSub, ySub, sizeMul3 = size * 3, rSum, gSum, bSum, n;
-                byte rAvg, gAvg, bAvg;
+                byte rNew, gNew, bNew;
                 
                 unsafe
                 {
@@ -51,34 +64,49 @@ namespace FilterLib.Filters.Mosaic
                         // Iterate through block columns
                         for (x = 0; x < wMul3; x += sizeMul3)
                         {
-                            // Calculate average color
-                            rSum = gSum = bSum = n = 0;
-                            for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
+                            byte* row;
+                            // Determine block color based on mode
+                            switch (Mode)
                             {
-                                // Get row
-                                byte* row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                                for (xSub = 0; xSub < sizeMul3 && x + xSub < wMul3; xSub += 3)
-                                {
-                                    rSum += row[x + xSub + 2];
-                                    gSum += row[x + xSub + 1];
-                                    bSum += row[x + xSub];
-                                    ++n;
-                                }
+                                case PixelateMode.Average:
+                                    rSum = gSum = bSum = n = 0;
+                                    for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
+                                    {
+                                        // Get row
+                                        row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
+                                        for (xSub = 0; xSub < sizeMul3 && x + xSub < wMul3; xSub += 3)
+                                        {
+                                            rSum += row[x + xSub + 2];
+                                            gSum += row[x + xSub + 1];
+                                            bSum += row[x + xSub];
+                                            ++n;
+                                        }
+                                    }
+                                    rNew = (byte)(rSum / n);
+                                    gNew = (byte)(gSum / n);
+                                    bNew = (byte)(bSum / n);
+                                    break;
+                                case PixelateMode.MidPoint:
+                                    row = (byte*)bmd.Scan0 + (Math.Min(y + size / 2, h - 1) * bmd.Stride);
+                                    int xMid = Math.Min(x + (size / 2) * 3, wMul3 - 3);
+                                    rNew = row[xMid + 2];
+                                    gNew = row[xMid + 1];
+                                    bNew = row[xMid];
+                                    break;
+                                default:
+                                    throw new ArgumentException($"Unknown pixelate mode: {Mode}");
                             }
-                            rAvg = (byte)(rSum / n);
-                            gAvg = (byte)(gSum / n);
-                            bAvg = (byte)(bSum / n);
 
-                            // Fill with average
+                            // Fill block
                             for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
                             {
                                 // Get row
-                                byte* row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
+                                row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
                                 for (xSub = 0; xSub < sizeMul3 && x + xSub < wMul3; xSub += 3)
                                 {
-                                    row[x + xSub + 2] = rAvg;
-                                    row[x + xSub + 1] = gAvg;
-                                    row[x + xSub] = bAvg;
+                                    row[x + xSub + 2] = rNew;
+                                    row[x + xSub + 1] = gNew;
+                                    row[x + xSub] = bNew;
                                 }
                             }
                         }
