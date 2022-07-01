@@ -119,6 +119,7 @@ namespace FilterLib.Filters.Transform
                                     throw new ArgumentException($"Unknown interpolation mode: {Interpolation}");
                             }
                         }
+                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
                     }
                 }
             }
