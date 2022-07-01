@@ -10,9 +10,7 @@ namespace FilterLib.Blending
     {
         private int opacity;
 
-        /// <summary>
-        /// Opacity [0:100]
-        /// </summary>
+        /// <inheritdoc/>
         public int Opacity
         {
             get { return opacity; }
@@ -23,23 +21,12 @@ namespace FilterLib.Blending
         /// Constructor.
         /// </summary>
         /// <param name="opacity">Opacity[0;100]</param>
-        protected BlendInPlaceBase(int opacity) => this.Opacity = opacity;
+        protected BlendInPlaceBase(int opacity) => Opacity = opacity;
 
-        /// <summary>
-        /// Blend two images together, the result is in the bottom image.
-        /// </summary>
-        /// <param name="bottom">Bottom image (will be changed)</param>
-        /// <param name="top">Top image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public abstract void ApplyInPlace(Bitmap bottom, Bitmap top, Reporting.IReporter reporter = null);
 
-        /// <summary>
-        /// Blend two images together creating a new image.
-        /// </summary>
-        /// <param name="bottom">Bottom image</param>
-        /// <param name="top">Top image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>Blended image</returns>
+        /// <inheritdoc/>
         public Bitmap Apply(Bitmap bottom, Bitmap top, Reporting.IReporter reporter = null)
         {
             Bitmap result = (Bitmap)bottom.Clone();

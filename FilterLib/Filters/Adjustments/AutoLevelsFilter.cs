@@ -1,5 +1,4 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
 using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Filters.Adjustments
@@ -18,7 +17,7 @@ namespace FilterLib.Filters.Adjustments
         public static (int, int) GetCroppingValues(Bitmap image)
         {
             // Get luminance histogram
-            int[] hist = Histogram.GetLuminanceHistogram(image);
+            int[] hist = Util.Histogram.GetLuminanceHistogram(image);
             // Total pixel count
             int pixels = image.Width * image.Height;
             // Crop limits
