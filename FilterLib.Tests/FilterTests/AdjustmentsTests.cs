@@ -2,6 +2,7 @@
 using FilterLib.Filters.Adjustments;
 using System.Collections.Generic;
 using FilterLib.Filters;
+using System;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -43,15 +44,28 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("Levels_30_200.bmp", new LevelsFilter(30, 200), 1);
             yield return new TestCaseData("Levels_120_125.bmp", new LevelsFilter(120, 125), 1);
 
+            
+
             yield return new TestCaseData("_input.bmp", new ShadowsHighlightsFilter(0, 0), 0);
             yield return new TestCaseData("ShadowsHighlights_10_40.bmp", new ShadowsHighlightsFilter(10, 40), 1);
             yield return new TestCaseData("ShadowsHighlights_100_0.bmp", new ShadowsHighlightsFilter(100, 0), 1);
             yield return new TestCaseData("ShadowsHighlights_0_100.bmp", new ShadowsHighlightsFilter(0, 100), 1);
         }
 
+        internal static IEnumerable<TestCaseData> Exceptions()
+        {
+            yield return new TestCaseData("_input.bmp", new LevelsFilter(80, 80));
+            yield return new TestCaseData("_input.bmp", new LevelsFilter(100, 80));
+        }
+
         [Test]
         [TestCaseSource("Data")]
         public void Test(string expected, IFilter filter, int tolerance) =>
             Assert.IsTrue(Common.CheckFilter("_input.bmp", expected, filter, tolerance));
+
+        [Test]
+        [TestCaseSource("Exceptions")]
+        public void TestEx(string expected, IFilter filter) =>
+            Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", expected, filter));
     }
 }

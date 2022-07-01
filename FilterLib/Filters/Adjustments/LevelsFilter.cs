@@ -1,4 +1,5 @@
 ﻿using FilterLib.Util;
+using System;
 
 namespace FilterLib.Filters.Adjustments
 {
@@ -48,6 +49,7 @@ namespace FilterLib.Filters.Adjustments
         /// <inheritdoc/>
         protected override byte MapComponent(byte comp)
         {
+            if (light <= dark) throw new ArgumentException("Light must be greater than dark.");
             if (comp < dark) return 0; // Black under dark level
             if (comp > light) return 255; // White above light level
             return (byte)((comp - dark) / (float)(light - dark) * 255); // Linear transition between
