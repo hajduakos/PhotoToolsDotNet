@@ -18,11 +18,7 @@ namespace FilterLib.Filters.Generate
         /// <param name="seed">Random number generator seed</param>
         public TurbulenceFilter(int iterations = 1, int seed = 0) : base(iterations, seed) { }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

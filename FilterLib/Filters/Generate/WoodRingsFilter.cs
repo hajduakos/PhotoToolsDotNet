@@ -47,15 +47,11 @@ namespace FilterLib.Filters.Generate
         public WoodRingsFilter(int rings = 0, float twist = 0, int iterations = 1, int seed = 0)
             : base(iterations, seed)
         {
-            this.Rings = rings;
-            this.Twist = twist;
+            Rings = rings;
+            Twist = twist;
         }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

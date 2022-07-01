@@ -60,16 +60,12 @@ namespace FilterLib.Filters.Generate
         public MarbleFilter(int horizLines = 0, int vertLines = 0, float twist = 0, int iterations = 1, int seed = 0)
             : base(iterations, seed)
         {
-            this.HorizontalLines = horizLines;
-            this.VerticalLines = vertLines;
-            this.Twist = twist;
+            HorizontalLines = horizLines;
+            VerticalLines = vertLines;
+            Twist = twist;
         }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

@@ -52,9 +52,9 @@ namespace FilterLib.Filters.Mosaic
         /// <param name="seed">Random generator seed</param>
         public CrystallizeFilter(int size = 1, int averaging = 100, int seed = 0)
         {
-            this.Size = size;
-            this.Averaging = averaging;
-            this.Seed = seed;
+            Size = size;
+            Averaging = averaging;
+            Seed = seed;
         }
 
 
@@ -72,12 +72,7 @@ namespace FilterLib.Filters.Mosaic
             public int Dist(int x1, int y1) => (x - x1) * (x - x1) + (y - y1) * (y - y1);
         }
 
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

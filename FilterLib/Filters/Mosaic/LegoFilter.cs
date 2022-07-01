@@ -30,16 +30,9 @@ namespace FilterLib.Filters.Mosaic
         /// Constructor with block size.
         /// </summary>
         /// <param name="size">Block size</param>
-        public LegoFilter(int size = 16)
-        {
-            this.Size = size;
-        }
+        public LegoFilter(int size = 16) => Size = size;
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

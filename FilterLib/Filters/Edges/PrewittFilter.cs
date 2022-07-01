@@ -18,11 +18,7 @@ namespace FilterLib.Filters.Edges
         private readonly ConvolutionFilter conv2 =
             new(new Conv3x3(-1, 0, 1, -1, 0, 1, -1, 0, 1));
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

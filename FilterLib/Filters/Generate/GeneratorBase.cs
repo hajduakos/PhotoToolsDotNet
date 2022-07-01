@@ -17,8 +17,8 @@ namespace FilterLib.Filters.Generate
         /// <param name="seed">Random number generator seed</param>
         protected GeneratorBase(int iterations, int seed)
         {
-            this.Iterations = iterations;
-            this.Seed = seed;
+            Iterations = iterations;
+            Seed = seed;
         }
 
         /// <summary>
