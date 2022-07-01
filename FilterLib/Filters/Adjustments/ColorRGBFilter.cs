@@ -54,14 +54,15 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="blue">Blue value [-255;255]</param>
         public ColorRGBFilter(int red = 0, int green = 0, int blue = 0)
         {
-            this.Red = red;
-            this.Green = green;
-            this.Blue = blue;
+            Red = red;
+            Green = green;
+            Blue = blue;
         }
 
-        byte[] redMap = null;
-        byte[] greenMap = null;
-        byte[] blueMap = null;
+        // Caches
+        private byte[] redMap = null;
+        private byte[] greenMap = null;
+        private byte[] blueMap = null;
 
         /// <summary>
         /// Gets called when filter starts applying.
@@ -69,6 +70,7 @@ namespace FilterLib.Filters.Adjustments
         protected override void ApplyStart()
         {
             base.ApplyStart();
+            // Pre-calculate and cache all possibilities
             redMap = new byte[256];
             greenMap = new byte[256];
             blueMap = new byte[256];
@@ -88,6 +90,10 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="b">Pointer to blue value</param>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
+            System.Diagnostics.Debug.Assert(redMap != null);
+            System.Diagnostics.Debug.Assert(greenMap != null);
+            System.Diagnostics.Debug.Assert(blueMap != null);
+            // Just use cache
             *r = redMap[*r];
             *g = greenMap[*g];
             *b = blueMap[*b];

@@ -25,7 +25,7 @@ namespace FilterLib.Filters.Adjustments
         /// Constructor with gamma adjustment parameter.
         /// </summary>
         /// <param name="gamma">Gamma adjustment value ]0;...]</param>
-        public GammaFilter(float gamma = 1f) => this.Gamma = gamma;
+        public GammaFilter(float gamma = 1f) => Gamma = gamma;
 
         /// <summary>
         /// Map a single (R/G/B) component.

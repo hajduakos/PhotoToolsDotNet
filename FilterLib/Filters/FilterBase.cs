@@ -10,18 +10,9 @@ namespace FilterLib.Filters
     /// </summary>
     public abstract class FilterBase : IFilter
     {
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public abstract Bitmap Apply(Bitmap image, IReporter reporter = null);
 
-        /// <summary>
-        /// Convert filter to string representation
-        /// </summary>
-        /// <returns>String representation of the filter</returns>
         public override string ToString()
         {
             StringBuilder sb = new();

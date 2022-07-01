@@ -20,6 +20,7 @@
         protected override sealed void ApplyStart()
         {
             base.ApplyStart();
+            // Pre-calculate and cache all the possibilities
             map = new byte[256];
             byte i = 0;
             do
@@ -36,6 +37,8 @@
         /// <param name="b">Pointer to blue value</param>
         protected override sealed unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
+            System.Diagnostics.Debug.Assert(map != null);
+            // Just use cache
             *r = map[*r];
             *g = map[*g];
             *b = map[*b];

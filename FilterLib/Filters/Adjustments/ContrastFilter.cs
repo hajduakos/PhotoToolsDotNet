@@ -28,7 +28,7 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="contrast">Contrast adjustment value [-100;100]</param>
         public ContrastFilter(int contrast = 0)
         {
-            this.Contrast = contrast;
+            Contrast = contrast;
         }
 
         /// <summary>

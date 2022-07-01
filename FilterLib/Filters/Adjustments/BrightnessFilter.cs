@@ -26,10 +26,7 @@ namespace FilterLib.Filters.Adjustments
         /// Constructor with brightness parameter.
         /// </summary>
         /// <param name="brightness">Brightness adjustment value [-255;255]</param>
-        public BrightnessFilter(int brightness = 0)
-        {
-            this.Brightness = brightness;
-        }
+        public BrightnessFilter(int brightness = 0) => Brightness = brightness;
 
         /// <summary>
         /// Map a single (R/G/B) component.

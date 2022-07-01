@@ -53,14 +53,15 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="lightness">Lightness [-100;100]</param>
         public ColorHSLFilter(int hue = 0, int saturation = 0, int lightness = 0)
         {
-            this.Hue = hue;
-            this.Saturation = saturation;
-            this.Lightness = lightness;
+            Hue = hue;
+            Saturation = saturation;
+            Lightness = lightness;
         }
 
-        int[] satMap = null;
-        int[] lightMap = null;
-        int[] hueMap = null;
+        // Caches
+        private int[] satMap = null;
+        private int[] lightMap = null;
+        private int[] hueMap = null;
 
         /// <summary>
         /// Gets called when filter starts applying.
@@ -94,6 +95,9 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="b">Pointer to blue value</param>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
+            System.Diagnostics.Debug.Assert(hueMap != null);
+            System.Diagnostics.Debug.Assert(satMap != null);
+            System.Diagnostics.Debug.Assert(lightMap != null);
             // Convert RGB to HSL
             HSL hsl = new RGB(*r, *g, *b).ToHSL();
             // Adjust in HSL space

@@ -7,12 +7,7 @@ namespace FilterLib.Filters
     /// </summary>
     public abstract class FilterInPlaceBase : FilterBase, IFilterInPlace
     {
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override Bitmap Apply(Bitmap image, Reporting.IReporter reporter = null)
         {
             Bitmap result = (Bitmap)image.Clone();
@@ -20,11 +15,7 @@ namespace FilterLib.Filters
             return result;
         }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public abstract void ApplyInPlace(Bitmap image, Reporting.IReporter reporter = null);
     }
 }

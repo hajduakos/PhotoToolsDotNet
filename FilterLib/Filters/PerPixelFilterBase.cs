@@ -22,21 +22,19 @@ namespace FilterLib.Filters
 
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3; // Width of a row
-                int h = image.Height; // Image height
-                int x, y;
+                int width_x3 = image.Width * 3;
 
                 unsafe
                 {
                     // Iterate through rows
-                    for (y = 0; y < h; ++y)
+                    for (int y = 0; y < image.Height; ++y)
                     {
                         // Get row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (int x = 0; x < width_x3; x += 3)
                             ProcessPixel(row + x + 2, row + x + 1, row + x);
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, image.Height - 1);
                     }
                 }
             }
