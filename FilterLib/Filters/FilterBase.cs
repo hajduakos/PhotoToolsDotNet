@@ -1,7 +1,7 @@
 ﻿using FilterLib.Reporting;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Linq;
 
 namespace FilterLib.Filters
 {
@@ -26,10 +26,9 @@ namespace FilterLib.Filters
         {
             StringBuilder sb = new();
             sb.Append(GetType().Name);
-            List<string> args = new();
-            foreach(var pi in ReflectiveApi.GetFilterProperties(GetType()))
-                args.Add($"{pi.Name}: {ParamToString(pi.GetValue(this))}");
-            if (args.Count > 0) sb.Append($"({string.Join(", ", args)})");
+            var args = ReflectiveApi.GetFilterProperties(GetType())
+                .Select(pi => $"{pi.Name}: {ParamToString(pi.GetValue(this))}");
+            if (args.Any()) sb.Append($"({string.Join(", ", args)})");
             return sb.ToString();
         }
 
@@ -38,9 +37,6 @@ namespace FilterLib.Filters
         /// </summary>
         /// <param name="param">Parameter to be printed</param>
         /// <returns>String representation</returns>
-        public virtual string ParamToString(object param)
-        {
-            return param.ToString();
-        }
+        public virtual string ParamToString(object param) => param.ToString();
     }
 }
