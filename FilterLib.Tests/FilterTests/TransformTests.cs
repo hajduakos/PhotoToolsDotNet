@@ -17,11 +17,11 @@ namespace FilterLib.Tests.FilterTests
             string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
 
             yield return new TestCaseData("_input.bmp",
-                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(1)), 1);
+                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(1), Util.Size.Relative(1)), 0);
             yield return new TestCaseData("_input.bmp",
-                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(2), Util.Size.Relative(2)), 1);
+                new CropFilter(Util.Size.Absolute(0), Util.Size.Absolute(0), Util.Size.Relative(2), Util.Size.Relative(2)), 0);
             yield return new TestCaseData("Crop_25pct_45px_50pct_40px.bmp",
-                new CropFilter(Util.Size.Relative(.25f), Util.Size.Absolute(45), Util.Size.Relative(.5f), Util.Size.Absolute(40)), 1);
+                new CropFilter(Util.Size.Relative(.25f), Util.Size.Absolute(45), Util.Size.Relative(.5f), Util.Size.Absolute(40)), 0);
 
             yield return new TestCaseData("FlipHorizontal.bmp", new FlipHorizontalFilter(), 0);
 
