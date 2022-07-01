@@ -53,8 +53,8 @@ namespace FilterLib.Tests.FilterTests
         
             yield return new TestCaseData("RandomDither_2.bmp", new RandomDitherFilter(2), 1);
             yield return new TestCaseData("RandomDither_4.bmp", new RandomDitherFilter(4), 1);
-            yield return new TestCaseData("_input.bmp", new FloydSteinbergDitherFilter(256), 1);
-            yield return new TestCaseData("_input.bmp", new FloydSteinbergDitherFilter(128), 2);
+            yield return new TestCaseData("_input.bmp", new RandomDitherFilter(256), 1);
+            yield return new TestCaseData("_input.bmp", new RandomDitherFilter(128), 2);
         
             yield return new TestCaseData("SierraDither_2.bmp", new SierraDitherFilter(2), 1);
             yield return new TestCaseData("SierraDither_4.bmp", new SierraDitherFilter(4), 1);
