@@ -32,10 +32,11 @@ namespace FilterLib.Filters.Dither
         /// <param name="matrix">Error diffusion matrix</param>
         protected ErrorDiffusionDitherFilterBase(int levels, ErrorDiffusionMatrix matrix)
         {
-            this.Levels = levels;
+            Levels = levels;
             this.matrix = matrix;
         }
 
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

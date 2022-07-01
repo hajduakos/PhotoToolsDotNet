@@ -1,6 +1,5 @@
 ﻿namespace FilterLib.Filters.Dither
 {
-
     /// <summary>
     /// Class representing a Bayer (ordered) dither matrix.
     /// </summary>
@@ -9,23 +8,14 @@
         private readonly int size;
         private readonly float[,] matrix; // Matrix for caching
 
-        /// <summary>
-        /// Get an element of the matrix
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="j"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public float this[int i, int j] =>
                 matrix != null ? matrix[i, j] : GetItem(i, j); // Use cached matrix or calculate on demand
 
-        /// <summary>
-        /// Width of the matrix
-        /// </summary>
+        /// <inheritdoc/>
         public int Width { get; private set; }
 
-        /// <summary>
-        /// Height of the matrix
-        /// </summary>
+        /// <inheritdoc/>
         public int Height { get; private set; }
 
         /// <summary>
@@ -35,8 +25,8 @@
         public BayerDitherMatrix(int size)
         {
             this.size = size;
-            this.Width = this.Height = 1 << size;
-            this.matrix = null;
+            Width = Height = 1 << size;
+            matrix = null;
             // Use cached matrix for small size
             if (size <= 8)
             {

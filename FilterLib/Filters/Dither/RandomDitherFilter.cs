@@ -37,12 +37,12 @@ namespace FilterLib.Filters.Dither
         /// <param name="seed">Random generator seed</param>
         public RandomDitherFilter(int levels = 256, int seed = 0)
         {
-            this.Levels = levels;
-            this.Seed = seed;
+            Levels = levels;
+            Seed = seed;
         }
 
-        Random rnd = null;
-        float intervalSize;
+        private Random rnd = null;
+        private float intervalSize;
 
         /// <summary>
         /// Gets called when filter starts applying.
@@ -54,17 +54,12 @@ namespace FilterLib.Filters.Dither
             intervalSize = 255f / (levels - 1);
         }
 
-        /// <summary>
-        /// Gets called for each pixel independently.
-        /// </summary>
-        /// <param name="r">Pointer to red value</param>
-        /// <param name="g">Pointer to green value</param>
-        /// <param name="b">Pointer to blue value</param>
+        /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             float roundedColor, nextRnd;
 
-            nextRnd = (float)rnd.NextDouble();
+            nextRnd = rnd.NextSingle();
 
             roundedColor = System.MathF.Floor(*r / intervalSize) * intervalSize;
             *r = (byte)((roundedColor + nextRnd * intervalSize > *r) ? roundedColor : (roundedColor + intervalSize));

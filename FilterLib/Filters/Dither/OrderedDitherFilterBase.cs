@@ -36,15 +36,11 @@ namespace FilterLib.Filters.Dither
         /// <param name="matrix">Dither matrix</param>
         protected OrderedDitherFilterBase(int levels, IOrderedDitherMatrix matrix)
         {
-            this.Levels = levels;
-            this.Matrix = matrix;
+            Levels = levels;
+            Matrix = matrix;
         }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

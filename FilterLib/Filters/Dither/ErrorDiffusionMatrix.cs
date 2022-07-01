@@ -42,10 +42,10 @@ namespace FilterLib.Filters.Dither
         /// <param name="normalize">Normalize the sum of matrix to 1</param>
         public ErrorDiffusionMatrix(float[,] matrix, int offset, bool normalize = true)
         {
-            this.Width = matrix.GetLength(0);
-            this.Height = matrix.GetLength(1);
+            Width = matrix.GetLength(0);
+            Height = matrix.GetLength(1);
             this.matrix = new float[Width, Height];
-            this.Offset = offset;
+            Offset = offset;
             // Copy data and normalize
             float sum = 0;
             for (int x = 0; x < Width; ++x)

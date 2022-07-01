@@ -19,7 +19,7 @@
             set
             {
                 size = System.Math.Max(1, value);
-                this.Matrix = new BayerDitherMatrix(size);
+                Matrix = new BayerDitherMatrix(size);
             }
         }
 
@@ -29,9 +29,6 @@
         /// <param name="levels">Number of levels [2:256]</param>
         /// <param name="size">Size of the matrix [1;...]</param>
         public BayerDitherFilter(int levels = 256, int size = 1)
-            : base(levels, new BayerDitherMatrix(size))
-        {
-            this.Size = size;
-        }
+            : base(levels, new BayerDitherMatrix(size)) => Size = size;
     }
 }
