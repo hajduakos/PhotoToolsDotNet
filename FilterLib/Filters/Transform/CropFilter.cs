@@ -1,6 +1,8 @@
 ﻿using FilterLib.Reporting;
+using FilterLib.Util;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace FilterLib.Filters.Transform
 {
@@ -76,11 +78,34 @@ namespace FilterLib.Filters.Transform
             if (y0 < 0) throw new ArgumentException($"Ivalid Y: {y0}");
             if (w0 <= 0) throw new ArgumentException($"Ivalid Width: {w0}");
             if (h0 <= 0) throw new ArgumentException($"Ivalid Height: {h0}");
+            w0 = Math.Min(w0, image.Width);
+            h0 = Math.Min(h0, image.Height);
 
             Bitmap cropped = new(w0, h0);
-            using (Graphics gfx = Graphics.FromImage(cropped))
+            int x, y;
+            int wMul3 = cropped.Width * 3;
+            int x0Mul3 = x0 * 3;
+            using (DisposableBitmapData bmd = new(cropped, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdOrg = new(image, PixelFormat.Format24bppRgb))
             {
-                gfx.DrawImage(image, -x0, -y0, image.Width, image.Height);
+                unsafe
+                {
+                    // Iterate through rows
+                    for (y = 0; y < h0; ++y)
+                    {
+                        // Get row
+                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        byte* rowOrg = (byte*)bmdOrg.Scan0 + ((y + y0) * bmdOrg.Stride);
+                        // Iterate through columns
+                        for (x = 0; x < wMul3; x += 3)
+                        {
+                            row[x] = rowOrg[x0Mul3 + x];
+                            row[x + 1] = rowOrg[x0Mul3 + x + 1];
+                            row[x + 2] = rowOrg[x0Mul3 + x + 2];
+                        }
+                        if ((y & 63) == 0) reporter?.Report(y, 0, h0 - 1);
+                    }
+                }
             }
             reporter?.Done();
             return cropped;
