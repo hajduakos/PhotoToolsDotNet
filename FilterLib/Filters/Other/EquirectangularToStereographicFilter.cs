@@ -51,16 +51,11 @@ namespace FilterLib.Filters.Other
         /// <param name="spin">Spin [0;360]</param>
         public EquirectangularToStereographicFilter(float aov = 120, float spin = 0)
         {
-            this.AOV = aov;
-            this.Spin = spin;
+            AOV = aov;
+            Spin = spin;
         }
 
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

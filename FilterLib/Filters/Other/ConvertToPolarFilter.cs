@@ -36,16 +36,9 @@ namespace FilterLib.Filters.Other
         /// Constructor.
         /// </summary>
         /// <param name="phase">Phase [0;360]</param>
-        public ConvertToPolarFilter(float phase = 0)
-        {
-            this.Phase = phase;
-        }
+        public ConvertToPolarFilter(float phase = 0) => Phase = phase;
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

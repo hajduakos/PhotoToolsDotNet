@@ -13,11 +13,7 @@ namespace FilterLib.Filters.Sharpen
         private readonly Other.ConvolutionFilter conv =
             new(new Conv3x3(0, -2, 0, -2, 11, -2, 0, -2, 0, 3, 0));
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null) => conv.ApplyInPlace(image, reporter);
     }
 }

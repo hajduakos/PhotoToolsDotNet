@@ -48,17 +48,12 @@ namespace FilterLib.Filters.Other
         /// <param name="direction">Direction</param>
         public WavesFilter(Util.Size wavelength, Util.Size amplitude, WaveDirection direction = WaveDirection.Horizontal)
         {
-            this.Wavelength = wavelength;
-            this.Amplitude = amplitude;
-            this.Direction = direction;
+            Wavelength = wavelength;
+            Amplitude = amplitude;
+            Direction = direction;
         }
 
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

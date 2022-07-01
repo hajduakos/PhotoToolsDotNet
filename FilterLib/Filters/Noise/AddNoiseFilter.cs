@@ -67,8 +67,8 @@ namespace FilterLib.Filters.Noise
             Seed = seed;
         }
 
-        int rn, gn, bn;
-        System.Random rnd;
+        private int rn, gn, bn;
+        private Random rnd;
 
         /// <summary>
         /// Gets called when filter starts applying.
@@ -79,12 +79,7 @@ namespace FilterLib.Filters.Noise
             rnd = new Random(Seed);
         }
 
-        /// <summary>
-        /// Gets called for each pixel independently.
-        /// </summary>
-        /// <param name="r">Pointer to red value</param>
-        /// <param name="g">Pointer to green value</param>
-        /// <param name="b">Pointer to blue value</param>
+        /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             // Decide to add noise to this pixel or not

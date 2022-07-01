@@ -32,16 +32,11 @@ namespace FilterLib.Filters.Transform
         /// <param name="crop">Crop the image to fit</param>
         public RotateFilter(float angle = 0, bool crop = false)
         {
-            this.Angle = angle;
-            this.Crop = crop;
+            Angle = angle;
+            Crop = crop;
         }
 
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             if (MathF.Abs(Angle) < 0.001f) return (Bitmap)image.Clone();

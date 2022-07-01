@@ -11,11 +11,7 @@ namespace FilterLib.Filters.Transform
     [Filter]
     public sealed class Rotate180Filter : FilterInPlaceBase
     {
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

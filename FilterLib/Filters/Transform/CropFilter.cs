@@ -55,18 +55,13 @@ namespace FilterLib.Filters.Transform
         /// <param name="height">Crop area height</param>
         public CropFilter(Util.Size x, Util.Size y, Util.Size width, Util.Size height)
         {
-            this.X = x;
-            this.Y = y;
-            this.Width = width;
-            this.Height = height;
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
         }
 
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

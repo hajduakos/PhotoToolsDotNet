@@ -29,17 +29,9 @@ namespace FilterLib.Filters.Noise
         /// Constructor.
         /// </summary>
         /// <param name="strength">Strength [0;100]</param>
-        public MedianFilter(int strength = 0)
-        {
-            this.Strength = strength;
-        }
+        public MedianFilter(int strength = 0) => Strength = strength;
 
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

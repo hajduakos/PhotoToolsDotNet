@@ -40,9 +40,9 @@ namespace FilterLib.Filters.Transform
         /// <param name="interpolation">Interpolation mode</param>
         public ResizeFilter(Util.Size width, Util.Size height, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
         {
-            this.Width = width;
-            this.Height = height;
-            this.Interpolation = interpolation;
+            Width = width;
+            Height = height;
+            Interpolation = interpolation;
         }
 
         /// <summary>
@@ -50,12 +50,7 @@ namespace FilterLib.Filters.Transform
         /// </summary>
         public ResizeFilter() : this(Util.Size.Relative(1f), Util.Size.Relative(1f)) { }
 
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
