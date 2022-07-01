@@ -36,13 +36,12 @@ namespace FilterLib.Filters.Mosaic
         {
             reporter?.Start();
             // Clone original image for iteration
-            using (Bitmap original = (Bitmap)image.Clone())
-            using (DisposableBitmapData bmd = new(original, PixelFormat.Format24bppRgb))
-            using (Graphics gfx = Graphics.FromImage(image))
+            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = original.Width * 3; // Width of a row
-                int h = original.Height; // Image height
+                int wMul3 = image.Width * 3; // Width of a row
+                int h = image.Height; // Image height
                 int x, y, xSub, ySub, sizeMul3 = size * 3, rSum, gSum, bSum, n;
+                byte rAvg, gAvg, bAvg;
                 
                 unsafe
                 {
@@ -52,7 +51,8 @@ namespace FilterLib.Filters.Mosaic
                         // Iterate through block columns
                         for (x = 0; x < wMul3; x += sizeMul3)
                         {
-                            rSum = gSum = bSum = n = 0; // Clear sums
+                            // Calculate average color
+                            rSum = gSum = bSum = n = 0;
                             for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
                             {
                                 // Get row
@@ -65,9 +65,22 @@ namespace FilterLib.Filters.Mosaic
                                     ++n;
                                 }
                             }
-                            // Get pixel color
-                            using Brush pixel = new SolidBrush(System.Drawing.Color.FromArgb(rSum / n, gSum / n, bSum / n));
-                            gfx.FillRectangle(pixel, x / 3, y, size, size); // Pixelate
+                            rAvg = (byte)(rSum / n);
+                            gAvg = (byte)(gSum / n);
+                            bAvg = (byte)(bSum / n);
+
+                            // Fill with average
+                            for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
+                            {
+                                // Get row
+                                byte* row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
+                                for (xSub = 0; xSub < sizeMul3 && x + xSub < wMul3; xSub += 3)
+                                {
+                                    row[x + xSub + 2] = rAvg;
+                                    row[x + xSub + 1] = gAvg;
+                                    row[x + xSub] = bAvg;
+                                }
+                            }
                         }
                         if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
                     }
