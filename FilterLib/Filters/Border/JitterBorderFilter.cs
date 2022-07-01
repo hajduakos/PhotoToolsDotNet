@@ -43,16 +43,12 @@ namespace FilterLib.Filters.Border
         /// <param name="seed">Random generator seed</param>
         public JitterBorderFilter(Util.Size width, RGB color, int seed = 0)
         {
-            this.Width = width;
-            this.Color = color;
-            this.Seed = seed;
+            Width = width;
+            Color = color;
+            Seed = seed;
         }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

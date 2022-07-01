@@ -63,9 +63,7 @@ namespace FilterLib.Filters.Adjustments
         private int[] lightMap = null;
         private int[] hueMap = null;
 
-        /// <summary>
-        /// Gets called when filter starts applying.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ApplyStart()
         {
             base.ApplyStart();
@@ -87,12 +85,7 @@ namespace FilterLib.Filters.Adjustments
             }
         }
 
-        /// <summary>
-        /// Gets called for each pixel independently.
-        /// </summary>
-        /// <param name="r">Pointer to red value</param>
-        /// <param name="g">Pointer to green value</param>
-        /// <param name="b">Pointer to blue value</param>
+        /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             System.Diagnostics.Debug.Assert(hueMap != null);
@@ -109,9 +102,7 @@ namespace FilterLib.Filters.Adjustments
             *b = (byte)rgb.B;
         }
 
-        /// <summary>
-        /// Gets called when filter finishes applying.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ApplyEnd()
         {
             satMap = hueMap = lightMap = null;

@@ -27,11 +27,7 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="gamma">Gamma adjustment value ]0;...]</param>
         public GammaFilter(float gamma = 1f) => Gamma = gamma;
 
-        /// <summary>
-        /// Map a single (R/G/B) component.
-        /// </summary>
-        /// <param name="comp">Input value</param>
-        /// <returns>Output value by applying the filter</returns>
+        /// <inheritdoc/>
         protected override byte MapComponent(byte comp) => (byte)(255 * System.MathF.Pow(comp / 255f, 1f / gamma)).Clamp(0, 255);
     }
 }

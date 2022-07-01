@@ -26,16 +26,9 @@ namespace FilterLib.Filters.Adjustments
         /// Constructor with contrast adjustment parameter.
         /// </summary>
         /// <param name="contrast">Contrast adjustment value [-100;100]</param>
-        public ContrastFilter(int contrast = 0)
-        {
-            Contrast = contrast;
-        }
+        public ContrastFilter(int contrast = 0) => Contrast = contrast;
 
-        /// <summary>
-        /// Map a single (R/G/B) component.
-        /// </summary>
-        /// <param name="comp">Input value</param>
-        /// <returns>Output value by applying the filter</returns>
+        /// <inheritdoc/>
         protected override byte MapComponent(byte comp)
         {
             float normalized = (100 + contrast) / 100f;

@@ -18,10 +18,7 @@ namespace FilterLib.Filters.Color
         /// Constructor.
         /// </summary>
         /// <param name="gradientMap">Gradient</param>
-        public GradientMapFilter(Gradient gradientMap)
-        {
-            GradientMap = gradientMap;
-        }
+        public GradientMapFilter(Gradient gradientMap) => GradientMap = gradientMap;
 
         /// <summary>
         /// Constructor.
@@ -30,21 +27,14 @@ namespace FilterLib.Filters.Color
 
         private RGB[] map;
 
-        /// <summary>
-        /// Gets called when filter starts applying.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ApplyStart()
         {
             base.ApplyStart();
             map = GradientMap.CreateMap256();
         }
 
-        /// <summary>
-        /// Gets called for each pixel independently.
-        /// </summary>
-        /// <param name="r">Pointer to red value</param>
-        /// <param name="g">Pointer to green value</param>
-        /// <param name="b">Pointer to blue value</param>
+        /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             int lum = (int)(.299f * (*r) + .587f * (*g) + .114f * (*b));
@@ -53,9 +43,7 @@ namespace FilterLib.Filters.Color
             *b = (byte)map[lum].B;
         }
 
-        /// <summary>
-        /// Gets called when filter finishes applying.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ApplyEnd()
         {
             map = null;

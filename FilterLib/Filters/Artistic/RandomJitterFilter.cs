@@ -38,16 +38,11 @@ namespace FilterLib.Filters.Artistic
         /// <param name="seed">Random number generator seed</param>
         public RandomJitterFilter(int radius = 1, int seed = 0)
         {
-            this.Radius = radius;
-            this.Seed = seed;
+            Radius = radius;
+            Seed = seed;
         }
 
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

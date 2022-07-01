@@ -28,11 +28,7 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="brightness">Brightness adjustment value [-255;255]</param>
         public BrightnessFilter(int brightness = 0) => Brightness = brightness;
 
-        /// <summary>
-        /// Map a single (R/G/B) component.
-        /// </summary>
-        /// <param name="comp">Input value</param>
-        /// <returns>Output value by applying the filter</returns>
+        /// <inheritdoc/>
         protected override byte MapComponent(byte comp) => (byte)(comp + brightness).Clamp(0, 255);
     }
 }

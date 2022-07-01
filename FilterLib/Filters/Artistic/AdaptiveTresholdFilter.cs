@@ -31,16 +31,9 @@ namespace FilterLib.Filters.Artistic
         /// Constructor with square size.
         /// </summary>
         /// <param name="squareSize">Square size</param>
-        public AdaptiveTresholdFilter(int squareSize = 1)
-        {
-            this.SquareSize = squareSize;
-        }
+        public AdaptiveTresholdFilter(int squareSize = 1) => SquareSize = squareSize;
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

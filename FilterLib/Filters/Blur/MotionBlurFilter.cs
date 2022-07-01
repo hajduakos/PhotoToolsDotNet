@@ -41,15 +41,11 @@ namespace FilterLib.Filters.Blur
         /// <param name="angle">Blur angle in degrees</param>
         public MotionBlurFilter(int length = 0, float angle = 0f)
         {
-            this.Angle = angle;
-            this.Length = length;
+            Angle = angle;
+            Length = length;
         }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

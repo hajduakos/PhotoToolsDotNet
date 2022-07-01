@@ -27,21 +27,13 @@ namespace FilterLib.Filters.Color
         /// Constructor with levels parameter.
         /// </summary>
         /// <param name="levels">Number of levels [2:256]</param>
-        public PosterizeFilter(int levels = 256)
-        {
-            this.Levels = levels;
-        }
+        public PosterizeFilter(int levels = 256) => Levels = levels;
 
-        /// <summary>
-        /// Map a single (R/G/B) component.
-        /// </summary>
-        /// <param name="comp">Input value</param>
-        /// <returns>Output value by applying the filter</returns>
+        /// <inheritdoc/>
         protected override byte MapComponent(byte comp)
         {
-            float div = 255f / (levels - 1); // Divisor
-            float divRecip = 1f / div; // Reciprocial of divisor
-            return (byte)MathF.Round(MathF.Round(comp * divRecip) * div);
+            float div = 255f / (levels - 1);
+            return (byte)MathF.Round(MathF.Round(comp / div) * div);
         }
     }
 }

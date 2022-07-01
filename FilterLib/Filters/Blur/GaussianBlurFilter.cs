@@ -29,16 +29,9 @@ namespace FilterLib.Filters.Blur
         /// Constructor
         /// </summary>
         /// <param name="radius">Blur radius [0;...]</param>
-        public GaussianBlurFilter(int radius = 0)
-        {
-            Radius = radius;
-        }
+        public GaussianBlurFilter(int radius = 0) => Radius = radius;
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

@@ -30,16 +30,9 @@ namespace FilterLib.Filters.Color
         /// Constructor.
         /// </summary>
         /// <param name="strength">Strength [0;100]</param>
-        public VintageFilter(int strength = 0)
-        {
-            this.Strength = strength;
-        }
+        public VintageFilter(int strength = 0) => Strength = strength;
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

@@ -48,18 +48,13 @@ namespace FilterLib.Filters.Border
         /// <param name="position">Border position</param>
         public SimpleBorderFilter(Util.Size width, Util.Size radius, RGB color, BorderPosition position)
         {
-            this.Width = width;
-            this.Radius = radius;
-            this.Color = color;
-            this.Position = position;
+            Width = width;
+            Radius = radius;
+            Color = color;
+            Position = position;
         }
 
-        /// <summary>
-        /// Apply filter, the original image is not modified.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
-        /// <returns>New image with filter applied</returns>
+        /// <inheritdoc/>
         public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

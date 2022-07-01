@@ -51,12 +51,13 @@ namespace FilterLib.Filters.Border
         /// <param name="position">Border position</param>
         public PatternBorderFilter(Util.Size width, Util.Size radius, Bitmap pattern, BorderPosition position)
         {
-            this.Width = width;
-            this.Radius = radius;
-            this.Pattern = pattern;
-            this.Position = position;
+            Width = width;
+            Radius = radius;
+            Pattern = pattern;
+            Position = position;
         }
 
+        /// <inheritdoc/>
         public override Bitmap Apply(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
@@ -92,13 +93,14 @@ namespace FilterLib.Filters.Border
             return imageWithBorder;
         }
 
+        /// <inheritdoc/>
         public override string ParamToString(object param)
         {
             if (param is Bitmap)
             {
                 Bitmap bmp = param as Bitmap;
                 return $"Bitmap({bmp.Width}x{bmp.Height})";
-            };
+            }
             return base.ParamToString(param);
         }
     }

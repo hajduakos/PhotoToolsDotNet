@@ -41,15 +41,11 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="darken">Darken highlights [0;100]</param>
         public ShadowsHighlightsFilter(int brighten = 0, int darken = 0)
         {
-            this.Brighten = brighten;
-            this.Darken = darken;
+            Brighten = brighten;
+            Darken = darken;
         }
 
-        /// <summary>
-        /// Map a single (R/G/B) component.
-        /// </summary>
-        /// <param name="comp">Input value</param>
-        /// <returns>Output value by applying the filter</returns>
+        /// <inheritdoc/>
         protected override byte MapComponent(byte comp)
         {
             if (brighten == 0 && darken == 0) return comp;

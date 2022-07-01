@@ -26,16 +26,11 @@ namespace FilterLib.Filters.Color
         /// Constructor with treshold value.
         /// </summary>
         /// <param name="treshold">Treshold value [0:255]</param>
-        public TresholdFilter(int treshold = 127)
-        {
-            this.Treshold = treshold;
-        }
+        public TresholdFilter(int treshold = 127) => Treshold = treshold;
 
         private byte[] map;
 
-        /// <summary>
-        /// Gets called when filter starts applying.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ApplyStart()
         {
             base.ApplyStart();
@@ -43,21 +38,15 @@ namespace FilterLib.Filters.Color
             for (int x = 0; x < 256; ++x) map[x] = (byte)(x < treshold ? 0 : 255);
         }
 
-        /// <summary>
-        /// Gets called for each pixel independently.
-        /// </summary>
-        /// <param name="r">Pointer to red value</param>
-        /// <param name="g">Pointer to green value</param>
-        /// <param name="b">Pointer to blue value</param>
+        /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
+            System.Diagnostics.Debug.Assert(map != null);
             int luminance = (int)(.299f * (*r) + .587f * (*g) + .114f * (*b));
             *r = *g = *b = map[luminance];
         }
 
-        /// <summary>
-        /// Gets called when filter finishes applying.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ApplyEnd()
         {
             map = null;

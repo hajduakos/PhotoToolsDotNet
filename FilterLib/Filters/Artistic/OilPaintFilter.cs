@@ -28,16 +28,9 @@ namespace FilterLib.Filters.Artistic
         /// Constructor with brush radius.
         /// </summary>
         /// <param name="radius">Brush radius</param>
-        public OilPaintFilter(int radius = 1)
-        {
-            this.Radius = radius;
-        }
+        public OilPaintFilter(int radius = 1) => Radius = radius;
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using Bitmap = System.Drawing.Bitmap;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using IReporter = FilterLib.Reporting.IReporter;
 using FilterLib.Util;
@@ -10,11 +10,7 @@ namespace FilterLib.Filters
     /// </summary>
     public abstract class PerPixelFilterBase : FilterInPlaceBase
     {
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override sealed void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

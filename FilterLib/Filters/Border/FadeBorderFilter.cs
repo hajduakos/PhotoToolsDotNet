@@ -35,15 +35,11 @@ namespace FilterLib.Filters.Border
         /// <param name="color">Border color</param>
         public FadeBorderFilter(Util.Size width, RGB color)
         {
-            this.Width = width;
-            this.Color = color;
+            Width = width;
+            Color = color;
         }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

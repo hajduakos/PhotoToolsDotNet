@@ -44,16 +44,12 @@ namespace FilterLib.Filters.Border
         /// <param name="color">Color of the vignette</param>
         public VignetteFilter(Util.Size radius, Util.Size clearRadius, RGB color)
         {
-            this.Radius = radius;
-            this.ClearRadius = clearRadius;
-            this.Color = color;
+            Radius = radius;
+            ClearRadius = clearRadius;
+            Color = color;
         }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

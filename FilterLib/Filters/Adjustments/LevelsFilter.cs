@@ -41,15 +41,11 @@ namespace FilterLib.Filters.Adjustments
         /// <param name="light">Light level [0:255]</param>
         public LevelsFilter(int dark = 0, int light = 255)
         {
-            this.Dark = dark;
-            this.Light = light;
+            Dark = dark;
+            Light = light;
         }
 
-        /// <summary>
-        /// Map a single (R/G/B) component.
-        /// </summary>
-        /// <param name="comp">Input value</param>
-        /// <returns>Output value by applying the filter</returns>
+        /// <inheritdoc/>
         protected override byte MapComponent(byte comp)
         {
             if (comp < dark) return 0; // Black under dark level

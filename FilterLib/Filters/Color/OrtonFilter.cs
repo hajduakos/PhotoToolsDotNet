@@ -44,15 +44,11 @@ namespace FilterLib.Filters.Color
         /// <param name="radius">Blur radius [0;...]</param>
         public OrtonFilter(int strength = 0, int radius = 0)
         {
-            this.Strength = strength;
-            this.Radius = radius;
+            Strength = strength;
+            Radius = radius;
         }
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();

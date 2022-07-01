@@ -1,6 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using System.Drawing;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Filters.Blur
 {
@@ -13,11 +13,7 @@ namespace FilterLib.Filters.Blur
         private readonly Other.ConvolutionFilter conv =
             new(new Conv3x3(1, 1, 1, 1, 8, 1, 1, 1, 1, 16, 0));
 
-        /// <summary>
-        /// Apply filter by modifying the original image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="reporter">Reporter (optional)</param>
+        /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null) => conv.ApplyInPlace(image, reporter);
     }
 }

@@ -6,7 +6,7 @@ namespace FilterLib.Filters.Color
     /// Convert to grayscale filter.
     /// </summary>
     [Filter]
-    public sealed class GrayscaleFilter :  PerPixelFilterBase
+    public sealed class GrayscaleFilter : PerPixelFilterBase
     {
         private int red, green, blue;
 
@@ -53,16 +53,14 @@ namespace FilterLib.Filters.Color
         /// <param name="blue">Blue ratio [0;100]</param>
         public GrayscaleFilter(int red = 30, int green = 59, int blue = 11)
         {
-            this.Red = red;
-            this.Green = green;
-            this.Blue = blue;
+            Red = red;
+            Green = green;
+            Blue = blue;
         }
 
         float redF, greenF, blueF;
 
-        /// <summary>
-        /// Gets called when filter starts applying.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void ApplyStart()
         {
             base.ApplyStart();
@@ -71,12 +69,7 @@ namespace FilterLib.Filters.Color
             blueF = blue / 100f;
         }
 
-        /// <summary>
-        /// Gets called for each pixel independently.
-        /// </summary>
-        /// <param name="r">Pointer to red value</param>
-        /// <param name="g">Pointer to green value</param>
-        /// <param name="b">Pointer to blue value</param>
+        /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             *r = *g = *b = (byte)(redF * (*r) + greenF * (*g) + blueF * (*b)).Clamp(0, 255);
