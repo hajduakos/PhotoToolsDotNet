@@ -26,6 +26,8 @@ namespace FilterLib.Tests.FilterTests
                 new FadeBorderFilter(Size.Absolute(0), new RGB(0, 0, 0)), 1);
             yield return new TestCaseData("FadeBorder_20_Red.bmp",
                 new FadeBorderFilter(Size.Absolute(20), new RGB(255, 0, 0)), 1);
+            yield return new TestCaseData("FadeBorder_40_Black.bmp",
+                new FadeBorderFilter(Size.Absolute(40), new RGB(0, 0, 0)), 1);
 
             yield return new TestCaseData("_input.bmp",
                 new PatternBorderFilter(Size.Absolute(0), Size.Absolute(0), pattern, BorderPosition.Inside), 1);
