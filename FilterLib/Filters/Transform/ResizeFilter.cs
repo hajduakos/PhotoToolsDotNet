@@ -12,8 +12,6 @@ namespace FilterLib.Filters.Transform
     [Filter]
     public sealed class ResizeFilter : FilterBase
     {
-        public enum InterpolationMode { NearestNeighbor, Bilinear }
-
         /// <summary>
         /// New width.
         /// </summary>

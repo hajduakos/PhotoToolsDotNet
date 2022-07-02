@@ -98,7 +98,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new CropFilter(Size.Absolute(12), Size.Absolute(34), Size.Absolute(56), Size.Absolute(78)), "CropFilter(X: 12px, Y: 34px, Width: 56px, Height: 78px)");
             yield return new TestCaseData(new FlipHorizontalFilter(), "FlipHorizontalFilter");
             yield return new TestCaseData(new FlipVerticalFilter(), "FlipVerticalFilter");
-            yield return new TestCaseData(new ResizeFilter(Size.Absolute(12), Size.Absolute(34), ResizeFilter.InterpolationMode.NearestNeighbor), "ResizeFilter(Width: 12px, Height: 34px, Interpolation: NearestNeighbor)");
+            yield return new TestCaseData(new ResizeFilter(Size.Absolute(12), Size.Absolute(34), InterpolationMode.NearestNeighbor), "ResizeFilter(Width: 12px, Height: 34px, Interpolation: NearestNeighbor)");
             yield return new TestCaseData(new Rotate180Filter(), "Rotate180Filter");
             yield return new TestCaseData(new RotateFilter(12, true), "RotateFilter(Angle: 12, Crop: True)");
             yield return new TestCaseData(new RotateLeftFilter(), "RotateLeftFilter");

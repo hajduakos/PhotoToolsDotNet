@@ -51,7 +51,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
             ResizeFilter ff = f as ResizeFilter;
             Assert.AreEqual(100, ff.Width.ToAbsolute(500));
             Assert.AreEqual(250, ff.Height.ToAbsolute(500));
-            Assert.AreEqual(ResizeFilter.InterpolationMode.NearestNeighbor, ff.Interpolation);
+            Assert.AreEqual(InterpolationMode.NearestNeighbor, ff.Interpolation);
         }
 
         [Test]
