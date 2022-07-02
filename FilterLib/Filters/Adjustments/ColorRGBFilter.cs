@@ -3,7 +3,8 @@
 namespace FilterLib.Filters.Adjustments
 {
     /// <summary>
-    /// Color adjustment in red-green-blue color space.
+    /// Adjust color in red-green-blue (RGB) color space by increasing/decreasing the value
+    /// of each component by a fixed amount.
     /// </summary>
     [Filter]
     public sealed class ColorRGBFilter : PerPixelFilterBase
@@ -11,7 +12,7 @@ namespace FilterLib.Filters.Adjustments
         private int red, green, blue;
 
         /// <summary>
-        /// Red value [-255;255].
+        /// Adjustment to red component [-255;255].
         /// </summary>
         [FilterParam]
         [FilterParamMin(-255)]
@@ -23,7 +24,7 @@ namespace FilterLib.Filters.Adjustments
         }
 
         /// <summary>
-        /// Green value [-255;255].
+        /// Adjustment to green component [-255;255].
         /// </summary>
         [FilterParam]
         [FilterParamMin(-255)]
@@ -35,7 +36,7 @@ namespace FilterLib.Filters.Adjustments
         }
 
         /// <summary>
-        /// Blue value [-255;255].
+        /// Adjustment to blue component [-255;255].
         /// </summary>
         [FilterParam]
         [FilterParamMin(-255)]
@@ -47,11 +48,11 @@ namespace FilterLib.Filters.Adjustments
         }
 
         /// <summary>
-        /// Constructor with R,G,B parameters.
+        /// Constructor.
         /// </summary>
-        /// <param name="red">Red value [-255;255]</param>
-        /// <param name="green">Green value [-255;255]</param>
-        /// <param name="blue">Blue value [-255;255]</param>
+        /// <param name="red">Adjustment to red component [-255;255]</param>
+        /// <param name="green">Adjustment to green component [-255;255]</param>
+        /// <param name="blue">Adjustment to blue component [-255;255]</param>
         public ColorRGBFilter(int red = 0, int green = 0, int blue = 0)
         {
             Red = red;
