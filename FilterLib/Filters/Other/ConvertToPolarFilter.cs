@@ -63,7 +63,7 @@ namespace FilterLib.Filters.Other
 
                 unsafe
                 {
-                    byte* orgStart = (byte*)bmdOrig.Scan0;
+                    byte* origStart = (byte*)bmdOrig.Scan0;
                     // Iterate through rows
                     for (y = 0; y < h; ++y)
                     {
@@ -105,18 +105,18 @@ namespace FilterLib.Filters.Other
                             if (y1 >= h) y1 = h - 1;
 
                             // Interpolation for R,G,B components
-                            row[x] = (byte)(orgStart[y0 * stride + x0] * (1 - xFrac) * (1 - yFrac)
-                                + orgStart[y1 * stride + x0] * (1 - xFrac) * yFrac
-                                + orgStart[y0 * stride + x1] * xFrac * (1 - yFrac)
-                                + orgStart[y1 * stride + x1] * xFrac * yFrac);
-                            row[x + 1] = (byte)(orgStart[y0 * stride + x0 + 1] * (1 - xFrac) * (1 - yFrac)
-                                + orgStart[y1 * stride + x0 + 1] * (1 - xFrac) * yFrac
-                                + orgStart[y0 * stride + x1 + 1] * xFrac * (1 - yFrac)
-                                + orgStart[y1 * stride + x1 + 1] * xFrac * yFrac);
-                            row[x + 2] = (byte)(orgStart[y0 * stride + x0 + 2] * (1 - xFrac) * (1 - yFrac)
-                                + orgStart[y1 * stride + x0 + 2] * (1 - xFrac) * yFrac
-                                + orgStart[y0 * stride + x1 + 2] * xFrac * (1 - yFrac)
-                                + orgStart[y1 * stride + x1 + 2] * xFrac * yFrac);
+                            row[x] = (byte)(origStart[y0 * stride + x0] * (1 - xFrac) * (1 - yFrac)
+                                + origStart[y1 * stride + x0] * (1 - xFrac) * yFrac
+                                + origStart[y0 * stride + x1] * xFrac * (1 - yFrac)
+                                + origStart[y1 * stride + x1] * xFrac * yFrac);
+                            row[x + 1] = (byte)(origStart[y0 * stride + x0 + 1] * (1 - xFrac) * (1 - yFrac)
+                                + origStart[y1 * stride + x0 + 1] * (1 - xFrac) * yFrac
+                                + origStart[y0 * stride + x1 + 1] * xFrac * (1 - yFrac)
+                                + origStart[y1 * stride + x1 + 1] * xFrac * yFrac);
+                            row[x + 2] = (byte)(origStart[y0 * stride + x0 + 2] * (1 - xFrac) * (1 - yFrac)
+                                + origStart[y1 * stride + x0 + 2] * (1 - xFrac) * yFrac
+                                + origStart[y0 * stride + x1 + 2] * xFrac * (1 - yFrac)
+                                + origStart[y1 * stride + x1 + 2] * xFrac * yFrac);
                         }
                         reporter?.Report(y, 0, h - 1);
                     }

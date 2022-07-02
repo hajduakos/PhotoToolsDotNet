@@ -65,7 +65,7 @@ namespace FilterLib.Filters.Blur
                 unsafe
                 {
                     byte* bmdstart = (byte*)bmd.Scan0;
-                    byte* orgstart = (byte*)bmdOrig.Scan0;
+                    byte* origStart = (byte*)bmdOrig.Scan0;
                     // Iterate through rows
                     for (y = 0; y < h; ++y)
                     {
@@ -85,9 +85,9 @@ namespace FilterLib.Filters.Blur
                                 if (xAct >= 0 && xAct < w && yAct >= 0 && yAct < h)
                                 {
                                     idx = yAct * stride + xAct * 3;   // Calculate index
-                                    rSum += orgstart[idx + 2]; // Sum red component
-                                    gSum += orgstart[idx + 1]; // Sum blue component
-                                    bSum += orgstart[idx];     // Sum green component
+                                    rSum += origStart[idx + 2]; // Sum red component
+                                    gSum += origStart[idx + 1]; // Sum blue component
+                                    bSum += origStart[idx];     // Sum green component
                                     ++n; // Number of items
                                 }
                             }
