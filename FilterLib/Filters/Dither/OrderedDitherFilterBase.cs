@@ -1,7 +1,7 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using FilterLib.Reporting;
+﻿using FilterLib.Reporting;
 using FilterLib.Util;
+using Bitmap = System.Drawing.Bitmap;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Dither
 {

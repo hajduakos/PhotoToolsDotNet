@@ -1,8 +1,9 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using FilterLib.Reporting;
+﻿using FilterLib.Reporting;
 using FilterLib.Util;
+using Bitmap = System.Drawing.Bitmap;
+using Math = System.Math;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using Random = System.Random;
 
 namespace FilterLib.Filters.Artistic
 {

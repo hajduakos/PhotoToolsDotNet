@@ -1,6 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using System.Drawing;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Filters.Edges
 {

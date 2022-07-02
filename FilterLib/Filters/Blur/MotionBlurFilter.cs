@@ -1,9 +1,9 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Bitmap = System.Drawing.Bitmap;
-using MathF = System.MathF;
 using Math = System.Math;
+using MathF = System.MathF;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Blur
 {

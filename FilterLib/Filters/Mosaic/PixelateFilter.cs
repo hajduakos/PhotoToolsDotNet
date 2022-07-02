@@ -1,8 +1,8 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using Bitmap = System.Drawing.Bitmap;
+using Math = System.Math;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Mosaic
 {
@@ -94,7 +94,7 @@ namespace FilterLib.Filters.Mosaic
                                     bNew = row[xMid];
                                     break;
                                 default:
-                                    throw new ArgumentException($"Unknown pixelate mode: {Mode}");
+                                    throw new System.ArgumentException($"Unknown pixelate mode: {Mode}");
                             }
 
                             // Fill block

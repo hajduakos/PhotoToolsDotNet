@@ -1,7 +1,8 @@
 ﻿using FilterLib.Reporting;
-using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using Math = System.Math;
+using MathF = System.MathF;
 
 namespace FilterLib.Filters.Transform
 {

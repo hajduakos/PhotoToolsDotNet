@@ -1,8 +1,9 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using Bitmap = System.Drawing.Bitmap;
+using Math = System.Math;
+using MathF = System.MathF;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Other
 {
@@ -65,14 +66,10 @@ namespace FilterLib.Filters.Other
             int waveLengthPx = Wavelength.ToAbsolute(Direction == WaveDirection.Horizontal ? w : h);
             int amplitudePx = Amplitude.ToAbsolute(Direction == WaveDirection.Horizontal ? h : w);
 
-            if (waveLengthPx == 0) throw new ArgumentException("Wavelength cannot be zero.");
+            if (waveLengthPx == 0) throw new System.ArgumentException("Wavelength cannot be zero.");
 
             if (Direction == WaveDirection.Horizontal) wavesBmp = new Bitmap(w, h + 2 * amplitudePx);
             else wavesBmp = new Bitmap(w + 2 * amplitudePx, h);
-            using (Graphics gfx = Graphics.FromImage(wavesBmp))
-            {
-                gfx.Clear(System.Drawing.Color.Black);
-            }
             // Lock bits
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             using (DisposableBitmapData bmdNew = new(wavesBmp, PixelFormat.Format24bppRgb))

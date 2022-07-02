@@ -1,8 +1,8 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using Bitmap = System.Drawing.Bitmap;
+using Math = System.Math;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Transform
 {
@@ -57,8 +57,8 @@ namespace FilterLib.Filters.Transform
             int newWidth = Width.ToAbsolute(image.Width);
             int newHeight = Height.ToAbsolute(image.Height);
 
-            if (newWidth <= 0) throw new ArgumentException($"Invalid new width: {newWidth}.");
-            if (newHeight <= 0) throw new ArgumentException($"Invalid new height: {newHeight}.");
+            if (newWidth <= 0) throw new System.ArgumentException($"Invalid new width: {newWidth}.");
+            if (newHeight <= 0) throw new System.ArgumentException($"Invalid new height: {newHeight}.");
 
             Bitmap resized = new(newWidth, newHeight);
             using (DisposableBitmapData bmd = new(resized, PixelFormat.Format24bppRgb))
@@ -111,7 +111,7 @@ namespace FilterLib.Filters.Transform
                                             yRatio1 * xRatio1 * rowOrg1[x1 + i]);
                                     break;
                                 default:
-                                    throw new ArgumentException($"Unknown interpolation mode: {Interpolation}");
+                                    throw new System.ArgumentException($"Unknown interpolation mode: {Interpolation}");
                             }
                         }
                         if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);

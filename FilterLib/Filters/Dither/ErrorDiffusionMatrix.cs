@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FilterLib.Filters.Dither
+﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
     /// Error diffusion matrix, e.g.,
@@ -70,7 +68,7 @@ namespace FilterLib.Filters.Dither
         public float[,] CopyMatrix()
         {
             float[,] copy = new float[Width, Height];
-            Array.Copy(matrix, copy, Width * Height);
+            System.Array.Copy(matrix, copy, Width * Height);
             return copy;
         }
     }

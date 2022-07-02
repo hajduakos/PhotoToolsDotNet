@@ -1,8 +1,8 @@
-﻿using System.Drawing;
-using FilterLib.Blending;
+﻿using FilterLib.Blending;
 using FilterLib.Filters.Blur;
 using FilterLib.Reporting;
 using FilterLib.Util;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Filters.Color
 {

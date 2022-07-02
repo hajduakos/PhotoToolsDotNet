@@ -1,8 +1,8 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using Bitmap = System.Drawing.Bitmap;
+using Math = System.Math;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Transform
 {
@@ -69,10 +69,10 @@ namespace FilterLib.Filters.Transform
             int y0 = Y.ToAbsolute(image.Height);
             int w0 = Width.ToAbsolute(image.Width);
             int h0 = Height.ToAbsolute(image.Height);
-            if (x0 < 0) throw new ArgumentException($"Ivalid X: {x0}");
-            if (y0 < 0) throw new ArgumentException($"Ivalid Y: {y0}");
-            if (w0 <= 0) throw new ArgumentException($"Ivalid Width: {w0}");
-            if (h0 <= 0) throw new ArgumentException($"Ivalid Height: {h0}");
+            if (x0 < 0) throw new System.ArgumentException($"Ivalid X: {x0}");
+            if (y0 < 0) throw new System.ArgumentException($"Ivalid Y: {y0}");
+            if (w0 <= 0) throw new System.ArgumentException($"Ivalid Width: {w0}");
+            if (h0 <= 0) throw new System.ArgumentException($"Ivalid Height: {h0}");
             w0 = Math.Min(w0, image.Width);
             h0 = Math.Min(h0, image.Height);
 

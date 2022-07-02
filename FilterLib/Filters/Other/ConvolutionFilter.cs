@@ -1,7 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using System.Drawing;
-using System.Drawing.Imaging;
+using Bitmap = System.Drawing.Bitmap;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Other
 {

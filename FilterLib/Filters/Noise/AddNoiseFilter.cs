@@ -1,5 +1,5 @@
-﻿using System;
-using FilterLib.Util;
+﻿using FilterLib.Util;
+using Random = System.Random;
 
 namespace FilterLib.Filters.Noise
 {
