@@ -3,7 +3,7 @@
 namespace FilterLib.Filters.Adjustments
 {
     /// <summary>
-    /// Color adjustment in the HSL (hue, saturation, lightness) color space.
+    /// Adjust color in the hue-saturation-lightness (HSL) space.
     /// </summary>
     [Filter]
     public sealed class ColorHSLFilter : PerPixelFilterBase
@@ -47,10 +47,11 @@ namespace FilterLib.Filters.Adjustments
         }
 
         /// <summary>
-        /// Constructor with hue, saturation and lightness parameters </summary>
-        /// <param name="hue">Hue [-180;180]</param>
-        /// <param name="saturation">Saturation [-100;100]</param>
-        /// <param name="lightness">Lightness [-100;100]</param>
+        /// Constructor.
+        /// </summary>
+        /// <param name="hue">Hue adjustment [-180;180]</param>
+        /// <param name="saturation">Saturation adjustment [-100;100]</param>
+        /// <param name="lightness">Lightness adjustment [-100;100]</param>
         public ColorHSLFilter(int hue = 0, int saturation = 0, int lightness = 0)
         {
             Hue = hue;
@@ -67,16 +68,15 @@ namespace FilterLib.Filters.Adjustments
         protected override void ApplyStart()
         {
             base.ApplyStart();
+            // Calculate all possible values and save in cache
             satMap = new int[101];
             lightMap = new int[101];
             hueMap = new int[361];
-            // Lightness and saturation
             for (int x = 0; x <= 100; ++x)
             {
                 satMap[x] = (x + saturation).Clamp(0, 100);
                 lightMap[x] = (x + lightness).Clamp(0, 100);
             }
-            // Hue
             for (int x = 0; x <= 360; ++x)
             {
                 hueMap[x] = x + hue;
@@ -91,9 +91,9 @@ namespace FilterLib.Filters.Adjustments
             System.Diagnostics.Debug.Assert(hueMap != null);
             System.Diagnostics.Debug.Assert(satMap != null);
             System.Diagnostics.Debug.Assert(lightMap != null);
-            // Convert RGB to HSL
+            // Convert to HSL
             HSL hsl = new RGB(*r, *g, *b).ToHSL();
-            // Adjust in HSL space
+            // Adjust in HSL space using cache
             hsl = new HSL(hueMap[hsl.H], satMap[hsl.S], lightMap[hsl.L]);
             // Convert back to RGB
             RGB rgb = hsl.ToRGB();
