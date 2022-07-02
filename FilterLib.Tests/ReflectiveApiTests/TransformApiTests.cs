@@ -64,13 +64,15 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<RotateFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "Angle", "123.45");
             ReflectiveApi.SetFilterPropertyByName(f, "Crop", "true");
+            ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "NearestNeighbor");
             RotateFilter ff = f as RotateFilter;
             Assert.AreEqual(123.45f, ff.Angle);
             Assert.AreEqual(true, ff.Crop);
+            Assert.AreEqual(InterpolationMode.NearestNeighbor, ff.Interpolation);
         }
 
         [Test]
-        public void TestRotateParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(RotateFilter)));
+        public void TestRotateParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(RotateFilter)));
 
         [Test]
         public void TestRotate180() => 

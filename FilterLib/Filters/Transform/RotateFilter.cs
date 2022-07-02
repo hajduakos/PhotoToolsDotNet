@@ -28,14 +28,22 @@ namespace FilterLib.Filters.Transform
         public bool Crop { get; set; }
 
         /// <summary>
+        /// Interpolation mode.
+        /// </summary>
+        [FilterParam]
+        public InterpolationMode Interpolation { get; set; }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="angle">Rotation angle [0;360]</param>
         /// <param name="crop">Crop the image to fit</param>
-        public RotateFilter(float angle = 0, bool crop = false)
+        /// <param name="interpolation">Interpolation mode</param>
+        public RotateFilter(float angle = 0, bool crop = false, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
         {
             Angle = angle;
             Crop = crop;
+            Interpolation = interpolation;
         }
 
         /// <inheritdoc/>
@@ -80,14 +88,21 @@ namespace FilterLib.Filters.Transform
                             float xr = x / 3 - crx;
                             float xOrig = xr * cosAng - yr * sinAng + cx;
                             float yOrig = cy - (xr * sinAng + yr * cosAng);
-                            int x0 = (int)Math.Round(xOrig);
-                            int y0 = (int)Math.Round(yOrig);
-                            if (x0 >= 0 && x0 < image.Width && y0 >= 0 && y0 < image.Height)
+                            switch (Interpolation)
                             {
-                                byte* pxOrig = (byte*)bmd.Scan0 + y0 * bmd.Stride + (x0 * 3);
-                                row[x] = pxOrig[0];
-                                row[x + 1] = pxOrig[1];
-                                row[x + 2] = pxOrig[2];
+                                case InterpolationMode.NearestNeighbor:
+                                    int x0 = (int)Math.Round(xOrig);
+                                    int y0 = (int)Math.Round(yOrig);
+                                    if (x0 >= 0 && x0 < image.Width && y0 >= 0 && y0 < image.Height)
+                                    {
+                                        byte* pxOrig = (byte*)bmd.Scan0 + y0 * bmd.Stride + (x0 * 3);
+                                        row[x] = pxOrig[0];
+                                        row[x + 1] = pxOrig[1];
+                                        row[x + 2] = pxOrig[2];
+                                    }
+                                    break;
+                                default:
+                                    throw new System.ArgumentException($"Unknown interpolation mode: {Interpolation}");
                             }
                         }
                         reporter?.Report(y, 0, image.Height - 1);
