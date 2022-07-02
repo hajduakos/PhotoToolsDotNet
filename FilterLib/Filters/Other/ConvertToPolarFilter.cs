@@ -44,7 +44,7 @@ namespace FilterLib.Filters.Other
             // Clone image (the clone won't be modified)
             using (Bitmap original = (Bitmap)image.Clone())
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrg = new(original, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
             {
                 int w = image.Width, h = image.Height;
                 int stride = bmd.Stride;
@@ -63,7 +63,7 @@ namespace FilterLib.Filters.Other
 
                 unsafe
                 {
-                    byte* orgStart = (byte*)bmdOrg.Scan0;
+                    byte* orgStart = (byte*)bmdOrig.Scan0;
                     // Iterate through rows
                     for (y = 0; y < h; ++y)
                     {

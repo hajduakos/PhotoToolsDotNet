@@ -30,7 +30,7 @@ namespace FilterLib.Filters.Other
             // Clone image (the clone won't be modified)
             using (Bitmap original = (Bitmap)image.Clone())
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrg = new(original, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
             {
                 int wMul3 = image.Width * 3;
                 int h = image.Height;
@@ -44,7 +44,7 @@ namespace FilterLib.Filters.Other
                     {
                         // Get rows
                         byte* row = (byte*)bmd.Scan0 + (y * stride);
-                        byte* rowOrg = (byte*)bmdOrg.Scan0 + (y * stride);
+                        byte* rowOrg = (byte*)bmdOrig.Scan0 + (y * stride);
                         // Iterate through columns
                         for (x = 0; x < wMul3; ++x)
                         {

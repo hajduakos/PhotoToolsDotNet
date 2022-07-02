@@ -81,7 +81,7 @@ namespace FilterLib.Filters.Transform
             int wMul3 = cropped.Width * 3;
             int x0Mul3 = x0 * 3;
             using (DisposableBitmapData bmd = new(cropped, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrg = new(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdOrig = new(image, PixelFormat.Format24bppRgb))
             {
                 unsafe
                 {
@@ -90,7 +90,7 @@ namespace FilterLib.Filters.Transform
                     {
                         // Get row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        byte* rowOrg = (byte*)bmdOrg.Scan0 + ((y + y0) * bmdOrg.Stride);
+                        byte* rowOrg = (byte*)bmdOrig.Scan0 + ((y + y0) * bmdOrig.Stride);
                         // Iterate through columns
                         for (x = 0; x < wMul3; x += 3)
                         {

@@ -62,7 +62,7 @@ namespace FilterLib.Filters.Transform
 
             Bitmap resized = new(newWidth, newHeight);
             using (DisposableBitmapData bmd = new(resized, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrg = new(image, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdOrig = new(image, PixelFormat.Format24bppRgb))
             {
                 int wMul3 = resized.Width * 3;
                 int h = resized.Height;
@@ -87,7 +87,7 @@ namespace FilterLib.Filters.Transform
                                 case InterpolationMode.NearestNeighbor:
                                     y0 = (int)Math.Round(y * hScale);
                                     x0 = (int)Math.Round(x / 3 * wScale) * 3;
-                                    byte* rowOrg = (byte*)bmdOrg.Scan0 + (y0 * bmdOrg.Stride);
+                                    byte* rowOrg = (byte*)bmdOrig.Scan0 + (y0 * bmdOrig.Stride);
                                     for (int i = 0; i < 3; i++) row[x + i] = rowOrg[x0 + i];
                                     break;
                                 case InterpolationMode.Bilinear:
@@ -101,8 +101,8 @@ namespace FilterLib.Filters.Transform
                                     x1 = (int)Math.Ceiling(xf) * 3;
                                     float xRatio1 = xf - x0 / 3;
                                     float xRatio0 = 1 - xRatio1;
-                                    byte* rowOrg0 = (byte*)bmdOrg.Scan0 + (y0 * bmdOrg.Stride);
-                                    byte* rowOrg1 = (byte*)bmdOrg.Scan0 + (y1 * bmdOrg.Stride);
+                                    byte* rowOrg0 = (byte*)bmdOrig.Scan0 + (y0 * bmdOrig.Stride);
+                                    byte* rowOrg1 = (byte*)bmdOrig.Scan0 + (y1 * bmdOrig.Stride);
                                     for (int i = 0; i < 3; i++)
                                         row[x + i] = (byte)(
                                             yRatio0 * xRatio0 * rowOrg0[x0 + i] +

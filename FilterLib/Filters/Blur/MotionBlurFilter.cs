@@ -52,7 +52,7 @@ namespace FilterLib.Filters.Blur
             // Clone image (the clone won't be modified)
             using (Bitmap original = (Bitmap)image.Clone())
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrg = new(original, PixelFormat.Format24bppRgb))
+            using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
             {
                 int wMul3 = image.Width * 3;
                 int w = image.Width, h = image.Height;
@@ -65,7 +65,7 @@ namespace FilterLib.Filters.Blur
                 unsafe
                 {
                     byte* bmdstart = (byte*)bmd.Scan0;
-                    byte* orgstart = (byte*)bmdOrg.Scan0;
+                    byte* orgstart = (byte*)bmdOrig.Scan0;
                     // Iterate through rows
                     for (y = 0; y < h; ++y)
                     {
