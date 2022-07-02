@@ -46,7 +46,7 @@ namespace FilterLib.Filters.Dither
             reporter?.Start();
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3;
+                int width_3 = image.Width * 3;
                 int h = image.Height;
                 int x, y, xDiv3;
                 int mw = Matrix.Width, mh = Matrix.Height; // Width and height of matrix
@@ -60,7 +60,7 @@ namespace FilterLib.Filters.Dither
                         // Get row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; ++x)
+                        for (x = 0; x < width_3; ++x)
                         {
                             xDiv3 = x / 3;
                             // Get rounded color

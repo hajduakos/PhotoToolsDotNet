@@ -60,7 +60,7 @@ namespace FilterLib.Filters.Generate
             {
                 int x, y, xDiv3;
                 int w = image.Width;
-                int wMul3 = w * 3;
+                int width_3 = w * 3;
                 int h = image.Height;
                 float xShifted, yShifted;
                 float sin_mult = (MathF.PI * 2 * rings);
@@ -76,7 +76,7 @@ namespace FilterLib.Filters.Generate
                         // Get row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             xDiv3 = x / 3;
                             xShifted = (xDiv3 - w / 2) / (float)w;

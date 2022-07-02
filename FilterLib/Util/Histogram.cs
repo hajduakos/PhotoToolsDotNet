@@ -18,13 +18,13 @@ namespace FilterLib.Util
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
                 int h = image.Height;
-                int wMul3 = image.Width * 3;
+                int width_3 = image.Width * 3;
                 unsafe
                 {
                     for (int y = 0; y < h; ++y)
                     {
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        for (int x = 0; x < wMul3; x += 3)
+                        for (int x = 0; x < width_3; x += 3)
                             ++histogram[(int)(.299 * row[x + 2] + .587 * row[x + 1] + .114 * row[x])];
                     }
                 }

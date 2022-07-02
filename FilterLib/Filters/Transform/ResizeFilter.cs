@@ -64,7 +64,7 @@ namespace FilterLib.Filters.Transform
             using (DisposableBitmapData bmd = new(resized, PixelFormat.Format24bppRgb))
             using (DisposableBitmapData bmdOrig = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = resized.Width * 3;
+                int width_3 = resized.Width * 3;
                 int h = resized.Height;
                 int x, y;
                 int x0, y0, x1, y1;
@@ -80,15 +80,15 @@ namespace FilterLib.Filters.Transform
                         // Get row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             switch (Interpolation)
                             {
                                 case InterpolationMode.NearestNeighbor:
                                     y0 = (int)Math.Round(y * hScale);
                                     x0 = (int)Math.Round(x / 3 * wScale) * 3;
-                                    byte* rowOrg = (byte*)bmdOrig.Scan0 + (y0 * bmdOrig.Stride);
-                                    for (int i = 0; i < 3; i++) row[x + i] = rowOrg[x0 + i];
+                                    byte* rowOrig = (byte*)bmdOrig.Scan0 + (y0 * bmdOrig.Stride);
+                                    for (int i = 0; i < 3; i++) row[x + i] = rowOrig[x0 + i];
                                     break;
                                 case InterpolationMode.Bilinear:
                                     float yf = y * hScale;
@@ -101,14 +101,14 @@ namespace FilterLib.Filters.Transform
                                     x1 = (int)Math.Ceiling(xf) * 3;
                                     float xRatio1 = xf - x0 / 3;
                                     float xRatio0 = 1 - xRatio1;
-                                    byte* rowOrg0 = (byte*)bmdOrig.Scan0 + (y0 * bmdOrig.Stride);
-                                    byte* rowOrg1 = (byte*)bmdOrig.Scan0 + (y1 * bmdOrig.Stride);
+                                    byte* rowOrig0 = (byte*)bmdOrig.Scan0 + (y0 * bmdOrig.Stride);
+                                    byte* rowOrig1 = (byte*)bmdOrig.Scan0 + (y1 * bmdOrig.Stride);
                                     for (int i = 0; i < 3; i++)
                                         row[x + i] = (byte)(
-                                            yRatio0 * xRatio0 * rowOrg0[x0 + i] +
-                                            yRatio1 * xRatio0 * rowOrg1[x0 + i] +
-                                            yRatio0 * xRatio1 * rowOrg0[x1 + i] +
-                                            yRatio1 * xRatio1 * rowOrg1[x1 + i]);
+                                            yRatio0 * xRatio0 * rowOrig0[x0 + i] +
+                                            yRatio1 * xRatio0 * rowOrig1[x0 + i] +
+                                            yRatio0 * xRatio1 * rowOrig0[x1 + i] +
+                                            yRatio1 * xRatio1 * rowOrig1[x1 + i]);
                                     break;
                                 default:
                                     throw new System.ArgumentException($"Unknown interpolation mode: {Interpolation}");

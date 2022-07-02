@@ -55,7 +55,7 @@ namespace FilterLib.Filters.Border
             reporter?.Start();
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3;
+                int width_3 = image.Width * 3;
                 int w = image.Width, h = image.Height;
                 int x, y;
                 float xShifted, yShifted, ellipseRadius;
@@ -74,7 +74,7 @@ namespace FilterLib.Filters.Border
                         // Get row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             // Calculate coordinates with the origin at the center
                             xShifted = x / 3f - halfWidth;

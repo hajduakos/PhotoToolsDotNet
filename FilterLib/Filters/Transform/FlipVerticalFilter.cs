@@ -17,7 +17,7 @@ namespace FilterLib.Filters.Transform
             reporter?.Start();
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3; // Width of a row
+                int width_3 = image.Width * 3; // Width of a row
                 int h = image.Height;
                 int hDiv2 = h / 2; // Half the height
                 int x, y, stride = bmd.Stride;
@@ -31,7 +31,7 @@ namespace FilterLib.Filters.Transform
                         byte* row1 = (byte*)bmd.Scan0 + (y * stride);
                         byte* row2 = (byte*)bmd.Scan0 + ((h - y - 1) * stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; ++x)
+                        for (x = 0; x < width_3; ++x)
                         {
                             swap = row1[x];
                             row1[x] = row2[x];

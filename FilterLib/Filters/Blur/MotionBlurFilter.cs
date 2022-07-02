@@ -54,7 +54,7 @@ namespace FilterLib.Filters.Blur
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3;
+                int width_3 = image.Width * 3;
                 int w = image.Width, h = image.Height;
                 int stride = bmd.Stride;
                 int x, y, dx, dy, k;
@@ -70,7 +70,7 @@ namespace FilterLib.Filters.Blur
                     for (y = 0; y < h; ++y)
                     {
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             // We have to sum each component through a line
                             bSum = gSum = rSum = n = 0;

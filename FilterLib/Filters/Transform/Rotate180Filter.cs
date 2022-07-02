@@ -17,7 +17,7 @@ namespace FilterLib.Filters.Transform
             reporter?.Start();
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3;
+                int width_3 = image.Width * 3;
                 int h = image.Height;
                 int hDiv2 = h / 2;
                 int x, y, stride = bmd.Stride;
@@ -31,19 +31,19 @@ namespace FilterLib.Filters.Transform
                         byte* row1 = (byte*)bmd.Scan0 + (y * stride);
                         byte* row2 = (byte*)bmd.Scan0 + ((h - y - 1) * stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             swap = row1[x]; // Blue
-                            row1[x] = row2[wMul3 - x - 3];
-                            row2[wMul3 - x - 3] = swap;
+                            row1[x] = row2[width_3 - x - 3];
+                            row2[width_3 - x - 3] = swap;
 
                             swap = row1[x + 1]; // Green
-                            row1[x + 1] = row2[wMul3 - x - 2];
-                            row2[wMul3 - x - 2] = swap;
+                            row1[x + 1] = row2[width_3 - x - 2];
+                            row2[width_3 - x - 2] = swap;
 
                             swap = row1[x + 2]; // Red
-                            row1[x + 2] = row2[wMul3 - x - 1];
-                            row2[wMul3 - x - 1] = swap;
+                            row1[x + 2] = row2[width_3 - x - 1];
+                            row2[width_3 - x - 1] = swap;
                         }
                         if ((y & 63) == 0) reporter?.Report(y, 0, hDiv2 - 1);
                     }

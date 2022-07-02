@@ -34,7 +34,7 @@ namespace FilterLib.Filters.Edges
                 // Lock bits
                 using DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb);
                 using DisposableBitmapData bmdTmp = new(tmp, PixelFormat.Format24bppRgb);
-                int wMul3 = image.Width * 3;
+                int width_3 = image.Width * 3;
                 int h = image.Height;
                 int x, y, nVal;
                 // Calculate map
@@ -60,7 +60,7 @@ namespace FilterLib.Filters.Edges
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         byte* rowTmp = (byte*)bmdTmp.Scan0 + (y * bmdTmp.Stride);
                         // Iterate through columns
-                        for (x = 3; x < wMul3 - 3; ++x)
+                        for (x = 3; x < width_3 - 3; ++x)
                         {
                             // Overwrite original
                             row[x] = map[row[x], rowTmp[x]];

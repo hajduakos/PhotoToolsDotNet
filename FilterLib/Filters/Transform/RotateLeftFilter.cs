@@ -21,7 +21,7 @@ namespace FilterLib.Filters.Transform
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             using (DisposableBitmapData bmdRot = new(rotated, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3; // Width of a row
+                int width_3 = image.Width * 3; // Width of a row
                 int rotH = rotated.Height;
                 int rotStride = bmdRot.Stride;
                 int h = image.Height; // Image height
@@ -37,7 +37,7 @@ namespace FilterLib.Filters.Transform
                         // Get row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             idx = (rotH - x / 3 - 1) * rotStride + y * 3; // Index in rotated image
                             rotStart[idx] = row[x];

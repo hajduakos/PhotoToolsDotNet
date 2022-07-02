@@ -48,7 +48,7 @@ namespace FilterLib.Filters.Other
             {
                 int w = image.Width, h = image.Height;
                 int stride = bmd.Stride;
-                int wMul3 = image.Width * 3; // Width of a row
+                int width_3 = image.Width * 3; // Width of a row
                 int x, y;
                 float xCorr, yCorr; // Corrected coordinates
                 float halfHeight = (h - 1) / 2f;
@@ -70,7 +70,7 @@ namespace FilterLib.Filters.Other
                         // Get rows
                         byte* row = (byte*)bmd.Scan0 + (y * stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             // Get corrected coordinates
                             xCorr = ((x / 3) - halfWidth) * xMult;

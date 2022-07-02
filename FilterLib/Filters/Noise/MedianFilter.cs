@@ -39,7 +39,7 @@ namespace FilterLib.Filters.Noise
             using Bitmap original = (Bitmap)image.Clone();
             using DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb);
             using DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb);
-            int wMul3 = image.Width * 3;
+            int width_3 = image.Width * 3;
             int h = image.Height;
             int x, y, k, l, min, stride = bmd.Stride;
             byte[,] medianBGR = new byte[3, 9]; // Arrays for sorting
@@ -56,22 +56,22 @@ namespace FilterLib.Filters.Noise
                 {
                     // Get rows
                     byte* row = (byte*)bmd.Scan0 + (y * stride);
-                    byte* rowOrg = (byte*)bmdOrig.Scan0 + (y * stride);
+                    byte* rowOrig = (byte*)bmdOrig.Scan0 + (y * stride);
                     // Iterate through columns
-                    for (x = 3; x < wMul3 - 3; x += 3)
+                    for (x = 3; x < width_3 - 3; x += 3)
                     {
                         // Collect pixel and surroundings
                         for (k = 0; k < 3; ++k)
                         {
-                            medianBGR[k, 0] = rowOrg[k + x - stride - 3];
-                            medianBGR[k, 1] = rowOrg[k + x - stride];
-                            medianBGR[k, 2] = rowOrg[k + x - stride + 3];
-                            medianBGR[k, 3] = rowOrg[k + x - 3];
-                            medianBGR[k, 4] = rowOrg[k + x];
-                            medianBGR[k, 5] = rowOrg[k + x + 3];
-                            medianBGR[k, 6] = rowOrg[k + x + stride - 3];
-                            medianBGR[k, 7] = rowOrg[k + x + stride];
-                            medianBGR[k, 8] = rowOrg[k + x + stride + 3];
+                            medianBGR[k, 0] = rowOrig[k + x - stride - 3];
+                            medianBGR[k, 1] = rowOrig[k + x - stride];
+                            medianBGR[k, 2] = rowOrig[k + x - stride + 3];
+                            medianBGR[k, 3] = rowOrig[k + x - 3];
+                            medianBGR[k, 4] = rowOrig[k + x];
+                            medianBGR[k, 5] = rowOrig[k + x + 3];
+                            medianBGR[k, 6] = rowOrig[k + x + stride - 3];
+                            medianBGR[k, 7] = rowOrig[k + x + stride];
+                            medianBGR[k, 8] = rowOrig[k + x + stride + 3];
                         }
                         // Calculate luminance values
                         for (k = 0; k < 9; ++k)

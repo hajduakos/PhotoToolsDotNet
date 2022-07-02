@@ -45,7 +45,7 @@ namespace FilterLib.Filters.Blur
             {
                 int x, y;
                 int w = image.Width, h = image.Height;
-                int wMul3 = image.Width * 3;
+                int width_3 = image.Width * 3;
                 int stride = bmd.Stride;
                 float sumR, sumG, sumB;
                 int xDiv3;
@@ -79,7 +79,7 @@ namespace FilterLib.Filters.Blur
                         byte* rowTmp = (byte*)bmdTmp.Scan0 + (y * stride);
 
                         // Iterate through each column
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             xDiv3 = x / 3;
                             sumR = sumG = sumB = 0; // Clear sum
@@ -89,7 +89,7 @@ namespace FilterLib.Filters.Blur
                                 int kIdx = r + radius; // Kernel indexer
                                 int idx;
                                 if (xDiv3 + r < 0) idx = 0; // If we are outside the image at the left, take the leftmost pixel
-                                else if (xDiv3 + r >= w) idx = wMul3 - 3;  // If we are outside the image at the right, take the rightmost pixel
+                                else if (xDiv3 + r >= w) idx = width_3 - 3;  // If we are outside the image at the right, take the rightmost pixel
                                 else idx = x + r * 3; // Else take the actual pixel
                                 // Add to the sum
                                 sumB += kernel[kIdx] * row[idx];
@@ -107,7 +107,7 @@ namespace FilterLib.Filters.Blur
 
                     // Then iterate through columns and do vertical blur
                     // The result is in 'image'
-                    for (x = 0; x < wMul3; x += 3)
+                    for (x = 0; x < width_3; x += 3)
                     {
                         // Get columns
                         byte* col = (byte*)bmd.Scan0 + x;
@@ -137,7 +137,7 @@ namespace FilterLib.Filters.Blur
                             col[j_stride + 2] = (byte)sumR;
                         }
                         // Report progress from 50% to 100%
-                        if ((x & 63) == 0) reporter?.Report(x + wMul3, 0, wMul3 * 2 - 3);
+                        if ((x & 63) == 0) reporter?.Report(x + width_3, 0, width_3 * 2 - 3);
                     }
                 }
             }

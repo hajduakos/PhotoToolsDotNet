@@ -74,7 +74,7 @@ namespace FilterLib.Filters.Other
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             using (DisposableBitmapData bmdNew = new(wavesBmp, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3; // Width of a row
+                int width_3 = image.Width * 3; // Width of a row
                 int stride = bmd.Stride;
                 int strideNew = bmdNew.Stride;
 
@@ -89,7 +89,7 @@ namespace FilterLib.Filters.Other
                     if (Direction == WaveDirection.Horizontal) // Horizontal waves
                     {
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             // Calculate offset
                             offset = (int)MathF.Round(MathF.Sin(freq * x / 3) * amplitudePx);
@@ -106,7 +106,7 @@ namespace FilterLib.Filters.Other
                                 newstart[idx2 + 2] = bmdstart[idx1 + 2];
                             }
 
-                            if ((x & 63) == 0) reporter?.Report(x, 0, wMul3 - 3);
+                            if ((x & 63) == 0) reporter?.Report(x, 0, width_3 - 3);
                         }
                     }
                     else // Vertical waves
@@ -121,7 +121,7 @@ namespace FilterLib.Filters.Other
                             offsetMul3 = offset * 3;
 
                             // Iterate through columns and move pixels
-                            for (x = 0; x < wMul3; ++x) newstart[y * strideNew + x + amplitudePxMul3 - offsetMul3] = bmdstart[y * stride + x];
+                            for (x = 0; x < width_3; ++x) newstart[y * strideNew + x + amplitudePxMul3 - offsetMul3] = bmdstart[y * stride + x];
 
                             if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
                         }

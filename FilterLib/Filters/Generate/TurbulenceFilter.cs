@@ -26,7 +26,7 @@ namespace FilterLib.Filters.Generate
             {
                 int x, y;
                 int w = image.Width;
-                int wMul3 = w * 3;
+                int width_3 = w * 3;
                 int h = image.Height;
                 if (reporter != null) reporter.Report(0, 0, 2 * h - 1);
                 float[,] turbulence = GenerateTurbulence(w, h);
@@ -41,7 +41,7 @@ namespace FilterLib.Filters.Generate
                         // Get row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             row[x] = row[x + 1] = row[x + 2] = (byte)(turbulence[x / 3, y] * 255);
                         }

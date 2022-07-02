@@ -43,15 +43,15 @@ namespace FilterLib.Filters.Dither
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
                 int pxWithErrorAdded;
-                int wMul3 = image.Width * 3;
+                int width_3 = image.Width * 3;
                 int h = image.Height;
                 int x, y;
                 int xSub, ySub;
                 float intervalSize = 255f / (levels - 1); // Size of an interval
                 int roundedColor; // Color rounded to the nearest color level
                 float quantErr;
-                float[,] quantErrArray = new float[wMul3, h];
-                for (x = 0; x < wMul3; x++) for (y = 0; y < h; y++) quantErrArray[x, y] = 0;
+                float[,] quantErrArray = new float[width_3, h];
+                for (x = 0; x < width_3; x++) for (y = 0; y < h; y++) quantErrArray[x, y] = 0;
 
                 float[,] diffusionMatrix = matrix.CopyMatrix();
 
@@ -63,7 +63,7 @@ namespace FilterLib.Filters.Dither
                         // Get row
                         byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; ++x)
+                        for (x = 0; x < width_3; ++x)
                         {
                             // Add quantization error
                             pxWithErrorAdded = (int)(row[x] + quantErrArray[x, y]);
@@ -76,14 +76,14 @@ namespace FilterLib.Filters.Dither
                             // Sum quantization error
                             // First row
                             for (xSub = matrix.Offset + 1; xSub < matrix.Width; ++xSub)
-                                if (x + (xSub - matrix.Offset) * 3 < wMul3)
+                                if (x + (xSub - matrix.Offset) * 3 < width_3)
                                     quantErrArray[x + (xSub - matrix.Offset) * 3, y] += quantErr * diffusionMatrix[xSub, 0];
 
                             // Other rows
                             for (ySub = 1; ySub < matrix.Height; ++ySub)
                                 if (y + ySub < h)
                                     for (xSub = 0; xSub < matrix.Width; ++xSub)
-                                        if (x + (xSub - matrix.Offset) * 3 < wMul3 && x + (xSub - matrix.Offset) * 3 >= 0)
+                                        if (x + (xSub - matrix.Offset) * 3 < width_3 && x + (xSub - matrix.Offset) * 3 >= 0)
                                             quantErrArray[x + (xSub - matrix.Offset) * 3, y + ySub] += quantErr * diffusionMatrix[xSub, ySub];
 
                             // Replace color

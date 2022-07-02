@@ -43,7 +43,7 @@ namespace FilterLib.Tests
             if (actual.Height != expected.Height) return false;
             using DisposableBitmapData bmdAct = new(actual, PixelFormat.Format24bppRgb);
             using DisposableBitmapData bmdExp = new(expected, PixelFormat.Format24bppRgb);
-            int wMul3 = actual.Width * 3;
+            int width_3 = actual.Width * 3;
             int h = actual.Height;
             int x, y;
             unsafe
@@ -54,7 +54,7 @@ namespace FilterLib.Tests
                     byte* rowAct = (byte*)bmdAct.Scan0 + (y * bmdAct.Stride);
                     byte* rowExp = (byte*)bmdExp.Scan0 + (y * bmdExp.Stride);
                     // Iterate through columns
-                    for (x = 0; x < wMul3; ++x)
+                    for (x = 0; x < width_3; ++x)
                         if (Math.Abs(rowAct[x] - rowExp[x]) > tolerance)
                             return false;
                 }

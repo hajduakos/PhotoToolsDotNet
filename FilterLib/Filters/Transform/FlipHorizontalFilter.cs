@@ -17,7 +17,7 @@ namespace FilterLib.Filters.Transform
             reporter?.Start();
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3; // Width of a row
+                int width_3 = image.Width * 3; // Width of a row
                 int wDiv2 = image.Width / 2 * 3; // Half the width
                 int h = image.Height;
                 int x, y;
@@ -33,16 +33,16 @@ namespace FilterLib.Filters.Transform
                         for (x = 0; x < wDiv2; x += 3)
                         {
                             swap = row[x]; // Blue
-                            row[x] = row[wMul3 - x - 3];
-                            row[wMul3 - x - 3] = swap;
+                            row[x] = row[width_3 - x - 3];
+                            row[width_3 - x - 3] = swap;
 
                             swap = row[x + 1]; // Green
-                            row[x + 1] = row[wMul3 - x - 2];
-                            row[wMul3 - x - 2] = swap;
+                            row[x + 1] = row[width_3 - x - 2];
+                            row[width_3 - x - 2] = swap;
 
                             swap = row[x + 2]; // Red
-                            row[x + 2] = row[wMul3 - x - 1];
-                            row[wMul3 - x - 1] = swap;
+                            row[x + 2] = row[width_3 - x - 1];
+                            row[width_3 - x - 1] = swap;
                         }
                         if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
                     }

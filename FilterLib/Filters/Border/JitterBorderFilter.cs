@@ -59,7 +59,7 @@ namespace FilterLib.Filters.Border
                 Random rnd = new(Seed);
                 int w = image.Width, h = image.Height;
                 int stride = bmd.Stride;
-                int wMul3 = image.Width * 3; // Width of a row
+                int width_3 = image.Width * 3; // Width of a row
                 int x, y, distanceFromNearestEdge;
                 int borderWidth = Width.ToAbsolute(Math.Max(w, h));
                 double[] map = new double[borderWidth + 1];
@@ -72,7 +72,7 @@ namespace FilterLib.Filters.Border
                         // Get rows
                         byte* row = (byte*)bmd.Scan0 + (y * stride);
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             distanceFromNearestEdge = Math.Min(Math.Min(x / 3, y), Math.Min(w - x / 3 - 1, h - y - 1));
                             if (distanceFromNearestEdge > borderWidth) continue;

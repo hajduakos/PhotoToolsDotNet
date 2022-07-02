@@ -51,7 +51,7 @@ namespace FilterLib.Filters.Mosaic
             // Clone original image for iteration
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int wMul3 = image.Width * 3;
+                int width_3 = image.Width * 3;
                 int h = image.Height;
                 int x, y, xSub, ySub, sizeMul3 = size * 3, rSum, gSum, bSum, n;
                 byte rNew, gNew, bNew;
@@ -62,7 +62,7 @@ namespace FilterLib.Filters.Mosaic
                     for (y = 0; y < h; y += size)
                     {
                         // Iterate through block columns
-                        for (x = 0; x < wMul3; x += sizeMul3)
+                        for (x = 0; x < width_3; x += sizeMul3)
                         {
                             byte* row;
                             // Determine block color based on mode
@@ -74,7 +74,7 @@ namespace FilterLib.Filters.Mosaic
                                     {
                                         // Get row
                                         row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                                        for (xSub = 0; xSub < sizeMul3 && x + xSub < wMul3; xSub += 3)
+                                        for (xSub = 0; xSub < sizeMul3 && x + xSub < width_3; xSub += 3)
                                         {
                                             rSum += row[x + xSub + 2];
                                             gSum += row[x + xSub + 1];
@@ -88,7 +88,7 @@ namespace FilterLib.Filters.Mosaic
                                     break;
                                 case PixelateMode.MidPoint:
                                     row = (byte*)bmd.Scan0 + (Math.Min(y + size / 2, h - 1) * bmd.Stride);
-                                    int xMid = Math.Min(x + (size / 2) * 3, wMul3 - 3);
+                                    int xMid = Math.Min(x + (size / 2) * 3, width_3 - 3);
                                     rNew = row[xMid + 2];
                                     gNew = row[xMid + 1];
                                     bNew = row[xMid];
@@ -102,7 +102,7 @@ namespace FilterLib.Filters.Mosaic
                             {
                                 // Get row
                                 row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                                for (xSub = 0; xSub < sizeMul3 && x + xSub < wMul3; xSub += 3)
+                                for (xSub = 0; xSub < sizeMul3 && x + xSub < width_3; xSub += 3)
                                 {
                                     row[x + xSub + 2] = rNew;
                                     row[x + xSub + 1] = gNew;

@@ -80,7 +80,7 @@ namespace FilterLib.Filters.Mosaic
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
                 int w = image.Width;
-                int wMul3 = image.Width * 3; // Width of a row
+                int width_3 = image.Width * 3; // Width of a row
                 int h = image.Height;
                 int x, y, xSub, ySub, size_3 = size * 3, i_3;
                 int stride = bmd.Stride;
@@ -116,12 +116,12 @@ namespace FilterLib.Filters.Mosaic
                     // First step: averaging
                     for (y = 0; y < h; y += size)
                     {
-                        for (x = 0; x < wMul3; x += size_3)
+                        for (x = 0; x < width_3; x += size_3)
                         {
                             rSum = gSum = bSum = n = 0; // Clear sums
                             for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
                             {
-                                for (xSub = 0; xSub < size_3 && x + xSub < wMul3; xSub += 3)
+                                for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                                 {
                                     rSum += imgStartPtr[(y + ySub) * stride + x + xSub + 2];
                                     gSum += imgStartPtr[(y + ySub) * stride + x + xSub + 1];
@@ -144,7 +144,7 @@ namespace FilterLib.Filters.Mosaic
                     for (y = 0; y < h; ++y)
                     {
                         // Iterate through columns
-                        for (x = 0; x < wMul3; x += 3)
+                        for (x = 0; x < width_3; x += 3)
                         {
                             i_3 = x / 3;
                             // Get current block
