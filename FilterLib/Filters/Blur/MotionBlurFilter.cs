@@ -55,51 +55,45 @@ namespace FilterLib.Filters.Blur
             using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
             {
                 int width_3 = image.Width * 3;
-                int w = image.Width, h = image.Height;
-                int stride = bmd.Stride;
-                int x, y, dx, dy, k;
                 float sinAngle = MathF.Sin(Angle * MathF.PI / 180);
                 float cosAngle = MathF.Cos(Angle * MathF.PI / 180);
-                int rSum, gSum, bSum, n;
-                int xAct, yAct, idx;
+                int idx, rSum, gSum, bSum, n;
                 unsafe
                 {
                     byte* bmdstart = (byte*)bmd.Scan0;
                     byte* origStart = (byte*)bmdOrig.Scan0;
                     // Iterate through rows
-                    for (y = 0; y < h; ++y)
+                    for (int y = 0; y < image.Height; ++y)
                     {
                         // Iterate through columns
-                        for (x = 0; x < width_3; x += 3)
+                        for (int x = 0; x < width_3; x += 3)
                         {
                             // We have to sum each component through a line
                             bSum = gSum = rSum = n = 0;
                             // Iterate through each pixel of the line
-                            for (k = -length; k <= length; ++k)
+                            for (int k = -length; k <= length; ++k)
                             {
-                                dx = (int)MathF.Round(k * cosAngle); // Horizontal distance from the center pixel
-                                dy = (int)MathF.Round(k * sinAngle); // Vertical distance from the center pixel
-                                xAct = x / 3 + dx; // x coord. of the actual pixel
-                                yAct = y + dy; // y coord. of the actual pixel
+                                int dx = (int)MathF.Round(k * cosAngle); // Horizontal distance from the center pixel
+                                int dy = (int)MathF.Round(k * sinAngle); // Vertical distance from the center pixel
+                                int xAct = x / 3 + dx; // x coord. of the actual pixel
+                                int yAct = y + dy; // y coord. of the actual pixel
                                 // If the pixel is in the bounds of the image
-                                if (xAct >= 0 && xAct < w && yAct >= 0 && yAct < h)
+                                if (xAct >= 0 && xAct < image.Width && yAct >= 0 && yAct < image.Height)
                                 {
-                                    idx = yAct * stride + xAct * 3;   // Calculate index
+                                    idx = yAct * bmd.Stride + xAct * 3;   // Calculate index
                                     rSum += origStart[idx + 2]; // Sum red component
                                     gSum += origStart[idx + 1]; // Sum blue component
                                     bSum += origStart[idx];     // Sum green component
                                     ++n; // Number of items
                                 }
                             }
-                            idx = y * stride + x; // Index of the center pixel
+                            idx = y * bmd.Stride + x; // Index of the center pixel
                             // Calculate average
                             bmdstart[idx + 2] = (byte)(rSum / n);
                             bmdstart[idx + 1] = (byte)(gSum / n);
                             bmdstart[idx] = (byte)(bSum / n);
                         }
-
-
-                        if ((y & 31) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, image.Height - 1);
                     }
                 }
             }
