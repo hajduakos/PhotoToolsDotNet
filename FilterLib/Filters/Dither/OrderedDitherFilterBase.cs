@@ -68,7 +68,7 @@ namespace FilterLib.Filters.Dither
                             // Calculate new value using dither matrix
                             row[x] = (byte)((roundedColor + Matrix[xDiv3 % mw, y % mh] * intervalSize > row[x]) ? roundedColor : (roundedColor + intervalSize));
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, h - 1);
                     }
                 }
             }

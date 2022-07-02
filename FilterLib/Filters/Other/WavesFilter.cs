@@ -79,7 +79,7 @@ namespace FilterLib.Filters.Other
                 int strideNew = bmdNew.Stride;
 
 
-                int x, y, offset, offsetMul3, idx1, idx2, amplitudePxMul3 = amplitudePx * 3;
+                int x, y, offset, offset_3, idx1, idx2, amplitudePx_3 = amplitudePx * 3;
                 float freq = 2 * MathF.PI / waveLengthPx;
                 unsafe
                 {
@@ -118,12 +118,12 @@ namespace FilterLib.Filters.Other
                             offset = (int)MathF.Round(MathF.Sin(freq * y) * amplitudePx);
                             if (offset > 0) offset = Math.Min(amplitudePx, offset);
                             else offset = -Math.Min(amplitudePx, -offset);
-                            offsetMul3 = offset * 3;
+                            offset_3 = offset * 3;
 
                             // Iterate through columns and move pixels
-                            for (x = 0; x < width_3; ++x) newstart[y * strideNew + x + amplitudePxMul3 - offsetMul3] = bmdstart[y * stride + x];
+                            for (x = 0; x < width_3; ++x) newstart[y * strideNew + x + amplitudePx_3 - offset_3] = bmdstart[y * stride + x];
 
-                            if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                            reporter?.Report(y, 0, h - 1);
                         }
                     }
                 }

@@ -53,7 +53,7 @@ namespace FilterLib.Filters.Mosaic
             {
                 int width_3 = image.Width * 3;
                 int h = image.Height;
-                int x, y, xSub, ySub, sizeMul3 = size * 3, rSum, gSum, bSum, n;
+                int x, y, xSub, ySub, size_3 = size * 3, rSum, gSum, bSum, n;
                 byte rNew, gNew, bNew;
                 
                 unsafe
@@ -62,7 +62,7 @@ namespace FilterLib.Filters.Mosaic
                     for (y = 0; y < h; y += size)
                     {
                         // Iterate through block columns
-                        for (x = 0; x < width_3; x += sizeMul3)
+                        for (x = 0; x < width_3; x += size_3)
                         {
                             byte* row;
                             // Determine block color based on mode
@@ -74,7 +74,7 @@ namespace FilterLib.Filters.Mosaic
                                     {
                                         // Get row
                                         row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                                        for (xSub = 0; xSub < sizeMul3 && x + xSub < width_3; xSub += 3)
+                                        for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                                         {
                                             rSum += row[x + xSub + 2];
                                             gSum += row[x + xSub + 1];
@@ -102,7 +102,7 @@ namespace FilterLib.Filters.Mosaic
                             {
                                 // Get row
                                 row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                                for (xSub = 0; xSub < sizeMul3 && x + xSub < width_3; xSub += 3)
+                                for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                                 {
                                     row[x + xSub + 2] = rNew;
                                     row[x + xSub + 1] = gNew;
@@ -110,7 +110,7 @@ namespace FilterLib.Filters.Mosaic
                                 }
                             }
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, h - 1);
                     }
                 }
             }

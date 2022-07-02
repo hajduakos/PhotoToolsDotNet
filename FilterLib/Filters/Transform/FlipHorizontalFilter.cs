@@ -44,7 +44,7 @@ namespace FilterLib.Filters.Transform
                             row[x + 2] = row[width_3 - x - 1];
                             row[width_3 - x - 1] = swap;
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, h - 1);
                     }
                 }
             }

@@ -65,7 +65,7 @@ namespace FilterLib.Filters.Other
 
                             row[x] = (byte)nVal.Clamp(0, 255);
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, h - 1);
                     }
                 }
             }

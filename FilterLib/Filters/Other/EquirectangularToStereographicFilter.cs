@@ -134,7 +134,7 @@ namespace FilterLib.Filters.Other
                                 + bmdStart[y0 * bmdStride + x1 + 2] * xFrac * (1 - yFrac)
                                 + bmdStart[y1 * bmdStride + x1 + 2] * xFrac * yFrac);
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, h - 1);
                     }
                 }
             }

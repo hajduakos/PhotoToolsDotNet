@@ -86,7 +86,7 @@ namespace FilterLib.Filters.Generate
                                 255 * Math.Abs(MathF.Sin(sin_mult * (MathF.Sqrt(xShifted * xShifted + yShifted * yShifted) + twist * turbulence[xDiv3, y])
                                 )));
                         }
-                        if ((y & 63) == 0) reporter?.Report(h + y, 0, 2 * h - 1);
+                        reporter?.Report(h + y, 0, 2 * h - 1);
                     }
                 }
 

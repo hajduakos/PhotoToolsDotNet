@@ -89,7 +89,7 @@ namespace FilterLib.Filters.Dither
                             // Replace color
                             row[x] = (byte)roundedColor;
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, h - 1);
                     }
                 }
             }

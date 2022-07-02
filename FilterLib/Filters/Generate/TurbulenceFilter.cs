@@ -45,7 +45,7 @@ namespace FilterLib.Filters.Generate
                         {
                             row[x] = row[x + 1] = row[x + 2] = (byte)(turbulence[x / 3, y] * 255);
                         }
-                        if ((y & 63) == 0) reporter?.Report(h + y, 0, 2 * h - 1);
+                        reporter?.Report(h + y, 0, 2 * h - 1);
                     }
                 }
 

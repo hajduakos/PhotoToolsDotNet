@@ -79,7 +79,7 @@ namespace FilterLib.Filters.Transform
             Bitmap cropped = new(w0, h0);
             int x, y;
             int width_3 = cropped.Width * 3;
-            int x0Mul3 = x0 * 3;
+            int x0_3 = x0 * 3;
             using (DisposableBitmapData bmd = new(cropped, PixelFormat.Format24bppRgb))
             using (DisposableBitmapData bmdOrig = new(image, PixelFormat.Format24bppRgb))
             {
@@ -94,11 +94,11 @@ namespace FilterLib.Filters.Transform
                         // Iterate through columns
                         for (x = 0; x < width_3; x += 3)
                         {
-                            row[x] = rowOrig[x0Mul3 + x];
-                            row[x + 1] = rowOrig[x0Mul3 + x + 1];
-                            row[x + 2] = rowOrig[x0Mul3 + x + 2];
+                            row[x] = rowOrig[x0_3 + x];
+                            row[x + 1] = rowOrig[x0_3 + x + 1];
+                            row[x + 2] = rowOrig[x0_3 + x + 2];
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h0 - 1);
+                        reporter?.Report(y, 0, h0 - 1);
                     }
                 }
             }

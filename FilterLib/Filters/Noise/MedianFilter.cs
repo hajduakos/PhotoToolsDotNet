@@ -103,7 +103,7 @@ namespace FilterLib.Filters.Noise
                         row[x + 1] = (byte)(op0 * row[x + 1] + op1 * medianBGR[1, 4]);
                         row[x + 2] = (byte)(op0 * row[x + 2] + op1 * medianBGR[2, 4]);
                     }
-                    if ((y & 63) == 0) reporter?.Report(y, 1, h - 2);
+                    reporter?.Report(y, 1, h - 2);
                 }
 
             }

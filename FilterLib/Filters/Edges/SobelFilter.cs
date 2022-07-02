@@ -65,7 +65,7 @@ namespace FilterLib.Filters.Edges
                             // Overwrite original
                             row[x] = map[row[x], rowTmp[x]];
                         }
-                        if ((y & 63) == 0) subRep.Report(y, 0, h - 1);
+                        subRep.Report(y, 0, h - 1);
                     }
                 }
             }

@@ -37,7 +37,7 @@ namespace FilterLib.Filters.Transform
                             row1[x] = row2[x];
                             row2[x] = swap;
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, hDiv2 - 1);
+                        reporter?.Report(y, 0, hDiv2 - 1);
                     }
                 }
             }

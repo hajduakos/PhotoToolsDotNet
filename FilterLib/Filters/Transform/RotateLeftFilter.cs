@@ -44,7 +44,7 @@ namespace FilterLib.Filters.Transform
                             rotStart[idx + 1] = row[x + 1];
                             rotStart[idx + 2] = row[x + 2];
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, h - 1);
                     }
                 }
             }

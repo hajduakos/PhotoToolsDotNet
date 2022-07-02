@@ -98,7 +98,7 @@ namespace FilterLib.Filters.Border
                                 row[x + 2] = (byte)(row[x + 2] * op + Color.R * (1 - op));
                             }
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, h - 1);
                     }
                 }
             }

@@ -83,7 +83,7 @@ namespace FilterLib.Filters.Border
                                 row[x] = (byte)Color.B;
                             }
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, h - 1);
                     }
                 }
             }

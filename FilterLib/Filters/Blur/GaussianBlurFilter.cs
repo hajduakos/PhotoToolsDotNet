@@ -102,7 +102,7 @@ namespace FilterLib.Filters.Blur
                         }
 
                         // Report progress from 0% to 50%
-                        if ((y & 63) == 0) reporter?.Report(y, 0, h * 2 - 1);
+                        reporter?.Report(y, 0, h * 2 - 1);
                     }
 
                     // Then iterate through columns and do vertical blur

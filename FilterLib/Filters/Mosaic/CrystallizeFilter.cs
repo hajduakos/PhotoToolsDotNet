@@ -136,7 +136,7 @@ namespace FilterLib.Filters.Mosaic
                             avgColors[x / size_3, y / size, 1] = (byte)(avg * gSum / n + (1 - avg) * imgStartPtr[pnt.y * stride + pnt.x * 3 + 1]);
                             avgColors[x / size_3, y / size, 2] = (byte)(avg * rSum / n + (1 - avg) * imgStartPtr[pnt.y * stride + pnt.x * 3 + 2]);
                         }
-                        if ((y & 63) == 0) reporter?.Report(y, 0, 2 * h - 1);
+                        reporter?.Report(y, 0, 2 * h - 1);
                     }
 
 
@@ -171,7 +171,7 @@ namespace FilterLib.Filters.Mosaic
                                 imgStartPtr[y * stride + x + xSub] = avgColors[minPoint.x / size, minPoint.y / size, xSub];
                         }
 
-                        if ((y & 63) == 0) reporter?.Report(h + y, 0, 2 * h - 1);
+                        reporter?.Report(h + y, 0, 2 * h - 1);
                     }
                 }
             }

@@ -65,7 +65,7 @@ namespace FilterLib.Filters.Mosaic
                 using DisposableBitmapData bmd = new(original, PixelFormat.Format24bppRgb);
                 int width_3 = original.Width * 3;
                 int h = original.Height;
-                int x, y, xSub, ySub, sizeMul3 = size * 3, rSum, gSum, bSum, n;
+                int x, y, xSub, ySub, size_3 = size * 3, rSum, gSum, bSum, n;
                 // Create graphics from image to draw on
                 using (Graphics gfx = Graphics.FromImage(image))
                 {
@@ -75,14 +75,14 @@ namespace FilterLib.Filters.Mosaic
                         for (y = 0; y < h; y += size)
                         {
                             // Iterate through block columns
-                            for (x = 0; x < width_3; x += sizeMul3)
+                            for (x = 0; x < width_3; x += size_3)
                             {
                                 rSum = gSum = bSum = n = 0; // Clear sums
                                 for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
                                 {
                                     // Get row
                                     byte* row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                                    for (xSub = 0; xSub < sizeMul3 && x + xSub < width_3; xSub += 3)
+                                    for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                                     {
                                         rSum += row[x + xSub + 2];
                                         gSum += row[x + xSub + 1];
@@ -98,7 +98,7 @@ namespace FilterLib.Filters.Mosaic
                                 gfx.SmoothingMode = SmoothingMode.AntiAlias;
                                 gfx.FillEllipse(pixel, x / 3 + size / 4, y + size / 4, size / 2, size / 2); // Fill center circle
                             }
-                            if ((y & 63) == 0) reporter?.Report(y, 0, h - 1);
+                            reporter?.Report(y, 0, h - 1);
                         }
                     }
                 }
