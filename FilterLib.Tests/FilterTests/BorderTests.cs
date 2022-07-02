@@ -18,23 +18,23 @@ namespace FilterLib.Tests.FilterTests
             string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
 
             yield return new TestCaseData("_input.bmp",
-                new JitterBorderFilter(Size.Absolute(0), new RGB(0, 0, 0), 0), 1);
+                new JitterBorderFilter(Size.Absolute(0), new RGB(0, 0, 0), 0), 0);
             yield return new TestCaseData("JitterBorder_20_Red_0.bmp",
                 new JitterBorderFilter(Size.Absolute(20), new RGB(255, 0, 0), 0), 1);
         
             yield return new TestCaseData("_input.bmp",
-                new FadeBorderFilter(Size.Absolute(0), new RGB(0, 0, 0)), 1);
+                new FadeBorderFilter(Size.Absolute(0), new RGB(0, 0, 0)), 0);
             yield return new TestCaseData("FadeBorder_1_Blue.bmp",
-                new FadeBorderFilter(Size.Absolute(1), new RGB(0, 0, 255)), 1);
+                new FadeBorderFilter(Size.Absolute(1), new RGB(0, 0, 255)), 0);
             yield return new TestCaseData("FadeBorder_20_Red.bmp",
                 new FadeBorderFilter(Size.Absolute(20), new RGB(255, 0, 0)), 1);
             yield return new TestCaseData("FadeBorder_40_Black.bmp",
                 new FadeBorderFilter(Size.Absolute(40), new RGB(0, 0, 0)), 1);
             yield return new TestCaseData("FadeBorder_300_Black.bmp",
-                new FadeBorderFilter(Size.Absolute(300), new RGB(0, 0, 0)), 1);
+                new FadeBorderFilter(Size.Absolute(300), new RGB(0, 0, 0)), 0);
 
             yield return new TestCaseData("_input.bmp",
-                new PatternBorderFilter(Size.Absolute(0), Size.Absolute(0), pattern, BorderPosition.Inside), 1);
+                new PatternBorderFilter(Size.Absolute(0), Size.Absolute(0), pattern, BorderPosition.Inside), 0);
             yield return new TestCaseData("PatternBorder_30px_0_Green_Inside.bmp",
                 new PatternBorderFilter(Size.Absolute(30), Size.Absolute(0), pattern, BorderPosition.Inside), 1);
         
@@ -44,7 +44,7 @@ namespace FilterLib.Tests.FilterTests
                 new PatternBorderFilter(Size.Absolute(20), Size.Relative(.1f), pattern, BorderPosition.Center), 1);
         
             yield return new TestCaseData("_input.bmp",
-                new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside), 1);
+                new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside), 0);
             yield return new TestCaseData("SimpleBorder_30px_0_Green_Inside.bmp",
                 new SimpleBorderFilter(Size.Absolute(30), Size.Absolute(0), new RGB(0, 255, 0), BorderPosition.Inside), 1);
         
@@ -53,7 +53,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData($"SimpleBorder_20px_10pct_Red_Center{suffix}.bmp",
                 new SimpleBorderFilter(Size.Absolute(20), Size.Relative(.1f), new RGB(255, 0, 0), BorderPosition.Center), 1);
         
-            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Relative(3), Size.Relative(2), new RGB(0, 0, 0)), 1);
+            yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Relative(3), Size.Relative(2), new RGB(0, 0, 0)), 0);
             yield return new TestCaseData("Vignette_150pct_60pct_Black.bmp", new VignetteFilter(Size.Relative(1.5f), Size.Relative(0.6f), new RGB(0, 0, 0)), 1);
             yield return new TestCaseData("Vignette_150pct_60pct_Black.bmp", new VignetteFilter(Size.Absolute(120), Size.Absolute(48), new RGB(0, 0, 0)), 1);
             yield return new TestCaseData("Vignette_100pct_90pct_Black.bmp", new VignetteFilter(Size.Relative(1f), Size.Relative(0.9f), new RGB(0, 0, 0)), 1);

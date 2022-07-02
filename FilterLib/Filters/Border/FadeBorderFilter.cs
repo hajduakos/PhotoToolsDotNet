@@ -52,7 +52,7 @@ namespace FilterLib.Filters.Border
                 // Draw rectangles with decreasing alpha value
                 for (int k = 0; k < borderWidth; ++k)
                 {
-                    float alpha = borderWidth == 1 ? 1 : 1 - k / (float)(borderWidth - 1);
+                    float alpha = 1 - k / (float)borderWidth;
                     if (k < image.Height)
                     {
                         for (int x = 0; x < width_3; x += 3)
