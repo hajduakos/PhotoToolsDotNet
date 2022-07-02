@@ -37,10 +37,14 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("Resize_25pct_50pct_BL.bmp",
                 new ResizeFilter(Util.Size.Relative(.25f), Util.Size.Relative(.5f), InterpolationMode.Bilinear), 1);
 
-            yield return new TestCaseData("_input.bmp", new RotateFilter(0, false), 1);
-            yield return new TestCaseData("_input.bmp", new RotateFilter(0, true), 1);
+            yield return new TestCaseData("_input.bmp", new RotateFilter(0, false, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("_input.bmp", new RotateFilter(0, true, InterpolationMode.NearestNeighbor), 1);
             yield return new TestCaseData("Rotate_30_false_NN.bmp", new RotateFilter(30, false, InterpolationMode.NearestNeighbor), 1);
             yield return new TestCaseData("Rotate_30_true_NN.bmp", new RotateFilter(30, true, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("_input.bmp", new RotateFilter(0, false, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("_input.bmp", new RotateFilter(0, true, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Rotate_30_false_BL.bmp", new RotateFilter(30, false, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Rotate_30_true_BL.bmp", new RotateFilter(30, true, InterpolationMode.Bilinear), 1);
 
             yield return new TestCaseData("Rotate180.bmp", new Rotate180Filter(), 0);
 

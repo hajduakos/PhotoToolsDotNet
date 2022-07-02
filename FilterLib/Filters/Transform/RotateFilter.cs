@@ -73,6 +73,8 @@ namespace FilterLib.Filters.Transform
             float cx = image.Width / 2;
             float cy = image.Height / 2;
             int rotWidth_3 = rotated.Width * 3;
+            int x0, y0, x1, y1;
+            byte red, green, blue;
 
             using (DisposableBitmapData bmdRot = new(rotated, PixelFormat.Format24bppRgb))
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
@@ -88,22 +90,68 @@ namespace FilterLib.Filters.Transform
                             float xr = x / 3 - crx;
                             float xOrig = xr * cosAng - yr * sinAng + cx;
                             float yOrig = cy - (xr * sinAng + yr * cosAng);
+                            red = green = blue = 0;
                             switch (Interpolation)
                             {
                                 case InterpolationMode.NearestNeighbor:
-                                    int x0 = (int)Math.Round(xOrig);
-                                    int y0 = (int)Math.Round(yOrig);
+                                    x0 = (int)Math.Round(xOrig);
+                                    y0 = (int)Math.Round(yOrig);
                                     if (x0 >= 0 && x0 < image.Width && y0 >= 0 && y0 < image.Height)
                                     {
                                         byte* pxOrig = (byte*)bmd.Scan0 + y0 * bmd.Stride + (x0 * 3);
-                                        row[x] = pxOrig[0];
-                                        row[x + 1] = pxOrig[1];
-                                        row[x + 2] = pxOrig[2];
+                                        blue = pxOrig[0];
+                                        green = pxOrig[1];
+                                        red = pxOrig[2];
                                     }
+                                    break;
+                                case InterpolationMode.Bilinear:
+                                    x0 = (int)Math.Floor(xOrig);
+                                    y0 = (int)Math.Floor(yOrig);
+                                    x1 = (int)Math.Ceiling(xOrig);
+                                    y1 = (int)Math.Ceiling(yOrig);
+                                    float xRatio1 = xOrig - x0;
+                                    float xRatio0 = 1 - xRatio1;
+                                    float yRatio1 = yOrig - y0;
+                                    float yRatio0 = 1 - yRatio1;
+                                    float redF = 0, greenF = 0, blueF = 0;
+                                    if (x0 >= 0 && x0 < image.Width && y0 >= 0 && y0 < image.Height)
+                                    {
+                                        byte* pxOrig = (byte*)bmd.Scan0 + y0 * bmd.Stride + (x0 * 3);
+                                        blueF += xRatio0 * yRatio0 * pxOrig[0];
+                                        greenF += xRatio0 * yRatio0 * pxOrig[1];
+                                        redF += xRatio0 * yRatio0 * pxOrig[2];
+                                    }
+                                    if (x1 >= 0 && x1 < image.Width && y0 >= 0 && y0 < image.Height)
+                                    {
+                                        byte* pxOrig = (byte*)bmd.Scan0 + y0 * bmd.Stride + (x1 * 3);
+                                        blueF += xRatio1 * yRatio0 * pxOrig[0];
+                                        greenF += xRatio1 * yRatio0 * pxOrig[1];
+                                        redF += xRatio1 * yRatio0 * pxOrig[2];
+                                    }
+                                    if (x0 >= 0 && x0 < image.Width && y1 >= 0 && y1 < image.Height)
+                                    {
+                                        byte* pxOrig = (byte*)bmd.Scan0 + y1 * bmd.Stride + (x0 * 3);
+                                        blueF += xRatio0 * yRatio1 * pxOrig[0];
+                                        greenF += xRatio0 * yRatio1 * pxOrig[1];
+                                        redF += xRatio0 * yRatio1 * pxOrig[2];
+                                    }
+                                    if (x1 >= 0 && x1 < image.Width && y1 >= 0 && y1 < image.Height)
+                                    {
+                                        byte* pxOrig = (byte*)bmd.Scan0 + y1 * bmd.Stride + (x1 * 3);
+                                        blueF += xRatio1 * yRatio1 * pxOrig[0];
+                                        greenF += xRatio1 * yRatio1 * pxOrig[1];
+                                        redF += xRatio1 * yRatio1 * pxOrig[2];
+                                    }
+                                    blue = blueF.ClampToByte();
+                                    green = greenF.ClampToByte();
+                                    red = redF.ClampToByte();
                                     break;
                                 default:
                                     throw new System.ArgumentException($"Unknown interpolation mode: {Interpolation}");
                             }
+                            row[x] = blue;
+                            row[x + 1] = green;
+                            row[x + 2] = red;
                         }
                         reporter?.Report(y, 0, image.Height - 1);
                     }
