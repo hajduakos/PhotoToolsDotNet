@@ -75,9 +75,9 @@ namespace FilterLib.Filters.Adjustments
             blueMap = new byte[256];
             for (int x = 0; x < 256; ++x)
             {
-                redMap[x] = (byte)(x + red).Clamp(0, 255);
-                greenMap[x] = (byte)(x + green).Clamp(0, 255);
-                blueMap[x] = (byte)(x + blue).Clamp(0, 255);
+                redMap[x] = (x + red).ClampToByte();
+                greenMap[x] = (x + green).ClampToByte();
+                blueMap[x] = (x + blue).ClampToByte();
             }
         }
 

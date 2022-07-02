@@ -63,7 +63,7 @@ namespace FilterLib.Filters.Other
                                 bl * convMatrix[0, 2] + bm * convMatrix[1, 2] + br * convMatrix[2, 2])
                                 / Matrix.Divisor + Matrix.Bias;
 
-                            row[x] = (byte)nVal.Clamp(0, 255);
+                            row[x] = nVal.ClampToByte();
                         }
                         reporter?.Report(y, 0, h - 1);
                     }

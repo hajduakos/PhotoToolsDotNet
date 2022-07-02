@@ -28,6 +28,6 @@ namespace FilterLib.Filters.Adjustments
         public GammaFilter(float gamma = 1f) => Gamma = gamma;
 
         /// <inheritdoc/>
-        protected override byte MapComponent(byte comp) => (byte)(255 * System.MathF.Pow(comp / 255f, 1f / gamma)).Clamp(0, 255);
+        protected override byte MapComponent(byte comp) => (255 * System.MathF.Pow(comp / 255f, 1f / gamma)).ClampToByte();
     }
 }

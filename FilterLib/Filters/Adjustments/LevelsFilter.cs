@@ -20,7 +20,7 @@ namespace FilterLib.Filters.Adjustments
         public int Dark
         {
             get { return dark; }
-            set { dark = value.Clamp(0, 255); }
+            set { dark = value.ClampToByte(); }
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace FilterLib.Filters.Adjustments
         public int Light
         {
             get { return light; }
-            set { light = value.Clamp(0, 255); }
+            set { light = value.ClampToByte(); }
         }
 
         /// <summary>

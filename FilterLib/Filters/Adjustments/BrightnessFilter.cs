@@ -30,6 +30,6 @@ namespace FilterLib.Filters.Adjustments
         public BrightnessFilter(int brightness = 0) => Brightness = brightness;
 
         /// <inheritdoc/>
-        protected override byte MapComponent(byte comp) => (byte)(comp + brightness).Clamp(0, 255);
+        protected override byte MapComponent(byte comp) => (comp + brightness).ClampToByte();
     }
 }

@@ -22,6 +22,33 @@ namespace FilterLib.Tests
         public void TestClamp(int expected, int actual) => Assert.AreEqual(expected, actual.Clamp(0, 255));
 
         [Test]
+        [TestCase(0, (-1000))]
+        [TestCase(0, (-1))]
+        [TestCase(0, 0)]
+        [TestCase(1, 1)]
+        [TestCase(25, 25)]
+        [TestCase(127, 127)]
+        [TestCase(254, 254)]
+        [TestCase(255, 255)]
+        [TestCase(255, 256)]
+        [TestCase(255, 1000)]
+        public void TestClampToByteInt(byte expected, int actual) => Assert.AreEqual(expected, actual.ClampToByte());
+
+        [Test]
+        [TestCase(0, (-1000.1f))]
+        [TestCase(0, (-1.1f))]
+        [TestCase(0, 0.2f)]
+        [TestCase(0, 0.5f)]
+        [TestCase(1, 1.1f)]
+        [TestCase(25, 25.1f)]
+        [TestCase(127, 127.1f)]
+        [TestCase(254, 254.9f)]
+        [TestCase(255, 255.1f)]
+        [TestCase(255, 256.1f)]
+        [TestCase(255, 1000.1f)]
+        public void TestClampToByteFloat(byte expected, float actual) => Assert.AreEqual(expected, actual.ClampToByte());
+
+        [Test]
         public void TestRGB()
         {
             Assert.AreEqual(20, new RGB(20, 10, 50).R);

@@ -72,7 +72,7 @@ namespace FilterLib.Filters.Color
         /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
-            *r = *g = *b = (byte)(redF * (*r) + greenF * (*g) + blueF * (*b)).Clamp(0, 255);
+            *r = *g = *b = (redF * (*r) + greenF * (*g) + blueF * (*b)).ClampToByte();
         }
     }
 }

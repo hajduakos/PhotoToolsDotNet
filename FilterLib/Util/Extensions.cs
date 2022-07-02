@@ -21,5 +21,17 @@ namespace FilterLib.Util
             if (value.CompareTo(min) < 0) return min;
             return value;
         }
+
+        /// <summary>
+        /// Clamp a value and convert to byte.
+        /// </summary>
+        /// <returns>Value clamped and converted</returns>
+        public static byte ClampToByte(this int value) => (byte)Clamp(value, 0, 255);
+
+        /// <summary>
+        /// Clamp a value and convert to byte.
+        /// </summary>
+        /// <returns>Value clamped and converted</returns>
+        public static byte ClampToByte(this float value) => (byte)Clamp(value, 0, 255);
     }
 }

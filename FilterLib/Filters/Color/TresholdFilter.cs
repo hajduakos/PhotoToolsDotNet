@@ -19,7 +19,7 @@ namespace FilterLib.Filters.Color
         public int Treshold
         {
             get { return treshold; }
-            set { treshold = value.Clamp(0, 255); }
+            set { treshold = value.ClampToByte(); }
         }
 
         /// <summary>

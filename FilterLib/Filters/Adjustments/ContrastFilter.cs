@@ -32,7 +32,7 @@ namespace FilterLib.Filters.Adjustments
         protected override byte MapComponent(byte comp)
         {
             float normalized = (100 + contrast) / 100f;
-            return (byte)(((comp / 255f - .5f) * normalized + .5f) * 255f).Clamp(0, 255);
+            return (((comp / 255f - .5f) * normalized + .5f) * 255f).ClampToByte();
         }
     }
 }

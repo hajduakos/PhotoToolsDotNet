@@ -6,13 +6,13 @@
     public struct RGB
     {
         /// <summary> Red component </summary>
-        public int R { get; private set; }
+        public byte R { get; private set; }
 
         /// <summary> Green component </summary>
-        public int G { get; private set; }
+        public byte G { get; private set; }
 
         /// <summary> Blue component </summary>
-        public int B { get; private set; }
+        public byte B { get; private set; }
 
         /// <summary>
         /// Constructor with RGB components.
@@ -22,9 +22,9 @@
         /// <param name="b">Blue</param>
         public RGB(int r = 0, int g = 0, int b = 0)
         {
-            this.R = r.Clamp(0, 255);
-            this.G = g.Clamp(0, 255);
-            this.B = b.Clamp(0, 255);
+            R = r.ClampToByte();
+            G = g.ClampToByte();
+            B = b.ClampToByte();
         }
 
         /// <summary>
@@ -36,9 +36,9 @@
             str = str.Replace("RGB(", "").Replace("(", "").Replace(")", "").Replace(" ", "");
             string[] tokens = str.Split(',');
             if (tokens.Length != 3) throw new System.ArgumentException("Expected three comma separated values for RGB.");
-            this.R = int.Parse(tokens[0]).Clamp(0, 255);
-            this.G = int.Parse(tokens[1]).Clamp(0, 255);
-            this.B = int.Parse(tokens[2]).Clamp(0, 255);
+            R = int.Parse(tokens[0]).ClampToByte();
+            G = int.Parse(tokens[1]).ClampToByte();
+            B = int.Parse(tokens[2]).ClampToByte();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@
 
         public override bool Equals(object obj) => obj is RGB r && this == r;
 
-        public override int GetHashCode() => R.GetHashCode() ^ G.GetHashCode() ^ B.GetHashCode();
+        public override int GetHashCode() => (R << 16) | (G << 8) | B;
 
         public static bool operator ==(RGB c1, RGB c2) => c1.R == c2.R && c1.G == c2.G && c1.B == c2.B;
 

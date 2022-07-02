@@ -37,7 +37,7 @@ namespace FilterLib.Filters.Noise
         public int Strength
         {
             get { return strength; }
-            set { strength = value.Clamp(0, 255); }
+            set { strength = value.ClampToByte(); }
         }
 
         /// <summary>
@@ -94,14 +94,14 @@ namespace FilterLib.Filters.Noise
                 }
                 else // Color noise -> separate values added to each channel
                 {
-                    rn = *r + (int)((rnd.NextDouble() * 2 - 1) * strength);
-                    gn = *g + (int)((rnd.NextDouble() * 2 - 1) * strength);
-                    bn = *b + (int)((rnd.NextDouble() * 2 - 1) * strength);
+                    rn = *r + (int)((rnd.NextSingle() * 2 - 1) * strength);
+                    gn = *g + (int)((rnd.NextSingle() * 2 - 1) * strength);
+                    bn = *b + (int)((rnd.NextSingle() * 2 - 1) * strength);
                 }
                 // Overwrite old values
-                *r = (byte)rn.Clamp(0, 255);
-                *g = (byte)gn.Clamp(0, 255);
-                *b = (byte)bn.Clamp(0, 255);
+                *r = rn.ClampToByte();
+                *g = gn.ClampToByte();
+                *b = bn.ClampToByte();
             }
         }
 
