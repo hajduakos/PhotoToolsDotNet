@@ -46,9 +46,9 @@ namespace FilterLib.Filters.Border
             reporter?.Start();
             int borderWidth = Width.ToAbsolute(Math.Max(image.Width, image.Height));
             int width_3 = image.Width * 3;
+            using DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb);
             unsafe
             {
-                using DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb);
                 // Draw rectangles with decreasing alpha value
                 for (int k = 0; k < borderWidth; ++k)
                 {

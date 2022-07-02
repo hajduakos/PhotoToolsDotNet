@@ -52,38 +52,36 @@ namespace FilterLib.Filters.Border
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
-            // Lock bits
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                // Random number generator
                 Random rnd = new(Seed);
-                int w = image.Width, h = image.Height;
-                int stride = bmd.Stride;
-                int width_3 = image.Width * 3; // Width of a row
-                int x, y, distanceFromNearestEdge;
-                int borderWidth = Width.ToAbsolute(Math.Max(w, h));
-                double[] map = new double[borderWidth + 1];
-                for (x = 0; x <= borderWidth; ++x) map[x] = MathF.Sin(x / (float)borderWidth * MathF.PI - MathF.PI / 2) / 2 + 0.5;
+                int width_3 = image.Width * 3;
+                int borderWidth = Width.ToAbsolute(Math.Max(image.Width, image.Height));
+                // Starting from the edge of the image, and going inwards, the probability of
+                // coloring a pixel fades off in with a sine transition for smooth results
+                float[] map = new float[borderWidth + 1];
+                for (int x = 0; x <= borderWidth; ++x)
+                    map[x] = MathF.Sin(x / (float)borderWidth * MathF.PI - MathF.PI / 2) / 2 + .5f;
                 unsafe
                 {
                     // Iterate through rows
-                    for (y = 0; y < h; ++y)
+                    for (int y = 0; y < image.Height; ++y)
                     {
                         // Get rows
-                        byte* row = (byte*)bmd.Scan0 + (y * stride);
+                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
                         // Iterate through columns
-                        for (x = 0; x < width_3; x += 3)
+                        for (int x = 0; x < width_3; x += 3)
                         {
-                            distanceFromNearestEdge = Math.Min(Math.Min(x / 3, y), Math.Min(w - x / 3 - 1, h - y - 1));
+                            int distanceFromNearestEdge = Math.Min(Math.Min(x / 3, y), Math.Min(image.Width - x / 3 - 1, image.Height - y - 1));
                             if (distanceFromNearestEdge > borderWidth) continue;
-                            if (rnd.NextDouble() > map[distanceFromNearestEdge])
+                            if (rnd.NextSingle() > map[distanceFromNearestEdge])
                             {
                                 row[x + 2] = (byte)Color.R;
                                 row[x + 1] = (byte)Color.G;
                                 row[x] = (byte)Color.B;
                             }
                         }
-                        reporter?.Report(y, 0, h - 1);
+                        reporter?.Report(y, 0, image.Height - 1);
                     }
                 }
             }

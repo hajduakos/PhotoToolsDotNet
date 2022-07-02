@@ -4,46 +4,48 @@ using Bitmap = System.Drawing.Bitmap;
 namespace FilterLib.Filters.Adjustments
 {
     /// <summary>
-    /// Automatic levels adjustment filter.
+    /// Automatic levels adjustment by histogram stretching. The idea is to maximalize the
+    /// dark and light levels while limiting the number of pixels that turn completely
+    /// black or white.
     /// </summary>
     [Filter]
     public sealed class AutoLevelsFilter : FilterInPlaceBase
     {
+        private const float LocalLimitPct = 1f / 256;
+        private const float GlobalLimitPct = 0.01f;
+
         /// <summary>
-        /// Get automatic level cropping values.
+        /// Determine dark/light values to be used in levels filter by limiting the total/local number of
+        /// pixels that are lost (become completely black or white).
         /// </summary>
-        /// <param name="image">Image</param>
-        /// <returns>A tuple of the dark and light cropping values</returns>
-        public static (int, int) GetCroppingValues(Bitmap image)
+        /// <returns>Tuple of dark and light cropping values</returns>
+        private static (int, int) GetCroppingValues(Bitmap image)
         {
-            // Get luminance histogram
-            int[] hist = Util.Histogram.GetLuminanceHistogram(image);
-            // Total pixel count
-            int pixels = image.Width * image.Height;
-            // Crop limits
-            int localLimit = pixels / 256;
-            int totalLimit = pixels / 100;
-            // Dark and light crop values
-            int cropLight = 0, cropDark = 0;
-            // Total count of cropped pixels
-            int total = 0;
-            // Dark crop value increases until we reach the crop limit, or the total number
-            // of cropped pixels reaches 1%
-            while (hist[cropDark] < localLimit && total < totalLimit) total += hist[cropDark++];
-            total = 0;
-            // Calculate light crop value like the dark
-            while (hist[255 - cropLight] < localLimit && total < totalLimit) total += hist[255 - cropLight++];
-            return (cropDark, cropLight);
+            int[] lumHistogram = Util.Histogram.GetLuminanceHistogram(image);
+            int totalPixels = image.Width * image.Height;
+            // Local limit to avoid losing individual intensity levels
+            float localLimit = totalPixels * LocalLimitPct;
+            // Global limit to avoid losing too many total pixels
+            float globalLimit = totalPixels * GlobalLimitPct;
+            int light = 0, dark = 0;
+            // Determine dark value
+            int totalLost = 0;
+            while (lumHistogram[dark] < localLimit && totalLost < globalLimit)
+                totalLost += lumHistogram[dark++];
+            // Determine light value
+            totalLost = 0;
+            while (lumHistogram[255 - light] < localLimit && totalLost < globalLimit)
+                totalLost += lumHistogram[255 - light++];
+            return (dark, light);
         }
 
         /// <inheritdoc/>
         public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
         {
             reporter?.Start();
-            // Calculate cropping values
-            (int cropDark, int cropLight) = GetCroppingValues(image);
+            (int dark, int light) = GetCroppingValues(image);
             reporter?.Report(50, 0, 100);
-            new LevelsFilter(cropDark, 255 - cropLight).ApplyInPlace(image, new SubReporter(reporter, 50, 100, 0, 100));
+            new LevelsFilter(dark, 255 - light).ApplyInPlace(image, new SubReporter(reporter, 50, 100, 0, 100));
             reporter?.Done();
         }
     }
