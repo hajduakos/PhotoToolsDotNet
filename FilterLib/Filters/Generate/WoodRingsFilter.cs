@@ -58,7 +58,7 @@ namespace FilterLib.Filters.Generate
             reporter?.Start();
             using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
             {
-                int x, y, xDiv3;
+                int x, y, x_div3;
                 int w = image.Width;
                 int width_3 = w * 3;
                 int h = image.Height;
@@ -78,12 +78,12 @@ namespace FilterLib.Filters.Generate
                         // Iterate through columns
                         for (x = 0; x < width_3; x += 3)
                         {
-                            xDiv3 = x / 3;
-                            xShifted = (xDiv3 - w / 2) / (float)w;
+                            x_div3 = x / 3;
+                            xShifted = (x_div3 - w / 2) / (float)w;
                             yShifted = (y - h / 2) / (float)h;
 
                             row[x] = row[x + 1] = row[x + 2] = (byte)(
-                                255 * Math.Abs(MathF.Sin(sin_mult * (MathF.Sqrt(xShifted * xShifted + yShifted * yShifted) + twist * turbulence[xDiv3, y])
+                                255 * Math.Abs(MathF.Sin(sin_mult * (MathF.Sqrt(xShifted * xShifted + yShifted * yShifted) + twist * turbulence[x_div3, y])
                                 )));
                         }
                         reporter?.Report(h + y, 0, 2 * h - 1);

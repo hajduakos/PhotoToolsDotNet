@@ -48,7 +48,7 @@ namespace FilterLib.Filters.Blur
                 int width_3 = image.Width * 3;
                 int stride = bmd.Stride;
                 float sumR, sumG, sumB;
-                int xDiv3;
+                int x_div3;
 
                 // Calculate the kernel
                 float[] kernel = new float[radius * 2 + 1];
@@ -81,15 +81,15 @@ namespace FilterLib.Filters.Blur
                         // Iterate through each column
                         for (x = 0; x < width_3; x += 3)
                         {
-                            xDiv3 = x / 3;
+                            x_div3 = x / 3;
                             sumR = sumG = sumB = 0; // Clear sum
                             // Iterate through the kernel
                             for (r = -radius; r <= radius; ++r)
                             {
                                 int kIdx = r + radius; // Kernel indexer
                                 int idx;
-                                if (xDiv3 + r < 0) idx = 0; // If we are outside the image at the left, take the leftmost pixel
-                                else if (xDiv3 + r >= w) idx = width_3 - 3;  // If we are outside the image at the right, take the rightmost pixel
+                                if (x_div3 + r < 0) idx = 0; // If we are outside the image at the left, take the leftmost pixel
+                                else if (x_div3 + r >= w) idx = width_3 - 3;  // If we are outside the image at the right, take the rightmost pixel
                                 else idx = x + r * 3; // Else take the actual pixel
                                 // Add to the sum
                                 sumB += kernel[kIdx] * row[idx];
