@@ -106,7 +106,7 @@ namespace FilterLib.Filters.Other
                                 newstart[idx2 + 2] = bmdstart[idx1 + 2];
                             }
 
-                            if ((x & 63) == 0) reporter?.Report(x, 0, width_3 - 3);
+                            reporter?.Report(x, 0, width_3 - 3);
                         }
                     }
                     else // Vertical waves

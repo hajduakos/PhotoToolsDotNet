@@ -137,7 +137,7 @@ namespace FilterLib.Filters.Blur
                             col[j_stride + 2] = (byte)sumR;
                         }
                         // Report progress from 50% to 100%
-                        if ((x & 63) == 0) reporter?.Report(x + width_3, 0, width_3 * 2 - 3);
+                        reporter?.Report(x + width_3, 0, width_3 * 2 - 3);
                     }
                 }
             }
