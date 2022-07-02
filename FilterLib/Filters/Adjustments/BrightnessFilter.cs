@@ -3,7 +3,8 @@
 namespace FilterLib.Filters.Adjustments
 {
     /// <summary>
-    /// Brightness adjustment filter.
+    /// Adjust brightness by increasing/decreasing the value of each component
+    /// with a fixed amount.
     /// </summary>
     [Filter]
     public sealed class BrightnessFilter : PerComponentFilterBase
@@ -11,7 +12,7 @@ namespace FilterLib.Filters.Adjustments
         private int brightness;
 
         /// <summary>
-        /// Brightness adjustment property [-255;255]
+        /// Brightness adjustment amount [-255;255]
         /// </summary>
         [FilterParam]
         [FilterParamMin(-255)]
@@ -21,11 +22,11 @@ namespace FilterLib.Filters.Adjustments
             get { return brightness; }
             set { brightness = value.Clamp(-255, 255); }
         }
-
+        
         /// <summary>
-        /// Constructor with brightness parameter.
+        /// Constructor.
         /// </summary>
-        /// <param name="brightness">Brightness adjustment value [-255;255]</param>
+        /// <param name="brightness">Brightness adjustment amount [-255;255]</param>
         public BrightnessFilter(int brightness = 0) => Brightness = brightness;
 
         /// <inheritdoc/>
