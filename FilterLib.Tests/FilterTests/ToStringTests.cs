@@ -100,7 +100,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new FlipVerticalFilter(), "FlipVerticalFilter");
             yield return new TestCaseData(new ResizeFilter(Size.Absolute(12), Size.Absolute(34), InterpolationMode.NearestNeighbor), "ResizeFilter(Width: 12px, Height: 34px, Interpolation: NearestNeighbor)");
             yield return new TestCaseData(new Rotate180Filter(), "Rotate180Filter");
-            yield return new TestCaseData(new RotateFilter(12, true, InterpolationMode.NearestNeighbor), "RotateFilter(Angle: 12, Crop: True, Interpolation: NearestNeighbor)");
+            yield return new TestCaseData(new RotateFilter(12, RotateFilter.CropMode.Fill, InterpolationMode.NearestNeighbor), "RotateFilter(Angle: 12, Crop: Fill, Interpolation: NearestNeighbor)");
             yield return new TestCaseData(new RotateLeftFilter(), "RotateLeftFilter");
             yield return new TestCaseData(new RotateRightFilter(), "RotateRightFilter");
         }

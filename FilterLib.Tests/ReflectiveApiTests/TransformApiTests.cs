@@ -63,11 +63,11 @@ namespace FilterLib.Tests.ReflectiveApiTests
             IFilter f = ReflectiveApi.ConstructFilterByName("Rotate");
             Assert.IsInstanceOf<RotateFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "Angle", "123.45");
-            ReflectiveApi.SetFilterPropertyByName(f, "Crop", "true");
+            ReflectiveApi.SetFilterPropertyByName(f, "Crop", "Fill");
             ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "NearestNeighbor");
             RotateFilter ff = f as RotateFilter;
             Assert.AreEqual(123.45f, ff.Angle);
-            Assert.AreEqual(true, ff.Crop);
+            Assert.AreEqual(RotateFilter.CropMode.Fill, ff.Crop);
             Assert.AreEqual(InterpolationMode.NearestNeighbor, ff.Interpolation);
         }
 

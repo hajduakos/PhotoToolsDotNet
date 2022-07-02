@@ -13,6 +13,8 @@ namespace FilterLib.Filters.Transform
     [Filter]
     public sealed class RotateFilter : FilterBase
     {
+        public enum CropMode { Fit, Fill }
+
         /// <summary>
         /// Rotation angle [0;360].
         /// </summary>
@@ -22,10 +24,10 @@ namespace FilterLib.Filters.Transform
         public float Angle { get; set; }
 
         /// <summary>
-        /// Crop the image to fit.
+        /// Crop mode (fit or fill).
         /// </summary>
         [FilterParam]
-        public bool Crop { get; set; }
+        public CropMode Crop { get; set; }
 
         /// <summary>
         /// Interpolation mode.
@@ -37,9 +39,9 @@ namespace FilterLib.Filters.Transform
         /// Constructor.
         /// </summary>
         /// <param name="angle">Rotation angle [0;360]</param>
-        /// <param name="crop">Crop the image to fit</param>
+        /// <param name="crop">Crop mode</param>
         /// <param name="interpolation">Interpolation mode</param>
-        public RotateFilter(float angle = 0, bool crop = false, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
+        public RotateFilter(float angle = 0, CropMode crop = CropMode.Fit, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
         {
             Angle = angle;
             Crop = crop;
@@ -55,18 +57,22 @@ namespace FilterLib.Filters.Transform
             float angRad = Angle / 180 * MathF.PI;
             float sinAng = MathF.Sin(angRad);
             float cosAng = MathF.Cos(angRad);
-            Bitmap rotated;
-            if (Crop)
+            Bitmap rotated = null;
+            switch (Crop)
             {
-                int newHeight = (int)(image.Height / (image.Width / (float)image.Height * Math.Abs(sinAng) + Math.Abs(cosAng)));
-                rotated = new Bitmap((int)(image.Width / (float)image.Height * newHeight), newHeight);
+                case CropMode.Fill:
+                    int newHeight = (int)(image.Height / (image.Width / (float)image.Height * Math.Abs(sinAng) + Math.Abs(cosAng)));
+                    rotated = new Bitmap((int)(image.Width / (float)image.Height * newHeight), newHeight);
+                    break;
+                case CropMode.Fit:
+                    rotated = new Bitmap(
+                        (int)(Math.Abs(sinAng) * image.Height + Math.Abs(cosAng) * image.Width),
+                        (int)(Math.Abs(cosAng) * image.Height + Math.Abs(sinAng) * image.Width));
+                    break;
+                default:
+                    throw new System.ArgumentException($"Unknown crop mode: {Crop}");
             }
-            else
-            {
-                rotated = new Bitmap(
-                    (int)(Math.Abs(sinAng) * image.Height + Math.Abs(cosAng * image.Width)),
-                    (int)(Math.Abs(cosAng) * image.Height + Math.Abs(sinAng * image.Width)));
-            }
+            System.Diagnostics.Debug.Assert(rotated != null);
 
             float crx = rotated.Width / 2;
             float cry = rotated.Height / 2;
