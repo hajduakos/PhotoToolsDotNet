@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Base class for filters that process each R,G,B component independently.
+    /// Uses caching to pre-compute all possible values for faster application.
     /// </summary>
     public abstract class PerComponentFilterBase : PerPixelFilterBase
     {
@@ -14,9 +15,7 @@
         /// <returns>Output value by applying the filter</returns>
         protected abstract byte MapComponent(byte comp);
 
-        /// <summary>
-        /// Gets called when filter starts applying.
-        /// </summary>
+        /// <inheritdoc/>
         protected override sealed void ApplyStart()
         {
             base.ApplyStart();
@@ -29,12 +28,7 @@
             } while (i++ != 255);
         }
 
-        /// <summary>
-        /// Gets called for each pixel independently.
-        /// </summary>
-        /// <param name="r">Pointer to red value</param>
-        /// <param name="g">Pointer to green value</param>
-        /// <param name="b">Pointer to blue value</param>
+        /// <inheritdoc/>
         protected override sealed unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             System.Diagnostics.Debug.Assert(map != null);
@@ -44,9 +38,7 @@
             *b = map[*b];
         }
 
-        /// <summary>
-        /// Gets called when filter finishes applying.
-        /// </summary>
+        /// <inheritdoc/>
         protected override sealed void ApplyEnd()
         {
             map = null;
