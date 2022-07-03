@@ -3,7 +3,7 @@
 namespace FilterLib.Filters.Adjustments
 {
     /// <summary>
-    /// Shadows and highlights filter.
+    /// Brighten shadows and darken highlights.
     /// </summary>
     [Filter]
     public sealed class ShadowsHighlightsFilter : PerComponentFilterBase
@@ -11,7 +11,7 @@ namespace FilterLib.Filters.Adjustments
         private int darken, brighten;
 
         /// <summary>
-        /// Brighten shadows [0;100].
+        /// Brighten shadows amount [0;100].
         /// </summary>
         [FilterParam]
         [FilterParamMin(0)]
@@ -23,7 +23,7 @@ namespace FilterLib.Filters.Adjustments
         }
 
         /// <summary>
-        /// Darken highlights [0;100].
+        /// Darken highlights amount [0;100].
         /// </summary>
         [FilterParam]
         [FilterParamMin(0)]
@@ -37,8 +37,8 @@ namespace FilterLib.Filters.Adjustments
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="brighten">Brighten shadows [0;100]</param>
-        /// <param name="darken">Darken highlights [0;100]</param>
+        /// <param name="brighten">Brighten shadows amount [0;100]</param>
+        /// <param name="darken">Darken highlights amount [0;100]</param>
         public ShadowsHighlightsFilter(int brighten = 0, int darken = 0)
         {
             Brighten = brighten;
@@ -50,26 +50,22 @@ namespace FilterLib.Filters.Adjustments
         {
             if (brighten == 0 && darken == 0) return comp;
 
-            float darkOp1 = darken / 100f; // Percent of darkening
-            float darkOp0 = 1 - darkOp1;
-            float brightOp1 = brighten / 100f; // Percent of brightening
-            float brightOp0 = 1 - brightOp1;
-            // Ratio of darken to brighten
-            float darkRatio = darken / (float)(brighten + darken);
-            float brightRatio = 1 - darkRatio;
-
             // Mulitply pixel with itself (darkening)
             float mult = comp * comp / 255f;
             // Blend with original value
-            mult = comp * darkOp0 + mult * darkOp1;
+            float darkPct = darken / 100f;
+            mult = comp * (1 - darkPct) + mult * darkPct;
 
             // Screen pixel with itself (brightening)
             float screen = (255 - comp) * comp / 255f + comp;
             // Blend with original value
-            screen = comp * brightOp0 + screen * brightOp1;
+            float brightPct = brighten / 100f;
+            screen = comp * (1 - brightPct) + screen * brightPct;
 
             // Blend darkened and brightened pixels together
-            return (byte)(darkRatio * mult + brightRatio * screen);
+            float darkRatio = darken / (float)(brighten + darken);
+            float brightRatio = 1 - darkRatio;
+            return (darkRatio * mult + brightRatio * screen).ClampToByte();
         }
     }
 }

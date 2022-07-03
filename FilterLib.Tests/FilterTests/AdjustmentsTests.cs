@@ -44,8 +44,6 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("Levels_30_200.bmp", new LevelsFilter(30, 200), 1);
             yield return new TestCaseData("Levels_120_125.bmp", new LevelsFilter(120, 125), 1);
 
-            
-
             yield return new TestCaseData("_input.bmp", new ShadowsHighlightsFilter(0, 0), 0);
             yield return new TestCaseData("ShadowsHighlights_10_40.bmp", new ShadowsHighlightsFilter(10, 40), 1);
             yield return new TestCaseData("ShadowsHighlights_100_0.bmp", new ShadowsHighlightsFilter(100, 0), 1);
