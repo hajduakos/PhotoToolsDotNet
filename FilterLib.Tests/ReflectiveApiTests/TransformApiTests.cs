@@ -6,6 +6,22 @@ namespace FilterLib.Tests.ReflectiveApiTests
 {
     public class TransformApiTests
     {
+
+        [Test]
+        public void TestBoxDownscale()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("BoxDownscale");
+            Assert.IsInstanceOf<BoxDownscaleFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Width", "100px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Height", "50%");
+            BoxDownscaleFilter ff = f as BoxDownscaleFilter;
+            Assert.AreEqual(100, ff.Width.ToAbsolute(500));
+            Assert.AreEqual(250, ff.Height.ToAbsolute(500));
+        }
+
+        [Test]
+        public void TestBoxDownscaleParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(BoxDownscaleFilter)));
+
         [Test]
         public void TestCrop()
         {

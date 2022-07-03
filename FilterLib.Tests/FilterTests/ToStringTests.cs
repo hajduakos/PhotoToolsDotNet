@@ -95,6 +95,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new MeanRemovalFilter(), "MeanRemovalFilter");
             yield return new TestCaseData(new SharpenFilter(), "SharpenFilter");
 
+            yield return new TestCaseData(new BoxDownscaleFilter(Size.Relative(.12f), Size.Absolute(34)), "BoxDownscaleFilter(Width: 12%, Height: 34px)");
             yield return new TestCaseData(new CropFilter(Size.Absolute(12), Size.Absolute(34), Size.Absolute(56), Size.Absolute(78)), "CropFilter(X: 12px, Y: 34px, Width: 56px, Height: 78px)");
             yield return new TestCaseData(new FlipHorizontalFilter(), "FlipHorizontalFilter");
             yield return new TestCaseData(new FlipVerticalFilter(), "FlipVerticalFilter");
