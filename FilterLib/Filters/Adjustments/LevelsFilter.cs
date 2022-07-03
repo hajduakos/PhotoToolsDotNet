@@ -4,7 +4,8 @@ using System;
 namespace FilterLib.Filters.Adjustments
 {
     /// <summary>
-    /// Level adjustment filter.
+    /// Adjust levels by taking a defined range of tones and stretching it to the full range.
+    /// Values outside the range will be clipped.
     /// </summary>
     [Filter]
     public sealed class LevelsFilter : PerComponentFilterBase
@@ -12,7 +13,7 @@ namespace FilterLib.Filters.Adjustments
         private int dark, light;
 
         /// <summary>
-        /// Dark level property [0;255].
+        /// Dark end of the range [0;255].
         /// </summary>
         [FilterParam]
         [FilterParamMin(0)]
@@ -24,7 +25,7 @@ namespace FilterLib.Filters.Adjustments
         }
 
         /// <summary>
-        /// Light level property [0;255].
+        /// Light end of the range [0;255].
         /// </summary>
         [FilterParam]
         [FilterParamMin(0)]
@@ -36,10 +37,10 @@ namespace FilterLib.Filters.Adjustments
         }
 
         /// <summary>
-        /// Constructor with light and dark level parameters.
+        /// Constructor.
         /// </summary>
-        /// <param name="dark">Dark level [0:255]</param>
-        /// <param name="light">Light level [0:255]</param>
+        /// <param name="dark">Dark end of the range [0:255]</param>
+        /// <param name="light">Light end of the range [0:255]</param>
         public LevelsFilter(int dark = 0, int light = 255)
         {
             Dark = dark;
@@ -49,7 +50,7 @@ namespace FilterLib.Filters.Adjustments
         /// <inheritdoc/>
         protected override byte MapComponent(byte comp)
         {
-            if (light <= dark) throw new ArgumentException("Light must be greater than dark.");
+            if (light <= dark) throw new ArgumentException($"Light ({light}) must be greater than dark ({dark}).");
             if (comp < dark) return 0; // Black under dark level
             if (comp > light) return 255; // White above light level
             return (byte)((comp - dark) / (float)(light - dark) * 255); // Linear transition between
