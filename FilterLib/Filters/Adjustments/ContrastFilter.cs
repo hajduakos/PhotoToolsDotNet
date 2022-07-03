@@ -3,7 +3,7 @@
 namespace FilterLib.Filters.Adjustments
 {
     /// <summary>
-    /// Contrast adjustment filter.
+    /// Adjust contrast by darkening/brightening tones below/above the midpoint.
     /// </summary>
     [Filter]
     public sealed class ContrastFilter : PerComponentFilterBase
@@ -11,7 +11,7 @@ namespace FilterLib.Filters.Adjustments
         private int contrast;
 
         /// <summary>
-        /// Contrast adjustment property [-100;100].
+        /// Contrast adjustment amount [-100;100].
         /// </summary>
         [FilterParam]
         [FilterParamMin(-100)]
@@ -23,9 +23,9 @@ namespace FilterLib.Filters.Adjustments
         }
 
         /// <summary>
-        /// Constructor with contrast adjustment parameter.
+        /// Constructor.
         /// </summary>
-        /// <param name="contrast">Contrast adjustment value [-100;100]</param>
+        /// <param name="contrast">Contrast adjustment amount [-100;100]</param>
         public ContrastFilter(int contrast = 0) => Contrast = contrast;
 
         /// <inheritdoc/>
