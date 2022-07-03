@@ -3,7 +3,7 @@
 namespace FilterLib.Filters.Adjustments
 {
     /// <summary>
-    /// Gamma adjustment filter.
+    /// Adjust gamma with an exponential transformation over pixel values.
     /// </summary>
     [Filter]
     public sealed class GammaFilter : PerComponentFilterBase
@@ -11,20 +11,20 @@ namespace FilterLib.Filters.Adjustments
         private float gamma;
 
         /// <summary>
-        /// Gamma adjustment property ]0;...]
+        /// Gamma adjustment amount ]0;...]
         /// </summary>
         [FilterParam]
         [FilterParamMinF(0.001f)]
         public float Gamma
         {
             get { return gamma; }
-            set { gamma = value <= 0.001f ? 0.001f : value;  }
+            set { gamma = System.MathF.Max(value, 0.001f); }
         }
 
         /// <summary>
-        /// Constructor with gamma adjustment parameter.
+        /// Constructor.
         /// </summary>
-        /// <param name="gamma">Gamma adjustment value ]0;...]</param>
+        /// <param name="gamma">Gamma adjustment amount ]0;...]</param>
         public GammaFilter(float gamma = 1f) => Gamma = gamma;
 
         /// <inheritdoc/>
