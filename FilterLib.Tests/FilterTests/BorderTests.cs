@@ -51,7 +51,13 @@ namespace FilterLib.Tests.FilterTests
                     new SimpleBorderFilter(Size.Relative(.1f), Size.Absolute(8), new RGB(0, 0, 255), BorderPosition.Outside, AntiAliasQuality.Medium), 1);
             yield return new TestCaseData($"SimpleBorder_20px_10pct_Red_Center_Med.bmp",
                 new SimpleBorderFilter(Size.Absolute(20), Size.Relative(.1f), new RGB(255, 0, 0), BorderPosition.Center, AntiAliasQuality.Medium), 1);
-        
+            yield return new TestCaseData($"SimpleBorder_200pct_0_Black_Inside_Med.bmp",
+                new SimpleBorderFilter(Size.Relative(2f), Size.Relative(0), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 1);
+            yield return new TestCaseData($"SimpleBorder_0_30px_Black_Inside_Med.bmp",
+                new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(30), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 1);
+            yield return new TestCaseData($"SimpleBorder_0_100pct_Black_Inside_Med.bmp",
+                new SimpleBorderFilter(Size.Absolute(0), Size.Relative(1f), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 1);
+
             yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Relative(3), Size.Relative(2), new RGB(0, 0, 0)), 0);
             yield return new TestCaseData("Vignette_150pct_60pct_Black.bmp", new VignetteFilter(Size.Relative(1.5f), Size.Relative(0.6f), new RGB(0, 0, 0)), 1);
             yield return new TestCaseData("Vignette_150pct_60pct_Black.bmp", new VignetteFilter(Size.Absolute(120), Size.Absolute(48), new RGB(0, 0, 0)), 1);
