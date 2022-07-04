@@ -1,17 +1,15 @@
-﻿using FilterLib.Blending;
-using FilterLib.Filters;
-using FilterLib.Util;
+﻿using FilterLib.Util;
 using NUnit.Framework;
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
+using Bitmap = System.Drawing.Bitmap;
+using ImageFormat = System.Drawing.Imaging.ImageFormat;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Tests
 {
     static class Common
     {
-        public static bool CheckFilter(string original, string expected, IFilter filter, int tolerance = 0)
+        public static bool CheckFilter(string original, string expected, Filters.IFilter filter, int tolerance = 0)
         {
             string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
 
@@ -19,11 +17,11 @@ namespace FilterLib.Tests
             using Bitmap bmpActual = filter.Apply(bmpOriginal);
             using Bitmap bmpExpected = original == expected ? (Bitmap)bmpOriginal.Clone() : new Bitmap(path + expected);
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
-            if (!ok) bmpActual.Save(path + expected.Replace(".bmp", "") + "_actual.bmp", ImageFormat.Bmp);
+            if (!ok) bmpActual.Save(path + expected.Replace(".bmp", "_actual.bmp"), ImageFormat.Bmp);
             return ok;
         }
 
-        public static bool CheckBlend(string original1, string original2, string expected, IBlend blend, int tolerance = 0)
+        public static bool CheckBlend(string original1, string original2, string expected, Blending.IBlend blend, int tolerance = 0)
         {
             string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
 
@@ -33,7 +31,7 @@ namespace FilterLib.Tests
             using Bitmap bmpExpected = original1 == expected ? (Bitmap)bmpOriginal1.Clone() :
                 (original2 == expected ? (Bitmap)bmpOriginal2.Clone() : new Bitmap(path + expected));
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
-            if (!ok) bmpActual.Save(path + expected.Replace(".bmp", "") + "_actual.bmp");
+            if (!ok) bmpActual.Save(path + expected.Replace(".bmp", "_actual.bmp"));
             return ok;
         }
 
@@ -44,24 +42,20 @@ namespace FilterLib.Tests
             using DisposableBitmapData bmdAct = new(actual, PixelFormat.Format24bppRgb);
             using DisposableBitmapData bmdExp = new(expected, PixelFormat.Format24bppRgb);
             int width_3 = actual.Width * 3;
-            int h = actual.Height;
-            int x, y;
             unsafe
             {
-                for (y = 0; y < h; ++y)
+                for (int y = 0; y < actual.Height; ++y)
                 {
-                    // Get row
                     byte* rowAct = (byte*)bmdAct.Scan0 + (y * bmdAct.Stride);
                     byte* rowExp = (byte*)bmdExp.Scan0 + (y * bmdExp.Stride);
-                    // Iterate through columns
-                    for (x = 0; x < width_3; ++x)
-                        if (Math.Abs(rowAct[x] - rowExp[x]) > tolerance)
+                    for (int x = 0; x < width_3; ++x)
+                        if (System.Math.Abs(rowAct[x] - rowExp[x]) > tolerance)
                             return false;
                 }
             }
             return true;
         }
 
-        public static int ParamCount(Type type) => ReflectiveApi.GetFilterProperties(type).ToArray().Length;
+        public static int ParamCount(System.Type type) => ReflectiveApi.GetFilterProperties(type).Count();
     }
 }
