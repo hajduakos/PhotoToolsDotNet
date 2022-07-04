@@ -1,9 +1,8 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+using Bitmap = System.Drawing.Bitmap;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Mosaic
 {
@@ -49,22 +48,23 @@ namespace FilterLib.Filters.Mosaic
             reporter?.Start();
             using DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb);
             int width_3 = image.Width * 3;
-            int h = image.Height;
-            int x, y, xSub, ySub, size_3 = size * 3, rSum, gSum, bSum, n;
+            int size_3 = size * 3;
+            (float, byte)[,] oc = GetOuterCircle();
+            float[,] ic = GetInnerCircle();
             unsafe
             {
                 // Iterate through block rows
-                for (y = 0; y < h; y += size)
+                for (int y = 0; y < image.Height; y += size)
                 {
                     // Iterate through block columns
-                    for (x = 0; x < width_3; x += size_3)
+                    for (int x = 0; x < width_3; x += size_3)
                     {
-                        rSum = gSum = bSum = n = 0; // Clear sums
-                        for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
+                        // Calculate average color in block
+                        int rSum = 0, gSum = 0, bSum = 0, n = 0;
+                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
                         {
-                            // Get row
                             byte* row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                            for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
+                            for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                             {
                                 rSum += row[x + xSub + 2];
                                 gSum += row[x + xSub + 1];
@@ -75,12 +75,12 @@ namespace FilterLib.Filters.Mosaic
                         byte rAvg = (rSum / n).ClampToByte();
                         byte gAvg = (gSum / n).ClampToByte();
                         byte bAvg = (bSum / n).ClampToByte();
-                        (float, byte)[,] oc = GetOuterCircle();
-                        for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
+
+                        // Use average color as basis and add outer circle on top of that
+                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
                         {
-                            // Get row
                             byte* row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                            for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
+                            for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                             {
                                 (float a, byte c) = oc[xSub / 3, ySub];
                                 row[x + xSub + 2] = (rAvg * (1 - a) + c * a).ClampToByte();
@@ -89,12 +89,11 @@ namespace FilterLib.Filters.Mosaic
                             }
                         }
 
-                        float[,] ic = GetInnerCircle();
-                        for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
+                        // Fill inner circle with average color
+                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
                         {
-                            // Get row
                             byte* row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
-                            for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
+                            for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                             {
                                 float a = ic[xSub / 3, ySub];
                                 row[x + xSub + 2] = (row[x + xSub + 2] * (1 - a) + rAvg * a).ClampToByte();
@@ -103,7 +102,7 @@ namespace FilterLib.Filters.Mosaic
                             }
                         }
                     }
-                    reporter?.Report(y, 0, h - 1);
+                    reporter?.Report(y, 0, image.Height - 1);
 
 
                 }
@@ -112,7 +111,10 @@ namespace FilterLib.Filters.Mosaic
             }
         }
 
-        private int GetSamples()
+        /// <summary>
+        /// Helper function to determine number of samples based on anti-aliasing quality.
+        /// </summary>
+        private int GetSampleCount()
         {
             return AntiAlias switch
             {
@@ -124,44 +126,58 @@ namespace FilterLib.Filters.Mosaic
             };
         }
 
+        /// <summary>
+        /// Get (alpha value, color) pairs for the outer circles: a white fading circle on top half,
+        /// and a black fading circle on the bottom.
+        /// </summary>
         private (float, byte)[,] GetOuterCircle()
         {
             (float, byte)[,] map = new (float, byte)[Size, Size];
-            int samples = GetSamples();
-            float delta = samples == 1 ? 0 : 1f / (samples - 1);
-            float r = Size / 4 + 1;
-            float c = Size / 2f;
+            int nSamples = GetSampleCount();
+            float samplingDelta = nSamples == 1 ? 0 : 1f / (nSamples - 1);
+            float radius_squared = MathF.Pow(Size / 4 + 1, 2);
+            int circleTop = Size / 4 - 1;
+            int circleBottom = 3 * Size / 4 + 1;
+            int topHalfFadeLength = Size / 4 + 1;
+            int bottomHalfFadeLength = Size / 4;
+            int bottomHalfStart = Size / 2 + 1;
+            float center = Size / 2f;
 
+            // Loop through the whole box
             for (int x = 0; x < Size; x++)
             {
                 for (int y = 0; y < Size; y++)
                 {
+                    // Create linear gradient first
+                    float baseAlpha = 0; // Nothing is visible by default
                     byte color;
-                    float baseAlpha = 0;
                     if (y < Size / 2)
                     {
+                        // Top half: white color, fading from top to bottom
                         color = 255;
-                        if (y >= Size / 4 - 1) baseAlpha = 1 - (y - (Size / 4 - 1)) / (float)(Size / 4 + 1);
+                        if (y >= circleTop) baseAlpha = 1 - (y - circleTop) / (float)topHalfFadeLength;
                     }
                     else
                     {
+                        // Bottom half: black color fading from bottom to top
                         color = 0;
-                        if (y >= Size / 2 + 1 && y < 3 * Size / 4 + 1) baseAlpha = (y - Size / 2) / (float)(Size / 4);
+                        if (y >= bottomHalfStart && y < circleBottom) baseAlpha = (y - Size / 2) / (float)bottomHalfFadeLength;
                     }
 
-                    int outside = 0;
-                    int total = 0;
-                    for (int dx = 0; dx < samples; ++dx)
+                    // Then cut out an anti-aliased circle
+                    int samplesInside = 0;
+                    int samplesTotal = 0;
+                    for (int dx = 0; dx < nSamples; ++dx)
                     {
-                        for (int dy = 0; dy < samples; ++dy)
+                        for (int dy = 0; dy < nSamples; ++dy)
                         {
-                            ++total;
-                            float x0 = x + (samples == 1 ? .5f : (dx * delta));
-                            float y0 = y + (samples == 1 ? .5f : (dy * delta));
-                            if ((x0 - c) * (x0 - c) + (y0 - c) * (y0 - c) > r * r) ++outside;
+                            ++samplesTotal;
+                            float x0 = x + (nSamples == 1 ? .5f : (dx * samplingDelta));
+                            float y0 = y + (nSamples == 1 ? .5f : (dy * samplingDelta));
+                            if ((x0 - center) * (x0 - center) + (y0 - center) * (y0 - center) <= radius_squared) ++samplesInside;
                         }
                     }
-                    float circleAlpha = 1 - outside / (float)total;
+                    float circleAlpha = samplesInside / (float)samplesTotal;
 
                     map[x, y] = (baseAlpha * circleAlpha, color);
                 }
@@ -170,31 +186,34 @@ namespace FilterLib.Filters.Mosaic
             return map;
         }
 
+        /// <summary>
+        /// Get anti-aliased alpha values corresponding to the inner circle.
+        /// </summary>
         private float[,] GetInnerCircle()
         {
             float[,] map = new float[Size, Size];
-            int samples = GetSamples();
-            float delta = samples == 1 ? 0 : 1f / (samples - 1);
-            float r = Size / 4;
-            float c = Size / 2f;
+            int nSamples = GetSampleCount();
+            float samplingDelta = nSamples == 1 ? 0 : 1f / (nSamples - 1);
+            float radius_squared = (Size / 4) * (Size / 4);
+            float center = Size / 2f;
 
             for (int x = 0; x < Size; x++)
             {
                 for (int y = 0; y < Size; y++)
                 {
-                    int outside = 0;
-                    int total = 0;
-                    for (int dx = 0; dx < samples; ++dx)
+                    int samplesInside = 0;
+                    int samplesTotal = 0;
+                    for (int dx = 0; dx < nSamples; ++dx)
                     {
-                        for (int dy = 0; dy < samples; ++dy)
+                        for (int dy = 0; dy < nSamples; ++dy)
                         {
-                            ++total;
-                            float x0 = x + (samples == 1 ? .5f : (dx * delta));
-                            float y0 = y + (samples == 1 ? .5f : (dy * delta));
-                            if ((x0 - c) * (x0 - c) + (y0 - c) * (y0 - c) > r * r) ++outside;
+                            ++samplesTotal;
+                            float x0 = x + (nSamples == 1 ? .5f : (dx * samplingDelta));
+                            float y0 = y + (nSamples == 1 ? .5f : (dy * samplingDelta));
+                            if ((x0 - center) * (x0 - center) + (y0 - center) * (y0 - center) <= radius_squared) ++samplesInside;
                         }
                     }
-                    map[x,y] = 1 - outside / (float)total;
+                    map[x,y] = samplesInside / (float)samplesTotal;
                 }
             }
             return map;

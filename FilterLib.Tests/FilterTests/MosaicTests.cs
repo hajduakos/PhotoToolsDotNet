@@ -2,7 +2,6 @@ using FilterLib.Filters;
 using FilterLib.Filters.Mosaic;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -12,8 +11,6 @@ namespace FilterLib.Tests.FilterTests
     {
         internal static IEnumerable<TestCaseData> Data()
         {
-            string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
-
             yield return new TestCaseData("_input.bmp", new CrystallizeFilter(1, 100, 0), 1);
             yield return new TestCaseData("Crystallize_10_100_0.bmp", new CrystallizeFilter(10, 100, 0), 1);
             yield return new TestCaseData("Crystallize_30_50_0.bmp", new CrystallizeFilter(30, 50, 0), 1);
