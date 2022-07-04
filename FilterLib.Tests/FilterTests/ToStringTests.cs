@@ -48,7 +48,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new FadeBorderFilter(Size.Absolute(12), new RGB(34, 56, 78)), "FadeBorderFilter(Width: 12px, Color: RGB(34, 56, 78))");
             yield return new TestCaseData(new JitterBorderFilter(Size.Absolute(12), new RGB(34, 56, 78), 9), "JitterBorderFilter(Width: 12px, Color: RGB(34, 56, 78), Seed: 9)");
             yield return new TestCaseData(new PatternBorderFilter(Size.Absolute(12), Size.Absolute(34), pattern, BorderPosition.Inside), "PatternBorderFilter(Width: 12px, Radius: 34px, Pattern: Bitmap(160x90), Position: Inside)");
-            yield return new TestCaseData(new SimpleBorderFilter(Size.Absolute(12), Size.Absolute(34), new RGB(56, 78, 90), BorderPosition.Outside, AntiAliasQuality.Low), "SimpleBorderFilter(Width: 12px, Radius: 34px, Color: RGB(56, 78, 90), Position: Outside, AntiAlias: Low)");
+            yield return new TestCaseData(new SimpleBorderFilter(Size.Absolute(12), Size.Absolute(34), new RGB(56, 78, 90), BorderPosition.Outside, AntiAliasQuality.Low), "SimpleBorderFilter(Color: RGB(56, 78, 90), Width: 12px, Radius: 34px, Position: Outside, AntiAlias: Low)");
             yield return new TestCaseData(new VignetteFilter(Size.Relative(1), Size.Relative(0), new RGB(12, 34, 56)), "VignetteFilter(Radius: 100%, ClearRadius: 0%, Color: RGB(12, 34, 56))");
 
             yield return new TestCaseData(new GradientMapFilter(new Gradient(new RGB(255, 0, 0), new RGB(255, 255, 0), new RGB(0, 255, 0))), "GradientMapFilter(GradientMap: Gradient(0 RGB(255, 0, 0), 0.5 RGB(255, 255, 0), 1 RGB(0, 255, 0)))");
