@@ -194,7 +194,7 @@ namespace FilterLib.Filters.Mosaic
             float[,] map = new float[Size, Size];
             int nSamples = GetSampleCount();
             float samplingDelta = nSamples == 1 ? 0 : 1f / (nSamples - 1);
-            float radius_squared = (Size / 4) * (Size / 4);
+            float radius_squared = MathF.Pow(Size / 4, 2);
             float center = Size / 2f;
 
             for (int x = 0; x < Size; x++)
