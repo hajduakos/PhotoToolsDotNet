@@ -29,12 +29,14 @@ namespace FilterLib.Tests.ReflectiveApiTests
             IFilter f = ReflectiveApi.ConstructFilterByName("Lego");
             Assert.IsInstanceOf<LegoFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "Size", "30");
+            ReflectiveApi.SetFilterPropertyByName(f, "AntiAlias", "High");
             LegoFilter ff = f as LegoFilter;
             Assert.AreEqual(30, ff.Size);
+            Assert.AreEqual(Util.AntiAliasQuality.High, ff.AntiAlias);
         }
 
         [Test]
-        public void TestLegoParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(LegoFilter)));
+        public void TestLegoParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(LegoFilter)));
 
         [Test]
         public void TestPixelate()

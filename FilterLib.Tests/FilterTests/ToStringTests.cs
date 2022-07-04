@@ -81,7 +81,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new WoodRingsFilter(12, 34, 56, 78), "WoodRingsFilter(Twist: 34, Rings: 12, Iterations: 56, Seed: 78)");
 
             yield return new TestCaseData(new CrystallizeFilter(12, 34, 56), "CrystallizeFilter(Size: 12, Averaging: 34, Seed: 56)");
-            yield return new TestCaseData(new LegoFilter(12), "LegoFilter(Size: 12)");
+            yield return new TestCaseData(new LegoFilter(12, Util.AntiAliasQuality.Medium), "LegoFilter(Size: 12, AntiAlias: Medium)");
             yield return new TestCaseData(new PixelateFilter(12), "PixelateFilter(Size: 12, Mode: Average)");
 
             yield return new TestCaseData(new AddNoiseFilter(12, 34, AddNoiseFilter.NoiseType.Monochrome, 56), "AddNoiseFilter(Intensity: 12, Strength: 34, Type: Monochrome, Seed: 56)");
