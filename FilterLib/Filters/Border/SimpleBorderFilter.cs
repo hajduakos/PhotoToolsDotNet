@@ -36,8 +36,14 @@ namespace FilterLib.Filters.Border
         [FilterParam]
         public BorderPosition Position { get; set; }
 
+        /// <summary>
+        /// Quality of anti-aliasing the rounded corners.
+        /// </summary>
+        [FilterParam]
+        public AntiAliasQuality AntiAlias { get; set; }
+
         public SimpleBorderFilter() :
-            this(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside) { }
+            this(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium) { }
 
         /// <summary>
         /// Constructor.
@@ -46,12 +52,14 @@ namespace FilterLib.Filters.Border
         /// <param name="radius">Border radius</param>
         /// <param name="color">Border color</param>
         /// <param name="position">Border position</param>
-        public SimpleBorderFilter(Size width, Size radius, RGB color, BorderPosition position)
+        /// <param name="antiAlias">Quality of anti-aliasing the rounded corners</param>
+        public SimpleBorderFilter(Size width, Size radius, RGB color, BorderPosition position, AntiAliasQuality antiAlias)
         {
             Width = width;
             Radius = radius;
             Color = color;
             Position = position;
+            AntiAlias = antiAlias;
         }
 
         /// <inheritdoc/>
@@ -102,6 +110,7 @@ namespace FilterLib.Filters.Border
                     // Draw the 4 borders
                     int newWidth_3 = newWidth * 3;
                     int borderW_3 = borderW * 3;
+                    // Top
                     for (int y = 0; y < borderW && y < newHeight; ++y)
                     {
                         byte* row = (byte*)bmd.Scan0 + y * bmd.Stride;
@@ -112,6 +121,7 @@ namespace FilterLib.Filters.Border
                             row[x + 2] = Color.R;
                         }
                     }
+                    // Bottom
                     for (int y = Math.Max(0, newHeight - borderW); y < newHeight; ++y)
                     {
                         byte* row = (byte*)bmd.Scan0 + y * bmd.Stride;
@@ -125,12 +135,14 @@ namespace FilterLib.Filters.Border
                     for (int y = borderW; y < newHeight - borderW; ++y)
                     {
                         byte* row = (byte*)bmd.Scan0 + y * bmd.Stride;
+                        // Left
                         for (int x = 0; x < borderW_3 && x < newWidth_3; x += 3)
                         {
                             row[x] = Color.B;
                             row[x + 1] = Color.G;
                             row[x + 2] = Color.R;
                         }
+                        // Right
                         for (int x = Math.Max(0, newWidth_3 - borderW_3); x < newWidth_3; x += 3)
                         {
                             row[x] = Color.B;
@@ -138,30 +150,10 @@ namespace FilterLib.Filters.Border
                             row[x + 2] = Color.R;
                         }
                     }
+
                     // Draw the circles
                     int radius_2 = 2 * radius;
-                    float[,] alphaMap = new float[radius_2, radius_2];
-                    for (int x = 0; x < radius_2; ++x)
-                    {
-                        for (int y = 0; y < radius_2; ++y)
-                        {
-                            const int samples = 4;
-                            float delta = 1f / (samples - 1);
-                            int outside = 0;
-                            int total = 0;
-                            for (int dx = 0; dx < samples; ++dx)
-                            {
-                                for (int dy = 0; dy < samples; ++dy)
-                                {
-                                    ++total;
-                                    float x0 = x + dx * delta;
-                                    float y0 = y + dy * delta;
-                                    if ((x0 - radius) * (x0 - radius) + (y0 - radius) * (y0 - radius) > radius * radius) ++outside;
-                                }
-                            }
-                            alphaMap[x, y] = outside / (float)total;
-                        }
-                    }
+                    float[,] alphaMap = GenerateAlphaMap(radius);
                     for (int y = 0; y < radius; ++y)
                     {
                         if (y + borderW >= newHeight) break;
@@ -217,6 +209,41 @@ namespace FilterLib.Filters.Border
 
             reporter?.Done();
             return result;
+        }
+
+        private float[,] GenerateAlphaMap(int radius)
+        {
+            var samples = AntiAlias switch
+            {
+                AntiAliasQuality.None => 1,
+                AntiAliasQuality.Low => 2,
+                AntiAliasQuality.Medium => 4,
+                AntiAliasQuality.High => 8,
+                _ => throw new ArgumentException($"Unsupported anti-alias quality: {AntiAlias}"),
+            };
+            float delta = samples == 1 ? 0 : 1f / (samples - 1);
+            int radius_2 = radius * 2;
+            float[,] map = new float[radius_2, radius_2];
+            for (int x = 0; x < radius_2; ++x)
+            {
+                for (int y = 0; y < radius_2; ++y)
+                {
+                    int outside = 0;
+                    int total = 0;
+                    for (int dx = 0; dx < samples; ++dx)
+                    {
+                        for (int dy = 0; dy < samples; ++dy)
+                        {
+                            ++total;
+                            float x0 = x + (samples == 1 ? .5f : (dx * delta));
+                            float y0 = y + (samples == 1 ? .5f : (dy * delta));
+                            if ((x0 - radius) * (x0 - radius) + (y0 - radius) * (y0 - radius) > radius * radius) ++outside;
+                        }
+                    }
+                    map[x, y] = outside / (float)total;
+                }
+            }
+            return map;
         }
     }
 }

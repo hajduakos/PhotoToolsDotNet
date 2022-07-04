@@ -67,15 +67,17 @@ namespace FilterLib.Tests.ReflectiveApiTests
             ReflectiveApi.SetFilterPropertyByName(f, "Radius", "8px");
             ReflectiveApi.SetFilterPropertyByName(f, "Color", "(255, 0, 0)");
             ReflectiveApi.SetFilterPropertyByName(f, "Position", "Outside");
+            ReflectiveApi.SetFilterPropertyByName(f, "AntiAlias", "High");
             SimpleBorderFilter ff = f as SimpleBorderFilter;
             Assert.AreEqual(20, ff.Width.ToAbsolute(200));
             Assert.AreEqual(8, ff.Radius.ToAbsolute(200));
             Assert.AreEqual(new RGB(255, 0, 0), ff.Color);
             Assert.AreEqual(BorderPosition.Outside, ff.Position);
+            Assert.AreEqual(AntiAliasQuality.High, ff.AntiAlias);
         }
 
         [Test]
-        public void TestSimpleBorderParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(SimpleBorderFilter)));
+        public void TestSimpleBorderParCnt() => Assert.AreEqual(5, Common.ParamCount(typeof(SimpleBorderFilter)));
 
         [Test]
         public void TestVignette()
