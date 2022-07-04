@@ -45,11 +45,11 @@ namespace FilterLib.Tests.FilterTests
         
             yield return new TestCaseData("_input.bmp",
                 new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 0);
-            yield return new TestCaseData("SimpleBorder_30px_0_Green_Inside.bmp",
+            yield return new TestCaseData("SimpleBorder_30px_0_Green_Inside_Med.bmp",
                 new SimpleBorderFilter(Size.Absolute(30), Size.Absolute(0), new RGB(0, 255, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 1);
-            yield return new TestCaseData($"SimpleBorder_10pct_8px_Blue_Outside.bmp",
+            yield return new TestCaseData($"SimpleBorder_10pct_8px_Blue_Outside_Med.bmp",
                     new SimpleBorderFilter(Size.Relative(.1f), Size.Absolute(8), new RGB(0, 0, 255), BorderPosition.Outside, AntiAliasQuality.Medium), 1);
-            yield return new TestCaseData($"SimpleBorder_20px_10pct_Red_Center.bmp",
+            yield return new TestCaseData($"SimpleBorder_20px_10pct_Red_Center_Med.bmp",
                 new SimpleBorderFilter(Size.Absolute(20), Size.Relative(.1f), new RGB(255, 0, 0), BorderPosition.Center, AntiAliasQuality.Medium), 1);
         
             yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Relative(3), Size.Relative(2), new RGB(0, 0, 0)), 0);
