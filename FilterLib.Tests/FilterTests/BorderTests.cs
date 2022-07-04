@@ -53,8 +53,14 @@ namespace FilterLib.Tests.FilterTests
                 new SimpleBorderFilter(Size.Absolute(20), Size.Relative(.1f), new RGB(255, 0, 0), BorderPosition.Center, AntiAliasQuality.Medium), 1);
             yield return new TestCaseData($"SimpleBorder_200pct_0_Black_Inside_Med.bmp",
                 new SimpleBorderFilter(Size.Relative(2f), Size.Relative(0), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 1);
+            yield return new TestCaseData($"SimpleBorder_0_30px_Black_Inside_None.bmp",
+                new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(30), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.None), 1);
+            yield return new TestCaseData($"SimpleBorder_0_30px_Black_Inside_Low.bmp",
+                new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(30), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Low), 1);
             yield return new TestCaseData($"SimpleBorder_0_30px_Black_Inside_Med.bmp",
                 new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(30), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 1);
+            yield return new TestCaseData($"SimpleBorder_0_30px_Black_Inside_High.bmp",
+                new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(30), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.High), 1);
             yield return new TestCaseData($"SimpleBorder_0_100pct_Black_Inside_Med.bmp",
                 new SimpleBorderFilter(Size.Absolute(0), Size.Relative(1f), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 1);
 
