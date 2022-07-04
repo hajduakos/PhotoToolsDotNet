@@ -1,11 +1,10 @@
-﻿using FilterLib.Filters.Border;
+﻿using FilterLib.Filters;
+using FilterLib.Filters.Border;
 using FilterLib.Util;
 using NUnit.Framework;
-using Bitmap = System.Drawing.Bitmap;
-using System.Runtime.InteropServices;
-using FilterLib.Filters;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -15,8 +14,6 @@ namespace FilterLib.Tests.FilterTests
         private static readonly Bitmap pattern = new(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
         internal static IEnumerable<TestCaseData> Data()
         {
-            string suffix = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "" : "_l";
-
             yield return new TestCaseData("_input.bmp",
                 new JitterBorderFilter(Size.Absolute(0), new RGB(0, 0, 0), 0), 0);
             yield return new TestCaseData("JitterBorder_20_Red_0.bmp",
@@ -34,14 +31,14 @@ namespace FilterLib.Tests.FilterTests
                 new FadeBorderFilter(Size.Absolute(300), new RGB(0, 0, 0)), 0);
 
             yield return new TestCaseData("_input.bmp",
-                new PatternBorderFilter(Size.Absolute(0), Size.Absolute(0), pattern, BorderPosition.Inside), 0);
+                new PatternBorderFilter(Size.Absolute(0), Size.Absolute(0), pattern, BorderPosition.Inside, AntiAliasQuality.Medium), 0);
             yield return new TestCaseData("PatternBorder_30px_0_Green_Inside.bmp",
-                new PatternBorderFilter(Size.Absolute(30), Size.Absolute(0), pattern, BorderPosition.Inside), 1);
+                new PatternBorderFilter(Size.Absolute(30), Size.Absolute(0), pattern, BorderPosition.Inside, AntiAliasQuality.Medium), 1);
         
-            yield return new TestCaseData($"PatternBorder_10pct_8px_Outside{suffix}.bmp",
-                    new PatternBorderFilter(Size.Relative(.1f), Size.Absolute(8), pattern, BorderPosition.Outside), 1);
-            yield return new TestCaseData($"PatternBorder_20px_10pct_Center{suffix}.bmp",
-                new PatternBorderFilter(Size.Absolute(20), Size.Relative(.1f), pattern, BorderPosition.Center), 1);
+            yield return new TestCaseData("PatternBorder_10pct_8px_Outside.bmp",
+                    new PatternBorderFilter(Size.Relative(.1f), Size.Absolute(8), pattern, BorderPosition.Outside, AntiAliasQuality.Medium), 1);
+            yield return new TestCaseData("PatternBorder_20px_10pct_Center.bmp",
+                new PatternBorderFilter(Size.Absolute(20), Size.Relative(.1f), pattern, BorderPosition.Center, AntiAliasQuality.Medium), 1);
         
             yield return new TestCaseData("_input.bmp",
                 new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 0);

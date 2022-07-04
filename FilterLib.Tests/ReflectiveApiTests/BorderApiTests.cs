@@ -48,15 +48,17 @@ namespace FilterLib.Tests.ReflectiveApiTests
             ReflectiveApi.SetFilterPropertyByName(f, "Radius", "8px");
             ReflectiveApi.SetFilterPropertyByName(f, "Pattern", TestContext.CurrentContext.TestDirectory + "/TestImages/_input.bmp");
             ReflectiveApi.SetFilterPropertyByName(f, "Position", "Outside");
+            ReflectiveApi.SetFilterPropertyByName(f, "AntiAlias", "Low");
             PatternBorderFilter ff = f as PatternBorderFilter;
             Assert.AreEqual(20, ff.Width.ToAbsolute(200));
             Assert.AreEqual(8, ff.Radius.ToAbsolute(200));
             Assert.AreEqual(160, ff.Pattern.Width);
             Assert.AreEqual(BorderPosition.Outside, ff.Position);
+            Assert.AreEqual(AntiAliasQuality.Low, ff.AntiAlias);
         }
 
         [Test]
-        public void TestPatternBorderParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(PatternBorderFilter)));
+        public void TestPatternBorderParCnt() => Assert.AreEqual(5, Common.ParamCount(typeof(PatternBorderFilter)));
 
         [Test]
         public void TestSimpleBorder()
