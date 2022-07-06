@@ -169,5 +169,20 @@ namespace FilterLib.Tests
             Assert.Throws<FormatException>(() => Size.FromString("123percent"));
             Assert.Throws<FormatException>(() => Size.FromString("123pixels"));
         }
+
+        [Test]
+        public void TestBitmapToImage()
+        {
+            string path = TestContext.CurrentContext.TestDirectory + "/TestImages/_input.bmp";
+            Image img = BitmapAdapter.FromBitmapPath(path);
+            int w = img.Width;
+            int h = img.Height;
+            Assert.AreEqual(160, w);
+            Assert.AreEqual(90, h);
+            Assert.AreEqual((98, 144, 198), (img[0, 0, 0], img[0, 0, 1], img[0, 0, 2]));
+            Assert.AreEqual((33, 32, 27), (img[w - 1, 0, 0], img[w - 1, 0, 1], img[w - 1, 0, 2]));
+            Assert.AreEqual((85, 120, 117), (img[0, h - 1, 0], img[0, h - 1, 1], img[0, h - 1, 2]));
+            Assert.AreEqual((181, 174, 157), (img[w - 1, h - 1, 0], img[w - 1, h - 1, 1], img[w - 1, h - 1, 2]));
+        }
     }
 }
