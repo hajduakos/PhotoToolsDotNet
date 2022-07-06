@@ -1,7 +1,4 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Artistic
 {
@@ -42,7 +39,7 @@ namespace FilterLib.Filters.Artistic
 
             unsafe
             {
-                fixed(byte* start = image, origStart = original)
+                fixed (byte* start = image, origStart = original)
                 {
                     int width_3 = image.Width * 3;
                     int sqSize_3 = sqSize * 3;
@@ -91,7 +88,7 @@ namespace FilterLib.Filters.Artistic
                                     // Calculate index (relative to current row)
                                     int idx = ySub * width_3 + x - sqSize_3 - 3;
                                     // Subtract luminance
-                                    sum -= RRatio * rowOrig[idx + 2] + GRatio * rowOrig[idx + 1] + BRatio * rowOrig[idx];
+                                    sum -= RRatio * rowOrig[idx] + GRatio * rowOrig[idx + 1] + BRatio * rowOrig[idx + 2];
                                     --n;
                                 }
                             }
