@@ -57,13 +57,13 @@ namespace FilterLib.Filters.Border
                             for (int x = 0; x < width_3; x += 3)
                             {
                                 byte* px = start + k * width_3 + x;
-                                px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
+                                px[0] = (byte)(px[0] * (1 - alpha) + Color.R * alpha);
                                 px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
-                                px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                                px[2] = (byte)(px[2] * (1 - alpha) + Color.B * alpha);
                                 px = start + (image.Height - 1 - k) * width_3 + x;
-                                px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
+                                px[0] = (byte)(px[0] * (1 - alpha) + Color.R * alpha);
                                 px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
-                                px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                                px[2] = (byte)(px[2] * (1 - alpha) + Color.B * alpha);
                             }
                         }
                         if (k < image.Width)
@@ -71,13 +71,13 @@ namespace FilterLib.Filters.Border
                             for (int y = 0; y < image.Height; ++y)
                             {
                                 byte* px = start + y * width_3 + k * 3;
-                                px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
+                                px[0] = (byte)(px[0] * (1 - alpha) + Color.R * alpha);
                                 px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
-                                px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                                px[2] = (byte)(px[2] * (1 - alpha) + Color.B * alpha);
                                 px = start + y * width_3 + width_3 - (k + 1) * 3;
-                                px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
+                                px[0] = (byte)(px[0] * (1 - alpha) + Color.R * alpha);
                                 px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
-                                px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                                px[2] = (byte)(px[2] * (1 - alpha) + Color.B * alpha);
                             }
                         }
                         reporter?.Report(k, 0, borderWidth - 1);
