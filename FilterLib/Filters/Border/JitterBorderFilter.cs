@@ -74,9 +74,9 @@ namespace FilterLib.Filters.Border
                             if (distanceFromNearestEdge > borderWidth) continue;
                             if (rnd.NextSingle() > map[distanceFromNearestEdge])
                             {
-                                row[x + 2] = Color.R;
+                                row[x] = Color.R;
                                 row[x + 1] = Color.G;
-                                row[x] = Color.B;
+                                row[x + 2] = Color.B;
                             }
                         }
                         reporter?.Report(y, 0, image.Height - 1);
