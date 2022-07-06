@@ -83,18 +83,18 @@ namespace FilterLib.Filters.Border
                             // If the point is outside the vignette area, set the color to given one
                             if (ellipseRadius > a1)
                             {
-                                row[x] = Color.B;
+                                row[x] = Color.R;
                                 row[x + 1] = Color.G;
-                                row[x + 2] = Color.R;
+                                row[x + 2] = Color.B;
                             }
                             // Else if the point is outside the clear zone, calculate opacity
                             else if (ellipseRadius >= a0)
                             {
                                 op = MathF.Cos((ellipseRadius - a0) * normalizer) / 2f + 0.5f; // Cosine transition
                                 //op = 1- (a_tmp - a0) / (a1 - a0); // Linear transition
-                                row[x] = (byte)(row[x] * op + Color.B * (1 - op));
+                                row[x] = (byte)(row[x] * op + Color.R * (1 - op));
                                 row[x + 1] = (byte)(row[x + 1] * op + Color.G * (1 - op));
-                                row[x + 2] = (byte)(row[x + 2] * op + Color.R * (1 - op));
+                                row[x + 2] = (byte)(row[x + 2] * op + Color.B * (1 - op));
                             }
                         }
                         reporter?.Report(y, 0, h - 1);
