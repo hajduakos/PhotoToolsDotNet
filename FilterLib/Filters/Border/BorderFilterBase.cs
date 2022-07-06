@@ -98,14 +98,14 @@ namespace FilterLib.Filters.Border
                     {
                         byte* row = start + y * result.Width * 3;
                         for (int x = 0; x < newWidth_3; x += 3)
-                            (row[x + 2], row[x + 1], row[x]) = GetBorderAt(x / 3, y);
+                            (row[x], row[x + 1], row[x+2]) = GetBorderAt(x / 3, y);
                     }
                     // Bottom
                     for (int y = Math.Max(0, newHeight - borderW); y < newHeight; ++y)
                     {
                         byte* row = start + y * result.Width * 3;
                         for (int x = 0; x < newWidth_3; x += 3)
-                            (row[x + 2], row[x + 1], row[x]) = GetBorderAt(x / 3, y);
+                            (row[x ], row[x + 1], row[x+2]) = GetBorderAt(x / 3, y);
                     }
                     // Left and right
                     for (int y = borderW; y < newHeight - borderW; ++y)
@@ -113,10 +113,10 @@ namespace FilterLib.Filters.Border
                         byte* row = start + y * result.Width * 3;
                         // Left
                         for (int x = 0; x < borderW_3 && x < newWidth_3; x += 3)
-                            (row[x + 2], row[x + 1], row[x]) = GetBorderAt(x / 3, y);
+                            (row[x ], row[x + 1], row[x+2]) = GetBorderAt(x / 3, y);
                         // Right
                         for (int x = Math.Max(0, newWidth_3 - borderW_3); x < newWidth_3; x += 3)
-                            (row[x + 2], row[x + 1], row[x]) = GetBorderAt(x / 3, y);
+                            (row[x ], row[x + 1], row[x+2]) = GetBorderAt(x / 3, y);
                     }
                     reporter?.Report(67, 0, 100);
 
@@ -132,9 +132,9 @@ namespace FilterLib.Filters.Border
                             int x_3 = (x + borderW) * 3;
                             float a = alphaMap[x, y];
                             (byte r, byte g, byte b) = GetBorderAt(x + borderW, y + borderW);
-                            row[x_3] = (a * b + (1 - a) * row[x_3]).ClampToByte();
+                            row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
                             row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
-                            row[x_3 + 2] = (a * r + (1 - a) * row[x_3 + 2]).ClampToByte();
+                            row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
                         }
                         // Top right
                         for (int x = radius_2 - 1; x >= radius && newWidth - borderW - radius_2 + x >= 0; --x)
@@ -142,9 +142,9 @@ namespace FilterLib.Filters.Border
                             int x_3 = (newWidth - borderW - radius_2 + x) * 3;
                             float a = alphaMap[x, y];
                             (byte r, byte g, byte b) = GetBorderAt(x_3 / 3, y + borderW);
-                            row[x_3] = (a * b + (1 - a) * row[x_3]).ClampToByte();
+                            row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
                             row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
-                            row[x_3 + 2] = (a * r + (1 - a) * row[x_3 + 2]).ClampToByte();
+                            row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
                         }
                     }
                     for (int y = radius_2 - 1; y >= radius && newHeight - borderW - radius_2 + y >= 0; --y)
@@ -157,9 +157,9 @@ namespace FilterLib.Filters.Border
                             int x_3 = (x + borderW) * 3;
                             float a = alphaMap[x, y];
                             (byte r, byte g, byte b) = GetBorderAt(x_3 / 3, yImg);
-                            row[x_3] = (a * b + (1 - a) * row[x_3]).ClampToByte();
+                            row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
                             row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
-                            row[x_3 + 2] = (a * r + (1 - a) * row[x_3 + 2]).ClampToByte();
+                            row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
                         }
                         // Bottom right
                         for (int x = radius_2 - 1; x >= radius && newWidth - borderW - radius_2 + x >= 0; --x)
@@ -167,9 +167,9 @@ namespace FilterLib.Filters.Border
                             int x_3 = (newWidth - borderW - radius_2 + x) * 3;
                             float a = alphaMap[x, y];
                             (byte r, byte g, byte b) = GetBorderAt(x_3 / 3, yImg);
-                            row[x_3] = (a * b + (1 - a) * row[x_3]).ClampToByte();
+                            row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
                             row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
-                            row[x_3 + 2] = (a * r + (1 - a) * row[x_3 + 2]).ClampToByte();
+                            row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
                         }
                     }
                     reporter?.Report(100, 0, 100);
