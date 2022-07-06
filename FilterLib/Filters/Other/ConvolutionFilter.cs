@@ -49,12 +49,12 @@ namespace FilterLib.Filters.Other
                             byte mm = rowOrig[x];
                             byte tl = y > 0 && x >= 3 ? rowOrig[x - stride - 3] : mm;
                             byte tm = y > 0 ? rowOrig[x - stride] : mm;
-                            byte tr = y > 0 && x < width_3 - 4 ? rowOrig[x - stride + 3] : mm;
+                            byte tr = y > 0 && x < width_3 - 3 ? rowOrig[x - stride + 3] : mm;
                             byte ml = x >= 3 ? rowOrig[x - 3] : mm;
-                            byte mr = x < width_3 - 4 ? rowOrig[x + 3] : mm;
+                            byte mr = x < width_3 - 3 ? rowOrig[x + 3] : mm;
                             byte bl = y < h - 1 && x >= 3 ? rowOrig[x + stride - 3] : mm;
                             byte bm = y < h - 1 ? rowOrig[x + stride] : mm;
-                            byte br = y < h - 1 && x < width_3 - 4 ? rowOrig[x + stride + 3] : mm;
+                            byte br = y < h - 1 && x < width_3 - 3 ? rowOrig[x + stride + 3] : mm;
                             nVal = (
                                 tl * convMatrix[0, 0] + tm * convMatrix[1, 0] + tr * convMatrix[2, 0] +
                                 ml * convMatrix[0, 1] + mm * convMatrix[1, 1] + mr * convMatrix[2, 1] +
