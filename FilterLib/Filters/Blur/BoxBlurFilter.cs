@@ -1,7 +1,4 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Blur
 {
@@ -46,19 +43,18 @@ namespace FilterLib.Filters.Blur
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Clone image for temporary use (intermediate result)
-            using (Bitmap tmp = (Bitmap)image.Clone())
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdTmp = new(tmp, PixelFormat.Format24bppRgb))
+            Image tmp = (Image)image.Clone();
+            unsafe
             {
-                int width_3 = image.Width * 3;
-                int radiusX_3 = radiusX * 3;
-
-                unsafe
+                fixed (byte* start = image, tmpStart = tmp)
                 {
+                    int width_3 = image.Width * 3;
+                    int radiusX_3 = radiusX * 3;
+
                     // We do the blurring in 2 steps: first horizontal, then vertical
 
                     // First iterate through rows and do horizontal blur
@@ -66,8 +62,8 @@ namespace FilterLib.Filters.Blur
                     for (int y = 0; y < image.Height; ++y)
                     {
                         // Get rows
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        byte* rowTmp = (byte*)bmdTmp.Scan0 + (y * bmdTmp.Stride);
+                        byte* row = start + (y * width_3);
+                        byte* rowTmp = tmpStart + (y * width_3);
 
                         // Clear sums
                         int rSum = 0, gSum = 0, bSum = 0, n = 0;
@@ -117,8 +113,8 @@ namespace FilterLib.Filters.Blur
                     for (int x = 0; x < width_3; x += 3)
                     {
                         // Get columns
-                        byte* col = (byte*)bmd.Scan0 + x;
-                        byte* colTmp = (byte*)bmdTmp.Scan0 + x;
+                        byte* col = start + x;
+                        byte* colTmp = tmpStart + x;
 
                         // Clear sums
                         int rSum = 0, gSum = 0, bSum = 0, n = 0;
@@ -126,9 +122,9 @@ namespace FilterLib.Filters.Blur
                         // Take the sum of the first ry+1 elements
                         for (int y = 0; y < image.Height && n <= radiusY; ++y)
                         {
-                            rSum += colTmp[y * bmdTmp.Stride + 2];
-                            gSum += colTmp[y * bmdTmp.Stride + 1];
-                            bSum += colTmp[y * bmdTmp.Stride];
+                            rSum += colTmp[y * width_3 + 2];
+                            gSum += colTmp[y * width_3 + 1];
+                            bSum += colTmp[y * width_3];
                             ++n;
                         }
                         // First element will be the average
@@ -139,8 +135,8 @@ namespace FilterLib.Filters.Blur
                         // Iterate through the other rows
                         for (int y = 1; y < image.Height; ++y)
                         {
-                            int j_stride = y * bmd.Stride;
-                            int ry_stride = radiusY * bmd.Stride;
+                            int j_stride = y * width_3;
+                            int ry_stride = radiusY * width_3;
                             // If we can take a new element from the bottom
                             if (y + radiusY < image.Height)
                             {
@@ -153,9 +149,9 @@ namespace FilterLib.Filters.Blur
                             // If we can remove an element from the top
                             if (y - radiusY - 1 >= 0)
                             {
-                                rSum -= colTmp[j_stride - ry_stride - bmd.Stride + 2]; // Row (j-ry-1)
-                                gSum -= colTmp[j_stride - ry_stride - bmd.Stride + 1];
-                                bSum -= colTmp[j_stride - ry_stride - bmd.Stride];
+                                rSum -= colTmp[j_stride - ry_stride - width_3 + 2]; // Row (j-ry-1)
+                                gSum -= colTmp[j_stride - ry_stride - width_3 + 1];
+                                bSum -= colTmp[j_stride - ry_stride - width_3];
                                 --n;
                             }
                             // The actual element will be the average

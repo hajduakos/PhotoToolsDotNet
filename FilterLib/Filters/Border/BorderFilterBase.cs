@@ -1,8 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Border
 {
@@ -56,7 +54,7 @@ namespace FilterLib.Filters.Border
         }
 
         /// <inheritdoc/>
-        public override sealed Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override sealed Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             int borderW = Width.ToAbsolute(Math.Max(image.Width, image.Height));
@@ -68,20 +66,20 @@ namespace FilterLib.Filters.Border
                 BorderPosition.Outside => (image.Width + 2 * borderW, image.Height + 2 * borderW),
                 _ => throw new ArgumentException($"Unknown border position: {Position}.")
             };
-            Bitmap result = new(newWidth, newHeight);
-            using (DisposableBitmapData bmdOrig = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmd = new(result, PixelFormat.Format24bppRgb))
+            Image result = new(newWidth, newHeight);
+
+            unsafe
             {
-                unsafe
-                {
+                fixed (byte* start = result, origStart = image)
+            {
                     // Draw the image centered
                     int imgOffset = (newWidth - image.Width) / 2;
                     int imgOffset_3 = imgOffset * 3;
                     int width_3 = image.Width * 3;
                     for (int y = 0; y < image.Height; ++y)
                     {
-                        byte* row = (byte*)bmd.Scan0 + (y + imgOffset) * bmd.Stride;
-                        byte* rowOrig = (byte*)bmdOrig.Scan0 + y * bmdOrig.Stride;
+                        byte* row = start + (y + imgOffset) * result.Width * 3;
+                        byte* rowOrig = origStart + y * image.Width * 3;
 
                         for (int x = 0; x < width_3; x += 3)
                         {
@@ -98,21 +96,21 @@ namespace FilterLib.Filters.Border
                     // Top
                     for (int y = 0; y < borderW && y < newHeight; ++y)
                     {
-                        byte* row = (byte*)bmd.Scan0 + y * bmd.Stride;
+                        byte* row = start + y * result.Width * 3;
                         for (int x = 0; x < newWidth_3; x += 3)
                             (row[x + 2], row[x + 1], row[x]) = GetBorderAt(x / 3, y);
                     }
                     // Bottom
                     for (int y = Math.Max(0, newHeight - borderW); y < newHeight; ++y)
                     {
-                        byte* row = (byte*)bmd.Scan0 + y * bmd.Stride;
+                        byte* row = start + y * result.Width * 3;
                         for (int x = 0; x < newWidth_3; x += 3)
                             (row[x + 2], row[x + 1], row[x]) = GetBorderAt(x / 3, y);
                     }
                     // Left and right
                     for (int y = borderW; y < newHeight - borderW; ++y)
                     {
-                        byte* row = (byte*)bmd.Scan0 + y * bmd.Stride;
+                        byte* row = start + y * result.Width * 3;
                         // Left
                         for (int x = 0; x < borderW_3 && x < newWidth_3; x += 3)
                             (row[x + 2], row[x + 1], row[x]) = GetBorderAt(x / 3, y);
@@ -127,7 +125,7 @@ namespace FilterLib.Filters.Border
                     float[,] alphaMap = GenerateAlphaMap(radius);
                     for (int y = 0; y < radius && y + borderW < newHeight; ++y)
                     {
-                        byte* row = (byte*)bmd.Scan0 + (y + borderW) * bmd.Stride;
+                        byte* row = start + (y + borderW) * result.Width * 3;
                         // Top left
                         for (int x = 0; x < radius && x + borderW < newWidth; ++x)
                         {
@@ -152,7 +150,7 @@ namespace FilterLib.Filters.Border
                     for (int y = radius_2 - 1; y >= radius && newHeight - borderW - radius_2 + y >= 0; --y)
                     {
                         int yImg = newHeight - borderW - radius_2 + y;
-                        byte* row = (byte*)bmd.Scan0 + yImg * bmd.Stride;
+                        byte* row = start + yImg * result.Width * 3;
                         // Bottom left
                         for (int x = 0; x < radius && x + borderW < newWidth; ++x)
                         {

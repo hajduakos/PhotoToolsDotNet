@@ -1,7 +1,4 @@
-﻿using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
-using IReporter = FilterLib.Reporting.IReporter;
-using FilterLib.Util;
+﻿using IReporter = FilterLib.Reporting.IReporter;
 
 namespace FilterLib.Filters
 {
@@ -11,25 +8,26 @@ namespace FilterLib.Filters
     public abstract class PerPixelFilterBase : FilterInPlaceBase
     {
         /// <inheritdoc/>
-        public override sealed void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override sealed void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             ApplyStart();
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            unsafe
             {
-                // Iterate through each pixel and process individually
-                int width_3 = image.Width * 3;
-                unsafe
+                fixed (byte* start = image)
                 {
+                    // Iterate through each pixel and process individually
+                    int width_3 = image.Width * 3;
                     for (int y = 0; y < image.Height; ++y)
                     {
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        byte* row = start + y * width_3;
                         for (int x = 0; x < width_3; x += 3)
                         {
-                            ProcessPixel(row + x + 2, row + x + 1, row + x);
+                            ProcessPixel(row + x, row + x + 1, row + x + 2);
                         }
                         reporter?.Report(y, 0, image.Height - 1);
                     }
+
                 }
             }
             ApplyEnd();

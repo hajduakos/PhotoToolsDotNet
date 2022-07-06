@@ -1,5 +1,4 @@
 ﻿using FilterLib.Reporting;
-using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Filters.Adjustments
 {
@@ -19,7 +18,7 @@ namespace FilterLib.Filters.Adjustments
         /// pixels that are lost (become completely black or white).
         /// </summary>
         /// <returns>Tuple of dark and light cropping values</returns>
-        private static (int, int) GetCroppingValues(Bitmap image)
+        private static (int, int) GetCroppingValues(Image image)
         {
             int[] lumHistogram = Util.Histogram.GetLuminanceHistogram(image);
             int totalPixels = image.Width * image.Height;
@@ -40,7 +39,7 @@ namespace FilterLib.Filters.Adjustments
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             (int dark, int light) = GetCroppingValues(image);

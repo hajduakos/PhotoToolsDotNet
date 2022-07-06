@@ -1,10 +1,11 @@
-﻿using System.Drawing;
+﻿using FilterLib;
 
 namespace FilterScript.Model
 {
     interface ITask
     {
-        public Bitmap Execute();
+        public Image Execute();
+
         public void Clear();
     }
 }

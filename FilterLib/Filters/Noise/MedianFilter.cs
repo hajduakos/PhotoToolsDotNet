@@ -1,7 +1,5 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Noise
 {
@@ -32,80 +30,82 @@ namespace FilterLib.Filters.Noise
         public MedianFilter(int strength = 0) => Strength = strength;
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Clone image (the clone won't be modified)
-            using Bitmap original = (Bitmap)image.Clone();
-            using DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb);
-            using DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb);
-            int width_3 = image.Width * 3;
-            int h = image.Height;
-            int x, y, k, l, min, stride = bmd.Stride;
-            byte[,] medianBGR = new byte[3, 9]; // Arrays for sorting
-            byte[] medianLum = new byte[9];
-            byte swap;
-
-            float op1 = strength / 100.0f;
-            float op0 = 1 - op1;
+            Image original = (Image)image.Clone();
 
             unsafe
             {
-                // Iterate through rows
-                for (y = 1; y < h - 1; ++y)
+                fixed (byte* start = image, origStart = original)
                 {
-                    // Get rows
-                    byte* row = (byte*)bmd.Scan0 + (y * stride);
-                    byte* rowOrig = (byte*)bmdOrig.Scan0 + (y * stride);
-                    // Iterate through columns
-                    for (x = 3; x < width_3 - 3; x += 3)
+                    int width_3 = image.Width * 3;
+                    int h = image.Height;
+                    int x, y, k, l, min, stride = width_3;
+                    byte[,] medianBGR = new byte[3, 9]; // Arrays for sorting
+                    byte[] medianLum = new byte[9];
+                    byte swap;
+
+                    float op1 = strength / 100.0f;
+                    float op0 = 1 - op1;
+
+                    // Iterate through rows
+                    for (y = 1; y < h - 1; ++y)
                     {
-                        // Collect pixel and surroundings
-                        for (k = 0; k < 3; ++k)
+                        // Get rows
+                        byte* row = start + (y * stride);
+                        byte* rowOrig = origStart + (y * stride);
+                        // Iterate through columns
+                        for (x = 3; x < width_3 - 3; x += 3)
                         {
-                            medianBGR[k, 0] = rowOrig[k + x - stride - 3];
-                            medianBGR[k, 1] = rowOrig[k + x - stride];
-                            medianBGR[k, 2] = rowOrig[k + x - stride + 3];
-                            medianBGR[k, 3] = rowOrig[k + x - 3];
-                            medianBGR[k, 4] = rowOrig[k + x];
-                            medianBGR[k, 5] = rowOrig[k + x + 3];
-                            medianBGR[k, 6] = rowOrig[k + x + stride - 3];
-                            medianBGR[k, 7] = rowOrig[k + x + stride];
-                            medianBGR[k, 8] = rowOrig[k + x + stride + 3];
-                        }
-                        // Calculate luminance values
-                        for (k = 0; k < 9; ++k)
-                            medianLum[k] = (byte)(.299 * medianBGR[2, k] + .587 * medianBGR[1, k] + .114 * medianBGR[0, k]);
-                        // Sort by luminance (only the first 5 elements, since we need the 5th
-                        for (k = 0; k < 5; ++k)
-                        {
-                            min = k;
-                            for (l = k + 1; l < 9; ++l)
-                                if (medianLum[l] < medianLum[min]) min = l;
-                            // Swap
-                            if (k != min)
+                            // Collect pixel and surroundings
+                            for (k = 0; k < 3; ++k)
                             {
-                                // Swap luminance
-                                swap = medianLum[min];
-                                medianLum[min] = medianLum[k];
-                                medianLum[k] = swap;
-                                // Swap rgbs
-                                for (l = 0; l < 3; ++l)
+                                medianBGR[k, 0] = rowOrig[k + x - stride - 3];
+                                medianBGR[k, 1] = rowOrig[k + x - stride];
+                                medianBGR[k, 2] = rowOrig[k + x - stride + 3];
+                                medianBGR[k, 3] = rowOrig[k + x - 3];
+                                medianBGR[k, 4] = rowOrig[k + x];
+                                medianBGR[k, 5] = rowOrig[k + x + 3];
+                                medianBGR[k, 6] = rowOrig[k + x + stride - 3];
+                                medianBGR[k, 7] = rowOrig[k + x + stride];
+                                medianBGR[k, 8] = rowOrig[k + x + stride + 3];
+                            }
+                            // Calculate luminance values
+                            for (k = 0; k < 9; ++k)
+                                medianLum[k] = (byte)(.299 * medianBGR[2, k] + .587 * medianBGR[1, k] + .114 * medianBGR[0, k]);
+                            // Sort by luminance (only the first 5 elements, since we need the 5th
+                            for (k = 0; k < 5; ++k)
+                            {
+                                min = k;
+                                for (l = k + 1; l < 9; ++l)
+                                    if (medianLum[l] < medianLum[min]) min = l;
+                                // Swap
+                                if (k != min)
                                 {
-                                    swap = medianBGR[l, min];
-                                    medianBGR[l, min] = medianBGR[l, k];
-                                    medianBGR[l, k] = swap;
+                                    // Swap luminance
+                                    swap = medianLum[min];
+                                    medianLum[min] = medianLum[k];
+                                    medianLum[k] = swap;
+                                    // Swap rgbs
+                                    for (l = 0; l < 3; ++l)
+                                    {
+                                        swap = medianBGR[l, min];
+                                        medianBGR[l, min] = medianBGR[l, k];
+                                        medianBGR[l, k] = swap;
+                                    }
                                 }
                             }
+                            // Get the median
+                            row[x] = (byte)(op0 * row[x] + op1 * medianBGR[0, 4]);
+                            row[x + 1] = (byte)(op0 * row[x + 1] + op1 * medianBGR[1, 4]);
+                            row[x + 2] = (byte)(op0 * row[x + 2] + op1 * medianBGR[2, 4]);
                         }
-                        // Get the median
-                        row[x] = (byte)(op0 * row[x] + op1 * medianBGR[0, 4]);
-                        row[x + 1] = (byte)(op0 * row[x + 1] + op1 * medianBGR[1, 4]);
-                        row[x + 2] = (byte)(op0 * row[x + 2] + op1 * medianBGR[2, 4]);
+                        reporter?.Report(y, 1, h - 2);
                     }
-                    reporter?.Report(y, 1, h - 2);
-                }
 
+                }
             }
             reporter?.Done();
         }

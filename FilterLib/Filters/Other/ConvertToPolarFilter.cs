@@ -1,8 +1,5 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using MathF = System.MathF;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Other
 {
@@ -38,37 +35,35 @@ namespace FilterLib.Filters.Other
         public ConvertToPolarFilter(float phase = 0) => Phase = phase;
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Clone image (the clone won't be modified)
-            using (Bitmap original = (Bitmap)image.Clone())
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
-            {
-                int w = image.Width, h = image.Height;
-                int stride = bmd.Stride;
-                int width_3 = image.Width * 3; // Width of a row
-                int x, y;
-                float xCorr, yCorr; // Corrected coordinates
-                float halfHeight = (h - 1) / 2f;
-                float halfWidth = (w - 1) / 2f;
-                float r, fi; // Radius and angle
-                float xMult = h / (float)w; // Correction to circle
-                int x0, y0, x1, y1; // Indexes in the original image (bilinear interpolation with 4 points)
-                float xOrg, yOrg; // Coordinates in the original image (float)
-                float xFrac, yFrac; // Fractional parts of the coordinates
-                float xMultiplier = (1 / (2 * MathF.PI) * (w - 1)); // Multiplier to convert to polar
-                float yMultiplier = 1 / halfHeight * (h - 1); // Multiplier to convert to polar
+            Image original = (Image)image.Clone();
 
-                unsafe
+            unsafe
+            {
+                fixed (byte* start = image, origStart = original)
                 {
-                    byte* origStart = (byte*)bmdOrig.Scan0;
+                    int w = image.Width, h = image.Height;
+                    int width_3 = image.Width * 3; // Width of a row
+                    int x, y;
+                    float xCorr, yCorr; // Corrected coordinates
+                    float halfHeight = (h - 1) / 2f;
+                    float halfWidth = (w - 1) / 2f;
+                    float r, fi; // Radius and angle
+                    float xMult = h / (float)w; // Correction to circle
+                    int x0, y0, x1, y1; // Indexes in the original image (bilinear interpolation with 4 points)
+                    float xOrg, yOrg; // Coordinates in the original image (float)
+                    float xFrac, yFrac; // Fractional parts of the coordinates
+                    float xMultiplier = (1 / (2 * MathF.PI) * (w - 1)); // Multiplier to convert to polar
+                    float yMultiplier = 1 / halfHeight * (h - 1); // Multiplier to convert to polar
+
                     // Iterate through rows
                     for (y = 0; y < h; ++y)
                     {
                         // Get rows
-                        byte* row = (byte*)bmd.Scan0 + (y * stride);
+                        byte* row = start + (y * width_3);
                         // Iterate through columns
                         for (x = 0; x < width_3; x += 3)
                         {
@@ -105,18 +100,18 @@ namespace FilterLib.Filters.Other
                             if (y1 >= h) y1 = h - 1;
 
                             // Interpolation for R,G,B components
-                            row[x] = (byte)(origStart[y0 * stride + x0] * (1 - xFrac) * (1 - yFrac)
-                                + origStart[y1 * stride + x0] * (1 - xFrac) * yFrac
-                                + origStart[y0 * stride + x1] * xFrac * (1 - yFrac)
-                                + origStart[y1 * stride + x1] * xFrac * yFrac);
-                            row[x + 1] = (byte)(origStart[y0 * stride + x0 + 1] * (1 - xFrac) * (1 - yFrac)
-                                + origStart[y1 * stride + x0 + 1] * (1 - xFrac) * yFrac
-                                + origStart[y0 * stride + x1 + 1] * xFrac * (1 - yFrac)
-                                + origStart[y1 * stride + x1 + 1] * xFrac * yFrac);
-                            row[x + 2] = (byte)(origStart[y0 * stride + x0 + 2] * (1 - xFrac) * (1 - yFrac)
-                                + origStart[y1 * stride + x0 + 2] * (1 - xFrac) * yFrac
-                                + origStart[y0 * stride + x1 + 2] * xFrac * (1 - yFrac)
-                                + origStart[y1 * stride + x1 + 2] * xFrac * yFrac);
+                            row[x] = (byte)(origStart[y0 * width_3 + x0] * (1 - xFrac) * (1 - yFrac)
+                                + origStart[y1 * width_3 + x0] * (1 - xFrac) * yFrac
+                                + origStart[y0 * width_3 + x1] * xFrac * (1 - yFrac)
+                                + origStart[y1 * width_3 + x1] * xFrac * yFrac);
+                            row[x + 1] = (byte)(origStart[y0 * width_3 + x0 + 1] * (1 - xFrac) * (1 - yFrac)
+                                + origStart[y1 * width_3 + x0 + 1] * (1 - xFrac) * yFrac
+                                + origStart[y0 * width_3 + x1 + 1] * xFrac * (1 - yFrac)
+                                + origStart[y1 * width_3 + x1 + 1] * xFrac * yFrac);
+                            row[x + 2] = (byte)(origStart[y0 * width_3 + x0 + 2] * (1 - xFrac) * (1 - yFrac)
+                                + origStart[y1 * width_3 + x0 + 2] * (1 - xFrac) * yFrac
+                                + origStart[y0 * width_3 + x1 + 2] * xFrac * (1 - yFrac)
+                                + origStart[y1 * width_3 + x1 + 2] * xFrac * yFrac);
                         }
                         reporter?.Report(y, 0, h - 1);
                     }

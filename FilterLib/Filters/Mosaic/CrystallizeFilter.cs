@@ -1,8 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Random = System.Random;
 
 namespace FilterLib.Filters.Mosaic
@@ -74,44 +72,44 @@ namespace FilterLib.Filters.Mosaic
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+
+            unsafe
             {
-                int w = image.Width;
-                int width_3 = image.Width * 3; // Width of a row
-                int h = image.Height;
-                int x, y, xSub, ySub, size_3 = size * 3, i_3;
-                int stride = bmd.Stride;
-                float avg = averaging / 100.0f;
-
-                // Generate points
-                Random rnd = new(Seed);
-                // Additional points required if the width/height is not dividible by the size
-                int crystalsX = w / size + ((w % size) == 0 ? 0 : 1);
-                int crystalsY = h / size + ((h % size) == 0 ? 0 : 1);
-                Cpoint[,] crystalPoints = new Cpoint[crystalsX, crystalsY];
-                for (xSub = 0; xSub < crystalsX; ++xSub)
+                fixed (byte* start = image)
                 {
-                    for (ySub = 0; ySub < crystalsY; ++ySub)
+                    int w = image.Width;
+                    int width_3 = image.Width * 3; // Width of a row
+                    int h = image.Height;
+                    int x, y, xSub, ySub, size_3 = size * 3, i_3;
+                    int stride = width_3;
+                    float avg = averaging / 100.0f;
+
+                    // Generate points
+                    Random rnd = new(Seed);
+                    // Additional points required if the width/height is not dividible by the size
+                    int crystalsX = w / size + ((w % size) == 0 ? 0 : 1);
+                    int crystalsY = h / size + ((h % size) == 0 ? 0 : 1);
+                    Cpoint[,] crystalPoints = new Cpoint[crystalsX, crystalsY];
+                    for (xSub = 0; xSub < crystalsX; ++xSub)
                     {
-                        // Generate random points
-                        crystalPoints[xSub, ySub] = new Cpoint(xSub * size + rnd.Next() % size, ySub * size + rnd.Next() % size);
-                        // Check bounds
-                        crystalPoints[xSub, ySub].x = Math.Min(crystalPoints[xSub, ySub].x, w - 1);
-                        crystalPoints[xSub, ySub].y = Math.Min(crystalPoints[xSub, ySub].y, h - 1);
+                        for (ySub = 0; ySub < crystalsY; ++ySub)
+                        {
+                            // Generate random points
+                            crystalPoints[xSub, ySub] = new Cpoint(xSub * size + rnd.Next() % size, ySub * size + rnd.Next() % size);
+                            // Check bounds
+                            crystalPoints[xSub, ySub].x = Math.Min(crystalPoints[xSub, ySub].x, w - 1);
+                            crystalPoints[xSub, ySub].y = Math.Min(crystalPoints[xSub, ySub].y, h - 1);
+                        }
                     }
-                }
 
-                // Average colors of the points
-                byte[,,] avgColors = new byte[crystalsX, crystalsY, 3];
-                int rSum, gSum, bSum, n;
+                    // Average colors of the points
+                    byte[,,] avgColors = new byte[crystalsX, crystalsY, 3];
+                    int rSum, gSum, bSum, n;
 
-                int blockX, blockY; // Current block coordinates
-                unsafe
-                {
-                    byte* imgStartPtr = (byte*)bmd.Scan0;
+                    int blockX, blockY; // Current block coordinates
 
                     // First step: averaging
                     for (y = 0; y < h; y += size)
@@ -123,18 +121,18 @@ namespace FilterLib.Filters.Mosaic
                             {
                                 for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                                 {
-                                    rSum += imgStartPtr[(y + ySub) * stride + x + xSub + 2];
-                                    gSum += imgStartPtr[(y + ySub) * stride + x + xSub + 1];
-                                    bSum += imgStartPtr[(y + ySub) * stride + x + xSub];
+                                    rSum += start[(y + ySub) * stride + x + xSub + 2];
+                                    gSum += start[(y + ySub) * stride + x + xSub + 1];
+                                    bSum += start[(y + ySub) * stride + x + xSub];
                                     ++n;
                                 }
                             }
                             // Get representative point
                             Cpoint pnt = crystalPoints[x / size_3, y / size];
                             // Set average color as a combination of the average color and the representative point
-                            avgColors[x / size_3, y / size, 0] = (byte)(avg * bSum / n + (1 - avg) * imgStartPtr[pnt.y * stride + pnt.x * 3]);
-                            avgColors[x / size_3, y / size, 1] = (byte)(avg * gSum / n + (1 - avg) * imgStartPtr[pnt.y * stride + pnt.x * 3 + 1]);
-                            avgColors[x / size_3, y / size, 2] = (byte)(avg * rSum / n + (1 - avg) * imgStartPtr[pnt.y * stride + pnt.x * 3 + 2]);
+                            avgColors[x / size_3, y / size, 0] = (byte)(avg * bSum / n + (1 - avg) * start[pnt.y * stride + pnt.x * 3]);
+                            avgColors[x / size_3, y / size, 1] = (byte)(avg * gSum / n + (1 - avg) * start[pnt.y * stride + pnt.x * 3 + 1]);
+                            avgColors[x / size_3, y / size, 2] = (byte)(avg * rSum / n + (1 - avg) * start[pnt.y * stride + pnt.x * 3 + 2]);
                         }
                         reporter?.Report(y, 0, 2 * h - 1);
                     }
@@ -168,7 +166,7 @@ namespace FilterLib.Filters.Mosaic
 
                             // Set the same color as the closest point color
                             for (xSub = 0; xSub < 3; xSub++)
-                                imgStartPtr[y * stride + x + xSub] = avgColors[minPoint.x / size, minPoint.y / size, xSub];
+                                start[y * stride + x + xSub] = avgColors[minPoint.x / size, minPoint.y / size, xSub];
                         }
 
                         reporter?.Report(h + y, 0, 2 * h - 1);

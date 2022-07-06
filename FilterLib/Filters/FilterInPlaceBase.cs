@@ -8,14 +8,14 @@ namespace FilterLib.Filters
     public abstract class FilterInPlaceBase : FilterBase, IFilterInPlace
     {
         /// <inheritdoc/>
-        public override Bitmap Apply(Bitmap image, Reporting.IReporter reporter = null)
+        public override Image Apply(Image image, Reporting.IReporter reporter = null)
         {
-            Bitmap result = (Bitmap)image.Clone();
+            Image result = (Image)image.Clone();
             ApplyInPlace(result, reporter);
             return result;
         }
 
         /// <inheritdoc/>
-        public abstract void ApplyInPlace(Bitmap image, Reporting.IReporter reporter = null);
+        public abstract void ApplyInPlace(Image image, Reporting.IReporter reporter = null);
     }
 }

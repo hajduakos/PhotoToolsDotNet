@@ -1,6 +1,4 @@
-﻿using Bitmap = System.Drawing.Bitmap;
-
-namespace FilterLib.Filters
+﻿namespace FilterLib.Filters
 {
     /// <summary>
     /// Interface for image filters that can be applied on the original image.
@@ -12,6 +10,6 @@ namespace FilterLib.Filters
         /// </summary>
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
-        void ApplyInPlace(Bitmap image, Reporting.IReporter reporter = null);
+        void ApplyInPlace(Image image, Reporting.IReporter reporter = null);
     }
 }

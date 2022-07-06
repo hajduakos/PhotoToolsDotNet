@@ -1,7 +1,5 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Other
 {
@@ -24,27 +22,27 @@ namespace FilterLib.Filters.Other
         public ConvolutionFilter(Conv3x3 matrix = new Conv3x3()) => Matrix = matrix;
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Clone image (the clone won't be modified)
-            using (Bitmap original = (Bitmap)image.Clone())
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
-            {
-                int width_3 = image.Width * 3;
-                int h = image.Height;
-                int x, y, nVal, stride = bmd.Stride;
-                int[,] convMatrix = Matrix.CopyMatrix();
+            Image original = (Image)image.Clone();
 
-                unsafe
+            unsafe
+            {
+                fixed (byte* start = image, origStart = original)
                 {
+                    int width_3 = image.Width * 3;
+                    int h = image.Height;
+                    int x, y, nVal, stride = width_3;
+                    int[,] convMatrix = Matrix.CopyMatrix();
+
                     // Iterate through rows
                     for (y = 0; y < h; ++y)
                     {
                         // Get rows
-                        byte* row = (byte*)bmd.Scan0 + (y * stride);
-                        byte* rowOrig = (byte*)bmdOrig.Scan0 + (y * stride);
+                        byte* row = start + (y * stride);
+                        byte* rowOrig = origStart + (y * stride);
                         // Iterate through columns
                         for (x = 0; x < width_3; ++x)
                         {

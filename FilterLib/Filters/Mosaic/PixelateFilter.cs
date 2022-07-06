@@ -1,8 +1,5 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Mosaic
 {
@@ -45,19 +42,18 @@ namespace FilterLib.Filters.Mosaic
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            // Clone original image for iteration
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            unsafe
             {
-                int width_3 = image.Width * 3;
-                int h = image.Height;
-                int x, y, xSub, ySub, size_3 = size * 3, rSum, gSum, bSum, n;
-                byte rNew, gNew, bNew;
-                
-                unsafe
+                fixed (byte* start = image)
                 {
+                    int width_3 = image.Width * 3;
+                    int h = image.Height;
+                    int x, y, xSub, ySub, size_3 = size * 3, rSum, gSum, bSum, n;
+                    byte rNew, gNew, bNew;
+
                     // Iterate through block rows
                     for (y = 0; y < h; y += size)
                     {
@@ -73,7 +69,7 @@ namespace FilterLib.Filters.Mosaic
                                     for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
                                     {
                                         // Get row
-                                        row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
+                                        row = start + ((y + ySub) * width_3);
                                         for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                                         {
                                             rSum += row[x + xSub + 2];
@@ -87,7 +83,7 @@ namespace FilterLib.Filters.Mosaic
                                     bNew = (byte)(bSum / n);
                                     break;
                                 case PixelateMode.MidPoint:
-                                    row = (byte*)bmd.Scan0 + (Math.Min(y + size / 2, h - 1) * bmd.Stride);
+                                    row = start + (Math.Min(y + size / 2, h - 1) * width_3);
                                     int xMid = Math.Min(x + (size / 2) * 3, width_3 - 3);
                                     rNew = row[xMid + 2];
                                     gNew = row[xMid + 1];
@@ -101,7 +97,7 @@ namespace FilterLib.Filters.Mosaic
                             for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
                             {
                                 // Get row
-                                row = (byte*)bmd.Scan0 + ((y + ySub) * bmd.Stride);
+                                row = start + ((y + ySub) * width_3);
                                 for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                                 {
                                     row[x + xSub + 2] = rNew;

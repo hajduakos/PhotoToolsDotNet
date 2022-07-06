@@ -1,6 +1,6 @@
-﻿using FilterScript.Model;
+﻿using FilterLib;
+using FilterScript.Model;
 using System;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
@@ -20,8 +20,8 @@ namespace FilterScript
             string inputPath = ParseArg(args, "i");
             string outputPath = ParseArg(args, "o");
             Script batch = Parser.Parse(File.ReadAllLines(scriptPath));
-            using Bitmap input = new(inputPath);
-            using Bitmap output = batch.Execute(input);
+            Image input = FilterLib.Util.BitmapAdapter.FromBitmapPath(inputPath);
+            using System.Drawing.Bitmap output = FilterLib.Util.BitmapAdapter.ToBitmap(batch.Execute(input));
             output.Save(outputPath, ImageFormat.Bmp);
             switch(new FileInfo(outputPath).Extension.ToLower())
             {

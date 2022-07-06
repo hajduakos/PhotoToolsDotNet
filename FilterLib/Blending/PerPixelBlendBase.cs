@@ -18,27 +18,26 @@ namespace FilterLib.Blending
         protected PerPixelBlendBase(int opacity) : base(opacity) { }
 
         /// <inheritdoc/>
-        public override sealed void ApplyInPlace(Bitmap bottom, Bitmap top, Reporting.IReporter reporter = null)
+        public override sealed void ApplyInPlace(Image bottom, Image top, Reporting.IReporter reporter = null)
         {
             reporter?.Start();
             BlendStart();
-
-            using (DisposableBitmapData bmdBot = new(bottom, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdTop = new(top, PixelFormat.Format24bppRgb))
+            unsafe
             {
-                int height = Math.Min(bottom.Height, top.Height);
-                int width_3 = Math.Min(bottom.Width, top.Width) * 3;
-                unsafe
+                fixed (byte* botStart = bottom, topStart = top)
                 {
+                    int height = Math.Min(bottom.Height, top.Height);
+                    int width_3 = Math.Min(bottom.Width, top.Width) * 3;
+
                     for (int y = 0; y < height; ++y)
                     {
-                        byte* botRow = (byte*)bmdBot.Scan0 + (y * bmdBot.Stride);
-                        byte* topRow = (byte*)bmdTop.Scan0 + (y * bmdTop.Stride);
+                        byte* botRow = botStart + (y * bottom.Width * 3);
+                        byte* topRow = topStart + (y * top.Width * 3);
 
                         for (int x = 0; x < width_3; x += 3)
                             BlendPixel(
-                                botRow + x + 2, botRow + x + 1, botRow + x,
-                                topRow + x + 2, topRow + x + 1, topRow + x);
+                                botRow + x, botRow + x + 1, botRow + x + 2,
+                                topRow + x, topRow + x + 1, topRow + x + 2);
 
                         reporter?.Report(y, 0, height - 1);
                     }

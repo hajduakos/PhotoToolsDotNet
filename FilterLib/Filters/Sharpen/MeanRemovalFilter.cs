@@ -1,6 +1,5 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using System.Drawing;
 
 namespace FilterLib.Filters.Sharpen
 {
@@ -14,6 +13,6 @@ namespace FilterLib.Filters.Sharpen
                new(new Conv3x3(-1, -1, -1, -1, 9, -1, -1, -1, -1, 1, 0));
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null) => conv.ApplyInPlace(image, reporter);
+        public override void ApplyInPlace(Image image, IReporter reporter = null) => conv.ApplyInPlace(image, reporter);
     }
 }

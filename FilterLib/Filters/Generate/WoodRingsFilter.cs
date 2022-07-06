@@ -1,9 +1,6 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
 using MathF = System.MathF;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Generate
 {
@@ -53,28 +50,28 @@ namespace FilterLib.Filters.Generate
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            unsafe
             {
-                int x, y, x_div3;
-                int w = image.Width;
-                int width_3 = w * 3;
-                int h = image.Height;
-                float xShifted, yShifted;
-                float sin_mult = (MathF.PI * 2 * rings);
-                reporter?.Report(0, 0, 2 * h - 1);
-                float[,] turbulence = GenerateTurbulence(w, h);
-                reporter?.Report(h, 0, 2 * h - 1);
-
-                unsafe
+                fixed (byte* start = image)
                 {
+                    int x, y, x_div3;
+                    int w = image.Width;
+                    int width_3 = w * 3;
+                    int h = image.Height;
+                    float xShifted, yShifted;
+                    float sin_mult = (MathF.PI * 2 * rings);
+                    reporter?.Report(0, 0, 2 * h - 1);
+                    float[,] turbulence = GenerateTurbulence(w, h);
+                    reporter?.Report(h, 0, 2 * h - 1);
+
                     // Iterate through rows
                     for (y = 0; y < h; ++y)
                     {
                         // Get row
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        byte* row = start + y * width_3;
                         // Iterate through columns
                         for (x = 0; x < width_3; x += 3)
                         {

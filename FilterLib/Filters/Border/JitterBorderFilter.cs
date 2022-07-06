@@ -1,8 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Border
 {
@@ -49,26 +47,26 @@ namespace FilterLib.Filters.Border
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            unsafe
             {
-                Random rnd = new(Seed);
-                int width_3 = image.Width * 3;
-                int borderWidth = Width.ToAbsolute(Math.Max(image.Width, image.Height));
-                // Starting from the edge of the image, and going inwards, the probability of
-                // coloring a pixel fades off in with a sine transition for smooth results
-                float[] map = new float[borderWidth + 1];
-                for (int x = 0; x <= borderWidth; ++x)
-                    map[x] = MathF.Sin(x / (float)borderWidth * MathF.PI - MathF.PI / 2) / 2 + .5f;
-                unsafe
+                fixed (byte* start = image)
                 {
+                    Random rnd = new(Seed);
+                    int width_3 = image.Width * 3;
+                    int borderWidth = Width.ToAbsolute(Math.Max(image.Width, image.Height));
+                    // Starting from the edge of the image, and going inwards, the probability of
+                    // coloring a pixel fades off in with a sine transition for smooth results
+                    float[] map = new float[borderWidth + 1];
+                    for (int x = 0; x <= borderWidth; ++x)
+                        map[x] = MathF.Sin(x / (float)borderWidth * MathF.PI - MathF.PI / 2) / 2 + .5f;
                     // Iterate through rows
                     for (int y = 0; y < image.Height; ++y)
                     {
                         // Get rows
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        byte* row = start + (y * width_3);
                         // Iterate through columns
                         for (int x = 0; x < width_3; x += 3)
                         {
@@ -76,9 +74,9 @@ namespace FilterLib.Filters.Border
                             if (distanceFromNearestEdge > borderWidth) continue;
                             if (rnd.NextSingle() > map[distanceFromNearestEdge])
                             {
-                                row[x + 2] = (byte)Color.R;
-                                row[x + 1] = (byte)Color.G;
-                                row[x] = (byte)Color.B;
+                                row[x + 2] = Color.R;
+                                row[x + 1] = Color.G;
+                                row[x] = Color.B;
                             }
                         }
                         reporter?.Report(y, 0, image.Height - 1);

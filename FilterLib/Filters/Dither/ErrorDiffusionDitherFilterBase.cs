@@ -37,31 +37,31 @@ namespace FilterLib.Filters.Dither
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+            unsafe
             {
-                int pxWithErrorAdded;
-                int width_3 = image.Width * 3;
-                int h = image.Height;
-                int x, y;
-                int xSub, ySub;
-                float intervalSize = 255f / (levels - 1); // Size of an interval
-                int roundedColor; // Color rounded to the nearest color level
-                float quantErr;
-                float[,] quantErrArray = new float[width_3, h];
-                for (x = 0; x < width_3; x++) for (y = 0; y < h; y++) quantErrArray[x, y] = 0;
-
-                float[,] diffusionMatrix = matrix.CopyMatrix();
-
-                unsafe
+                fixed (byte* start = image)
                 {
+                    int pxWithErrorAdded;
+                    int width_3 = image.Width * 3;
+                    int h = image.Height;
+                    int x, y;
+                    int xSub, ySub;
+                    float intervalSize = 255f / (levels - 1); // Size of an interval
+                    int roundedColor; // Color rounded to the nearest color level
+                    float quantErr;
+                    float[,] quantErrArray = new float[width_3, h];
+                    for (x = 0; x < width_3; x++) for (y = 0; y < h; y++) quantErrArray[x, y] = 0;
+
+                    float[,] diffusionMatrix = matrix.CopyMatrix();
+
                     // Iterate through rows
                     for (y = 0; y < h; y++)
                     {
                         // Get row
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        byte* row = start + y * width_3;
                         // Iterate through columns
                         for (x = 0; x < width_3; ++x)
                         {

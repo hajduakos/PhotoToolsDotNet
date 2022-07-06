@@ -1,9 +1,6 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
 using MathF = System.MathF;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Other
 {
@@ -55,10 +52,10 @@ namespace FilterLib.Filters.Other
         }
 
         /// <inheritdoc/>
-        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            Bitmap wavesBmp;
+            Image wavesBmp;
 
             int w = image.Width;
             int h = image.Height;
@@ -68,23 +65,18 @@ namespace FilterLib.Filters.Other
 
             if (waveLengthPx == 0) throw new System.ArgumentException("Wavelength cannot be zero.");
 
-            if (Direction == WaveDirection.Horizontal) wavesBmp = new Bitmap(w, h + 2 * amplitudePx);
-            else wavesBmp = new Bitmap(w + 2 * amplitudePx, h);
+            if (Direction == WaveDirection.Horizontal) wavesBmp = new Image(w, h + 2 * amplitudePx);
+            else wavesBmp = new Image(w + 2 * amplitudePx, h);
             // Lock bits
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdNew = new(wavesBmp, PixelFormat.Format24bppRgb))
+            unsafe
             {
-                int width_3 = image.Width * 3; // Width of a row
-                int stride = bmd.Stride;
-                int strideNew = bmdNew.Stride;
-
-
-                int x, y, offset, offset_3, idx1, idx2, amplitudePx_3 = amplitudePx * 3;
-                float freq = 2 * MathF.PI / waveLengthPx;
-                unsafe
+                fixed (byte* bmdstart = image, newstart = wavesBmp)
                 {
-                    byte* bmdstart = (byte*)bmd.Scan0;
-                    byte* newstart = (byte*)bmdNew.Scan0;
+                    int width_3 = image.Width * 3; // Width of a row
+                    int widthNew_3 = wavesBmp.Width * 3;
+
+                    int x, y, offset, offset_3, idx1, idx2, amplitudePx_3 = amplitudePx * 3;
+                    float freq = 2 * MathF.PI / waveLengthPx;
 
                     if (Direction == WaveDirection.Horizontal) // Horizontal waves
                     {
@@ -99,8 +91,8 @@ namespace FilterLib.Filters.Other
                             // Iterate through rows and move pixels
                             for (y = 0; y < h; ++y)
                             {
-                                idx1 = y * stride + x;
-                                idx2 = (y + amplitudePx - offset) * strideNew + x;
+                                idx1 = y * width_3 + x;
+                                idx2 = (y + amplitudePx - offset) * widthNew_3 + x;
                                 newstart[idx2] = bmdstart[idx1];
                                 newstart[idx2 + 1] = bmdstart[idx1 + 1];
                                 newstart[idx2 + 2] = bmdstart[idx1 + 2];
@@ -121,7 +113,7 @@ namespace FilterLib.Filters.Other
                             offset_3 = offset * 3;
 
                             // Iterate through columns and move pixels
-                            for (x = 0; x < width_3; ++x) newstart[y * strideNew + x + amplitudePx_3 - offset_3] = bmdstart[y * stride + x];
+                            for (x = 0; x < width_3; ++x) newstart[y * widthNew_3 + x + amplitudePx_3 - offset_3] = bmdstart[y * width_3 + x];
 
                             reporter?.Report(y, 0, h - 1);
                         }

@@ -1,5 +1,4 @@
 ﻿using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Blending
 {
@@ -24,13 +23,13 @@ namespace FilterLib.Blending
         protected BlendInPlaceBase(int opacity) => Opacity = opacity;
 
         /// <inheritdoc/>
-        public abstract void ApplyInPlace(Bitmap bottom, Bitmap top, Reporting.IReporter reporter = null);
+        public abstract void ApplyInPlace(Image bottom, Image top, Reporting.IReporter reporter = null);
 
         /// <inheritdoc/>
-        public Bitmap Apply(Bitmap bottom, Bitmap top, Reporting.IReporter reporter = null)
+        public Image Apply(Image bottom, Image top, Reporting.IReporter reporter = null)
         {
-            Bitmap result = (Bitmap)bottom.Clone();
-            ApplyInPlace(result, top);
+            Image result = (Image)bottom.Clone();
+            ApplyInPlace(result, top, reporter);
             return result;
         }
     }

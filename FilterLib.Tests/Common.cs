@@ -13,11 +13,11 @@ namespace FilterLib.Tests
         {
             string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
 
-            using Bitmap bmpOriginal = new(path + original);
-            using Bitmap bmpActual = filter.Apply(bmpOriginal);
-            using Bitmap bmpExpected = original == expected ? (Bitmap)bmpOriginal.Clone() : new Bitmap(path + expected);
+            Image bmpOriginal = BitmapAdapter.FromBitmapPath(path + original);
+            Image bmpActual = filter.Apply(bmpOriginal);
+            Image bmpExpected = original == expected ? (Image)bmpOriginal.Clone() : BitmapAdapter.FromBitmapPath(path + expected);
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
-            if (!ok) bmpActual.Save(path + expected.Replace(".bmp", "_actual.bmp"), ImageFormat.Bmp);
+            if (!ok) BitmapAdapter.ToBitmap(bmpActual).Save(path + expected.Replace(".bmp", "_actual.bmp"), ImageFormat.Bmp);
             return ok;
         }
 
@@ -25,35 +25,36 @@ namespace FilterLib.Tests
         {
             string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
 
-            using Bitmap bmpOriginal1 = new(path + original1);
-            using Bitmap bmpOriginal2 = original1 == original2 ? (Bitmap)bmpOriginal1.Clone() : new Bitmap(path + original2);
-            using Bitmap bmpActual = blend.Apply(bmpOriginal1, bmpOriginal2);
-            using Bitmap bmpExpected = original1 == expected ? (Bitmap)bmpOriginal1.Clone() :
-                (original2 == expected ? (Bitmap)bmpOriginal2.Clone() : new Bitmap(path + expected));
+            Image bmpOriginal1 = BitmapAdapter.FromBitmapPath(path + original1);
+            Image bmpOriginal2 = original1 == original2 ? (Image)bmpOriginal1.Clone() : BitmapAdapter.FromBitmapPath(path + original2);
+            Image bmpActual = blend.Apply(bmpOriginal1, bmpOriginal2);
+            Image bmpExpected = original1 == expected ? (Image)bmpOriginal1.Clone() :
+                (original2 == expected ? (Image)bmpOriginal2.Clone() : BitmapAdapter.FromBitmapPath(path + expected));
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
-            if (!ok) bmpActual.Save(path + expected.Replace(".bmp", "_actual.bmp"));
+            if (!ok) BitmapAdapter.ToBitmap(bmpActual).Save(path + expected.Replace(".bmp", "_actual.bmp"));
             return ok;
         }
 
-        private static bool Compare(Bitmap actual, Bitmap expected, int tolerance)
+        private static bool Compare(Image actual, Image expected, int tolerance)
         {
             if (actual.Width != expected.Width) return false;
             if (actual.Height != expected.Height) return false;
-            using DisposableBitmapData bmdAct = new(actual, PixelFormat.Format24bppRgb);
-            using DisposableBitmapData bmdExp = new(expected, PixelFormat.Format24bppRgb);
-            int width_3 = actual.Width * 3;
             unsafe
             {
-                for (int y = 0; y < actual.Height; ++y)
+                fixed (byte* actStart = actual, expStart = expected)
                 {
-                    byte* rowAct = (byte*)bmdAct.Scan0 + (y * bmdAct.Stride);
-                    byte* rowExp = (byte*)bmdExp.Scan0 + (y * bmdExp.Stride);
-                    for (int x = 0; x < width_3; ++x)
-                        if (System.Math.Abs(rowAct[x] - rowExp[x]) > tolerance)
-                            return false;
+                    int width_3 = actual.Width * 3;
+                    for (int y = 0; y < actual.Height; ++y)
+                    {
+                        byte* rowAct = actStart + (y * width_3);
+                        byte* rowExp = expStart + (y * width_3);
+                        for (int x = 0; x < width_3; ++x)
+                            if (System.Math.Abs(rowAct[x] - rowExp[x]) > tolerance)
+                                return false;
+                    }
                 }
+                return true;
             }
-            return true;
         }
 
         public static int ParamCount(System.Type type) => ReflectiveApi.GetFilterProperties(type).Count();

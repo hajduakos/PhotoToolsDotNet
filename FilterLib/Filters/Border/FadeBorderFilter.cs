@@ -1,8 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
-using System.Drawing;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Border
 {
@@ -41,48 +39,49 @@ namespace FilterLib.Filters.Border
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             int borderWidth = Width.ToAbsolute(Math.Max(image.Width, image.Height));
             int width_3 = image.Width * 3;
-            using DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb);
+
             unsafe
             {
-                // Draw rectangles with decreasing alpha value
-                for (int k = 0; k < borderWidth; ++k)
-                {
-                    float alpha = 1 - k / (float)borderWidth;
-                    if (k < image.Height)
+                fixed (byte* start = image)
+                    // Draw rectangles with decreasing alpha value
+                    for (int k = 0; k < borderWidth; ++k)
                     {
-                        for (int x = 0; x < width_3; x += 3)
+                        float alpha = 1 - k / (float)borderWidth;
+                        if (k < image.Height)
                         {
-                            byte* px = (byte*)bmd.Scan0 + k * bmd.Stride + x;
-                            px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
-                            px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
-                            px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
-                            px = (byte*)bmd.Scan0 + (image.Height - 1 - k) * bmd.Stride + x;
-                            px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
-                            px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
-                            px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                            for (int x = 0; x < width_3; x += 3)
+                            {
+                                byte* px = start + k * width_3 + x;
+                                px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
+                                px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
+                                px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                                px = start + (image.Height - 1 - k) * width_3 + x;
+                                px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
+                                px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
+                                px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                            }
                         }
-                    }
-                    if (k < image.Width)
-                    {
-                        for (int y = 0; y < image.Height; ++y)
+                        if (k < image.Width)
                         {
-                            byte* px = (byte*)bmd.Scan0 + y * bmd.Stride + k * 3;
-                            px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
-                            px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
-                            px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
-                            px = (byte*)bmd.Scan0 + y * bmd.Stride + width_3 - (k + 1) * 3;
-                            px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
-                            px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
-                            px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                            for (int y = 0; y < image.Height; ++y)
+                            {
+                                byte* px = start + y * width_3 + k * 3;
+                                px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
+                                px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
+                                px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                                px = start + y * width_3 + width_3 - (k + 1) * 3;
+                                px[0] = (byte)(px[0] * (1 - alpha) + Color.B * alpha);
+                                px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
+                                px[2] = (byte)(px[2] * (1 - alpha) + Color.R * alpha);
+                            }
                         }
+                        reporter?.Report(k, 0, borderWidth - 1);
                     }
-                    reporter?.Report(k, 0, borderWidth - 1);
-                }
             }
             reporter?.Done();
         }

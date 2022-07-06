@@ -1,8 +1,5 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Random = System.Random;
 
 namespace FilterLib.Filters.Artistic
@@ -44,24 +41,23 @@ namespace FilterLib.Filters.Artistic
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Clone image (the clone won't be modified)
-            using (Bitmap original = (Bitmap)image.Clone())
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
+            Image original = (Image)image.Clone();
+            unsafe
             {
-                Random rnd = new(Seed);
-                int width_3 = image.Width * 3;
-                unsafe
+                fixed (byte* start = image, origStart = original)
                 {
+                    Random rnd = new(Seed);
+                    int width_3 = image.Width * 3;
                     // Iterate through rows
                     for (int y = 0; y < image.Height; ++y)
                     {
                         // Get rows
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        byte* rowOrig = (byte*)bmdOrig.Scan0 + (y * bmdOrig.Stride);
+                        byte* row = start + (y * width_3);
+                        byte* rowOrig = origStart + (y * width_3);
                         // Iterate through columns
                         for (int x = 0; x < width_3; x += 3)
                         {
@@ -75,7 +71,7 @@ namespace FilterLib.Filters.Artistic
                             if (y + dy < 0 || y + dy >= image.Height) dy = 0;
 
                             // Calculate index (dy rows, dx columns)
-                            int idx = dy * bmd.Stride + dx;
+                            int idx = dy * width_3 + dx;
 
                             // Replace all 3 components
                             row[x] = rowOrig[x + idx];

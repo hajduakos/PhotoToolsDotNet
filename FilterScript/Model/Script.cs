@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
+using FilterLib;
 using System.Linq;
 
 namespace FilterScript.Model
@@ -19,10 +19,10 @@ namespace FilterScript.Model
 
         public void AddTask(ITask task) => tasks.Add(task);
 
-        public Bitmap Execute(Bitmap input)
+        public Image Execute(Image input)
         {
             InputTask.Input = input;
-            Bitmap result = tasks[^1].Execute();
+            Image result = tasks[^1].Execute();
             foreach (ITask t in tasks.Take(tasks.Count - 1)) t.Clear();
             return result;
         }

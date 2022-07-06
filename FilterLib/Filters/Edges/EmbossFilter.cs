@@ -1,6 +1,5 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Filters.Edges
 {
@@ -14,6 +13,6 @@ namespace FilterLib.Filters.Edges
             new(new Conv3x3(1, 1, 1, 0, 0, 0, -1, -1, -1, 1, 127));
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null) => conv.ApplyInPlace(image, reporter);
+        public override void ApplyInPlace(Image image, IReporter reporter = null) => conv.ApplyInPlace(image, reporter);
     }
 }

@@ -1,6 +1,4 @@
-﻿using Bitmap = System.Drawing.Bitmap;
-
-namespace FilterLib.Blending
+﻿namespace FilterLib.Blending
 {
     /// <summary>
     /// Blend mode interface that can be applied in place.
@@ -13,6 +11,6 @@ namespace FilterLib.Blending
         /// <param name="bottom">Bottom image (will be changed)</param>
         /// <param name="top">Top image</param>
         /// <param name="reporter">Reporter (optional)</param>
-        void ApplyInPlace(Bitmap bottom, Bitmap top, Reporting.IReporter reporter = null);
+        void ApplyInPlace(Image bottom, Image top, Reporting.IReporter reporter = null);
     }
 }

@@ -1,5 +1,5 @@
-﻿using FilterLib.Filters;
-using System.Drawing;
+﻿using FilterLib;
+using FilterLib.Filters;
 
 namespace FilterScript.Model
 {
@@ -8,14 +8,14 @@ namespace FilterScript.Model
         public ITask Parent { get; private set; }
         public IFilter Filter { get; private set; }
 
-        private Bitmap result;
+        private Image result;
         public FilterTask(IFilter filter, ITask parent)
         {
             this.Filter = filter;
             this.Parent = parent;
             result = null;
         }
-        public Bitmap Execute()
+        public Image Execute()
         {
             if (result == null) result = Filter.Apply(Parent.Execute());
             return result;
@@ -23,7 +23,6 @@ namespace FilterScript.Model
 
         public void Clear()
         {
-            result?.Dispose();
             result = null;
         }
     }

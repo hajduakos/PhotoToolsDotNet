@@ -1,7 +1,4 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Transform
 {
@@ -12,28 +9,26 @@ namespace FilterLib.Filters.Transform
     public sealed class RotateRightFilter : FilterBase
     {
         /// <inheritdoc/>
-        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            Bitmap rotated = new(image.Height, image.Width);
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdRot = new(rotated, PixelFormat.Format24bppRgb))
+            Image rotated = new(image.Height, image.Width);
+            unsafe
             {
-                int width_3 = image.Width * 3; // Width of a row
-                int rotW = rotated.Width;
-                int rotStride = bmdRot.Stride;
-                int h = image.Height;
-                int x, y;
-                int idx;
-                unsafe
+                fixed (byte* start = image, rotStart = rotated)
                 {
-                    byte* rotStart = (byte*)bmdRot.Scan0;
+                    int width_3 = image.Width * 3; // Width of a row
+                    int rotW = rotated.Width;
+                    int rotStride = rotW * 3;
+                    int h = image.Height;
+                    int x, y;
+                    int idx;
 
                     // Iterate through rows
                     for (y = 0; y < h; y++)
                     {
                         // Get row
-                        byte* row = (byte*)bmd.Scan0 + (rotW - 1 - y) * bmd.Stride;
+                        byte* row = start + (rotW - 1 - y) * width_3;
                         // Iterate through columns
                         for (x = 0; x < width_3; x += 3)
                         {

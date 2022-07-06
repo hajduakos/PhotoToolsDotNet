@@ -12,30 +12,28 @@ namespace FilterLib.Filters.Transform
     public sealed class RotateLeftFilter : FilterBase
     {
         /// <inheritdoc/>
-        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Rotated image
-            Bitmap rotated = new(image.Height, image.Width);
+            Image rotated = new(image.Height, image.Width);
             // Lock bits
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdRot = new(rotated, PixelFormat.Format24bppRgb))
+            unsafe
             {
-                int width_3 = image.Width * 3; // Width of a row
-                int rotH = rotated.Height;
-                int rotStride = bmdRot.Stride;
-                int h = image.Height; // Image height
-                int x, y;
-                int idx;
-                unsafe
+                fixed (byte* start = image, rotStart = rotated)
                 {
-                    byte* rotStart = (byte*)bmdRot.Scan0;
+                    int width_3 = image.Width * 3; // Width of a row
+                    int rotH = rotated.Height;
+                    int rotStride = rotated.Width * 3;
+                    int h = image.Height; // Image height
+                    int x, y;
+                    int idx;
 
                     // Iterate through rows
                     for (y = 0; y < h; y++)
                     {
                         // Get row
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        byte* row = start + (y * width_3);
                         // Iterate through columns
                         for (x = 0; x < width_3; x += 3)
                         {

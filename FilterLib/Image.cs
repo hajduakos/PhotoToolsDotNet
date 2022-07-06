@@ -1,6 +1,6 @@
 ﻿namespace FilterLib
 {
-    public sealed class Image
+    public sealed class Image : System.ICloneable
     {
         private readonly byte[] data;
 
@@ -30,6 +30,13 @@
         public ref byte GetPinnableReference()
         {
             return ref data[0];
+        }
+
+        public object Clone()
+        {
+            Image img = new(Width, Height);
+            System.Array.Copy(data, img.data, data.Length);
+            return img;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using FilterLib.Blending;
-using System.Drawing;
+using FilterLib;
 
 namespace FilterScript.Model
 {
@@ -9,7 +9,7 @@ namespace FilterScript.Model
         public ITask TopParent { get; private set; }
         public IBlend Blend { get; private set; }
 
-        private Bitmap result;
+        private Image result;
 
         public BlendTask(IBlend blend, ITask bottomParent, ITask topParent)
         {
@@ -18,7 +18,7 @@ namespace FilterScript.Model
             this.TopParent = topParent;
             result = null;
         }
-        public Bitmap Execute()
+        public Image Execute()
         {
             if (result == null) result = Blend.Apply(BottomParent.Execute(), TopParent.Execute());
             return result;
@@ -26,7 +26,6 @@ namespace FilterScript.Model
 
         public void Clear()
         {
-            result?.Dispose();
             result = null;
         }
     }

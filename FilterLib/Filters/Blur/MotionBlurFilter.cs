@@ -1,9 +1,6 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
 using MathF = System.MathF;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Blur
 {
@@ -46,22 +43,19 @@ namespace FilterLib.Filters.Blur
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Clone image (the clone won't be modified)
-            using (Bitmap original = (Bitmap)image.Clone())
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
+            Image original = (Image)image.Clone();
+            unsafe
             {
-                int width_3 = image.Width * 3;
-                float sinAngle = MathF.Sin(Angle * MathF.PI / 180);
-                float cosAngle = MathF.Cos(Angle * MathF.PI / 180);
-                int idx, rSum, gSum, bSum, n;
-                unsafe
+                fixed (byte* start = image, origStart = original)
                 {
-                    byte* bmdstart = (byte*)bmd.Scan0;
-                    byte* origStart = (byte*)bmdOrig.Scan0;
+                    int width_3 = image.Width * 3;
+                    float sinAngle = MathF.Sin(Angle * MathF.PI / 180);
+                    float cosAngle = MathF.Cos(Angle * MathF.PI / 180);
+                    int idx, rSum, gSum, bSum, n;
                     // Iterate through rows
                     for (int y = 0; y < image.Height; ++y)
                     {
@@ -80,18 +74,18 @@ namespace FilterLib.Filters.Blur
                                 // If the pixel is in the bounds of the image
                                 if (xAct >= 0 && xAct < image.Width && yAct >= 0 && yAct < image.Height)
                                 {
-                                    idx = yAct * bmd.Stride + xAct * 3;   // Calculate index
+                                    idx = yAct * width_3 + xAct * 3;   // Calculate index
                                     rSum += origStart[idx + 2]; // Sum red component
                                     gSum += origStart[idx + 1]; // Sum blue component
                                     bSum += origStart[idx];     // Sum green component
                                     ++n; // Number of items
                                 }
                             }
-                            idx = y * bmd.Stride + x; // Index of the center pixel
+                            idx = y * width_3 + x; // Index of the center pixel
                             // Calculate average
-                            bmdstart[idx + 2] = (byte)(rSum / n);
-                            bmdstart[idx + 1] = (byte)(gSum / n);
-                            bmdstart[idx] = (byte)(bSum / n);
+                            start[idx + 2] = (byte)(rSum / n);
+                            start[idx + 1] = (byte)(gSum / n);
+                            start[idx] = (byte)(bSum / n);
                         }
                         reporter?.Report(y, 0, image.Height - 1);
                     }

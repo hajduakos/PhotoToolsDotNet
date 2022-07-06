@@ -1,7 +1,4 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Artistic
 {
@@ -31,29 +28,28 @@ namespace FilterLib.Filters.Artistic
         public OilPaintFilter(int radius = 1) => Radius = radius;
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Clone image (the clone won't be modified)
-            using (Bitmap original = (Bitmap)image.Clone())
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrig = new(original, PixelFormat.Format24bppRgb))
+            Image original = (Image)image.Clone();
+            unsafe
             {
-                int width_3 = image.Width * 3;
-                int radius_3 = radius * 3;
-                int[] red = new int[256];
-                int[] green = new int[256];
-                int[] blue = new int[256];
-                int[] intensities = new int[256];
-
-                unsafe
+                fixed (byte* start = image, origStart = original)
                 {
+                    int width_3 = image.Width * 3;
+                    int radius_3 = radius * 3;
+                    int[] red = new int[256];
+                    int[] green = new int[256];
+                    int[] blue = new int[256];
+                    int[] intensities = new int[256];
+
                     // Iterate through rows
                     for (int y = 0; y < image.Height; ++y)
                     {
                         // Get rows
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        byte* rowOrig = (byte*)bmdOrig.Scan0 + (y * bmdOrig.Stride);
+                        byte* row = start + (y * width_3);
+                        byte* rowOrig = origStart + (y * width_3);
 
                         // Clear arrays
                         for (int xSub = 0; xSub < 256; ++xSub) red[xSub] = green[xSub] = blue[xSub] = intensities[xSub] = 0;
@@ -66,7 +62,7 @@ namespace FilterLib.Filters.Artistic
                             for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                             {
                                 // Calculate index (relative to current row)
-                                int idx = ySub * bmd.Stride + xSub * 3;
+                                int idx = ySub * width_3 + xSub * 3;
                                 // Get luminance
                                 int avg = (int)(0.299 * rowOrig[idx + 2] + 0.587 * rowOrig[idx + 1] + 0.114 * rowOrig[idx]);
                                 // Increase values
@@ -97,7 +93,7 @@ namespace FilterLib.Filters.Artistic
                                 for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                                 {
                                     // Calculate index (relative to current row)
-                                    int idx = ySub * bmd.Stride + x - radius_3 - 3;
+                                    int idx = ySub * width_3 + x - radius_3 - 3;
                                     // Get luminance
                                     int avg = (int)(0.299 * rowOrig[idx + 2] + 0.587 * rowOrig[idx + 1] + 0.114 * rowOrig[idx]);
                                     // Decrease values
@@ -115,7 +111,7 @@ namespace FilterLib.Filters.Artistic
                                 for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                                 {
                                     // Calculate index (relative to current row)
-                                    int idx = ySub * bmd.Stride + x + radius_3;
+                                    int idx = ySub * width_3 + x + radius_3;
                                     // Get luminance
                                     int avg = (int)(0.299 * rowOrig[idx + 2] + 0.587 * rowOrig[idx + 1] + 0.114 * rowOrig[idx]);
                                     // Increase values

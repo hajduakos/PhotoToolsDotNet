@@ -1,7 +1,4 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Transform
 {
@@ -12,23 +9,24 @@ namespace FilterLib.Filters.Transform
     public sealed class FlipHorizontalFilter : FilterInPlaceBase
     {
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
+
+            unsafe
             {
-                int width_3 = image.Width * 3; // Width of a row
-                int wDiv2 = image.Width / 2 * 3; // Half the width
-                int h = image.Height;
-                int x, y;
-                byte swap;
-                unsafe
+                fixed (byte* start = image)
                 {
+                    int width_3 = image.Width * 3; // Width of a row
+                    int wDiv2 = image.Width / 2 * 3; // Half the width
+                    int h = image.Height;
+                    int x, y;
+                    byte swap;
                     // Iterate through rows
                     for (y = 0; y < h; ++y)
                     {
                         // Get row
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
+                        byte* row = start + (y * width_3);
                         // Iterate through columns
                         for (x = 0; x < wDiv2; x += 3)
                         {

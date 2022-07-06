@@ -1,5 +1,4 @@
 ﻿using FilterLib.Reporting;
-using System.Drawing;
 using System.Text;
 using System.Linq;
 
@@ -11,7 +10,7 @@ namespace FilterLib.Filters
     public abstract class FilterBase : IFilter
     {
         /// <inheritdoc/>
-        public abstract Bitmap Apply(Bitmap image, IReporter reporter = null);
+        public abstract Image Apply(Image image, IReporter reporter = null);
 
         public override string ToString()
         {

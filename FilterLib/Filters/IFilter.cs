@@ -1,6 +1,4 @@
-﻿using Bitmap = System.Drawing.Bitmap;
-
-namespace FilterLib.Filters
+﻿namespace FilterLib.Filters
 {
     /// <summary>
     /// The basic interface for image filters. If a filter can be applied on
@@ -15,6 +13,6 @@ namespace FilterLib.Filters
         /// <param name="image">Input image</param>
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>New image with filter applied</returns>
-        Bitmap Apply(Bitmap image, Reporting.IReporter reporter = null);
+        Image Apply(Image image, Reporting.IReporter reporter = null);
     }
 }

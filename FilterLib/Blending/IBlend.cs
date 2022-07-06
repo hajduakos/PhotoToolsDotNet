@@ -1,6 +1,4 @@
-﻿using Bitmap = System.Drawing.Bitmap;
-
-namespace FilterLib.Blending
+﻿namespace FilterLib.Blending
 {
     /// <summary>
     /// Blend mode interface.
@@ -14,7 +12,7 @@ namespace FilterLib.Blending
         /// <param name="top">Top image</param>
         /// <param name="reporter">Reporter (optional)</param>
         /// <returns>Blended image</returns>
-        Bitmap Apply(Bitmap bottom, Bitmap top, Reporting.IReporter reporter = null);
+        Image Apply(Image bottom, Image top, Reporting.IReporter reporter = null);
 
         /// <summary>
         /// Opacity of the top image [0:100]

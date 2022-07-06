@@ -14,6 +14,6 @@ namespace FilterLib.Filters.Sharpen
             new(new Conv3x3(0, -2, 0, -2, 11, -2, 0, -2, 0, 3, 0));
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null) => conv.ApplyInPlace(image, reporter);
+        public override void ApplyInPlace(Image image, IReporter reporter = null) => conv.ApplyInPlace(image, reporter);
     }
 }

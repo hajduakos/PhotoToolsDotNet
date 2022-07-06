@@ -1,9 +1,6 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
 using MathF = System.MathF;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Blur
 {
@@ -33,37 +30,37 @@ namespace FilterLib.Filters.Blur
         public GaussianBlurFilter(int radius = 0) => Radius = radius;
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             if (Radius == 0) { reporter?.Done(); return; }
             // Clone image for temporary use
-            using (Bitmap tmp = (Bitmap)image.Clone())
+            Image tmp = (Image)image.Clone();
             // Lock bits
-            using (DisposableBitmapData bmd = new(image, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdTmp = new(tmp, PixelFormat.Format24bppRgb))
+
+            unsafe
             {
-                int width_3 = image.Width * 3;
-                float sumR, sumG, sumB;
-
-                // Calculate the kernel
-                float[] kernel = new float[radius * 2 + 1];
-                int r = -radius;
-                float sqrt2piR = 1f / (MathF.Sqrt(2 * MathF.PI) * radius);
-                float rsquare2 = 1f / (2 * radius * radius);
-                float kernelSum = 0;
-                for (int x = 0; x < kernel.Length; x++)
+                fixed (byte* start = image, tmpStart = tmp)
                 {
-                    kernel[x] = sqrt2piR * MathF.Exp(-r * r * rsquare2);
-                    kernelSum += kernel[x];
-                    ++r;
-                }
-                // Normalize the kernel
-                for (int x = 0; x < kernel.Length; x++)
-                    kernel[x] /= kernelSum;
+                    int width_3 = image.Width * 3;
+                    float sumR, sumG, sumB;
 
-                unsafe
-                {
+                    // Calculate the kernel
+                    float[] kernel = new float[radius * 2 + 1];
+                    int r = -radius;
+                    float sqrt2piR = 1f / (MathF.Sqrt(2 * MathF.PI) * radius);
+                    float rsquare2 = 1f / (2 * radius * radius);
+                    float kernelSum = 0;
+                    for (int x = 0; x < kernel.Length; x++)
+                    {
+                        kernel[x] = sqrt2piR * MathF.Exp(-r * r * rsquare2);
+                        kernelSum += kernel[x];
+                        ++r;
+                    }
+                    // Normalize the kernel
+                    for (int x = 0; x < kernel.Length; x++)
+                        kernel[x] /= kernelSum;
+
                     // We do the blurring in 2 steps: first horizontal, then vertical
 
                     // First iterate through rows and do horizontal blur
@@ -71,8 +68,8 @@ namespace FilterLib.Filters.Blur
                     for (int y = 0; y < image.Height; ++y)
                     {
                         // Get rows
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        byte* rowTmp = (byte*)bmdTmp.Scan0 + (y * bmdTmp.Stride);
+                        byte* row = start + (y * width_3);
+                        byte* rowTmp = tmpStart + (y * width_3);
 
                         // Iterate through each column
                         for (int x = 0; x < width_3; x += 3)
@@ -106,22 +103,22 @@ namespace FilterLib.Filters.Blur
                     for (int x = 0; x < width_3; x += 3)
                     {
                         // Get columns
-                        byte* col = (byte*)bmd.Scan0 + x;
-                        byte* colTmp = (byte*)bmdTmp.Scan0 + x;
+                        byte* col = start + x;
+                        byte* colTmp = tmpStart + x;
 
                         // Iterate through the other rows
                         for (int y = 0; y < image.Height; ++y)
                         {
                             sumR = sumG = sumB = 0; // Clear sum
-                            int y_stride = y * bmd.Stride;
+                            int y_stride = y * width_3;
                             // Iterate through the kernel
                             for (r = -radius; r <= radius; ++r)
                             {
                                 int kIdx = r + radius; // Kernel indexer
                                 int idx;
                                 if (y + r < 0) idx = 0; // If we are outside the image at the top, take the topmost pixel
-                                else if (y + r >= image.Height) idx = (image.Height - 1) * bmd.Stride; // If we are outside the image at the bottom, take the bottom pixel
-                                else idx = (y + r) * bmd.Stride;// Else take the actual pixel
+                                else if (y + r >= image.Height) idx = (image.Height - 1) * width_3; // If we are outside the image at the bottom, take the bottom pixel
+                                else idx = (y + r) * width_3;// Else take the actual pixel
 
                                 // Add to the sum
                                 sumB += kernel[kIdx] * colTmp[idx];

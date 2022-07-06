@@ -1,14 +1,14 @@
-﻿using System.Drawing;
+﻿using FilterLib;
 
 namespace FilterScript.Model
 {
     sealed class InputTask : ITask
     {
-        public Bitmap Input { get; set; }
+        public Image Input { get; set; }
 
-        public InputTask(Bitmap input = null) => this.Input = input;
+        public InputTask(Image input = null) => this.Input = input;
 
-        public Bitmap Execute() => Input;
+        public Image Execute() => Input;
 
         public void Clear() { }
     }

@@ -1,8 +1,5 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Transform
 {
@@ -62,7 +59,7 @@ namespace FilterLib.Filters.Transform
         }
 
         /// <inheritdoc/>
-        public override Bitmap Apply(Bitmap image, IReporter reporter = null)
+        public override Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             int x0 = X.ToAbsolute(image.Width);
@@ -76,21 +73,20 @@ namespace FilterLib.Filters.Transform
             w0 = Math.Min(w0, image.Width);
             h0 = Math.Min(h0, image.Height);
 
-            Bitmap cropped = new(w0, h0);
+            Image cropped = new(w0, h0);
             int x, y;
             int width_3 = cropped.Width * 3;
             int x0_3 = x0 * 3;
-            using (DisposableBitmapData bmd = new(cropped, PixelFormat.Format24bppRgb))
-            using (DisposableBitmapData bmdOrig = new(image, PixelFormat.Format24bppRgb))
+            unsafe
             {
-                unsafe
+                fixed (byte* start = cropped, origStart = image)
                 {
                     // Iterate through rows
                     for (y = 0; y < h0; ++y)
                     {
                         // Get row
-                        byte* row = (byte*)bmd.Scan0 + (y * bmd.Stride);
-                        byte* rowOrig = (byte*)bmdOrig.Scan0 + ((y + y0) * bmdOrig.Stride);
+                        byte* row = start + (y * width_3);
+                        byte* rowOrig = origStart + ((y + y0) * image.Width * 3);
                         // Iterate through columns
                         for (x = 0; x < width_3; x += 3)
                         {

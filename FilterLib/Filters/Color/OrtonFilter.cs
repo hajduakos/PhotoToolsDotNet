@@ -2,7 +2,6 @@
 using FilterLib.Filters.Blur;
 using FilterLib.Reporting;
 using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Filters.Color
 {
@@ -49,12 +48,12 @@ namespace FilterLib.Filters.Color
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Bitmap image, IReporter reporter = null)
+        public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            using Bitmap screened = new ScreenBlend(100).Apply(image, (Bitmap)image.Clone(), new SubReporter(reporter, 0, 25, 0, 100));
-            using Bitmap blurred = new GaussianBlurFilter(radius).Apply(screened, new SubReporter(reporter, 25, 50, 0, 100));
-            using Bitmap multiplied = new MultiplyBlend(100).Apply(screened, blurred, new SubReporter(reporter, 50, 75, 0, 100));
+            Image screened = new ScreenBlend(100).Apply(image, (Image)image.Clone(), new SubReporter(reporter, 0, 25, 0, 100));
+            Image blurred = new GaussianBlurFilter(radius).Apply(screened, new SubReporter(reporter, 25, 50, 0, 100));
+            Image multiplied = new MultiplyBlend(100).Apply(screened, blurred, new SubReporter(reporter, 50, 75, 0, 100));
             new NormalBlend(strength).ApplyInPlace(image, multiplied, new SubReporter(reporter, 75, 100, 0, 100));
             reporter?.Done();
         }
