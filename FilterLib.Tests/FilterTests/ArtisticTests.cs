@@ -19,9 +19,10 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("OilPaint_5.bmp", new OilPaintFilter(5), 1);
             yield return new TestCaseData("OilPaint_10.bmp", new OilPaintFilter(10), 1);
 
-            yield return new TestCaseData("RandomJitter_1_0.bmp", new RandomJitterFilter(1, 0), 1);
-            yield return new TestCaseData("RandomJitter_5_0.bmp", new RandomJitterFilter(5, 0), 1);
-            yield return new TestCaseData("RandomJitter_10_0.bmp", new RandomJitterFilter(10, 0), 1);
+            yield return new TestCaseData("_input.bmp", new RandomJitterFilter(0, 0), 0);
+            yield return new TestCaseData("RandomJitter_1_0.bmp", new RandomJitterFilter(1, 0), 0);
+            yield return new TestCaseData("RandomJitter_5_0.bmp", new RandomJitterFilter(5, 0), 0);
+            yield return new TestCaseData("RandomJitter_10_0.bmp", new RandomJitterFilter(10, 0), 0);
         }
 
         [Test]

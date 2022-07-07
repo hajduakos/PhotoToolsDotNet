@@ -14,14 +14,14 @@ namespace FilterLib.Filters.Artistic
         private int radius;
 
         /// <summary>
-        /// Jitter radius [1;...].
+        /// Jitter radius [0;...].
         /// </summary>
         [FilterParam]
-        [FilterParamMin(1)]
+        [FilterParamMin(0)]
         public int Radius
         {
             get { return radius; }
-            set { radius = Math.Max(1, value); }
+            set { radius = Math.Max(0, value); }
         }
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace FilterLib.Filters.Artistic
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="radius">Jitter radius [1;...]</param>
+        /// <param name="radius">Jitter radius [0;...]</param>
         /// <param name="seed">Random number generator seed</param>
-        public RandomJitterFilter(int radius = 1, int seed = 0)
+        public RandomJitterFilter(int radius = 0, int seed = 0)
         {
             Radius = radius;
             Seed = seed;
