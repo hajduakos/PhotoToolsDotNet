@@ -21,6 +21,7 @@ namespace FilterLib.Filters.Adjustments
         private static (int, int) GetCroppingValues(Image image)
         {
             int[] lumHistogram = Util.Histogram.GetLuminanceHistogram(image);
+            System.Diagnostics.Debug.Assert(lumHistogram.Length == 256, "Histogram length expected to be 256.");
             int totalPixels = image.Width * image.Height;
             // Local limit to avoid losing individual intensity levels
             float localLimit = totalPixels * LocalLimitPct;

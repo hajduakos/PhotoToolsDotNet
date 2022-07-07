@@ -97,9 +97,9 @@ namespace FilterLib.Filters.Adjustments
             hsl = new HSL(hueMap[hsl.H], satMap[hsl.S], lightMap[hsl.L]);
             // Convert back to RGB
             RGB rgb = hsl.ToRGB();
-            *r = (byte)rgb.R;
-            *g = (byte)rgb.G;
-            *b = (byte)rgb.B;
+            *r = rgb.R;
+            *g = rgb.G;
+            *b = rgb.B;
         }
 
         /// <inheritdoc/>
