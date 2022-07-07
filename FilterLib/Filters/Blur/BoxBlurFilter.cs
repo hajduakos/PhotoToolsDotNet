@@ -3,7 +3,8 @@
 namespace FilterLib.Filters.Blur
 {
     /// <summary>
-    /// Apply blur both horizontally and vertically, uniformly within a radius.
+    /// Apply blur by replacing each pixel with the average weighted
+    /// uniformly within a given horizontal and vertical radius.
     /// </summary>
     [Filter]
     public sealed class BoxBlurFilter : FilterInPlaceBase
