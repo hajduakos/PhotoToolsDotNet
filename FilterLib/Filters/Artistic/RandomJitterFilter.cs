@@ -1,6 +1,4 @@
 ﻿using FilterLib.Reporting;
-using Math = System.Math;
-using Random = System.Random;
 
 namespace FilterLib.Filters.Artistic
 {
@@ -21,7 +19,7 @@ namespace FilterLib.Filters.Artistic
         public int Radius
         {
             get { return radius; }
-            set { radius = Math.Max(0, value); }
+            set { radius = System.Math.Max(0, value); }
         }
 
         /// <summary>
@@ -45,7 +43,7 @@ namespace FilterLib.Filters.Artistic
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            Random rnd = new(Seed);
+            System.Random rnd = new(Seed);
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
