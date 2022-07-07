@@ -3,7 +3,7 @@
 namespace FilterLib.Filters.Blur
 {
     /// <summary>
-    /// Box blur filter.
+    /// Apply blur both horizontally and vertically, uniformly within a radius.
     /// </summary>
     [Filter]
     public sealed class BoxBlurFilter : FilterInPlaceBase
@@ -33,7 +33,8 @@ namespace FilterLib.Filters.Blur
         }
 
         /// <summary>
-        /// Constructor with horizontal and vertical radius parameters </summary>
+        /// Constructor.
+        /// </summary>
         /// <param name="radiusX">Horizontal radius [0;...]</param>
         /// <param name="radiusY">Vertical radius [0;...]</param>
         public BoxBlurFilter(int radiusX = 0, int radiusY = 0)
@@ -43,125 +44,115 @@ namespace FilterLib.Filters.Blur
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            // Clone image for temporary use (intermediate result)
-            Image tmp = (Image)image.Clone();
-            unsafe
+            // We do the blurring in 2 steps: first horizontal, then vertical
+            Image tmp = new(image.Width, image.Height); // Intermediate result between the 2 steps
+            System.Diagnostics.Debug.Assert(image.Width == tmp.Width);
+            int width_3 = image.Width * 3;
+            int radiusX_3 = radiusX * 3;
+            fixed (byte* imgStart = image, tmpStart = tmp)
             {
-                fixed (byte* start = image, tmpStart = tmp)
+                // Horizontal blur, result is in 'tmp'
+                // For each pixel, we have to calculate the average over a given radius.
+                // To make this more efficient, a rolling window is used
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    int width_3 = image.Width * 3;
-                    int radiusX_3 = radiusX * 3;
+                    byte* imgRow = imgStart + (y * width_3);
+                    byte* tmpRow = tmpStart + (y * width_3);
 
-                    // We do the blurring in 2 steps: first horizontal, then vertical
-
-                    // First iterate through rows and do horizontal blur
-                    // The result is in 'tmp'
-                    for (int y = 0; y < image.Height; ++y)
+                    // First fill the window
+                    int rSum = 0, gSum = 0, bSum = 0, n = 0;
+                    for (int x = 0; x < width_3 && n <= radiusX; x += 3)
                     {
-                        // Get rows
-                        byte* row = start + (y * width_3);
-                        byte* rowTmp = tmpStart + (y * width_3);
+                        rSum += imgRow[x];
+                        gSum += imgRow[x + 1];
+                        bSum += imgRow[x + 2];
+                        ++n;
+                    }
+                    // First element is the average
+                    tmpRow[0] = (byte)(rSum / n);
+                    tmpRow[1] = (byte)(gSum / n);
+                    tmpRow[2] = (byte)(bSum / n);
 
-                        // Clear sums
-                        int rSum = 0, gSum = 0, bSum = 0, n = 0;
-                        //Take the sum of the first rx+1 elements
-                        for (int x = 0; x < width_3 && n <= radiusX; x += 3)
+                    // Iterate through the other columns
+                    for (int x = 3; x < width_3; x += 3)
+                    {
+                        // Add element to right
+                        if (x / 3 + radiusX < image.Width)
                         {
-                            rSum += row[x + 2];
-                            gSum += row[x + 1];
-                            bSum += row[x];
+                            rSum += imgRow[x + radiusX_3];
+                            gSum += imgRow[x + radiusX_3 + 1];
+                            bSum += imgRow[x + radiusX_3 + 2];
                             ++n;
                         }
-                        // First element is the average
-                        rowTmp[2] = (byte)(rSum / n);
-                        rowTmp[1] = (byte)(gSum / n);
-                        rowTmp[0] = (byte)(bSum / n);
-
-                        // Iterate through the other columns
-                        for (int x = 3; x < width_3; x += 3)
+                        // Remove an element from the left
+                        if (x / 3 - radiusX - 1 >= 0)
                         {
-                            // If we can take a new element from the right
-                            if (x / 3 + radiusX < image.Width)
-                            {
-                                rSum += row[x + radiusX_3 + 2];
-                                gSum += row[x + radiusX_3 + 1];
-                                bSum += row[x + radiusX_3];
-                                ++n;
-                            }
-                            // If we can remove an element from the left
-                            if (x / 3 - radiusX - 1 >= 0)
-                            {
-                                rSum -= row[x - radiusX_3 - 3 + 2];
-                                gSum -= row[x - radiusX_3 - 3 + 1];
-                                bSum -= row[x - radiusX_3 - 3];
-                                --n;
-                            }
-                            // The actual element is the average  
-                            rowTmp[x + 2] = (byte)(rSum / n);
-                            rowTmp[x + 1] = (byte)(gSum / n);
-                            rowTmp[x] = (byte)(bSum / n);
+                            rSum -= imgRow[x - radiusX_3 - 3];
+                            gSum -= imgRow[x - radiusX_3 - 3 + 1];
+                            bSum -= imgRow[x - radiusX_3 - 3 + 2];
+                            --n;
                         }
-                        // Report progress from 0% to 50%
-                        reporter?.Report(y, 0, image.Height * 2 - 1);
+                        // The actual element is the average  
+                        tmpRow[x] = (byte)(rSum / n);
+                        tmpRow[x + 1] = (byte)(gSum / n);
+                        tmpRow[x + 2] = (byte)(bSum / n);
                     }
+                    // Report progress from 0% to 50%
+                    reporter?.Report(y, 0, image.Height * 2 - 1);
+                }
 
-                    // Then iterate through columns and do vertical blur
-                    // The result is in 'image'
-                    for (int x = 0; x < width_3; x += 3)
+                // Vertical blur, the result is in 'image'
+                int radiusRowOffset = radiusY * width_3;
+                for (int x = 0; x < width_3; x += 3)
+                {
+                    byte* imgCol = imgStart + x;
+                    byte* tmpCol = tmpStart + x;
+
+                    // First fill the window
+                    int rSum = 0, gSum = 0, bSum = 0, n = 0;
+                    for (int y = 0; y < image.Height && n <= radiusY; ++y)
                     {
-                        // Get columns
-                        byte* col = start + x;
-                        byte* colTmp = tmpStart + x;
+                        rSum += tmpCol[y * width_3];
+                        gSum += tmpCol[y * width_3 + 1];
+                        bSum += tmpCol[y * width_3 + 2];
+                        ++n;
+                    }
+                    // First element is the average
+                    imgCol[0] = (byte)(rSum / n);
+                    imgCol[1] = (byte)(gSum / n);
+                    imgCol[2] = (byte)(bSum / n);
 
-                        // Clear sums
-                        int rSum = 0, gSum = 0, bSum = 0, n = 0;
-
-                        // Take the sum of the first ry+1 elements
-                        for (int y = 0; y < image.Height && n <= radiusY; ++y)
+                    // Iterate through the other rows
+                    for (int y = 1; y < image.Height; ++y)
+                    {
+                        int rowOffset = y * width_3;
+                        // Add element to bottom
+                        if (y + radiusY < image.Height)
                         {
-                            rSum += colTmp[y * width_3 + 2];
-                            gSum += colTmp[y * width_3 + 1];
-                            bSum += colTmp[y * width_3];
+                            rSum += tmpCol[rowOffset + radiusRowOffset];
+                            gSum += tmpCol[rowOffset + radiusRowOffset + 1];
+                            bSum += tmpCol[rowOffset + radiusRowOffset + 2];
                             ++n;
                         }
-                        // First element will be the average
-                        col[2] = (byte)(rSum / n);
-                        col[1] = (byte)(gSum / n);
-                        col[0] = (byte)(bSum / n);
 
-                        // Iterate through the other rows
-                        for (int y = 1; y < image.Height; ++y)
+                        // Remove an element from the top
+                        if (y - radiusY - 1 >= 0)
                         {
-                            int j_stride = y * width_3;
-                            int ry_stride = radiusY * width_3;
-                            // If we can take a new element from the bottom
-                            if (y + radiusY < image.Height)
-                            {
-                                rSum += colTmp[j_stride + ry_stride + 2];
-                                gSum += colTmp[j_stride + ry_stride + 1];
-                                bSum += colTmp[j_stride + ry_stride];
-                                ++n;
-                            }
-
-                            // If we can remove an element from the top
-                            if (y - radiusY - 1 >= 0)
-                            {
-                                rSum -= colTmp[j_stride - ry_stride - width_3 + 2]; // Row (j-ry-1)
-                                gSum -= colTmp[j_stride - ry_stride - width_3 + 1];
-                                bSum -= colTmp[j_stride - ry_stride - width_3];
-                                --n;
-                            }
-                            // The actual element will be the average
-                            col[j_stride + 2] = (byte)(rSum / n);
-                            col[j_stride + 1] = (byte)(gSum / n);
-                            col[j_stride] = (byte)(bSum / n);
+                            rSum -= tmpCol[rowOffset - radiusRowOffset - width_3];
+                            gSum -= tmpCol[rowOffset - radiusRowOffset - width_3 + 1];
+                            bSum -= tmpCol[rowOffset - radiusRowOffset - width_3 + 2];
+                            --n;
                         }
-                        // Report progress from 50% to 100%
-                        reporter?.Report(x + width_3, 0, width_3 * 2 - 3);
+                        // The actual element is the average
+                        imgCol[rowOffset] = (byte)(rSum / n);
+                        imgCol[rowOffset + 1] = (byte)(gSum / n);
+                        imgCol[rowOffset + 2] = (byte)(bSum / n);
                     }
+                    // Report progress from 50% to 100%
+                    reporter?.Report(x + width_3, 0, width_3 * 2 - 3);
                 }
             }
             reporter?.Done();
