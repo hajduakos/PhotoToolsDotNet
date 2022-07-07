@@ -53,7 +53,6 @@ namespace FilterLib.Filters.Artistic
             {
                 for (int y = 0; y < image.Height; ++y)
                 {
-                    // Get rows
                     byte* newRow = newStart + y * width_3;
                     byte* oldRow = oldStart + y * width_3;
                     for (int x = 0; x < width_3; x += 3)
@@ -66,7 +65,7 @@ namespace FilterLib.Filters.Artistic
                         if (x / 3 + dx < 0 || x / 3 + dx >= image.Width) dx = 0;
                         if (y + dy < 0 || y + dy >= image.Height) dy = 0;
 
-                        // Calculate index (dy rows, dx columns)
+                        // Calculate offset (dy rows, dx columns)
                         int idx = dy * width_3 + dx * 3;
 
                         newRow[x] = oldRow[x + idx];
