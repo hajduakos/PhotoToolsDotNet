@@ -54,7 +54,7 @@ namespace FilterLib.Filters.Border
         }
 
         /// <inheritdoc/>
-        public override sealed Image Apply(Image image, IReporter reporter = null)
+        public override sealed unsafe Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             int borderW = Width.ToAbsolute(Math.Max(image.Width, image.Height));
@@ -67,115 +67,127 @@ namespace FilterLib.Filters.Border
                 _ => throw new ArgumentException($"Unknown border position: {Position}.")
             };
             Image result = new(newWidth, newHeight);
-
-            unsafe
+            fixed (byte* newStart = result, oldStart = image)
             {
-                fixed (byte* start = result, origStart = image)
-            {
-                    // Draw the image centered
-                    int imgOffset = (newWidth - image.Width) / 2;
-                    int imgOffset_3 = imgOffset * 3;
-                    int width_3 = image.Width * 3;
-                    for (int y = 0; y < image.Height; ++y)
-                    {
-                        byte* row = start + (y + imgOffset) * result.Width * 3;
-                        byte* rowOrig = origStart + y * image.Width * 3;
+                // Draw the image centered
+                int imgOffset = (newWidth - image.Width) / 2;
+                int imgOffset_3 = imgOffset * 3;
+                int oldWidth_3 = image.Width * 3;
+                int newWidth_3 = result.Width * 3;
+                for (int y = 0; y < image.Height; ++y)
+                {
+                    byte* newPtr = newStart + (y + imgOffset) * newWidth_3;
+                    byte* oldPtr = oldStart + y * oldWidth_3;
 
-                        for (int x = 0; x < width_3; x += 3)
-                        {
-                            row[x + imgOffset_3] = rowOrig[x];
-                            row[x + imgOffset_3 + 1] = rowOrig[x + 1];
-                            row[x + imgOffset_3 + 2] = rowOrig[x + 2];
-                        }
-                    }
-                    reporter?.Report(33, 0, 100);
-
-                    // Draw the 4 borders around the image
-                    int newWidth_3 = newWidth * 3;
-                    int borderW_3 = borderW * 3;
-                    // Top
-                    for (int y = 0; y < borderW && y < newHeight; ++y)
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        byte* row = start + y * result.Width * 3;
-                        for (int x = 0; x < newWidth_3; x += 3)
-                            (row[x], row[x + 1], row[x+2]) = GetBorderAt(x / 3, y);
+                        newPtr[imgOffset_3] = oldPtr[0];
+                        newPtr[imgOffset_3 + 1] = oldPtr[1];
+                        newPtr[imgOffset_3 + 2] = oldPtr[2];
+                        oldPtr += 3;
+                        newPtr += 3;
                     }
-                    // Bottom
-                    for (int y = Math.Max(0, newHeight - borderW); y < newHeight; ++y)
-                    {
-                        byte* row = start + y * result.Width * 3;
-                        for (int x = 0; x < newWidth_3; x += 3)
-                            (row[x ], row[x + 1], row[x+2]) = GetBorderAt(x / 3, y);
-                    }
-                    // Left and right
-                    for (int y = borderW; y < newHeight - borderW; ++y)
-                    {
-                        byte* row = start + y * result.Width * 3;
-                        // Left
-                        for (int x = 0; x < borderW_3 && x < newWidth_3; x += 3)
-                            (row[x ], row[x + 1], row[x+2]) = GetBorderAt(x / 3, y);
-                        // Right
-                        for (int x = Math.Max(0, newWidth_3 - borderW_3); x < newWidth_3; x += 3)
-                            (row[x ], row[x + 1], row[x+2]) = GetBorderAt(x / 3, y);
-                    }
-                    reporter?.Report(67, 0, 100);
-
-                    // Draw the circles (rounded corner)
-                    int radius_2 = 2 * radius;
-                    float[,] alphaMap = GenerateAlphaMap(radius);
-                    for (int y = 0; y < radius && y + borderW < newHeight; ++y)
-                    {
-                        byte* row = start + (y + borderW) * result.Width * 3;
-                        // Top left
-                        for (int x = 0; x < radius && x + borderW < newWidth; ++x)
-                        {
-                            int x_3 = (x + borderW) * 3;
-                            float a = alphaMap[x, y];
-                            (byte r, byte g, byte b) = GetBorderAt(x + borderW, y + borderW);
-                            row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
-                            row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
-                            row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
-                        }
-                        // Top right
-                        for (int x = radius_2 - 1; x >= radius && newWidth - borderW - radius_2 + x >= 0; --x)
-                        {
-                            int x_3 = (newWidth - borderW - radius_2 + x) * 3;
-                            float a = alphaMap[x, y];
-                            (byte r, byte g, byte b) = GetBorderAt(x_3 / 3, y + borderW);
-                            row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
-                            row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
-                            row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
-                        }
-                    }
-                    for (int y = radius_2 - 1; y >= radius && newHeight - borderW - radius_2 + y >= 0; --y)
-                    {
-                        int yImg = newHeight - borderW - radius_2 + y;
-                        byte* row = start + yImg * result.Width * 3;
-                        // Bottom left
-                        for (int x = 0; x < radius && x + borderW < newWidth; ++x)
-                        {
-                            int x_3 = (x + borderW) * 3;
-                            float a = alphaMap[x, y];
-                            (byte r, byte g, byte b) = GetBorderAt(x_3 / 3, yImg);
-                            row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
-                            row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
-                            row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
-                        }
-                        // Bottom right
-                        for (int x = radius_2 - 1; x >= radius && newWidth - borderW - radius_2 + x >= 0; --x)
-                        {
-                            int x_3 = (newWidth - borderW - radius_2 + x) * 3;
-                            float a = alphaMap[x, y];
-                            (byte r, byte g, byte b) = GetBorderAt(x_3 / 3, yImg);
-                            row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
-                            row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
-                            row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
-                        }
-                    }
-                    reporter?.Report(100, 0, 100);
                 }
-            }
+                reporter?.Report(33, 0, 100);
 
+                // Draw the 4 borders around the image
+                int borderW_3 = borderW * 3;
+                // Top
+                byte* ptr = newStart;
+                for (int y = 0; y < borderW && y < newHeight; ++y)
+                {
+                    for (int x = 0; x < result.Width; ++x)
+                    {
+                        (ptr[0], ptr[1], ptr[2]) = GetBorderAt(x, y);
+                        ptr += 3;
+                    }
+                }
+                // Bottom
+                int y0 = Math.Max(0, newHeight - borderW);
+                ptr = newStart + y0 * newWidth_3;
+                for (int y = y0; y < newHeight; ++y)
+                {
+                    for (int x = 0; x < result.Width; ++x)
+                    {
+                        (ptr[0], ptr[1], ptr[2]) = GetBorderAt(x, y);
+                        ptr += 3;
+                    }
+                }
+                // Left and right
+                for (int y = borderW; y < newHeight - borderW; ++y)
+                {
+                    ptr = newStart + y * newWidth_3;
+                    // Left
+                    for (int x = 0; x < borderW && x < result.Width; ++x)
+                    {
+                        (ptr[0], ptr[1], ptr[2]) = GetBorderAt(x, y);
+                        ptr += 3;
+                    }
+                    // Right
+                    int x0 = Math.Max(0, result.Width - borderW);
+                    ptr = newStart + y * newWidth_3 + x0 * 3;
+                    for (int x = x0; x < result.Width; ++x)
+                    {
+                        (ptr[0], ptr[1], ptr[2]) = GetBorderAt(x, y);
+                        ptr += 3;
+                    }
+                }
+                reporter?.Report(67, 0, 100);
+
+                // Draw the circles (rounded corner)
+                int radius_2 = 2 * radius;
+                float[,] alphaMap = GenerateAlphaMap(radius);
+                for (int y = 0; y < radius && y + borderW < newHeight; ++y)
+                {
+                    byte* row = newStart + (y + borderW) * newWidth_3;
+                    // Top left
+                    for (int x = 0; x < radius && x + borderW < newWidth; ++x)
+                    {
+                        int x_3 = (x + borderW) * 3;
+                        float a = alphaMap[x, y];
+                        (byte r, byte g, byte b) = GetBorderAt(x + borderW, y + borderW);
+                        row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
+                        row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
+                        row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
+                    }
+                    // Top right
+                    for (int x = radius_2 - 1; x >= radius && newWidth - borderW - radius_2 + x >= 0; --x)
+                    {
+                        int x_3 = (newWidth - borderW - radius_2 + x) * 3;
+                        float a = alphaMap[x, y];
+                        (byte r, byte g, byte b) = GetBorderAt(x_3 / 3, y + borderW);
+                        row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
+                        row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
+                        row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
+                    }
+                }
+                for (int y = radius_2 - 1; y >= radius && newHeight - borderW - radius_2 + y >= 0; --y)
+                {
+                    int yImg = newHeight - borderW - radius_2 + y;
+                    byte* row = newStart + yImg * newWidth_3;
+                    // Bottom left
+                    for (int x = 0; x < radius && x + borderW < newWidth; ++x)
+                    {
+                        int x_3 = (x + borderW) * 3;
+                        float a = alphaMap[x, y];
+                        (byte r, byte g, byte b) = GetBorderAt(x_3 / 3, yImg);
+                        row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
+                        row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
+                        row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
+                    }
+                    // Bottom right
+                    for (int x = radius_2 - 1; x >= radius && newWidth - borderW - radius_2 + x >= 0; --x)
+                    {
+                        int x_3 = (newWidth - borderW - radius_2 + x) * 3;
+                        float a = alphaMap[x, y];
+                        (byte r, byte g, byte b) = GetBorderAt(x_3 / 3, yImg);
+                        row[x_3] = (a * r + (1 - a) * row[x_3]).ClampToByte();
+                        row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
+                        row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
+                    }
+                }
+                reporter?.Report(100, 0, 100);
+            }
             reporter?.Done();
             return result;
         }
