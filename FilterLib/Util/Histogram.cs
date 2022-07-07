@@ -2,32 +2,33 @@
 {
     public static class Histogram
     {
+        private const float RRatio = .299f;
+        private const float GRatio = .587f;
+        private const float BRatio = .114f;
+
         /// <summary>
         /// Get luminance histogram corresponding to an image.
         /// </summary>
         /// <param name="image">Input image</param>
         /// <returns>Luminance histogram (256 elements)</returns>
-        public static int[] GetLuminanceHistogram(Image image)
+        public unsafe static int[] GetLuminanceHistogram(Image image)
         {
             // Array containing histogram values
             int[] histogram = new int[256];
             for (int i = 0; i < 256; ++i) histogram[i] = 0;
-            unsafe
+
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                byte* ptr = start;
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    int h = image.Height;
-                    int width_3 = image.Width * 3;
-                    unsafe
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        for (int y = 0; y < h; ++y)
-                        {
-                            byte* row = start + y * width_3;
-                            for (int x = 0; x < width_3; x += 3)
-                                ++histogram[(int)(.299 * row[x] + .587 * row[x + 1] + .114 * row[x + 2])];
-                        }
+                        ++histogram[(byte)(RRatio * ptr[0] + GRatio * ptr[1] + BRatio * ptr[2])];
+                        ptr += 3;
                     }
                 }
+
             }
             return histogram;
         }

@@ -1,7 +1,5 @@
-﻿using FilterLib.Util;
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using FilterLib;
+using FilterLib.Util;
 
 namespace FilterScript.Test
 {
@@ -9,35 +7,32 @@ namespace FilterScript.Test
     {
         static int Main(string[] args)
         {
-            using Bitmap expected = new(args[0]);
-            using Bitmap actual = new(args[1]);
+            Image expected = BitmapAdapter.FromBitmapPath(args[0]);
+            Image actual = BitmapAdapter.FromBitmapPath(args[1]);
             if (Compare(actual, expected, 3)) return 0;
             return 1;
         }
 
-        private static bool Compare(Bitmap actual, Bitmap expected, int tolerance)
+        private static bool Compare(Image actual, Image expected, int tolerance)
         {
             if (actual.Width != expected.Width) return false;
             if (actual.Height != expected.Height) return false;
-            using DisposableBitmapData bmdAct = new(actual, PixelFormat.Format24bppRgb);
-            using DisposableBitmapData bmdExp = new(expected, PixelFormat.Format24bppRgb);
-            int width_3 = actual.Width * 3;
-            int h = actual.Height;
-            int x, y;
             unsafe
             {
-                for (y = 0; y < h; ++y)
+                fixed (byte* actStart = actual, expStart = expected)
                 {
-                    // Get row
-                    byte* rowAct = (byte*)bmdAct.Scan0 + (y * bmdAct.Stride);
-                    byte* rowExp = (byte*)bmdExp.Scan0 + (y * bmdExp.Stride);
-                    // Iterate through columns
-                    for (x = 0; x < width_3; ++x)
-                        if (Math.Abs(rowAct[x] - rowExp[x]) > tolerance)
-                            return false;
+                    int width_3 = actual.Width * 3;
+                    for (int y = 0; y < actual.Height; ++y)
+                    {
+                        byte* rowAct = actStart + (y * width_3);
+                        byte* rowExp = expStart + (y * width_3);
+                        for (int x = 0; x < width_3; ++x)
+                            if (System.Math.Abs(rowAct[x] - rowExp[x]) > tolerance)
+                                return false;
+                    }
                 }
+                return true;
             }
-            return true;
         }
     }
 }
