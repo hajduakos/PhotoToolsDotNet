@@ -13,7 +13,7 @@
         public ScreenBlend(int opacity = 100) : base(opacity) { }
 
         private float op0, op1;
-        int nVal;
+        private float nVal;
 
         /// <inheritdoc/>
         protected override void BlendStart()
@@ -25,7 +25,7 @@
         /// <inheritdoc/>
         protected override unsafe void BlendComponent(byte* compBottom, byte* compTop)
         {
-            nVal = (int)((255 - *compTop) * *compBottom / 255.0f + *compTop);
+            nVal = (255 - *compTop) * *compBottom / 255f + *compTop;
             if (nVal > 255) nVal = 255;
             *compBottom = (byte)(op0 * *compBottom + op1 * nVal);
         }

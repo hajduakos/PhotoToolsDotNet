@@ -1,7 +1,4 @@
-﻿using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using Math = System.Math;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
+﻿using Math = System.Math;
 
 namespace FilterLib.Blending
 {
@@ -18,32 +15,30 @@ namespace FilterLib.Blending
         protected PerPixelBlendBase(int opacity) : base(opacity) { }
 
         /// <inheritdoc/>
-        public override sealed void ApplyInPlace(Image bottom, Image top, Reporting.IReporter reporter = null)
+        public override sealed unsafe void ApplyInPlace(Image bottom, Image top, Reporting.IReporter reporter = null)
         {
             reporter?.Start();
             BlendStart();
-            unsafe
+            fixed (byte* botStart = bottom, topStart = top)
             {
-                fixed (byte* botStart = bottom, topStart = top)
+                int height = Math.Min(bottom.Height, top.Height);
+                int width = Math.Min(bottom.Width, top.Width);
+
+                for (int y = 0; y < height; ++y)
                 {
-                    int height = Math.Min(bottom.Height, top.Height);
-                    int width_3 = Math.Min(bottom.Width, top.Width) * 3;
+                    byte* botPtr = botStart + (y * bottom.Width * 3);
+                    byte* topPtr = topStart + (y * top.Width * 3);
 
-                    for (int y = 0; y < height; ++y)
+                    for (int x = 0; x < width; ++x)
                     {
-                        byte* botRow = botStart + (y * bottom.Width * 3);
-                        byte* topRow = topStart + (y * top.Width * 3);
-
-                        for (int x = 0; x < width_3; x += 3)
-                            BlendPixel(
-                                botRow + x, botRow + x + 1, botRow + x + 2,
-                                topRow + x, topRow + x + 1, topRow + x + 2);
-
-                        reporter?.Report(y, 0, height - 1);
+                        BlendPixel(botPtr, botPtr + 1, botPtr + 2, topPtr, topPtr + 1, topPtr + 2);
+                        botPtr += 3;
+                        topPtr += 3;
                     }
+
+                    reporter?.Report(y, 0, height - 1);
                 }
             }
-
             BlendEnd();
             reporter?.Done();
         }

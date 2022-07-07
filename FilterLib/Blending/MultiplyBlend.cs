@@ -13,7 +13,7 @@
         public MultiplyBlend(int opacity = 100) : base(opacity) { }
 
         private float op0, op1;
-        int nVal;
+        private float nVal;
 
         /// <inheritdoc/>
         protected override void BlendStart()
@@ -25,7 +25,7 @@
         /// <inheritdoc/>
         protected override unsafe void BlendComponent(byte* compBottom, byte* compTop)
         {
-            nVal = (int)(*compBottom * *compTop / 255.0f);
+            nVal = *compBottom * *compTop / 255f;
             *compBottom = (byte)(op0 * *compBottom + op1 * nVal);
         }
     }

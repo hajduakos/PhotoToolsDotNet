@@ -15,7 +15,7 @@ namespace FilterLib.Blending
         public ColorDodgeBlend(int opacity = 100) : base(opacity) { }
 
         private float op0, op1;
-        private int inv;
+        float inv;
         private float nVal;
 
         /// <inheritdoc/>
@@ -30,7 +30,7 @@ namespace FilterLib.Blending
         {
             inv = 255 - *compTop;
             if (inv == 0) nVal = 255;
-            else nVal = (*compBottom / (float)inv * 255.0f).Clamp(0, 255);
+            else nVal = (*compBottom / inv * 255f).Clamp(0, 255);
             *compBottom = (byte)(op0 * *compBottom + op1 * nVal);
         }
     }
