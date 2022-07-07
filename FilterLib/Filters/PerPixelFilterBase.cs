@@ -8,28 +8,26 @@ namespace FilterLib.Filters
     public abstract class PerPixelFilterBase : FilterInPlaceBase
     {
         /// <inheritdoc/>
-        public override sealed void ApplyInPlace(Image image, IReporter reporter = null)
+        public override sealed unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             ApplyStart();
-            unsafe
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                byte* ptr = start;
+                // Iterate through each pixel and process individually
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    // Iterate through each pixel and process individually
-                    int width_3 = image.Width * 3;
-                    for (int y = 0; y < image.Height; ++y)
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        byte* row = start + y * width_3;
-                        for (int x = 0; x < width_3; x += 3)
-                        {
-                            ProcessPixel(row + x, row + x + 1, row + x + 2);
-                        }
-                        reporter?.Report(y, 0, image.Height - 1);
+                        ProcessPixel(ptr, ptr + 1, ptr + 2);
+                        ptr += 3;
                     }
-
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
+
             }
+
             ApplyEnd();
             reporter?.Done();
         }
