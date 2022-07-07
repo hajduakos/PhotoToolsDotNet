@@ -3,11 +3,16 @@
 namespace FilterLib.Filters.Artistic
 {
     /// <summary>
-    /// Oil paint filter.
+    /// Create an oil paint effect by replacing each pixel with the most
+    /// frequent intesity (mode) within a given radius.
     /// </summary>
     [Filter]
     public sealed class OilPaintFilter : FilterInPlaceBase
     {
+        private const float RRatio = .299f;
+        private const float GRatio = .587f;
+        private const float BRatio = .114f;
+
         private int radius;
 
         /// <summary>
@@ -22,117 +27,97 @@ namespace FilterLib.Filters.Artistic
         }
 
         /// <summary>
-        /// Constructor with brush radius.
+        /// Constructor.
         /// </summary>
-        /// <param name="radius">Brush radius</param>
+        /// <param name="radius">Brush radius [1;...]</param>
         public OilPaintFilter(int radius = 1) => Radius = radius;
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
-            unsafe
+            System.Diagnostics.Debug.Assert(image.Width == original.Width);
+            int width_3 = image.Width * 3;
+            int radius_3 = radius * 3;
+            int[] red = new int[256];
+            int[] green = new int[256];
+            int[] blue = new int[256];
+            int[] intensities = new int[256];
+            // For each pixel we calculate the frequency of each intensity level within the radius,
+            // and also the average R, G and B values corresponding to the intensity levels. Then
+            // we replace the current pixel with the R, G, B values corresponding to the most
+            // frequent intensity level (mode). To make this more efficient, we go row-by-row and
+            // use a moving window:
+            // - First we calculate the full window for the first pixel
+            // - But then in each step moving right, we drop one row from the left and add one at the right
+            fixed (byte* newStart = image, oldStart = original)
             {
-                fixed (byte* start = image, origStart = original)
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    int width_3 = image.Width * 3;
-                    int radius_3 = radius * 3;
-                    int[] red = new int[256];
-                    int[] green = new int[256];
-                    int[] blue = new int[256];
-                    int[] intensities = new int[256];
+                    byte* newRow = newStart + y * width_3;
+                    byte* oldRow = oldStart + y * width_3;
 
-                    // Iterate through rows
-                    for (int y = 0; y < image.Height; ++y)
+                    for (int i = 0; i < 256; ++i) red[i] = green[i] = blue[i] = intensities[i] = 0;
+
+                    // Calculate full window around first column of current row
+                    for (int xSub = 0; xSub <= radius && xSub < image.Width; ++xSub)
                     {
-                        // Get rows
-                        byte* row = start + (y * width_3);
-                        byte* rowOrig = origStart + (y * width_3);
-
-                        // Clear arrays
-                        for (int xSub = 0; xSub < 256; ++xSub) red[xSub] = green[xSub] = blue[xSub] = intensities[xSub] = 0;
-
-                        // Build up arrays with the surrounding of the first column of the actual row
-                        // Horizontal
-                        for (int xSub = 0; xSub <= radius && xSub < image.Width; ++xSub)
+                        for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                         {
-                            // Vertically from -radius to +radius
+                            int idx = ySub * width_3 + xSub * 3;
+                            int avg = (int)(RRatio * oldRow[idx] + GRatio * oldRow[idx + 1] + BRatio * oldRow[idx + 2]);
+                            ++intensities[avg];
+                            red[avg] += oldRow[idx];
+                            green[avg] += oldRow[idx + 1];
+                            blue[avg] += oldRow[idx + 2];
+                        }
+                    }
+                    // Calculate first column of current row
+                    int max = 0;
+                    for (int i = 0; i < 256; i++) if (intensities[max] < intensities[i]) max = i;
+                    newRow[0] = (byte)(red[max] / intensities[max]);
+                    newRow[1] = (byte)(green[max] / intensities[max]);
+                    newRow[2] = (byte)(blue[max] / intensities[max]);
+
+                    // Iterate through other columns and update window
+                    for (int x = 3; x < width_3; x += 3)
+                    {
+                        // Remove a column from the left
+                        if (x / 3 - radius - 1 >= 0)
+                        {
                             for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                             {
-                                // Calculate index (relative to current row)
-                                int idx = ySub * width_3 + xSub * 3;
-                                // Get luminance
-                                int avg = (int)(0.299 * rowOrig[idx] + 0.587 * rowOrig[idx + 1] + 0.114 * rowOrig[idx + 2]);
-                                // Increase values
-                                intensities[avg]++;
-                                // Sum values
-                                red[avg] += rowOrig[idx];
-                                green[avg] += rowOrig[idx + 1];
-                                blue[avg] += rowOrig[idx + 2];
+                                int idx = ySub * width_3 + x - radius_3 - 3;
+                                int avg = (int)(RRatio * oldRow[idx] + GRatio * oldRow[idx + 1] + BRatio * oldRow[idx + 2]);
+                                --intensities[avg];
+                                red[avg] -= oldRow[idx];
+                                green[avg] -= oldRow[idx + 1];
+                                blue[avg] -= oldRow[idx + 2];
                             }
                         }
-                        // Get the most frequent intensity
-                        int max = 0;
-                        for (int xSub = 0; xSub < 256; xSub++) if (intensities[max] < intensities[xSub]) max = xSub;
-                        // First element of the row will be the average of the maximal intensity
-                        row[0] = (byte)(red[max] / intensities[max]);
-                        row[1] = (byte)(green[max] / intensities[max]);
-                        row[2] = (byte)(blue[max] / intensities[max]);
-
-                        // Iterate through other columns
-                        // Rather than building up the whole array again, we just take in another column
-                        // (+radius) and remove a column (-radius-1)
-                        for (int x = 3; x < width_3; x += 3)
+                        // Add column to right
+                        if (x / 3 + radius < image.Width)
                         {
-                            // If we can remove a column
-                            if (x / 3 - radius - 1 >= 0)
+                            for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                             {
-                                // Remove column (vertically from -radius to +radius)
-                                for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
-                                {
-                                    // Calculate index (relative to current row)
-                                    int idx = ySub * width_3 + x - radius_3 - 3;
-                                    // Get luminance
-                                    int avg = (int)(0.299 * rowOrig[idx] + 0.587 * rowOrig[idx + 1] + 0.114 * rowOrig[idx + 2]);
-                                    // Decrease values
-                                    intensities[avg]--;
-                                    // Sum values
-                                    red[avg] -= rowOrig[idx];
-                                    green[avg] -= rowOrig[idx + 1];
-                                    blue[avg] -= rowOrig[idx + 2];
-                                }
+                                int idx = ySub * width_3 + x + radius_3;
+                                int avg = (int)(RRatio * oldRow[idx] + GRatio * oldRow[idx + 1] + BRatio * oldRow[idx + 2]);
+                                ++intensities[avg];
+                                red[avg] += oldRow[idx];
+                                green[avg] += oldRow[idx + 1];
+                                blue[avg] += oldRow[idx + 2];
                             }
-                            // If we can add a new column
-                            if (x / 3 + radius < image.Width)
-                            {
-                                // Add column (vertically from -radius to +radius)
-                                for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
-                                {
-                                    // Calculate index (relative to current row)
-                                    int idx = ySub * width_3 + x + radius_3;
-                                    // Get luminance
-                                    int avg = (int)(0.299 * rowOrig[idx] + 0.587 * rowOrig[idx + 1] + 0.114 * rowOrig[idx + 2]);
-                                    // Increase values
-                                    intensities[avg]++;
-                                    // Sum values
-                                    red[avg] += rowOrig[idx];
-                                    green[avg] += rowOrig[idx + 1];
-                                    blue[avg] += rowOrig[idx + 2];
-                                }
-                            }
-                            // Get the most frequent intensity
-                            max = 0;
-                            for (int xSub = 0; xSub < 256; xSub++) if (intensities[max] < intensities[xSub]) max = xSub;
-                            // Actual element will be the average of the maximal intensity
-                            row[x] = (byte)(red[max] / intensities[max]);
-                            row[x + 1] = (byte)(green[max] / intensities[max]);
-                            row[x + 2] = (byte)(blue[max] / intensities[max]);
                         }
-
-                        reporter?.Report(y, 0, image.Height - 1);
+                        // Calculate current column of current row
+                        max = 0;
+                        for (int i = 0; i < 256; i++) if (intensities[max] < intensities[i]) max = i;
+                        newRow[x] = (byte)(red[max] / intensities[max]);
+                        newRow[x + 1] = (byte)(green[max] / intensities[max]);
+                        newRow[x + 2] = (byte)(blue[max] / intensities[max]);
                     }
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
             }
             reporter?.Done();

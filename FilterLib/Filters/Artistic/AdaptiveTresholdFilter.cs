@@ -9,9 +9,10 @@ namespace FilterLib.Filters.Artistic
     [Filter]
     public sealed class AdaptiveTresholdFilter : FilterInPlaceBase
     {
-        private const float RRatio = 0.299f;
-        private const float GRatio = 0.587f;
-        private const float BRatio = 0.114f;
+        private const float RRatio = .299f;
+        private const float GRatio = .587f;
+        private const float BRatio = .114f;
+
         private int sqSize;
 
         /// <summary>
@@ -37,12 +38,12 @@ namespace FilterLib.Filters.Artistic
             reporter?.Start();
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
+            System.Diagnostics.Debug.Assert(image.Width == original.Width);
+            int width_3 = image.Width * 3;
+            int sqSize_3 = sqSize * 3;
 
             fixed (byte* newStart = image, oldStart = original)
             {
-                System.Diagnostics.Debug.Assert(image.Width == original.Width);
-                int width_3 = image.Width * 3;
-                int sqSize_3 = sqSize * 3;
 
                 // For each pixel we have to calculate the average intensity in a given radius. To make this
                 // more efficient, we go row-by-row and use a moving window:
@@ -95,14 +96,13 @@ namespace FilterLib.Filters.Artistic
                             }
                         }
                         avg = sum / n;
-                        // Treshold element
+                        // Treshold current column of current row
                         lum = RRatio * oldRow[x] + GRatio * oldRow[x + 1] + BRatio * oldRow[x + 2];
                         newRow[x] = newRow[x + 1] = newRow[x + 2] = (byte)(avg < lum ? 255 : 0);
                     }
                     reporter?.Report(y, 0, image.Height - 1);
                 }
             }
-
             reporter?.Done();
         }
     }

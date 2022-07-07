@@ -5,7 +5,8 @@ using Random = System.Random;
 namespace FilterLib.Filters.Artistic
 {
     /// <summary>
-    /// Random jitter filter.
+    /// Create a jitter effect by replacing each pixel
+    /// by a random one within a given radius.
     /// </summary>
     [Filter]
     public sealed class RandomJitterFilter : FilterInPlaceBase
@@ -13,7 +14,7 @@ namespace FilterLib.Filters.Artistic
         private int radius;
 
         /// <summary>
-        /// Jitter radius property.
+        /// Jitter radius [1;...].
         /// </summary>
         [FilterParam]
         [FilterParamMin(1)]
@@ -30,9 +31,9 @@ namespace FilterLib.Filters.Artistic
         public int Seed { get; set; }
 
         /// <summary>
-        /// Constructor with radius and seed parameters.
+        /// Constructor.
         /// </summary>
-        /// <param name="radius">Jitter radius</param>
+        /// <param name="radius">Jitter radius [1;...]</param>
         /// <param name="seed">Random number generator seed</param>
         public RandomJitterFilter(int radius = 1, int seed = 0)
         {
@@ -41,48 +42,44 @@ namespace FilterLib.Filters.Artistic
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            Random rnd = new(Seed);
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
-            unsafe
+            System.Diagnostics.Debug.Assert(image.Width == original.Width);
+            int width_3 = image.Width * 3;
+
+            fixed (byte* newStart = image, oldStart = original)
             {
-                fixed (byte* start = image, origStart = original)
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    Random rnd = new(Seed);
-                    int width_3 = image.Width * 3;
-                    // Iterate through rows
-                    for (int y = 0; y < image.Height; ++y)
+                    // Get rows
+                    byte* newRow = newStart + y * width_3;
+                    byte* oldRow = oldStart + y * width_3;
+                    for (int x = 0; x < width_3; x += 3)
                     {
-                        // Get rows
-                        byte* row = start + (y * width_3);
-                        byte* rowOrig = origStart + (y * width_3);
-                        // Iterate through columns
-                        for (int x = 0; x < width_3; x += 3)
-                        {
-                            // Random numbers between -radius and +radius
-                            int dx = rnd.Next(2 * radius + 1) - radius;
-                            int dy = rnd.Next(2 * radius + 1) - radius;
-                            dx *= 3; // Multiply by 3 because of the 3 components
+                        // Random numbers between -radius and +radius
+                        int dx = rnd.Next(2 * radius + 1) - radius;
+                        int dy = rnd.Next(2 * radius + 1) - radius;
 
-                            // When out of range, take zero instead
-                            if (x / 3 + dx < 0 || x / 3 + dx >= image.Width) dx = 0;
-                            if (y + dy < 0 || y + dy >= image.Height) dy = 0;
+                        // When out of range, take zero instead
+                        if (x / 3 + dx < 0 || x / 3 + dx >= image.Width) dx = 0;
+                        if (y + dy < 0 || y + dy >= image.Height) dy = 0;
 
-                            // Calculate index (dy rows, dx columns)
-                            int idx = dy * width_3 + dx;
+                        // Calculate index (dy rows, dx columns)
+                        int idx = dy * width_3 + dx * 3;
 
-                            // Replace all 3 components
-                            row[x] = rowOrig[x + idx];
-                            row[x + 1] = rowOrig[x + idx + 1];
-                            row[x + 2] = rowOrig[x + idx + 2];
-                        }
-                        reporter?.Report(y, 0, image.Height - 1);
+                        newRow[x] = oldRow[x + idx];
+                        newRow[x + 1] = oldRow[x + idx + 1];
+                        newRow[x + 2] = oldRow[x + idx + 2];
                     }
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
             }
             reporter?.Done();
         }
     }
 }
+
