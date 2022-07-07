@@ -5,7 +5,8 @@ using System;
 namespace FilterLib.Filters.Border
 {
     /// <summary>
-    /// Jitter border filter.
+    /// Add a jitter border, where the probability of coloring
+    /// a pixel gradually goes from 1 to 0 towards the center.
     /// </summary>
     [Filter]
     public sealed class JitterBorderFilter : FilterInPlaceBase
@@ -47,40 +48,35 @@ namespace FilterLib.Filters.Border
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            unsafe
+
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                Random rnd = new(Seed);
+                int borderWidth = Width.ToAbsolute(Math.Max(image.Width, image.Height));
+                // Starting from the edge of the image, and going inwards, the probability of
+                // coloring a pixel fades off in with a sine transition for smooth results
+                float[] map = new float[borderWidth + 1];
+                for (int x = 0; x <= borderWidth; ++x)
+                    map[x] = MathF.Sin(x / (float)borderWidth * MathF.PI - MathF.PI / 2) / 2 + .5f;
+
+                byte* ptr = start;
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    Random rnd = new(Seed);
-                    int width_3 = image.Width * 3;
-                    int borderWidth = Width.ToAbsolute(Math.Max(image.Width, image.Height));
-                    // Starting from the edge of the image, and going inwards, the probability of
-                    // coloring a pixel fades off in with a sine transition for smooth results
-                    float[] map = new float[borderWidth + 1];
-                    for (int x = 0; x <= borderWidth; ++x)
-                        map[x] = MathF.Sin(x / (float)borderWidth * MathF.PI - MathF.PI / 2) / 2 + .5f;
-                    // Iterate through rows
-                    for (int y = 0; y < image.Height; ++y)
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        // Get rows
-                        byte* row = start + (y * width_3);
-                        // Iterate through columns
-                        for (int x = 0; x < width_3; x += 3)
+                        int distanceFromNearestEdge = Math.Min(Math.Min(x, y), Math.Min(image.Width - x - 1, image.Height - y - 1));
+                        if (distanceFromNearestEdge <= borderWidth && rnd.NextSingle() > map[distanceFromNearestEdge])
                         {
-                            int distanceFromNearestEdge = Math.Min(Math.Min(x / 3, y), Math.Min(image.Width - x / 3 - 1, image.Height - y - 1));
-                            if (distanceFromNearestEdge > borderWidth) continue;
-                            if (rnd.NextSingle() > map[distanceFromNearestEdge])
-                            {
-                                row[x] = Color.R;
-                                row[x + 1] = Color.G;
-                                row[x + 2] = Color.B;
-                            }
+                            ptr[0] = Color.R;
+                            ptr[1] = Color.G;
+                            ptr[2] = Color.B;
                         }
-                        reporter?.Report(y, 0, image.Height - 1);
+                        ptr += 3;
                     }
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
             }
             reporter?.Done();
