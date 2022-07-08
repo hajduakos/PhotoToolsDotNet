@@ -18,7 +18,7 @@ namespace FilterLib.Filters.Border
         /// Constructor.
         /// </summary>
         public PatternBorderFilter() :
-            this(Util.Size.Absolute(0), Util.Size.Absolute(0), new Image(1, 1), BorderPosition.Inside, AntiAliasQuality.Medium)
+            this(Size.Absolute(0), Size.Absolute(0), new Image(1, 1), BorderPosition.Inside, AntiAliasQuality.Medium)
         { }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace FilterLib.Filters.Border
         /// <param name="radius">Border radius</param>
         /// <param name="pattern">Border pattern</param>
         /// <param name="position">Border position</param>
-        public PatternBorderFilter(Util.Size width, Util.Size radius, Image pattern, BorderPosition position, AntiAliasQuality antiAlias)
+        public PatternBorderFilter(Size width, Size radius, Image pattern, BorderPosition position, AntiAliasQuality antiAlias)
             : base(width, radius, position, antiAlias) => Pattern = pattern;
 
         protected override (byte, byte, byte) GetBorderAt(int x, int y)

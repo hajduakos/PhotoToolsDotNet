@@ -5,7 +5,7 @@ using System;
 namespace FilterLib.Filters.Border
 {
     /// <summary>
-    /// Vignette filter.
+    /// Add an ellipse shaped vignette that gradually ades off towards the center.
     /// </summary>
     [Filter]
     public sealed class VignetteFilter : FilterInPlaceBase
@@ -15,13 +15,13 @@ namespace FilterLib.Filters.Border
         /// Radius of the vignette, outside is filled with given color.
         /// </summary>
         [FilterParam]
-        public Util.Size Radius { get; set; }
+        public Size Radius { get; set; }
 
         /// <summary>
         /// Radius of the clear zone.
         /// </summary>
         [FilterParam]
-        public Util.Size ClearRadius { get; set; }
+        public Size ClearRadius { get; set; }
 
         /// <summary>
         /// Vignette color.
@@ -48,57 +48,48 @@ namespace FilterLib.Filters.Border
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            int width_3 = image.Width * 3;
+            float a1 = Radius.ToAbsolute(image.Width / 2);
+            float a0 = ClearRadius.ToAbsolute(image.Width / 2);
+            if (a1 < a0) throw new ArgumentException("Radius must be larger than clear zone radius.");
+            float halfWidth = image.Width / 2f, halfHeight = image.Height / 2f;
+            float ratioSquare = image.Width * image.Width / (float)(image.Height * image.Height);
+            float normalizer = MathF.PI / (a1 - a0);
 
-            unsafe
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                byte* ptr = start;
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    int width_3 = image.Width * 3;
-                    int w = image.Width, h = image.Height;
-                    int x, y;
-                    float xShifted, yShifted, ellipseRadius;
-                    float a1 = Radius.ToAbsolute(w / 2);
-                    float a0 = ClearRadius.ToAbsolute(w / 2);
-                    if (a1 < a0) throw new ArgumentException("Radius must be larger than clear zone radius.");
-                    float halfWidth = w / 2f, halfHeight = h / 2f;
-                    float ratioSquare = w * w / (float)(h * h);
-                    float normalizer = MathF.PI / (a1 - a0);
-                    float op;
-                    // Iterate through rows
-                    for (y = 0; y < h; ++y)
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        // Get row
-                        byte* row = start + y * width_3;
-                        // Iterate through columns
-                        for (x = 0; x < width_3; x += 3)
+                        // Calculate coordinates with the origin at the center
+                        float xShifted = x - halfWidth;
+                        float yShifted = y - halfHeight;
+                        // Calculate the radius (A) of the ellipse on which the point is
+                        float ellipseRadius = MathF.Sqrt(xShifted * xShifted + yShifted * yShifted * ratioSquare);
+                        // If the point is outside the vignette area, set the color to given one
+                        if (ellipseRadius > a1)
                         {
-                            // Calculate coordinates with the origin at the center
-                            xShifted = x / 3f - halfWidth;
-                            yShifted = y - halfHeight;
-                            // Calculate the radius (A) of the ellipse on which the point is
-                            ellipseRadius = MathF.Sqrt(xShifted * xShifted + yShifted * yShifted * ratioSquare);
-                            // If the point is outside the vignette area, set the color to given one
-                            if (ellipseRadius > a1)
-                            {
-                                row[x] = Color.R;
-                                row[x + 1] = Color.G;
-                                row[x + 2] = Color.B;
-                            }
-                            // Else if the point is outside the clear zone, calculate opacity
-                            else if (ellipseRadius >= a0)
-                            {
-                                op = MathF.Cos((ellipseRadius - a0) * normalizer) / 2f + 0.5f; // Cosine transition
-                                //op = 1- (a_tmp - a0) / (a1 - a0); // Linear transition
-                                row[x] = (byte)(row[x] * op + Color.R * (1 - op));
-                                row[x + 1] = (byte)(row[x + 1] * op + Color.G * (1 - op));
-                                row[x + 2] = (byte)(row[x + 2] * op + Color.B * (1 - op));
-                            }
+                            ptr[0] = Color.R;
+                            ptr[1] = Color.G;
+                            ptr[2] = Color.B;
                         }
-                        reporter?.Report(y, 0, h - 1);
+                        // Else if the point is outside the clear zone, calculate opacity
+                        else if (ellipseRadius >= a0)
+                        {
+                            float op = MathF.Cos((ellipseRadius - a0) * normalizer) / 2f + 0.5f; // Cosine transition
+                            //op = 1- (a_tmp - a0) / (a1 - a0); // Linear transition
+                            ptr[0] = (byte)(ptr[0] * op + Color.R * (1 - op));
+                            ptr[1] = (byte)(ptr[1] * op + Color.G * (1 - op));
+                            ptr[2] = (byte)(ptr[2] * op + Color.B * (1 - op));
+                        }
+                        ptr += 3;
                     }
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
             }
             reporter?.Done();

@@ -3,7 +3,7 @@
 namespace FilterLib.Filters.Border
 {
     /// <summary>
-    /// Simple border filter.
+    /// Add a border using a solid color.
     /// </summary>
     [Filter]
     public sealed class SimpleBorderFilter : BorderFilterBase
