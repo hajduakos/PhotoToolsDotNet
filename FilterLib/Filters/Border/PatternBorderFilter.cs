@@ -1,13 +1,9 @@
-﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using FilterLib.Util;
 
 namespace FilterLib.Filters.Border
 {
     /// <summary>
-    /// Pattern border filter.
+    /// Add a border using an other image.
     /// </summary>
     [Filter]
     public sealed class PatternBorderFilter : BorderFilterBase
@@ -16,13 +12,13 @@ namespace FilterLib.Filters.Border
         /// Border pattern.
         /// </summary>
         [FilterParam]
-        public Bitmap Pattern { get; set; }
+        public Image Pattern { get; set; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         public PatternBorderFilter() :
-            this(Util.Size.Absolute(0), Util.Size.Absolute(0), new Bitmap(1, 1), BorderPosition.Inside, AntiAliasQuality.Medium)
+            this(Util.Size.Absolute(0), Util.Size.Absolute(0), new Image(1, 1), BorderPosition.Inside, AntiAliasQuality.Medium)
         { }
 
         /// <summary>
@@ -32,22 +28,23 @@ namespace FilterLib.Filters.Border
         /// <param name="radius">Border radius</param>
         /// <param name="pattern">Border pattern</param>
         /// <param name="position">Border position</param>
-        public PatternBorderFilter(Util.Size width, Util.Size radius, Bitmap pattern, BorderPosition position, AntiAliasQuality antiAlias)
+        public PatternBorderFilter(Util.Size width, Util.Size radius, Image pattern, BorderPosition position, AntiAliasQuality antiAlias)
             : base(width, radius, position, antiAlias) => Pattern = pattern;
 
         protected override (byte, byte, byte) GetBorderAt(int x, int y)
         {
-            System.Drawing.Color c = Pattern.GetPixel(x % Pattern.Width, y % Pattern.Height);
-            return (c.R, c.G, c.B);
+            int x1 = x % Pattern.Width;
+            int y1 = y % Pattern.Height;
+            return (Pattern[x1, y1, 0], Pattern[x1, y1, 1], Pattern[x1, y1, 2]);
         }
 
         /// <inheritdoc/>
         public override string ParamToString(object param)
         {
-            if (param is Bitmap)
+            if (param is Image)
             {
-                Bitmap bmp = param as Bitmap;
-                return $"Bitmap({bmp.Width}x{bmp.Height})";
+                Image img = param as Image;
+                return $"Image({img.Width}x{img.Height})";
             }
             return base.ParamToString(param);
         }

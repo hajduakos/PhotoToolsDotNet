@@ -4,14 +4,13 @@ using FilterLib.Util;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Tests.FilterTests
 {
     [TestFixture]
     public class BorderTests
     {
-        private static readonly Bitmap pattern = new(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
+        private static readonly Image pattern = BitmapAdapter.FromBitmapPath(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
         internal static IEnumerable<TestCaseData> Data()
         {
             yield return new TestCaseData("_input.bmp",
@@ -85,8 +84,5 @@ namespace FilterLib.Tests.FilterTests
         [TestCaseSource("Exceptions")]
         public void TestEx(string expected, IFilter filter) =>
             Assert.Throws<ArgumentException>(() => Common.CheckFilter("_input.bmp", expected, filter));
-
-        [OneTimeTearDown]
-        public static void CleanUp() => pattern.Dispose();
     }
 }

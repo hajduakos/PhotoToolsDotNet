@@ -15,7 +15,6 @@ using FilterLib.Filters.Transform;
 using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
-using Bitmap = System.Drawing.Bitmap;
 using System.Linq;
 
 namespace FilterLib.Tests.FilterTests
@@ -24,7 +23,7 @@ namespace FilterLib.Tests.FilterTests
     [Parallelizable(ParallelScope.All)]
     public class ToStringTests
     {
-        private static readonly Bitmap pattern = new(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
+        private static readonly Image pattern = BitmapAdapter.FromBitmapPath(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
         internal static IEnumerable<TestCaseData> Data()
         {
             yield return new TestCaseData(new AutoLevelsFilter(), "AutoLevelsFilter");
@@ -47,7 +46,7 @@ namespace FilterLib.Tests.FilterTests
 
             yield return new TestCaseData(new FadeBorderFilter(Size.Absolute(12), new RGB(34, 56, 78)), "FadeBorderFilter(Width: 12px, Color: RGB(34, 56, 78))");
             yield return new TestCaseData(new JitterBorderFilter(Size.Absolute(12), new RGB(34, 56, 78), 9), "JitterBorderFilter(Width: 12px, Color: RGB(34, 56, 78), Seed: 9)");
-            yield return new TestCaseData(new PatternBorderFilter(Size.Absolute(12), Size.Absolute(34), pattern, BorderPosition.Inside, AntiAliasQuality.Medium), "PatternBorderFilter(Pattern: Bitmap(160x90), Width: 12px, Radius: 34px, Position: Inside, AntiAlias: Medium)");
+            yield return new TestCaseData(new PatternBorderFilter(Size.Absolute(12), Size.Absolute(34), pattern, BorderPosition.Inside, AntiAliasQuality.Medium), "PatternBorderFilter(Pattern: Image(160x90), Width: 12px, Radius: 34px, Position: Inside, AntiAlias: Medium)");
             yield return new TestCaseData(new SimpleBorderFilter(Size.Absolute(12), Size.Absolute(34), new RGB(56, 78, 90), BorderPosition.Outside, AntiAliasQuality.Low), "SimpleBorderFilter(Color: RGB(56, 78, 90), Width: 12px, Radius: 34px, Position: Outside, AntiAlias: Low)");
             yield return new TestCaseData(new VignetteFilter(Size.Relative(1), Size.Relative(0), new RGB(12, 34, 56)), "VignetteFilter(Radius: 100%, ClearRadius: 0%, Color: RGB(12, 34, 56))");
 
@@ -121,8 +120,5 @@ namespace FilterLib.Tests.FilterTests
                 Assert.IsTrue(found, $"ToString test not found for {filter.Name}");
             }
         }
-
-        [OneTimeTearDown]
-        public static void CleanUp() => pattern.Dispose();
     }
 }
