@@ -2,12 +2,11 @@
 using FilterLib.Filters.Adjustments;
 using FilterLib.Reporting;
 using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 
 namespace FilterLib.Filters.Color
 {
     /// <summary>
-    /// Vintage filter.
+    /// Craete a vintage look by various color transformations.
     /// </summary>
     [Filter]
     public sealed class VintageFilter : FilterInPlaceBase
@@ -43,7 +42,6 @@ namespace FilterLib.Filters.Color
             new MultiplyBlend(50).ApplyInPlace(image, sepia);
             new ContrastFilter(15).ApplyInPlace(image, new SubReporter(reporter, 40, 60, 0, 100));
             new ColorHSLFilter(0, 5, 0).ApplyInPlace(image, new SubReporter(reporter, 60, 80, 0, 100));
-
             if (strength != 100)
                 new NormalBlend(100 - strength).ApplyInPlace(image, original, new SubReporter(reporter, 80, 100, 0, 100));
 

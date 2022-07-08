@@ -1,7 +1,9 @@
-﻿namespace FilterLib.Filters.Color
+﻿using FilterLib.Util;
+
+namespace FilterLib.Filters.Color
 {
     /// <summary>
-    /// Sepia filter.
+    /// Sepia filter creating an old looking brownish color.
     /// </summary>
     [Filter]
     public sealed class SepiaFilter : PerPixelFilterBase
@@ -10,16 +12,13 @@
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             // Calculate sepia values using formula
-            int rs = (int)(.393 * (*r) + .769 * (*g) + .189 * (*b));
-            int gs = (int)(.349 * (*r) + .686 * (*g) + .168 * (*b));
-            int bs = (int)(.272 * (*r) + .534 * (*g) + .131 * (*b));
-            if (rs > 255) rs = 255;
-            if (gs > 255) gs = 255;
-            if (bs > 255) bs = 255;
+            float rs = .393f * (*r) + .769f * (*g) + .189f * (*b);
+            float gs = .349f * (*r) + .686f * (*g) + .168f * (*b);
+            float bs = .272f * (*r) + .534f * (*g) + .131f * (*b);
 
-            *r = (byte)rs;
-            *g = (byte)gs;
-            *b = (byte)bs;
+            *r = rs.ClampToByte();
+            *g = gs.ClampToByte();
+            *b = bs.ClampToByte();
         }
     }
 }

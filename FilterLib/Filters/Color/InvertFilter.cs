@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Filters.Color
 {
     /// <summary>
-    /// Invert filter.
+    /// Invert the image by inverting all components of all pixels.
     /// </summary>
     [Filter]
     public sealed class InvertFilter : PerComponentFilterBase

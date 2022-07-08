@@ -4,7 +4,7 @@ using MathF = System.MathF;
 namespace FilterLib.Filters.Color
 {
     /// <summary>
-    /// Posterize filter that reduces the levels of each component.
+    /// Posterize image by reducing the number of levels for each component.
     /// </summary>
     [Filter]
     public sealed class PosterizeFilter : PerComponentFilterBase
@@ -12,7 +12,7 @@ namespace FilterLib.Filters.Color
         private int levels;
 
         /// <summary>
-        /// Number of levels [2:256]
+        /// Number of levels [2:256].
         /// </summary>
         [FilterParam]
         [FilterParamMin(2)]
@@ -24,7 +24,7 @@ namespace FilterLib.Filters.Color
         }
 
         /// <summary>
-        /// Constructor with levels parameter.
+        /// Constructor.
         /// </summary>
         /// <param name="levels">Number of levels [2:256]</param>
         public PosterizeFilter(int levels = 256) => Levels = levels;

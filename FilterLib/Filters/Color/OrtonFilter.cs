@@ -6,7 +6,7 @@ using FilterLib.Util;
 namespace FilterLib.Filters.Color
 {
     /// <summary>
-    /// Orton filter.
+    /// Orton filter, creating a soft glow look.
     /// </summary>
     [Filter]
     public sealed class OrtonFilter : FilterInPlaceBase
@@ -51,7 +51,7 @@ namespace FilterLib.Filters.Color
         public override void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            Image screened = new ScreenBlend(100).Apply(image, (Image)image.Clone(), new SubReporter(reporter, 0, 25, 0, 100));
+            Image screened = new ScreenBlend(100).Apply(image, image, new SubReporter(reporter, 0, 25, 0, 100));
             Image blurred = new GaussianBlurFilter(radius).Apply(screened, new SubReporter(reporter, 25, 50, 0, 100));
             Image multiplied = new MultiplyBlend(100).Apply(screened, blurred, new SubReporter(reporter, 50, 75, 0, 100));
             new NormalBlend(strength).ApplyInPlace(image, multiplied, new SubReporter(reporter, 75, 100, 0, 100));

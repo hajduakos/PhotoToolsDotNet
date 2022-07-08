@@ -3,7 +3,7 @@
 namespace FilterLib.Filters.Color
 {
     /// <summary>
-    /// Convert to grayscale filter.
+    /// Convert to grayscale using custom weights for the different components.
     /// </summary>
     [Filter]
     public sealed class GrayscaleFilter : PerPixelFilterBase
@@ -47,7 +47,8 @@ namespace FilterLib.Filters.Color
         }
 
         /// <summary>
-        /// Constructor with R,G,B parameters </summary>
+        /// Constructor.
+        /// </summary>
         /// <param name="red">Red ratio [0;100]</param>
         /// <param name="green">Green ratio [0;100]</param>
         /// <param name="blue">Blue ratio [0;100]</param>
@@ -58,7 +59,7 @@ namespace FilterLib.Filters.Color
             Blue = blue;
         }
 
-        float redF, greenF, blueF;
+        private float redF, greenF, blueF;
 
         /// <inheritdoc/>
         protected override void ApplyStart()

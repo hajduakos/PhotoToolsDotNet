@@ -3,7 +3,8 @@
 namespace FilterLib.Filters.Color
 {
     /// <summary>
-    /// Treshold filter.
+    /// Treshold filter that maps each pixel to pure black or white based on
+    /// a given (and fixed) treshold.
     /// </summary>
     [Filter]
     public sealed class TresholdFilter : PerPixelFilterBase
@@ -23,28 +24,30 @@ namespace FilterLib.Filters.Color
         }
 
         /// <summary>
-        /// Constructor with treshold value.
+        /// Constructor.
         /// </summary>
         /// <param name="treshold">Treshold value [0:255]</param>
         public TresholdFilter(int treshold = 127) => Treshold = treshold;
 
+        // Cache
         private byte[] map;
 
         /// <inheritdoc/>
         protected override void ApplyStart()
         {
             base.ApplyStart();
+            // Fill cache
             map = new byte[256];
-            for (int x = 0; x < 256; ++x) map[x] = (byte)(x < treshold ? 0 : 255);
+            for (int i = 0; i < 256; ++i) map[i] = (byte)(i < treshold ? 0 : 255);
         }
 
         /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
+            // Use cache
             System.Diagnostics.Debug.Assert(map != null);
             System.Diagnostics.Debug.Assert(map.Length == 256);
-            byte lum = (byte)RGB.GetLuminance(*r, *g, *b);
-            *r = *g = *b = map[lum];
+            *r = *g = *b = map[(byte)RGB.GetLuminance(*r, *g, *b)];
         }
 
         /// <inheritdoc/>
