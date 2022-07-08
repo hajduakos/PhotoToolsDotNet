@@ -9,10 +9,6 @@ namespace FilterLib.Filters.Artistic
     [Filter]
     public sealed class OilPaintFilter : FilterInPlaceBase
     {
-        private const float RRatio = .299f;
-        private const float GRatio = .587f;
-        private const float BRatio = .114f;
-
         private int radius;
 
         /// <summary>
@@ -67,11 +63,11 @@ namespace FilterLib.Filters.Artistic
                         for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                         {
                             int idx = ySub * width_3 + xSub * 3;
-                            int avg = (int)(RRatio * oldRow[idx] + GRatio * oldRow[idx + 1] + BRatio * oldRow[idx + 2]);
-                            ++intensities[avg];
-                            red[avg] += oldRow[idx];
-                            green[avg] += oldRow[idx + 1];
-                            blue[avg] += oldRow[idx + 2];
+                            int lum = (int)Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
+                            ++intensities[lum];
+                            red[lum] += oldRow[idx];
+                            green[lum] += oldRow[idx + 1];
+                            blue[lum] += oldRow[idx + 2];
                         }
                     }
                     // Calculate first column of current row
@@ -90,11 +86,11 @@ namespace FilterLib.Filters.Artistic
                             for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                             {
                                 int idx = ySub * width_3 + x - radius_3 - 3;
-                                int avg = (int)(RRatio * oldRow[idx] + GRatio * oldRow[idx + 1] + BRatio * oldRow[idx + 2]);
-                                --intensities[avg];
-                                red[avg] -= oldRow[idx];
-                                green[avg] -= oldRow[idx + 1];
-                                blue[avg] -= oldRow[idx + 2];
+                                int lum = (int)Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
+                                --intensities[lum];
+                                red[lum] -= oldRow[idx];
+                                green[lum] -= oldRow[idx + 1];
+                                blue[lum] -= oldRow[idx + 2];
                             }
                         }
                         // Add column to right
@@ -103,11 +99,11 @@ namespace FilterLib.Filters.Artistic
                             for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                             {
                                 int idx = ySub * width_3 + x + radius_3;
-                                int avg = (int)(RRatio * oldRow[idx] + GRatio * oldRow[idx + 1] + BRatio * oldRow[idx + 2]);
-                                ++intensities[avg];
-                                red[avg] += oldRow[idx];
-                                green[avg] += oldRow[idx + 1];
-                                blue[avg] += oldRow[idx + 2];
+                                int lum = (int)Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
+                                ++intensities[lum];
+                                red[lum] += oldRow[idx];
+                                green[lum] += oldRow[idx + 1];
+                                blue[lum] += oldRow[idx + 2];
                             }
                         }
                         // Calculate current column of current row

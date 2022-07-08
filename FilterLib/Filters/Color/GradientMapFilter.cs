@@ -3,7 +3,7 @@
 namespace FilterLib.Filters.Color
 {
     /// <summary>
-    /// Gradient map filter.
+    /// Map each color to a value in a given gradient based on its luminance.
     /// </summary>
     [Filter]
     public sealed class GradientMapFilter : PerPixelFilterBase
@@ -37,10 +37,12 @@ namespace FilterLib.Filters.Color
         /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
-            int lum = (int)(.299f * (*r) + .587f * (*g) + .114f * (*b));
-            *r = (byte)map[lum].R;
-            *g = (byte)map[lum].G;
-            *b = (byte)map[lum].B;
+            System.Diagnostics.Debug.Assert(map != null);
+            System.Diagnostics.Debug.Assert(map.Length == 256);
+            byte lum = (byte)RGB.GetLuminance(*r, *g, *b);
+            *r = map[lum].R;
+            *g = map[lum].G;
+            *b = map[lum].B;
         }
 
         /// <inheritdoc/>

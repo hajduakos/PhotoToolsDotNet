@@ -2,10 +2,6 @@
 {
     public static class Histogram
     {
-        private const float RRatio = .299f;
-        private const float GRatio = .587f;
-        private const float BRatio = .114f;
-
         /// <summary>
         /// Get luminance histogram corresponding to an image.
         /// </summary>
@@ -24,7 +20,7 @@
                 {
                     for (int x = 0; x < image.Width; ++x)
                     {
-                        ++histogram[(byte)(RRatio * ptr[0] + GRatio * ptr[1] + BRatio * ptr[2])];
+                        ++histogram[(byte)RGB.GetLuminance(ptr[0], ptr[1], ptr[2])];
                         ptr += 3;
                     }
                 }

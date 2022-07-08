@@ -9,10 +9,6 @@ namespace FilterLib.Filters.Artistic
     [Filter]
     public sealed class AdaptiveTresholdFilter : FilterInPlaceBase
     {
-        private const float RRatio = .299f;
-        private const float GRatio = .587f;
-        private const float BRatio = .114f;
-
         private int sqSize;
 
         /// <summary>
@@ -63,13 +59,13 @@ namespace FilterLib.Filters.Artistic
                         for (int ySub = y < sqSize ? -y : -sqSize; y + ySub < image.Height && ySub <= sqSize; ++ySub)
                         {
                             int idx = ySub * width_3 + xSub * 3;
-                            sum += RRatio * oldRow[idx] + GRatio * oldRow[idx + 1] + BRatio * oldRow[idx + 2];
+                            sum += Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
                             ++n;
                         }
                     }
                     float avg = sum / n;
                     // Treshold first column of current row
-                    float lum = RRatio * oldRow[0] + GRatio * oldRow[1] + BRatio * oldRow[2];
+                    float lum = Util.RGB.GetLuminance(oldRow[0], oldRow[1], oldRow[2]);
                     newRow[0] = newRow[1] = newRow[2] = (byte)(avg < lum ? 255 : 0);
 
                     // Iterate through other columns and update window
@@ -81,7 +77,7 @@ namespace FilterLib.Filters.Artistic
                             for (int ySub = y < sqSize ? -y : -sqSize; y + ySub < image.Height && ySub <= sqSize; ++ySub)
                             {
                                 int idx = ySub * width_3 + x - sqSize_3 - 3;
-                                sum -= RRatio * oldRow[idx] + GRatio * oldRow[idx + 1] + BRatio * oldRow[idx + 2];
+                                sum -= Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
                                 --n;
                             }
                         }
@@ -91,13 +87,13 @@ namespace FilterLib.Filters.Artistic
                             for (int ySub = y < sqSize ? -y : -sqSize; y + ySub < image.Height && ySub <= sqSize; ++ySub)
                             {
                                 int idx = ySub * width_3 + x + sqSize_3;
-                                sum += RRatio * oldRow[idx] + GRatio * oldRow[idx + 1] + BRatio * oldRow[idx + 2];
+                                sum += Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
                                 ++n;
                             }
                         }
                         avg = sum / n;
                         // Treshold current column of current row
-                        lum = RRatio * oldRow[x] + GRatio * oldRow[x + 1] + BRatio * oldRow[x + 2];
+                        lum = Util.RGB.GetLuminance(oldRow[x], oldRow[x + 1], oldRow[x + 2]);
                         newRow[x] = newRow[x + 1] = newRow[x + 2] = (byte)(avg < lum ? 255 : 0);
                     }
                     reporter?.Report(y, 0, image.Height - 1);

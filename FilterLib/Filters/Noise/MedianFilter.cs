@@ -74,7 +74,7 @@ namespace FilterLib.Filters.Noise
                             }
                             // Calculate luminance values
                             for (k = 0; k < 9; ++k)
-                                medianLum[k] = (byte)(.114 * medianBGR[2, k] + .587 * medianBGR[1, k] + .299 * medianBGR[0, k]);
+                                medianLum[k] = (byte)RGB.GetLuminance(medianBGR[0, k], medianBGR[1, k], medianBGR[2, k]);
                             // Sort by luminance (only the first 5 elements, since we need the 5th
                             for (k = 0; k < 5; ++k)
                             {

@@ -81,5 +81,11 @@
         public static bool operator !=(RGB c1, RGB c2) => !(c1 == c2);
 
         public override string ToString() => $"RGB({R}, {G}, {B})";
+
+        private const float RRatio = .299f;
+        private const float GRatio = .587f;
+        private const float BRatio = .114f;
+
+        public static float GetLuminance(byte r, byte g, byte b) => RRatio * r + GRatio * g + BRatio * b;
     }
 }

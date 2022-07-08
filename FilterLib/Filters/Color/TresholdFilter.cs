@@ -42,8 +42,9 @@ namespace FilterLib.Filters.Color
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
             System.Diagnostics.Debug.Assert(map != null);
-            int luminance = (int)(.299f * (*r) + .587f * (*g) + .114f * (*b));
-            *r = *g = *b = map[luminance];
+            System.Diagnostics.Debug.Assert(map.Length == 256);
+            byte lum = (byte)RGB.GetLuminance(*r, *g, *b);
+            *r = *g = *b = map[lum];
         }
 
         /// <inheritdoc/>
