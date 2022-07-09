@@ -9,7 +9,8 @@ namespace FilterLib.Filters.Noise
     [Filter]
     public sealed class AddNoiseFilter : PerPixelFilterBase
     {
-        private int intensity, strength;
+        private int intensity;
+        private int strength;
 
         /// <summary>
         /// Possible noise types.
@@ -53,7 +54,7 @@ namespace FilterLib.Filters.Noise
         public int Seed { get; set; }
 
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
         /// <param name="intensity">Intensity of the noise [0;1000]</param>
         /// <param name="strength">Strength of the noise [0;255]</param>
@@ -87,7 +88,7 @@ namespace FilterLib.Filters.Noise
             {
                 if (Type == NoiseType.Monochrome) // Monochrome noise -> same noise added to each channel
                 {
-                    int noise = (int)((rnd.NextDouble() * 2 - 1) * strength);
+                    int noise = (int)((rnd.NextSingle() * 2 - 1) * strength);
                     rn = *r + noise;
                     gn = *g + noise;
                     bn = *b + noise;
