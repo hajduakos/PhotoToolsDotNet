@@ -6,12 +6,13 @@ using Random = System.Random;
 namespace FilterLib.Filters.Mosaic
 {
     /// <summary>
-    /// Crystallize filter.
+    /// Create a crystallized look using a variant of the Voronoi diagram.
     /// </summary>
     [Filter]
     public sealed class CrystallizeFilter : FilterInPlaceBase
     {
-        private int size, averaging;
+        private int size;
+        private int averaging;
 
         /// <summary>
         /// Crystal size [1;...].
@@ -72,105 +73,90 @@ namespace FilterLib.Filters.Mosaic
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
 
-            unsafe
+            // First step: divide the image into a grid with the given size
+            // and generate one crystal point in each square
+            Random rnd = new(Seed);
+            // Additional points required if the width/height is not dividible by the size
+            int crystalsX = image.Width / size + ((image.Width % size) == 0 ? 0 : 1);
+            int crystalsY = image.Height / size + ((image.Height % size) == 0 ? 0 : 1);
+            Cpoint[,] crystalPts = new Cpoint[crystalsX, crystalsY];
+            for (int xSub = 0; xSub < crystalsX; ++xSub)
             {
-                fixed (byte* start = image)
+                for (int ySub = 0; ySub < crystalsY; ++ySub)
                 {
-                    int w = image.Width;
-                    int width_3 = image.Width * 3; // Width of a row
-                    int h = image.Height;
-                    int x, y, xSub, ySub, size_3 = size * 3, i_3;
-                    int stride = width_3;
-                    float avg = averaging / 100.0f;
+                    crystalPts[xSub, ySub] = new Cpoint(xSub * size + rnd.Next() % size, ySub * size + rnd.Next() % size);
+                    // Check bounds
+                    crystalPts[xSub, ySub].x = Math.Min(crystalPts[xSub, ySub].x, image.Width - 1);
+                    crystalPts[xSub, ySub].y = Math.Min(crystalPts[xSub, ySub].y, image.Height - 1);
+                }
+            }
 
-                    // Generate points
-                    Random rnd = new(Seed);
-                    // Additional points required if the width/height is not dividible by the size
-                    int crystalsX = w / size + ((w % size) == 0 ? 0 : 1);
-                    int crystalsY = h / size + ((h % size) == 0 ? 0 : 1);
-                    Cpoint[,] crystalPoints = new Cpoint[crystalsX, crystalsY];
-                    for (xSub = 0; xSub < crystalsX; ++xSub)
+            int width_3 = image.Width * 3;
+            int size_3 = size * 3;
+            float avg = averaging / 100.0f;
+            byte[,,] avgColors = new byte[crystalsX, crystalsY, 3];
+            fixed (byte* startPtr = image)
+            {
+                // Second step: calculate avarege color of a square in the grid
+                for (int y = 0; y < image.Height; y += size)
+                {
+                    for (int x = 0; x < width_3; x += size_3)
                     {
-                        for (ySub = 0; ySub < crystalsY; ++ySub)
+                        float rSum = 0, gSum = 0, bSum = 0;
+                        int n = 0;
+                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
                         {
-                            // Generate random points
-                            crystalPoints[xSub, ySub] = new Cpoint(xSub * size + rnd.Next() % size, ySub * size + rnd.Next() % size);
-                            // Check bounds
-                            crystalPoints[xSub, ySub].x = Math.Min(crystalPoints[xSub, ySub].x, w - 1);
-                            crystalPoints[xSub, ySub].y = Math.Min(crystalPoints[xSub, ySub].y, h - 1);
-                        }
-                    }
-
-                    // Average colors of the points
-                    byte[,,] avgColors = new byte[crystalsX, crystalsY, 3];
-                    int rSum, gSum, bSum, n;
-
-                    int blockX, blockY; // Current block coordinates
-
-                    // First step: averaging
-                    for (y = 0; y < h; y += size)
-                    {
-                        for (x = 0; x < width_3; x += size_3)
-                        {
-                            rSum = gSum = bSum = n = 0; // Clear sums
-                            for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
+                            for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                             {
-                                for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
+                                rSum += startPtr[(y + ySub) * width_3 + x + xSub];
+                                gSum += startPtr[(y + ySub) * width_3 + x + xSub + 1];
+                                bSum += startPtr[(y + ySub) * width_3 + x + xSub + 2];
+                                ++n;
+                            }
+                        }
+                        // Set average color as a combination of the average color and the representative point
+                        Cpoint pnt = crystalPts[x / size_3, y / size];
+                        avgColors[x / size_3, y / size, 0] = (byte)(avg * rSum / n + (1 - avg) * startPtr[pnt.y * width_3 + pnt.x * 3]);
+                        avgColors[x / size_3, y / size, 1] = (byte)(avg * gSum / n + (1 - avg) * startPtr[pnt.y * width_3 + pnt.x * 3 + 1]);
+                        avgColors[x / size_3, y / size, 2] = (byte)(avg * bSum / n + (1 - avg) * startPtr[pnt.y * width_3 + pnt.x * 3 + 2]);
+                    }
+                    reporter?.Report(y, 0, 2 * image.Height - 1);
+                }
+
+                // Third step: draw Voronoi diagram: for each pixel, find the closest crystal point
+                // and use that as the color of the pixel
+                for (int y = 0; y < image.Height; ++y)
+                {
+                    for (int x = 0; x < width_3; x += 3)
+                    {
+                        int x_div3 = x / 3;
+                        int blockX = x_div3 / size;
+                        int blockY = y / size;
+                        // Optimization: closest point must belong to the surrounding 5x5 square of blocks
+                        Cpoint minPoint = crystalPts[blockX, blockY];
+                        int minDistance = minPoint.Dist(x_div3, y);
+                        for (int xSub = Math.Max(0, blockX - 2); xSub <= blockX + 2 && xSub < crystalsX; ++xSub)
+                        {
+                            for (int ySub = Math.Max(0, blockY - 2); ySub <= blockY + 2 && ySub < crystalsY; ++ySub)
+                            {
+                                int dist = crystalPts[xSub, ySub].Dist(x_div3, y);
+                                if (dist < minDistance)
                                 {
-                                    rSum += start[(y + ySub) * stride + x + xSub + 2];
-                                    gSum += start[(y + ySub) * stride + x + xSub + 1];
-                                    bSum += start[(y + ySub) * stride + x + xSub];
-                                    ++n;
+                                    minDistance = dist;
+                                    minPoint = crystalPts[xSub, ySub];
                                 }
                             }
-                            // Get representative point
-                            Cpoint pnt = crystalPoints[x / size_3, y / size];
-                            // Set average color as a combination of the average color and the representative point
-                            avgColors[x / size_3, y / size, 0] = (byte)(avg * bSum / n + (1 - avg) * start[pnt.y * stride + pnt.x * 3]);
-                            avgColors[x / size_3, y / size, 1] = (byte)(avg * gSum / n + (1 - avg) * start[pnt.y * stride + pnt.x * 3 + 1]);
-                            avgColors[x / size_3, y / size, 2] = (byte)(avg * rSum / n + (1 - avg) * start[pnt.y * stride + pnt.x * 3 + 2]);
-                        }
-                        reporter?.Report(y, 0, 2 * h - 1);
-                    }
-
-
-                    // Iterate through rows
-                    for (y = 0; y < h; ++y)
-                    {
-                        // Iterate through columns
-                        for (x = 0; x < width_3; x += 3)
-                        {
-                            i_3 = x / 3;
-                            // Get current block
-                            blockX = i_3 / size;
-                            blockY = y / size;
-                            // Find closest point in the surrounding 5x5 square of blocks
-                            Cpoint minPoint = crystalPoints[blockX, blockY];
-                            int minDistance = minPoint.Dist(i_3, y);
-                            for (xSub = Math.Max(0, blockX - 2); xSub <= blockX + 2 && xSub < crystalsX; ++xSub)
-                            {
-                                for (ySub = Math.Max(0, blockY - 2); ySub <= blockY + 2 && ySub < crystalsY; ++ySub)
-                                {
-                                    int dist = crystalPoints[xSub, ySub].Dist(i_3, y);
-                                    if (dist < minDistance)
-                                    {
-                                        minDistance = dist;
-                                        minPoint = crystalPoints[xSub, ySub];
-                                    }
-                                }
-                            }
-
-                            // Set the same color as the closest point color
-                            for (xSub = 0; xSub < 3; xSub++)
-                                start[y * stride + x + xSub] = avgColors[minPoint.x / size, minPoint.y / size, xSub];
                         }
 
-                        reporter?.Report(h + y, 0, 2 * h - 1);
+                        // Set the same color as the closest point color
+                        for (int i = 0; i < 3; i++)
+                            startPtr[y * width_3 + x + i] = avgColors[minPoint.x / size, minPoint.y / size, i];
                     }
+                    reporter?.Report(image.Height + y, 0, 2 * image.Height - 1);
                 }
             }
             reporter?.Done();

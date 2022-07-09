@@ -4,7 +4,7 @@ using Math = System.Math;
 namespace FilterLib.Filters.Mosaic
 {
     /// <summary>
-    /// Pixelate filter.
+    /// Pixelate the image to bigger blocks.
     /// </summary>
     [Filter]
     public sealed class PixelateFilter : FilterInPlaceBase
@@ -42,72 +42,67 @@ namespace FilterLib.Filters.Mosaic
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            unsafe
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                int width_3 = image.Width * 3;
+                int size_3 = size * 3;
+                byte rNew, gNew, bNew;
+
+                // Iterate through block rows
+                for (int y = 0; y < image.Height; y += size)
                 {
-                    int width_3 = image.Width * 3;
-                    int h = image.Height;
-                    int x, y, xSub, ySub, size_3 = size * 3, rSum, gSum, bSum, n;
-                    byte rNew, gNew, bNew;
-
-                    // Iterate through block rows
-                    for (y = 0; y < h; y += size)
+                    // Iterate through block columns
+                    for (int x = 0; x < width_3; x += size_3)
                     {
-                        // Iterate through block columns
-                        for (x = 0; x < width_3; x += size_3)
+                        byte* row;
+                        // Determine block color based on mode
+                        switch (Mode)
                         {
-                            byte* row;
-                            // Determine block color based on mode
-                            switch (Mode)
-                            {
-                                case PixelateMode.Average:
-                                    rSum = gSum = bSum = n = 0;
-                                    for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
-                                    {
-                                        // Get row
-                                        row = start + ((y + ySub) * width_3);
-                                        for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
-                                        {
-                                            rSum += row[x + xSub + 2];
-                                            gSum += row[x + xSub + 1];
-                                            bSum += row[x + xSub];
-                                            ++n;
-                                        }
-                                    }
-                                    rNew = (byte)(rSum / n);
-                                    gNew = (byte)(gSum / n);
-                                    bNew = (byte)(bSum / n);
-                                    break;
-                                case PixelateMode.MidPoint:
-                                    row = start + (Math.Min(y + size / 2, h - 1) * width_3);
-                                    int xMid = Math.Min(x + (size / 2) * 3, width_3 - 3);
-                                    rNew = row[xMid + 2];
-                                    gNew = row[xMid + 1];
-                                    bNew = row[xMid];
-                                    break;
-                                default:
-                                    throw new System.ArgumentException($"Unknown pixelate mode: {Mode}");
-                            }
-
-                            // Fill block
-                            for (ySub = 0; ySub < size && y + ySub < h; ++ySub)
-                            {
-                                // Get row
-                                row = start + ((y + ySub) * width_3);
-                                for (xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
+                            case PixelateMode.Average:
+                                float rSum = 0, gSum = 0, bSum = 0;
+                                int n = 0;
+                                for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
                                 {
-                                    row[x + xSub + 2] = rNew;
-                                    row[x + xSub + 1] = gNew;
-                                    row[x + xSub] = bNew;
+                                    row = start + ((y + ySub) * width_3);
+                                    for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
+                                    {
+                                        rSum += row[x + xSub];
+                                        gSum += row[x + xSub + 1];
+                                        bSum += row[x + xSub + 2];
+                                        ++n;
+                                    }
                                 }
+                                rNew = (byte)(rSum / n);
+                                gNew = (byte)(gSum / n);
+                                bNew = (byte)(bSum / n);
+                                break;
+                            case PixelateMode.MidPoint:
+                                row = start + (Math.Min(y + size / 2, image.Height - 1) * width_3);
+                                int xMid = Math.Min(x + (size / 2) * 3, width_3 - 3);
+                                rNew = row[xMid];
+                                gNew = row[xMid + 1];
+                                bNew = row[xMid + 2];
+                                break;
+                            default:
+                                throw new System.ArgumentException($"Unknown pixelate mode: {Mode}");
+                        }
+
+                        // Fill block
+                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                        {
+                            row = start + ((y + ySub) * width_3);
+                            for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
+                            {
+                                row[x + xSub] = rNew;
+                                row[x + xSub + 1] = gNew;
+                                row[x + xSub + 2] = bNew;
                             }
                         }
-                        reporter?.Report(y, 0, h - 1);
                     }
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
             }
             reporter?.Done();

@@ -5,7 +5,7 @@ using System;
 namespace FilterLib.Filters.Mosaic
 {
     /// <summary>
-    /// Lego filter.
+    /// Pixelate the image and add circles as if it was made of Lego blocks.
     /// </summary>
     [Filter]
     public sealed class LegoFilter : FilterInPlaceBase
@@ -41,70 +41,66 @@ namespace FilterLib.Filters.Mosaic
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            unsafe
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                int width_3 = image.Width * 3;
+                int size_3 = size * 3;
+                (float, byte)[,] oc = GetOuterCircle();
+                float[,] ic = GetInnerCircle();
+                // Iterate through block rows
+                for (int y = 0; y < image.Height; y += size)
                 {
-                    int width_3 = image.Width * 3;
-                    int size_3 = size * 3;
-                    (float, byte)[,] oc = GetOuterCircle();
-                    float[,] ic = GetInnerCircle();
-                    // Iterate through block rows
-                    for (int y = 0; y < image.Height; y += size)
+                    // Iterate through block columns
+                    for (int x = 0; x < width_3; x += size_3)
                     {
-                        // Iterate through block columns
-                        for (int x = 0; x < width_3; x += size_3)
+                        // Calculate average color in block
+                        float rSum = 0, gSum = 0, bSum = 0;
+                        int n = 0;
+                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
                         {
-                            // Calculate average color in block
-                            int rSum = 0, gSum = 0, bSum = 0, n = 0;
-                            for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                            byte* row = start + ((y + ySub) * width_3);
+                            for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                             {
-                                byte* row = start + ((y + ySub) * width_3);
-                                for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
-                                {
-                                    rSum += row[x + xSub + 2];
-                                    gSum += row[x + xSub + 1];
-                                    bSum += row[x + xSub];
-                                    ++n;
-                                }
-                            }
-                            byte rAvg = (rSum / n).ClampToByte();
-                            byte gAvg = (gSum / n).ClampToByte();
-                            byte bAvg = (bSum / n).ClampToByte();
-
-                            // Use average color as basis and add outer circle on top of that
-                            for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
-                            {
-                                byte* row = start + ((y + ySub) * width_3);
-                                for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
-                                {
-                                    (float a, byte c) = oc[xSub / 3, ySub];
-                                    row[x + xSub + 2] = (rAvg * (1 - a) + c * a).ClampToByte();
-                                    row[x + xSub + 1] = (gAvg * (1 - a) + c * a).ClampToByte();
-                                    row[x + xSub] = (bAvg * (1 - a) + c * a).ClampToByte();
-                                }
-                            }
-
-                            // Fill inner circle with average color
-                            for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
-                            {
-                                byte* row = start + ((y + ySub) * width_3);
-                                for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
-                                {
-                                    float a = ic[xSub / 3, ySub];
-                                    row[x + xSub + 2] = (row[x + xSub + 2] * (1 - a) + rAvg * a).ClampToByte();
-                                    row[x + xSub + 1] = (row[x + xSub + 1] * (1 - a) + gAvg * a).ClampToByte();
-                                    row[x + xSub] = (row[x + xSub] * (1 - a) + bAvg * a).ClampToByte();
-                                }
+                                rSum += row[x + xSub + 2];
+                                gSum += row[x + xSub + 1];
+                                bSum += row[x + xSub];
+                                ++n;
                             }
                         }
-                        reporter?.Report(y, 0, image.Height - 1);
+                        byte rAvg = (rSum / n).ClampToByte();
+                        byte gAvg = (gSum / n).ClampToByte();
+                        byte bAvg = (bSum / n).ClampToByte();
 
+                        // Use average color as basis and add outer circle on top of that
+                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                        {
+                            byte* row = start + ((y + ySub) * width_3);
+                            for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
+                            {
+                                (float a, byte c) = oc[xSub / 3, ySub];
+                                row[x + xSub + 2] = (rAvg * (1 - a) + c * a).ClampToByte();
+                                row[x + xSub + 1] = (gAvg * (1 - a) + c * a).ClampToByte();
+                                row[x + xSub] = (bAvg * (1 - a) + c * a).ClampToByte();
+                            }
+                        }
 
+                        // Fill inner circle with average color
+                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                        {
+                            byte* row = start + ((y + ySub) * width_3);
+                            for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
+                            {
+                                float a = ic[xSub / 3, ySub];
+                                row[x + xSub + 2] = (row[x + xSub + 2] * (1 - a) + rAvg * a).ClampToByte();
+                                row[x + xSub + 1] = (row[x + xSub + 1] * (1 - a) + gAvg * a).ClampToByte();
+                                row[x + xSub] = (row[x + xSub] * (1 - a) + bAvg * a).ClampToByte();
+                            }
+                        }
                     }
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
                 reporter?.Done();
             }
