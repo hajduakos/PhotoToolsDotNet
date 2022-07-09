@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
-    /// Jarvis-Judice-Ninke dither filter.
+    /// Jarvis-Judice-Ninke error diffusion dither filter.
     /// </summary>
     [Filter]
     public sealed class JarvisJudiceNinkeDitherFilter : ErrorDiffusionDitherFilterBase

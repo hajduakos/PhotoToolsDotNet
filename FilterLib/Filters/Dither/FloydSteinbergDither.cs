@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
-    /// Floyd-Steinberg dither filter.
+    /// Floyd-Steinberg error diffusion dither filter.
     /// </summary>
     [Filter]
     public sealed class FloydSteinbergDitherFilter : ErrorDiffusionDitherFilterBase

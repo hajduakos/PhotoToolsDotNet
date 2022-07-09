@@ -1,17 +1,17 @@
 ﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
-    /// Ordered dither matrix interface
+    /// Interface for ordered dither matrices.
     /// </summary>
     public interface IOrderedDitherMatrix
     {
         /// <summary>
-        /// Get an element of the matrix
+        /// Get an element of the matrix.
         /// </summary>
-        /// <param name="i"></param>
-        /// <param name="j"></param>
-        /// <returns></returns>
-        float this[int i, int j] { get; }
+        /// <param name="x">Column number</param>
+        /// <param name="y">Row number</param>
+        /// <returns>Element</returns>
+        float this[int x, int y] { get; }
 
         /// <summary>
         /// Width of the matrix

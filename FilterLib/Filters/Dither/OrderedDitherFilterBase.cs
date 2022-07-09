@@ -1,7 +1,5 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Dither
 {
@@ -41,36 +39,27 @@ namespace FilterLib.Filters.Dither
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            unsafe
+            float intervalSize = 255f / (levels - 1);
+            int width_3 = image.Width * 3;
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                byte* ptr = start;
+                for (int y = 0; y < image.Height; y++)
                 {
-                    int width_3 = image.Width * 3;
-                    int h = image.Height;
-                    int x, y, x_div3;
-                    int mw = Matrix.Width, mh = Matrix.Height; // Width and height of matrix
-                    float intervalSize = 255f / (levels - 1); // Size of an interval
-                    float roundedColor; // Color rounded to the nearest color level
-
-                    // Iterate through rows
-                    for (y = 0; y < h; y++)
+                    for (int x = 0; x < width_3; ++x)
                     {
-                        // Get row
-                        byte* row = start + y * width_3;
-                        // Iterate through columns
-                        for (x = 0; x < width_3; ++x)
-                        {
-                            x_div3 = x / 3;
-                            // Get rounded color
-                            roundedColor = System.MathF.Floor(row[x] / intervalSize) * intervalSize;
-                            // Calculate new value using dither matrix
-                            row[x] = (byte)((roundedColor + Matrix[x_div3 % mw, y % mh] * intervalSize > row[x]) ? roundedColor : (roundedColor + intervalSize));
-                        }
-                        reporter?.Report(y, 0, h - 1);
+                        // We need to round down or up to the nearest multiply of intervalSize.
+                        // The precise treshold depends on the matrix, so that values inbetween are sometimes
+                        // rounded down, and sometimes rounded up.
+                        float roundedColor = System.MathF.Floor(*ptr / intervalSize) * intervalSize;
+                        float treshold = roundedColor + Matrix[(x / 3) % Matrix.Width, y % Matrix.Height] * intervalSize;
+                        *ptr = (treshold > *ptr ? roundedColor : (roundedColor + intervalSize)).ClampToByte();
+                        ++ptr;
                     }
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
             }
             reporter?.Done();

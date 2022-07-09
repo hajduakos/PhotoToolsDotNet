@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
-    /// Bayer dither filter.
+    /// Bayer dither is an ordered dither with a specific recursively defined matrix.
     /// </summary>
     [Filter]
     public class BayerDitherFilter : OrderedDitherFilterBase

@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
-    /// Sierra dither filter.
+    /// Sierra error diffusion dither filter.
     /// </summary>
     [Filter]
     public sealed class SierraDitherFilter : ErrorDiffusionDitherFilterBase

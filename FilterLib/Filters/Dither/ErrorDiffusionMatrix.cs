@@ -1,7 +1,11 @@
 ﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
-    /// Error diffusion matrix, e.g.,
+    /// Error diffusion matrix where an element in the first row is the actual pixel
+    /// and the rest of the elements represent the distribution quantization error.
+    /// 
+    /// Example:
+    /// 
     /// |   * 7 |
     /// | 3 5 1 |.
     /// </summary>
@@ -10,30 +14,30 @@
         private readonly float[,] matrix; // Matrix
 
         /// <summary>
-        /// Indexer
+        /// Indexer.
         /// </summary>
-        /// <param name="i">Column number</param>
-        /// <param name="j">Row number</param>
+        /// <param name="x">Column number</param>
+        /// <param name="y">Row number</param>
         /// <returns>Element of the matrix</returns>
-        public float this[int i, int j] => matrix[i, j];
+        public float this[int x, int y] => matrix[x, y];
 
         /// <summary>
-        /// Width of the matrix
+        /// Width of the matrix.
         /// </summary>
-        public readonly int Width;
+        public int Width { get; private set; }
 
         /// <summary>
-        /// Height of the matrix
+        /// Height of the matrix.
         /// </summary>
-        public readonly int Height;
+        public int Height { get; private set; }
 
         /// <summary>
-        /// Position of the actual pixel in the first row
+        /// Position of the actual pixel in the first row.
         /// </summary>
-        public readonly int Offset;
+        public int Offset { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="offset">Position of the actual pixel in the first row</param>

@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
-    /// Shiau-Fan dither filter.
+    /// Shiau-Fan error diffusion dither filter.
     /// </summary>
     [Filter]
     public sealed class ShiauFanDitherFilter : ErrorDiffusionDitherFilterBase

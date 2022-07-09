@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Filters.Dither
 {
     /// <summary>
-    /// Stucki dither filter.
+    /// Stucki error diffusion dither filter.
     /// </summary>
     [Filter]
     public sealed class StuckiDitherFilter : ErrorDiffusionDitherFilterBase

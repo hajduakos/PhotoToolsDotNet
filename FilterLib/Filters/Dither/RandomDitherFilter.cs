@@ -57,18 +57,20 @@ namespace FilterLib.Filters.Dither
         /// <inheritdoc/>
         protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
         {
-            float roundedColor, nextRnd;
+            float floor, ceil;
+            float nextRnd = rnd.NextSingle();
 
-            nextRnd = rnd.NextSingle();
-
-            roundedColor = System.MathF.Floor(*r / intervalSize) * intervalSize;
-            *r = (byte)((roundedColor + nextRnd * intervalSize > *r) ? roundedColor : (roundedColor + intervalSize));
+            floor = System.MathF.Floor(*r / intervalSize) * intervalSize;
+            ceil = floor + intervalSize;
+            *r = ((floor + nextRnd * intervalSize > *r) ? floor : ceil).ClampToByte();
             
-            roundedColor = System.MathF.Floor(*g / intervalSize) * intervalSize;
-            *g = (byte)((roundedColor + nextRnd * intervalSize > *g) ? roundedColor : (roundedColor + intervalSize));
+            floor = System.MathF.Floor(*g / intervalSize) * intervalSize;
+            ceil = floor + intervalSize;
+            *g = ((floor + nextRnd * intervalSize > *g) ? floor : ceil).ClampToByte();
             
-            roundedColor = System.MathF.Floor(*b / intervalSize) * intervalSize;
-            *b = (byte)((roundedColor + nextRnd * intervalSize > *b) ? roundedColor : (roundedColor + intervalSize));
+            floor = System.MathF.Floor(*b / intervalSize) * intervalSize;
+            ceil = floor + intervalSize;
+            *b = ((floor + nextRnd * intervalSize > *b) ? floor : ceil).ClampToByte();
         }
 
         /// <summary>
