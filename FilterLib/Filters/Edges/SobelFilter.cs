@@ -17,7 +17,7 @@ namespace FilterLib.Filters.Edges
             new(new Conv3x3(-1, 0, 1, -2, 0, 2, -1, 0, 1));
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             // Clone image
@@ -29,43 +29,29 @@ namespace FilterLib.Filters.Edges
             conv2.ApplyInPlace(image, new SubReporter(reporter, 34, 66, 0, 100));
             IReporter subRep = new SubReporter(reporter, 67, 100, 0, 100);
 
-            // Lock bits
-            int width_3 = image.Width * 3;
-            int h = image.Height;
-            int x, y, nVal;
-            // Calculate map
+            // Cache all different combinations
             byte[,] map = new byte[256, 256];
-            for (x = 0; x < 256; x++)
-            {
-                for (y = 0; y < 256; y++)
-                {
-                    // Calculate new value
-                    nVal = (int)System.MathF.Sqrt(x * x + y * y);
-                    // Correction
-                    if (nVal > 255) nVal = 255;
-                    // Overwrite original
-                    map[x, y] = (byte)nVal;
-                }
-            }
-            unsafe
-            {
-                fixed (byte* start = image, tmpStart = tmp)
-                    // Iterate through rows
-                    for (y = 1; y < h - 1; ++y)
-                    {
-                        // Get rows
-                        byte* row = start + y * width_3;
-                        byte* rowTmp = tmpStart + y * width_3;
-                        // Iterate through columns
-                        for (x = 3; x < width_3 - 3; ++x)
-                        {
-                            // Overwrite original
-                            row[x] = map[row[x], rowTmp[x]];
-                        }
-                        subRep.Report(y, 0, h - 1);
-                    }
-            }
+            for (int x = 0; x < 256; x++)
+                for (int y = 0; y < 256; y++)
+                    map[x, y] = System.MathF.Sqrt(x * x + y * y).ClampToByte();
 
+            int width_3 = image.Width * 3;
+            fixed (byte* imgStart = image, tmpStart = tmp)
+            {
+                byte* imgPtr = imgStart;
+                byte* tmpPtr = tmpStart;
+                for (int y = 0; y < image.Height; ++y)
+                {
+                    for (int x = 0; x < width_3; ++x)
+                    {
+                        *imgPtr = map[*imgPtr, *tmpPtr];
+                        ++imgPtr;
+                        ++tmpPtr;
+                    }
+                    subRep.Report(y, 0, image.Height - 1);
+                }
+
+            }
             reporter?.Done();
         }
     }

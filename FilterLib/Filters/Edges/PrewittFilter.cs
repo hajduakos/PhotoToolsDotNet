@@ -35,7 +35,6 @@ namespace FilterLib.Filters.Edges
                 for (int y = 0; y < 256; y++)
                     map[x, y] = System.MathF.Sqrt(x * x + y * y).ClampToByte();
 
-
             int width_3 = image.Width * 3;
             fixed (byte* imgStart = image, tmpStart = tmp)
             {
