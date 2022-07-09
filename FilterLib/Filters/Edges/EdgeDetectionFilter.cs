@@ -4,7 +4,7 @@ using FilterLib.Util;
 namespace FilterLib.Filters.Edges
 {
     /// <summary>
-    /// Edge detection filter.
+    /// Edge detection filter using a 3x3 convolution.
     /// </summary>
     [Filter]
     public sealed class EdgeDetectionFilter : FilterInPlaceBase

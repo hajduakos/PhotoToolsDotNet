@@ -4,7 +4,7 @@ using FilterLib.Util;
 namespace FilterLib.Filters.Edges
 {
     /// <summary>
-    /// Emboss filter.
+    /// Emboss filter using a 3x3 convolution.
     /// </summary>
     [Filter]
     public sealed class EmbossFilter : FilterInPlaceBase
