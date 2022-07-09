@@ -5,13 +5,13 @@ using MathF = System.MathF;
 namespace FilterLib.Filters.Generate
 {
     /// <summary>
-    /// Wood rings generating filter.
+    /// Generate wood rings looking pattern.
     /// </summary>
     [Filter]
     public sealed class WoodRingsFilter : GeneratorBase
     {
-        private int rings; // Number of rings
-        private float twist; // Twist factor
+        private int rings;
+        private float twist;
 
         /// <summary>
         /// Twist factor.
@@ -36,7 +36,7 @@ namespace FilterLib.Filters.Generate
         }
 
         /// <summary>
-        /// Constructor with iterations and random number seed
+        /// Constructor.
         /// </summary>
         /// <param name="rings">Number of rings [0;...]</param>
         /// <param name="twist">Twist factor [0;...]</param>
@@ -50,43 +50,29 @@ namespace FilterLib.Filters.Generate
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            unsafe
+            float sin_mult = MathF.PI * 2 * rings;
+            reporter?.Report(0, 0, 2 * image.Height - 1);
+            float[,] turb = GenerateTurbulence(image.Width, image.Height);
+            reporter?.Report(image.Height, 0, 2 * image.Height - 1);
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                byte* ptr = start;
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    int x, y, x_div3;
-                    int w = image.Width;
-                    int width_3 = w * 3;
-                    int h = image.Height;
-                    float xShifted, yShifted;
-                    float sin_mult = (MathF.PI * 2 * rings);
-                    reporter?.Report(0, 0, 2 * h - 1);
-                    float[,] turbulence = GenerateTurbulence(w, h);
-                    reporter?.Report(h, 0, 2 * h - 1);
-
-                    // Iterate through rows
-                    for (y = 0; y < h; ++y)
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        // Get row
-                        byte* row = start + y * width_3;
-                        // Iterate through columns
-                        for (x = 0; x < width_3; x += 3)
-                        {
-                            x_div3 = x / 3;
-                            xShifted = (x_div3 - w / 2) / (float)w;
-                            yShifted = (y - h / 2) / (float)h;
+                        float x0 = (x - image.Width / 2) / (float)image.Width;
+                        float y0 = (y - image.Height / 2) / (float)image.Height;
 
-                            row[x] = row[x + 1] = row[x + 2] = (byte)(
-                                255 * Math.Abs(MathF.Sin(sin_mult * (MathF.Sqrt(xShifted * xShifted + yShifted * yShifted) + twist * turbulence[x_div3, y])
-                                )));
-                        }
-                        reporter?.Report(h + y, 0, 2 * h - 1);
+                        ptr[0] = ptr[1] = ptr[2] =
+                            (byte)(255 * Math.Abs(MathF.Sin(sin_mult * (MathF.Sqrt(x0 * x0 + y0 * y0) + twist * turb[x, y]))));
+                        ptr += 3;
                     }
+                    reporter?.Report(image.Height + y, 0, 2 * image.Height - 1);
                 }
-
             }
             reporter?.Done();
         }

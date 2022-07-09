@@ -4,7 +4,7 @@ using MathF = System.MathF;
 namespace FilterLib.Filters.Generate
 {
     /// <summary>
-    /// Base class for generators.
+    /// Base class for turbulance-based generators.
     /// </summary>
     public abstract class GeneratorBase : FilterInPlaceBase
     {
@@ -39,42 +39,37 @@ namespace FilterLib.Filters.Generate
         public int Seed { get; set; }
 
         /// <summary>
-        /// Generate a random turbulence map, the values are between 0 and 1.
+        /// Generate a random turbulence map with values between 0 and 1.
         /// </summary>
         /// <param name="width">Width of the map</param>
         /// <param name="height">Height of the map</param>
         /// <returns>Random turbulence map</returns>
         protected float[,] GenerateTurbulence(int width, int height)
         {
-            int x, y;
-            float sum;
             int pow = 1 << iterations;
-            int pow0;
-            int x0, x1, y0, y1;
-            float xFloat, yFloat, xFrac, yFrac;
             float[,] noise = new float[width, height];
             float[,] turbulence = new float[width, height];
             System.Random rnd = new(Seed);
-            for (x = 0; x < width; ++x)
-                for (y = 0; y < height; ++y)
-                    noise[x, y] = (float)rnd.NextDouble();
+            for (int x = 0; x < width; ++x)
+                for (int y = 0; y < height; ++y)
+                    noise[x, y] = rnd.NextSingle();
 
-            for (x = 0; x < width; ++x)
+            for (int x = 0; x < width; ++x)
             {
-                for (y = 0; y < height; ++y)
+                for (int y = 0; y < height; ++y)
                 {
-                    sum = 0;
-                    pow0 = pow;
+                    float sum = 0;
+                    int pow0 = pow;
                     while (pow0 >= 1)
                     {
-                        xFloat = x / (float)pow0;
-                        yFloat = y / (float)pow0;
-                        x0 = (int)MathF.Floor(xFloat);
-                        x1 = (int)MathF.Ceiling(xFloat);
-                        xFrac = xFloat - x0;
-                        y0 = (int)MathF.Floor(yFloat);
-                        y1 = (int)MathF.Ceiling(yFloat);
-                        yFrac = yFloat - y0;
+                        float xFloat = x / (float)pow0;
+                        float yFloat = y / (float)pow0;
+                        int x0 = (int)MathF.Floor(xFloat);
+                        int x1 = (int)MathF.Ceiling(xFloat);
+                        float xFrac = xFloat - x0;
+                        int y0 = (int)MathF.Floor(yFloat);
+                        int y1 = (int)MathF.Ceiling(yFloat);
+                        float yFrac = yFloat - y0;
 
                         sum += pow0 * (
                             noise[x0, y0] * (1 - xFrac) * (1 - yFrac) +

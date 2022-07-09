@@ -1,12 +1,9 @@
 ﻿using FilterLib.Reporting;
-using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Generate
 {
     /// <summary>
-    /// Turbulence generating filter.
+    /// Generate turbulance.
     /// </summary>
     [Filter]
     public sealed class TurbulenceFilter : GeneratorBase
@@ -19,36 +16,24 @@ namespace FilterLib.Filters.Generate
         public TurbulenceFilter(int iterations = 1, int seed = 0) : base(iterations, seed) { }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            unsafe
+            reporter?.Report(0, 0, 2 * image.Height - 1);
+            float[,] turb = GenerateTurbulence(image.Width, image.Height);
+            reporter?.Report(image.Height, 0, 2 * image.Height - 1);
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                byte* ptr = start;
+                for (int y = 0; y < image.Height; y++)
                 {
-                    int x, y;
-                    int w = image.Width;
-                    int width_3 = w * 3;
-                    int h = image.Height;
-                    if (reporter != null) reporter.Report(0, 0, 2 * h - 1);
-                    float[,] turbulence = GenerateTurbulence(w, h);
-                    if (reporter != null) reporter.Report(h, 0, 2 * h - 1);
-
-
-                    // Iterate through rows
-                    for (y = 0; y < h; y++)
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        // Get row
-                        byte* row = start + y * width_3;
-                        // Iterate through columns
-                        for (x = 0; x < width_3; x += 3)
-                        {
-                            row[x] = row[x + 1] = row[x + 2] = (byte)(turbulence[x / 3, y] * 255);
-                        }
-                        reporter?.Report(h + y, 0, 2 * h - 1);
+                        ptr[0] = ptr[1] = ptr[2] = (byte)(turb[x, y] * 255);
+                        ptr += 3;
                     }
+                    reporter?.Report(image.Height + y, 0, 2 * image.Height - 1);
                 }
-
             }
             reporter?.Done();
         }

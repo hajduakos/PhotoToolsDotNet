@@ -5,13 +5,13 @@ using MathF = System.MathF;
 namespace FilterLib.Filters.Generate
 {
     /// <summary>
-    /// Marble generating filter.
+    /// Generate a marble-like pattern.
     /// </summary>
     [Filter]
     public sealed class MarbleFilter : GeneratorBase
     {
-        private int horizLines, vertLines; // Number of horizontal/vertical lines
-        private float twist; // Twist factor
+        private int horizLines, vertLines;
+        private float twist;
 
         /// <summary>
         /// Number of horizontal lines.
@@ -47,7 +47,7 @@ namespace FilterLib.Filters.Generate
         }
 
         /// <summary>
-        /// Constructor with iterations and random number seed
+        /// Constructor.
         /// </summary>
         /// <param name="horizLines">Number of horizontal lines [0;...]</param>
         /// <param name="vertLines">Number of vertical lines [0;...]</param>
@@ -63,40 +63,28 @@ namespace FilterLib.Filters.Generate
         }
 
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            unsafe
+            float xMul = horizLines / (float)image.Width;
+            float yMul = vertLines / (float)image.Height;
+            reporter?.Report(0, 0, 2 * image.Height - 1);
+            float[,] turb = GenerateTurbulence(image.Width, image.Height);
+            reporter?.Report(image.Height, 0, 2 * image.Height - 1);
+
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                byte* ptr = start;
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    int x, y, x_div3;
-                    int w = image.Width;
-                    int width_3 = w * 3;
-                    int h = image.Height;
-                    float xMultiplier = horizLines / (float)w;
-                    float yMultiplier = vertLines / (float)h;
-                    reporter?.Report(0, 0, 2 * h - 1);
-                    float[,] turbulence = GenerateTurbulence(w, h);
-                    reporter?.Report(h, 0, 2 * h - 1);
-
-
-                    // Iterate through rows
-                    for (y = 0; y < h; ++y)
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        // Get row
-                        byte* row = start + (y * width_3);
-                        // Iterate through columns
-                        for (x = 0; x < width_3; x += 3)
-                        {
-                            x_div3 = x / 3;
-                            row[x] = row[x + 1] = row[x + 2] =
-                                (byte)(255 * Math.Abs(MathF.Sin(MathF.PI * (x_div3 * xMultiplier + y * yMultiplier + twist * turbulence[x_div3, y]))));
-                        }
-                        reporter?.Report(h + y, 0, 2 * h - 1);
+                        ptr[0] = ptr[1] = ptr[2] =
+                            (byte)(255 * Math.Abs(MathF.Sin(MathF.PI * (x * xMul + y * yMul + twist * turb[x, y]))));
+                        ptr += 3;
                     }
+                    reporter?.Report(image.Height + y, 0, 2 * image.Height - 1);
                 }
-
             }
             reporter?.Done();
         }
