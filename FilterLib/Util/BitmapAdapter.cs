@@ -1,15 +1,24 @@
-﻿using Bitmap = System.Drawing.Bitmap;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
+using Bitmap = System.Drawing.Bitmap;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace FilterLib.Util
 {
+    /// <summary>
+    /// Utility class for adapting Bitmaps to Images
+    /// </summary>
     public static class BitmapAdapter
     {
+        /// <summary>
+        /// Load a bitmap from file into image.
+        /// </summary>
+        /// <param name="path">Path to bitmap</param>
+        /// <returns>Image with contents of the bitmap</returns>
         public static Image FromBitmapPath(string path)
         {
             using Bitmap bmp = new(path);
             Image img = new(bmp.Width, bmp.Height);
-            BitmapData bmd = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+            BitmapData bmd = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             int width_3 = bmp.Width * 3;
             unsafe
             {
@@ -32,10 +41,15 @@ namespace FilterLib.Util
             return img;
         }
 
+        /// <summary>
+        /// Convert image to bitmap.
+        /// </summary>
+        /// <param name="img">Source image</param>
+        /// <returns>New bitmap with the image contents</returns>
         public static Bitmap ToBitmap(Image img)
         {
             Bitmap bmp = new(img.Width, img.Height);
-            BitmapData bmd = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+            BitmapData bmd = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
             int width_3 = bmp.Width * 3;
             unsafe
             {

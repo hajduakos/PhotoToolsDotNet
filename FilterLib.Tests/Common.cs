@@ -1,9 +1,7 @@
 ﻿using FilterLib.Util;
 using NUnit.Framework;
 using System.Linq;
-using Bitmap = System.Drawing.Bitmap;
 using ImageFormat = System.Drawing.Imaging.ImageFormat;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Tests
 {
@@ -15,9 +13,13 @@ namespace FilterLib.Tests
 
             Image bmpOriginal = BitmapAdapter.FromBitmapPath(path + original);
             Image bmpActual = filter.Apply(bmpOriginal);
-            Image bmpExpected = original == expected ? (Image)bmpOriginal.Clone() : BitmapAdapter.FromBitmapPath(path + expected);
+            Image bmpExpected = BitmapAdapter.FromBitmapPath(path + expected);
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
-            if (!ok) BitmapAdapter.ToBitmap(bmpActual).Save(path + expected.Replace(".bmp", "_actual.bmp"), ImageFormat.Bmp);
+            if (!ok)
+            {
+                using System.Drawing.Bitmap b = BitmapAdapter.ToBitmap(bmpActual);
+                b.Save(path + expected.Replace(".bmp", "_actual.bmp"), ImageFormat.Bmp);
+            }
             return ok;
         }
 
@@ -26,12 +28,15 @@ namespace FilterLib.Tests
             string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
 
             Image bmpOriginal1 = BitmapAdapter.FromBitmapPath(path + original1);
-            Image bmpOriginal2 = original1 == original2 ? (Image)bmpOriginal1.Clone() : BitmapAdapter.FromBitmapPath(path + original2);
+            Image bmpOriginal2 = BitmapAdapter.FromBitmapPath(path + original2);
             Image bmpActual = blend.Apply(bmpOriginal1, bmpOriginal2);
-            Image bmpExpected = original1 == expected ? (Image)bmpOriginal1.Clone() :
-                (original2 == expected ? (Image)bmpOriginal2.Clone() : BitmapAdapter.FromBitmapPath(path + expected));
+            Image bmpExpected = BitmapAdapter.FromBitmapPath(path + expected);
             bool ok = Compare(bmpActual, bmpExpected, tolerance);
-            if (!ok) BitmapAdapter.ToBitmap(bmpActual).Save(path + expected.Replace(".bmp", "_actual.bmp"));
+            if (!ok)
+            {
+                using System.Drawing.Bitmap b = BitmapAdapter.ToBitmap(bmpActual);
+                b.Save(path + expected.Replace(".bmp", "_actual.bmp"), ImageFormat.Bmp);
+            }
             return ok;
         }
 
