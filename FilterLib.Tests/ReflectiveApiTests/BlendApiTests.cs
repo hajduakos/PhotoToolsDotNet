@@ -38,6 +38,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<LighterColorBlend>(ReflectiveApi.ConstructBlendByName("LighterColor"));
 
         [Test]
+        public void TestLightnessBlend() =>
+            Assert.IsInstanceOf<LightnessBlend>(ReflectiveApi.ConstructBlendByName("Lightness"));
+
+        [Test]
         public void TestMultiplyBlend() =>
             Assert.IsInstanceOf<MultiplyBlend>(ReflectiveApi.ConstructBlendByName("Multiply"));
 

@@ -42,6 +42,10 @@ namespace FilterLib.Tests
             yield return new TestCaseData("LighterColorBlend_80.bmp", new LighterColorBlend(80), 2);
             yield return new TestCaseData("LighterColorBlend_100.bmp", new LighterColorBlend(100), 2);
 
+            yield return new TestCaseData("_input.bmp", new LighterColorBlend(0), 2);
+            yield return new TestCaseData("LightnessBlend_80.bmp", new LightnessBlend(80), 2);
+            yield return new TestCaseData("LightnessBlend_100.bmp", new LightnessBlend(100), 2);
+
             yield return new TestCaseData("_input.bmp", new MultiplyBlend(0), 2);
             yield return new TestCaseData("MultiplyBlend_80.bmp", new MultiplyBlend(80), 2);
             yield return new TestCaseData("MultiplyBlend_100.bmp", new MultiplyBlend(100), 2);
