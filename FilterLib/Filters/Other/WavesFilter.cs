@@ -5,7 +5,7 @@ using MathF = System.MathF;
 namespace FilterLib.Filters.Other
 {
     /// <summary>
-    /// Waves filter.
+    /// Distort the image as if waves were going through it.
     /// </summary>
     [Filter]
     public sealed class WavesFilter : FilterBase
@@ -52,76 +52,70 @@ namespace FilterLib.Filters.Other
         }
 
         /// <inheritdoc/>
-        public override Image Apply(Image image, IReporter reporter = null)
+        public override unsafe Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            Image wavesBmp;
+            Image result;
 
-            int w = image.Width;
-            int h = image.Height;
-
-            int waveLengthPx = Wavelength.ToAbsolute(Direction == WaveDirection.Horizontal ? w : h);
-            int amplitudePx = Amplitude.ToAbsolute(Direction == WaveDirection.Horizontal ? h : w);
+            int waveLengthPx = Wavelength.ToAbsolute(Direction == WaveDirection.Horizontal ? image.Width : image.Height);
+            int amplitudePx = Amplitude.ToAbsolute(Direction == WaveDirection.Horizontal ? image.Height : image.Width);
 
             if (waveLengthPx == 0) throw new System.ArgumentException("Wavelength cannot be zero.");
 
-            if (Direction == WaveDirection.Horizontal) wavesBmp = new Image(w, h + 2 * amplitudePx);
-            else wavesBmp = new Image(w + 2 * amplitudePx, h);
-            // Lock bits
-            unsafe
+            if (Direction == WaveDirection.Horizontal) result = new Image(image.Width, image.Height + 2 * amplitudePx);
+            else result = new Image(image.Width + 2 * amplitudePx, image.Height);
+
+            int oldWidth_3 = image.Width * 3;
+            int newWidth_3 = result.Width * 3;
+            int amplitudePx_3 = amplitudePx * 3;
+            float freq = 2 * MathF.PI / waveLengthPx;
+
+            fixed (byte* oldStart = image, newStart = result)
             {
-                fixed (byte* bmdstart = image, newstart = wavesBmp)
+                if (Direction == WaveDirection.Horizontal)
                 {
-                    int width_3 = image.Width * 3; // Width of a row
-                    int widthNew_3 = wavesBmp.Width * 3;
-
-                    int x, y, offset, offset_3, idx1, idx2, amplitudePx_3 = amplitudePx * 3;
-                    float freq = 2 * MathF.PI / waveLengthPx;
-
-                    if (Direction == WaveDirection.Horizontal) // Horizontal waves
+                    // Iterate through columns
+                    for (int x = 0; x < oldWidth_3; x += 3)
                     {
-                        // Iterate through columns
-                        for (x = 0; x < width_3; x += 3)
+                        // Calculate offset
+                        int offset = (int)MathF.Round(MathF.Sin(freq * x / 3) * amplitudePx);
+                        if (offset > 0) offset = Math.Min(amplitudePx, offset);
+                        else offset = -Math.Min(amplitudePx, -offset);
+
+                        // Iterate through rows and move pixels
+                        for (int y = 0; y < image.Height; ++y)
                         {
-                            // Calculate offset
-                            offset = (int)MathF.Round(MathF.Sin(freq * x / 3) * amplitudePx);
-                            if (offset > 0) offset = Math.Min(amplitudePx, offset);
-                            else offset = -Math.Min(amplitudePx, -offset);
-
-                            // Iterate through rows and move pixels
-                            for (y = 0; y < h; ++y)
-                            {
-                                idx1 = y * width_3 + x;
-                                idx2 = (y + amplitudePx - offset) * widthNew_3 + x;
-                                newstart[idx2] = bmdstart[idx1];
-                                newstart[idx2 + 1] = bmdstart[idx1 + 1];
-                                newstart[idx2 + 2] = bmdstart[idx1 + 2];
-                            }
-
-                            reporter?.Report(x, 0, width_3 - 3);
+                            int idx1 = y * oldWidth_3 + x;
+                            int idx2 = (y + amplitudePx - offset) * newWidth_3 + x;
+                            newStart[idx2] = oldStart[idx1];
+                            newStart[idx2 + 1] = oldStart[idx1 + 1];
+                            newStart[idx2 + 2] = oldStart[idx1 + 2];
                         }
-                    }
-                    else // Vertical waves
-                    {
-                        // Iterate through rows
-                        for (y = 0; y < h; ++y)
-                        {
-                            // Calculate offset
-                            offset = (int)MathF.Round(MathF.Sin(freq * y) * amplitudePx);
-                            if (offset > 0) offset = Math.Min(amplitudePx, offset);
-                            else offset = -Math.Min(amplitudePx, -offset);
-                            offset_3 = offset * 3;
 
-                            // Iterate through columns and move pixels
-                            for (x = 0; x < width_3; ++x) newstart[y * widthNew_3 + x + amplitudePx_3 - offset_3] = bmdstart[y * width_3 + x];
-
-                            reporter?.Report(y, 0, h - 1);
-                        }
+                        reporter?.Report(x, 0, oldWidth_3 - 3);
                     }
                 }
+                else if (Direction == WaveDirection.Vertical)
+                {
+                    // Iterate through rows
+                    for (int y = 0; y < image.Height; ++y)
+                    {
+                        // Calculate offset
+                        int offset = (int)MathF.Round(MathF.Sin(freq * y) * amplitudePx);
+                        if (offset > 0) offset = Math.Min(amplitudePx, offset);
+                        else offset = -Math.Min(amplitudePx, -offset);
+                        int offset_3 = offset * 3;
+
+                        // Iterate through columns and move pixels
+                        for (int x = 0; x < oldWidth_3; ++x) newStart[y * newWidth_3 + x + amplitudePx_3 - offset_3] = oldStart[y * oldWidth_3 + x];
+
+                        reporter?.Report(y, 0, image.Height - 1);
+                    }
+                }
+                else throw new System.ArgumentException($"Unknown wave direction: {Direction}.");
             }
             reporter?.Done();
-            return wavesBmp;
+            return result;
         }
     }
 }
