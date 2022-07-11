@@ -23,9 +23,7 @@ namespace FilterLib.Filters.Transform
                     {
                         for (int c = 0; c < 3; ++c)
                         {
-                            byte swap = row[x + c];
-                            row[x + c] = row[width_3 - x - 3 + c];
-                            row[width_3 - x - 3 + c] = swap;
+                            (row[width_3 - x - 3 + c], row[x + c]) = (row[x + c], row[width_3 - x - 3 + c]);
                         }
                     }
                     reporter?.Report(y, 0, image.Height - 1);

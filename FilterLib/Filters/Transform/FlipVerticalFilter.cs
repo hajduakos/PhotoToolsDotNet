@@ -22,9 +22,7 @@ namespace FilterLib.Filters.Transform
                     byte* row2 = start + (image.Height - y - 1) * width_3;
                     for (int x = 0; x < width_3; ++x)
                     {
-                        byte swap = row1[x];
-                        row1[x] = row2[x];
-                        row2[x] = swap;
+                        (row2[x], row1[x]) = (row1[x], row2[x]);
                     }
                     reporter?.Report(y, 0, height_div2 - 1);
                 }

@@ -43,7 +43,7 @@ namespace FilterLib.Tests
         [Test]
         public void TestBlendWithSelf()
         {
-            Image img = new Image(1, 1);
+            Image img = new(1, 1);
             (img[0, 0, 0], img[0, 0, 1], img[0, 0, 2]) = (1, 2, 3);
             Image result = new NormalBlend(100).Apply(img, img);
             Assert.AreEqual(1, result[0, 0, 0]);
