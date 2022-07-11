@@ -14,12 +14,16 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<DarkenBlend>(ReflectiveApi.ConstructBlendByName("Darken"));
 
         [Test]
+        public void TestDarkerColorBlend() =>
+            Assert.IsInstanceOf<DarkerColorBlend>(ReflectiveApi.ConstructBlendByName("DarkerColor"));
+
+        [Test]
         public void TestDifferenceBlend() =>
             Assert.IsInstanceOf<DifferenceBlend>(ReflectiveApi.ConstructBlendByName("Difference"));
 
         [Test]
-        public void TestDarkerColorBlend() =>
-            Assert.IsInstanceOf<DarkerColorBlend>(ReflectiveApi.ConstructBlendByName("DarkerColor"));
+        public void TestHueBlend() =>
+            Assert.IsInstanceOf<HueBlend>(ReflectiveApi.ConstructBlendByName("Hue"));
 
         [Test]
         public void TestLightenBlend() =>

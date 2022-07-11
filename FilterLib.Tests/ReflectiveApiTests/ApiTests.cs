@@ -11,7 +11,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
         [Test]
         public void TestListBlends() =>
-            Assert.AreEqual(9, ReflectiveApi.GetBlendTypes().Count());
+            Assert.AreEqual(10, ReflectiveApi.GetBlendTypes().Count());
 
     }
 }
