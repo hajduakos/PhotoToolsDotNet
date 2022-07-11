@@ -46,6 +46,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<NormalBlend>(ReflectiveApi.ConstructBlendByName("Normal"));
 
         [Test]
+        public void TestSaturationBlend() =>
+            Assert.IsInstanceOf<SaturationBlend>(ReflectiveApi.ConstructBlendByName("Saturation"));
+
+        [Test]
         public void TestScreenBlend() =>
             Assert.IsInstanceOf<ScreenBlend>(ReflectiveApi.ConstructBlendByName("Screen"));
     }
