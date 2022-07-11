@@ -10,6 +10,10 @@ namespace FilterLib.Tests
     {
         internal static IEnumerable<TestCaseData> Data()
         {
+            yield return new TestCaseData("_input.bmp", new ColorBlend(0), 2);
+            yield return new TestCaseData("ColorBlend_80.bmp", new ColorBlend(80), 2);
+            yield return new TestCaseData("ColorBlend_100.bmp", new ColorBlend(100), 2);
+
             yield return new TestCaseData("_input.bmp", new ColorDodgeBlend(0), 2);
             yield return new TestCaseData("ColorDodgeBlend_80.bmp", new ColorDodgeBlend(80), 2);
             yield return new TestCaseData("ColorDodgeBlend_100.bmp", new ColorDodgeBlend(100), 2);

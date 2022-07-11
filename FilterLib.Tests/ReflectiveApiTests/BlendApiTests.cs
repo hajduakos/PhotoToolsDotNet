@@ -6,6 +6,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
     public class BlendApiTests
     {
         [Test]
+        public void TestColorBlend() =>
+            Assert.IsInstanceOf<ColorBlend>(ReflectiveApi.ConstructBlendByName("Color"));
+
+        [Test]
         public void TestColorDodgeBlend() =>
             Assert.IsInstanceOf<ColorDodgeBlend>(ReflectiveApi.ConstructBlendByName("ColorDodge"));
 
