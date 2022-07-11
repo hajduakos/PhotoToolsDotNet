@@ -17,7 +17,11 @@ namespace FilterLib.Tests
             yield return new TestCaseData("_input.bmp", new DarkenBlend(0), 2);
             yield return new TestCaseData("DarkenBlend_80.bmp", new DarkenBlend(80), 2);
             yield return new TestCaseData("DarkenBlend_100.bmp", new DarkenBlend(100), 2);
-        
+
+            yield return new TestCaseData("_input.bmp", new DifferenceBlend(0), 2);
+            yield return new TestCaseData("DifferenceBlend_80.bmp", new DifferenceBlend(80), 2);
+            yield return new TestCaseData("DifferenceBlend_100.bmp", new DifferenceBlend(100), 2);
+
             yield return new TestCaseData("_input.bmp", new LightenBlend(0), 2);
             yield return new TestCaseData("LightenBlend_80.bmp", new LightenBlend(80), 2);
             yield return new TestCaseData("LightenBlend_100.bmp", new LightenBlend(100), 2);
