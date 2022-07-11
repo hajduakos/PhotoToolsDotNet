@@ -7,11 +7,11 @@ namespace FilterLib.Tests.ReflectiveApiTests
     {
         [Test]
         public void TestListFilters() =>
-            Assert.AreEqual(65, ReflectiveApi.GetFilterTypes().ToArray().Length);
+            Assert.AreEqual(65, ReflectiveApi.GetFilterTypes().Count());
 
         [Test]
         public void TestListBlends() =>
-            Assert.AreEqual(7, ReflectiveApi.GetBlendTypes().ToArray().Length);
+            Assert.AreEqual(7, ReflectiveApi.GetBlendTypes().Count());
 
     }
 }
