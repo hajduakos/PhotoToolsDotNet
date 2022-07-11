@@ -3,40 +3,30 @@
 namespace FilterLib.Filters.Transform
 {
     /// <summary>
-    /// Flip vertical filter.
+    /// Flip the image vertically (along a horizontal axis).
     /// </summary>
     [Filter]
     public sealed class FlipVerticalFilter : FilterInPlaceBase
     {
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-
-            unsafe
+            int width_3 = image.Width * 3;
+            int height_div2 = image.Height / 2;
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                for (int y = 0; y < height_div2; ++y)
                 {
-                    int width_3 = image.Width * 3; // Width of a row
-                    int h = image.Height;
-                    int hDiv2 = h / 2; // Half the height
-                    int x, y, stride = width_3;
-                    byte swap;
-                    // Iterate through rows
-                    for (y = 0; y < hDiv2; ++y)
+                    byte* row1 = start + y * width_3;
+                    byte* row2 = start + (image.Height - y - 1) * width_3;
+                    for (int x = 0; x < width_3; ++x)
                     {
-                        // Get rows
-                        byte* row1 = start + (y * stride);
-                        byte* row2 = start + ((h - y - 1) * stride);
-                        // Iterate through columns
-                        for (x = 0; x < width_3; ++x)
-                        {
-                            swap = row1[x];
-                            row1[x] = row2[x];
-                            row2[x] = swap;
-                        }
-                        reporter?.Report(y, 0, hDiv2 - 1);
+                        byte swap = row1[x];
+                        row1[x] = row2[x];
+                        row2[x] = swap;
                     }
+                    reporter?.Report(y, 0, height_div2 - 1);
                 }
             }
             reporter?.Done();

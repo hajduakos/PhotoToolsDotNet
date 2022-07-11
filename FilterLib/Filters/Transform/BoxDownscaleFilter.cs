@@ -1,9 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using Bitmap = System.Drawing.Bitmap;
 using Math = System.Math;
 using MathF = System.MathF;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace FilterLib.Filters.Transform
 {
@@ -43,7 +41,7 @@ namespace FilterLib.Filters.Transform
         public BoxDownscaleFilter() : this(Size.Relative(1f), Size.Relative(1f)) { }
 
         /// <inheritdoc/>
-        public override Image Apply(Image image, IReporter reporter = null)
+        public override unsafe Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
             int newWidth = Width.ToAbsolute(image.Width);
@@ -59,60 +57,56 @@ namespace FilterLib.Filters.Transform
             float yRatio = image.Height / (float)resized.Height;
             System.Diagnostics.Debug.Assert(xRatio >= 0.9999f);
             System.Diagnostics.Debug.Assert(yRatio >= 0.9999f);
-            unsafe
+
+            fixed (byte* newStart = resized, oldStart = image)
             {
-                fixed (byte* start = resized, origStart = image)
+                // Loop through pixels of the resized image
+                byte* newPtr = newStart;
+                for (int y = 0; y < resized.Height; ++y)
                 {
-                    // Loop through pixels of the resized image
-                    for (int y = 0; y < resized.Height; ++y)
+                    for (int x = 0; x < resized.Width; ++x)
                     {
-                        byte* row = start + y * resized.Width * 3;
-                        for (int x = 0; x < resized.Width; ++x)
+                        // Each pixel corresponds to a "box" in the original image, covering
+                        // multiple pixels so we do an average. Some pixels might be partially covered
+                        // if the ratio is not an integer. Hence, we round down the starting pixel and
+                        // round up the ending pixel, and check for partial cover inside the loop.
+                        float rSum = 0, gSum = 0, bSum = 0, weightSum = 0;
+
+                        float yStart = y * yRatio;
+                        float yEnd = (y + 1) * yRatio;
+                        float yEndCeil = MathF.Ceiling(yEnd);
+                        for (int yi = (int)Math.Floor(yStart); yi < yEndCeil; ++yi)
                         {
-                            // Each pixel corresponds to a "box" in the original image, covering
-                            // multiple pixels so we do an average. Some pixels might be partially covered
-                            // if the ratio is not an integer. Hence, we round down the starting pixel and
-                            // round up the ending pixel, and check for partial cover inside the loop.
-                            float rSum = 0, gSum = 0, bSum = 0, weightSum = 0;
+                            float weightY = 1;
+                            // Check for partially covered pixel in the beginning and end
+                            if (yi < yStart) weightY = 1 - (yStart - yi);
+                            else if (yi + 1 > yEnd) weightY = yEnd - yi;
 
-                            float yStart = y * yRatio;
-                            float yEnd = (y + 1) * yRatio;
-                            float yEndCeil = MathF.Ceiling(yEnd);
-                            for (int yi = (int)Math.Floor(yStart); yi < yEndCeil; ++yi)
+                            float xStart = x * xRatio;
+                            float xEnd = (x + 1) * xRatio;
+                            float xEndCeil = MathF.Ceiling(xEnd);
+                            for (int xi = (int)Math.Floor(xStart); xi < xEndCeil; ++xi)
                             {
-                                float wy = 1;
                                 // Check for partially covered pixel in the beginning and end
-                                if (yi < yStart) wy = 1 - (yStart - yi);
-                                else if (yi + 1 > yEnd) wy = yEnd - yi;
+                                float weightX = 1;
+                                if (xi < xStart) weightX = 1 - (xStart - xi);
+                                else if (xi + 1 > xEnd) weightX = xEnd - xi;
 
-                                float xStart = x * xRatio;
-                                float xEnd = (x + 1) * xRatio;
-                                float xEndCeil = MathF.Ceiling(xEnd);
-                                for (int xi = (int)Math.Floor(xStart); xi < xEndCeil; ++xi)
-                                {
-                                    // Check for partially covered pixel in the beginning and end
-                                    float wx = 1;
-                                    if (xi < xStart) wx = 1 - (xStart - xi);
-                                    else if (xi + 1 > xEnd) wx = xEnd - xi;
-
-                                    byte* pxOrig = origStart + yi * image.Width * 3 + (xi * 3);
-                                    rSum += pxOrig[2] * wx * wy;
-                                    gSum += pxOrig[1] * wx * wy;
-                                    bSum += pxOrig[0] * wx * wy;
-                                    weightSum += wx * wy;
-                                }
+                                byte* oldPx = oldStart + yi * image.Width * 3 + xi * 3;
+                                rSum += oldPx[0] * weightX * weightY;
+                                gSum += oldPx[1] * weightX * weightY;
+                                bSum += oldPx[2] * weightX * weightY;
+                                weightSum += weightX * weightY;
                             }
-
-                            int x_3 = x * 3;
-                            row[x_3] = (bSum / weightSum).ClampToByte();
-                            row[x_3 + 1] = (gSum / weightSum).ClampToByte();
-                            row[x_3 + 2] = (rSum / weightSum).ClampToByte();
-
                         }
-                        reporter?.Report(y, 0, resized.Height - 1);
-                    }
-                }
 
+                        newPtr[0] = (rSum / weightSum).ClampToByte();
+                        newPtr[1] = (gSum / weightSum).ClampToByte();
+                        newPtr[2] = (bSum / weightSum).ClampToByte();
+                        newPtr += 3;
+                    }
+                    reporter?.Report(y, 0, resized.Height - 1);
+                }
                 reporter?.Done();
                 return resized;
             }

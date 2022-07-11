@@ -3,48 +3,34 @@
 namespace FilterLib.Filters.Transform
 {
     /// <summary>
-    /// Rotate 180 degrees filter
+    /// Rotate the image with 180 degrees in a lossless way.
     /// </summary>
     [Filter]
     public sealed class Rotate180Filter : FilterInPlaceBase
     {
         /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
 
-            unsafe
+            int width_3 = image.Width * 3;
+            int hDiv2 = image.Height / 2;
+            fixed (byte* start = image)
             {
-                fixed (byte* start = image)
+                for (int y = 0; y < hDiv2; ++y)
                 {
-                    int width_3 = image.Width * 3;
-                    int h = image.Height;
-                    int hDiv2 = h / 2;
-                    int x, y, stride = width_3;
-                    byte swap;
-                    // Iterate through rows
-                    for (y = 0; y < hDiv2; ++y)
+                    byte* row1 = start + (y * width_3);
+                    byte* row2 = start + ((image.Height - y - 1) * width_3);
+                    for (int x = 0; x < width_3; x += 3)
                     {
-                        // Get rows
-                        byte* row1 = start + (y * stride);
-                        byte* row2 = start + ((h - y - 1) * stride);
-                        // Iterate through columns
-                        for (x = 0; x < width_3; x += 3)
+                        for (int c = 0; c < 3; ++c)
                         {
-                            swap = row1[x]; // Blue
-                            row1[x] = row2[width_3 - x - 3];
-                            row2[width_3 - x - 3] = swap;
-
-                            swap = row1[x + 1]; // Green
-                            row1[x + 1] = row2[width_3 - x - 2];
-                            row2[width_3 - x - 2] = swap;
-
-                            swap = row1[x + 2]; // Red
-                            row1[x + 2] = row2[width_3 - x - 1];
-                            row2[width_3 - x - 1] = swap;
+                            byte swap = row1[x + c];
+                            row1[x + c] = row2[width_3 - x - 3 + c];
+                            row2[width_3 - x - 3 + c] = swap;
                         }
-                        reporter?.Report(y, 0, hDiv2 - 1);
                     }
+                    reporter?.Report(y, 0, hDiv2 - 1);
                 }
             }
             reporter?.Done();
