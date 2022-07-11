@@ -39,5 +39,16 @@ namespace FilterLib.Tests
         [TestCaseSource("Data")]
         public void Test(string expected, IBlend blend, int tolerance) =>
             Assert.IsTrue(Common.CheckBlend("_input.bmp", "_input2.bmp", expected, blend, tolerance));
+
+        [Test]
+        public void TestBlendWithSelf()
+        {
+            Image img = new Image(1, 1);
+            (img[0, 0, 0], img[0, 0, 1], img[0, 0, 2]) = (1, 2, 3);
+            Image result = new NormalBlend(100).Apply(img, img);
+            Assert.AreEqual(1, result[0, 0, 0]);
+            Assert.AreEqual(2, result[0, 0, 1]);
+            Assert.AreEqual(3, result[0, 0, 2]);
+        }
     }
 }
