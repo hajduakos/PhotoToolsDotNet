@@ -10,12 +10,12 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<ColorDodgeBlend>(ReflectiveApi.ConstructBlendByName("ColorDodge"));
 
         [Test]
-        public void TestDifferenceBlend() =>
-            Assert.IsInstanceOf<DifferenceBlend>(ReflectiveApi.ConstructBlendByName("Difference"));
-
-        [Test]
         public void TestDarkenBlend() =>
             Assert.IsInstanceOf<DarkenBlend>(ReflectiveApi.ConstructBlendByName("Darken"));
+
+        [Test]
+        public void TestDifferenceBlend() =>
+            Assert.IsInstanceOf<DifferenceBlend>(ReflectiveApi.ConstructBlendByName("Difference"));
 
         [Test]
         public void TestDarkerColorBlend() =>
@@ -24,6 +24,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
         [Test]
         public void TestLightenBlend() =>
             Assert.IsInstanceOf<LightenBlend>(ReflectiveApi.ConstructBlendByName("Lighten"));
+
+        [Test]
+        public void TestLighterColorBlend() =>
+            Assert.IsInstanceOf<LighterColorBlend>(ReflectiveApi.ConstructBlendByName("LighterColor"));
 
         [Test]
         public void TestMultiplyBlend() =>
