@@ -7,7 +7,7 @@ namespace FilterLib.Blending
     /// but use the saturation of the top color.
     /// </summary>
     [Blend]
-    public sealed class SaturationBlend : PerPixelBlendBase
+    public sealed class SaturationBlend : HSLBlendBase
     {
         /// <summary>
         /// Constructor
@@ -16,12 +16,6 @@ namespace FilterLib.Blending
         public SaturationBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB)
-        {
-            HSL hslBot = new RGB(botR, botG, botB).ToHSL();
-            HSL hslTop = new RGB(topR, topG, topB).ToHSL();
-            RGB blended = new HSL(hslBot.H, hslTop.S, hslBot.L).ToRGB();
-            return (blended.R, blended.G, blended.B);
-        }
+        protected override HSL BlendHSL(HSL bot, HSL top) => new(bot.H, top.S, bot.L);
     }
 }
