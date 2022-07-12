@@ -13,18 +13,17 @@
         protected PerComponentBlendBase(int opacity) : base(opacity) { }
 
         /// <summary>
-        /// Blend a component (R/G/B).
+        /// Blend a component (R/G/B) without considering opacity.
         /// </summary>
         /// <param name="compBottom">Bottom component</param>
         /// <param name="compTop">Top component</param>
-        protected abstract unsafe void BlendComponent(byte* compBottom, byte* compTop);
+        /// <returns>Blended value</returns>
+        protected abstract unsafe byte BlendComponent(byte compBottom, byte compTop);
 
         /// <inheritdoc/>
-        protected override sealed unsafe void BlendPixel(byte* botR, byte* botG, byte* botB, byte* topR, byte* topG, byte* topB)
+        protected override sealed unsafe (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB)
         {
-            BlendComponent(botR, topR);
-            BlendComponent(botG, topG);
-            BlendComponent(botB, topB);
+            return (BlendComponent(botR, topR), BlendComponent(botG, topG), BlendComponent(botB, topB));
         }
     }
 }

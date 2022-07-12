@@ -12,19 +12,10 @@
         /// <param name="opacity">Opacity [0:100]</param>
         public DarkenBlend(int opacity = 100) : base(opacity) { }
 
-        private float op0, op1;
-
         /// <inheritdoc/>
-        protected override void BlendStart()
+        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
         {
-            op1 = Opacity / 100f;
-            op0 = 1 - op1;
-        }
-
-        /// <inheritdoc/>
-        protected override unsafe void BlendComponent(byte* compBottom, byte* compTop)
-        {
-            *compBottom = (byte)(op0 * (*compBottom) + op1 * System.Math.Min(*compBottom, *compTop));
+            return System.Math.Min(compBottom, compTop);
         }
     }
 }

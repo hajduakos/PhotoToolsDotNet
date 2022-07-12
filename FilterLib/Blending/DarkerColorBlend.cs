@@ -12,25 +12,13 @@
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
         public DarkerColorBlend(int opacity = 100) : base(opacity) { }
-
-        private float op0, op1;
-
         /// <inheritdoc/>
-        protected override void BlendStart()
+        protected override unsafe (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB)
         {
-            op1 = Opacity / 100.0f;
-            op0 = 1 - op1;
-        }
-
-        /// <inheritdoc/>
-        protected override unsafe void BlendPixel(byte* botR, byte* botG, byte* botB, byte* topR, byte* topG, byte* topB)
-        {
-            if (Util.RGB.GetLuminance(*botR, *botG, *botB) > Util.RGB.GetLuminance(*topR, *topG, *topB))
-            {
-                *botR = (byte)(op0 * (*botR) + op1 * (*topR));
-                *botG = (byte)(op0 * (*botG) + op1 * (*topG));
-                *botB = (byte)(op0 * (*botB) + op1 * (*topB));
-            }
+            if (Util.RGB.GetLuminance(botR, botG, botB) > Util.RGB.GetLuminance(topR, topG, topB))
+                return (topR, topG, topB);
+            else
+                return (botR, botG, botB);
         }
     }
 }

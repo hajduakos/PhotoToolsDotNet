@@ -15,24 +15,13 @@ namespace FilterLib.Blending
         /// <param name="opacity">Opacity [0:100]</param>
         public ColorBlend(int opacity = 100) : base(opacity) { }
 
-        private float op0, op1;
-
         /// <inheritdoc/>
-        protected override void BlendStart()
+        protected override unsafe (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB)
         {
-            op1 = Opacity / 100.0f;
-            op0 = 1 - op1;
-        }
-
-        /// <inheritdoc/>
-        protected override unsafe void BlendPixel(byte* botR, byte* botG, byte* botB, byte* topR, byte* topG, byte* topB)
-        {
-            HSL hslBot = new RGB(*botR, *botG, *botB).ToHSL();
-            HSL hslTop = new RGB(*topR, *topG, *topB).ToHSL();
+            HSL hslBot = new RGB(botR, botG, botB).ToHSL();
+            HSL hslTop = new RGB(topR, topG, topB).ToHSL();
             RGB blended = new HSL(hslTop.H, hslTop.S, hslBot.L).ToRGB();
-            *botR = (byte)(op0 * (*botR) + op1 * blended.R);
-            *botG = (byte)(op0 * (*botG) + op1 * blended.G);
-            *botB = (byte)(op0 * (*botB) + op1 * blended.B);
+            return (blended.R, blended.G, blended.B);
         }
     }
 }
