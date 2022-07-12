@@ -63,7 +63,9 @@ namespace FilterLib.Tests
             yield return new TestCaseData("MultiplyBlend_100.bmp", new MultiplyBlend(100), 2);
         
             yield return new TestCaseData("_input.bmp", new NormalBlend(0), 1);
+            yield return new TestCaseData("NormalBlend_25.bmp", new NormalBlend(25), 1);
             yield return new TestCaseData("NormalBlend_50.bmp", new NormalBlend(50), 1);
+            yield return new TestCaseData("NormalBlend_75.bmp", new NormalBlend(75), 1);
             yield return new TestCaseData("_input2.bmp", new NormalBlend(100), 1);
         
             yield return new TestCaseData("_input.bmp", new ScreenBlend(0), 2);
