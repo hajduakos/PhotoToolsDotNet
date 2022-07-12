@@ -50,6 +50,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<LinearBurnBlend>(ReflectiveApi.ConstructBlendByName("LinearBurn"));
 
         [Test]
+        public void TestLinearDodgeBlend() =>
+            Assert.IsInstanceOf<LinearDodgeBlend>(ReflectiveApi.ConstructBlendByName("LinearDodge"));
+
+        [Test]
         public void TestMultiplyBlend() =>
             Assert.IsInstanceOf<MultiplyBlend>(ReflectiveApi.ConstructBlendByName("Multiply"));
 
