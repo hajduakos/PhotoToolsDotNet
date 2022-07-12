@@ -10,6 +10,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<ColorBlend>(ReflectiveApi.ConstructBlendByName("Color"));
 
         [Test]
+        public void TestColorBurnBlend() =>
+            Assert.IsInstanceOf<ColorBurnBlend>(ReflectiveApi.ConstructBlendByName("ColorBurn"));
+
+        [Test]
         public void TestColorDodgeBlend() =>
             Assert.IsInstanceOf<ColorDodgeBlend>(ReflectiveApi.ConstructBlendByName("ColorDodge"));
 
