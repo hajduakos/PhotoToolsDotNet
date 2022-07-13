@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Blending
 {
     /// <summary>
-    /// Normal blend mode.
+    /// Use the top layer without any arithmetic.
     /// </summary>
     [Blend]
     public sealed class NormalBlend : PerComponentBlendBase
@@ -13,9 +13,6 @@
         public NormalBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
-        {
-            return compTop;
-        }
+        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) => compTop;
     }
 }

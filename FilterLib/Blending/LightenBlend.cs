@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Blending
 {
     /// <summary>
-    /// Lighten blend mode.
+    /// Pick the lighter value for each component.
     /// </summary>
     [Blend]
     public sealed class LightenBlend : PerComponentBlendBase
@@ -13,9 +13,7 @@
         public LightenBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
-        {
-            return System.Math.Max(compBottom, compTop);
-        }
+        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
+            System.Math.Max(compBottom, compTop);
     }
 }

@@ -3,7 +3,7 @@
 namespace FilterLib.Blending
 {
     /// <summary>
-    /// Color dodge blend mode.
+    /// Divide bottom layer by inverted top layer.
     /// </summary>
     [Blend]
     public sealed class ColorDodgeBlend : PerComponentBlendBase

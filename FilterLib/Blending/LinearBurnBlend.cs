@@ -3,7 +3,7 @@
 namespace FilterLib.Blending
 {
     /// <summary>
-    /// Linear burn blend mode.
+    /// Add bottom and top layer, then subtract white.
     /// </summary>
     [Blend]
     public sealed class LinearBurnBlend : PerComponentBlendBase
@@ -15,9 +15,7 @@ namespace FilterLib.Blending
         public LinearBurnBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
-        {
-            return (compBottom + compTop - 255).ClampToByte();
-        }
+        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
+            (compBottom + compTop - 255).ClampToByte();
     }
 }

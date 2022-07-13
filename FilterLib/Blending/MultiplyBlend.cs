@@ -3,7 +3,7 @@
 namespace FilterLib.Blending
 {
     /// <summary>
-    /// Multiply blend mode.
+    /// Multiply top and bottom layers.
     /// </summary>
     [Blend]
     public sealed class MultiplyBlend : PerComponentBlendBase
@@ -15,9 +15,7 @@ namespace FilterLib.Blending
         public MultiplyBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
-        {
-            return (compBottom * compTop / 255f).ClampToByte();
-        }
+        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
+            (compBottom * compTop / 255f).ClampToByte();
     }
 }

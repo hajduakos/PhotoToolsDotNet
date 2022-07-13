@@ -3,7 +3,7 @@
 namespace FilterLib.Blending
 {
     /// <summary>
-    /// Linear dodge blend mode.
+    /// Add bottom and top layer.
     /// </summary>
     [Blend]
     public sealed class LinearDodgeBlend : PerComponentBlendBase
@@ -15,9 +15,7 @@ namespace FilterLib.Blending
         public LinearDodgeBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
-        {
-            return (compBottom + compTop).ClampToByte();
-        }
+        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
+            (compBottom + compTop).ClampToByte();
     }
 }

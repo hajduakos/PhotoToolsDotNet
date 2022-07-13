@@ -3,7 +3,7 @@
 namespace FilterLib.Blending
 {
     /// <summary>
-    /// Color burn blend mode.
+    /// Invert bottom layer, divide by top, and invert result.
     /// </summary>
     [Blend]
     public sealed class ColorBurnBlend : PerComponentBlendBase

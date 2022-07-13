@@ -3,7 +3,7 @@
 namespace FilterLib.Blending
 {
     /// <summary>
-    /// Difference blend mode.
+    /// Calculate the (Absolute value) of the difference of the two layers.
     /// </summary>
     [Blend]
     public sealed class DifferenceBlend : PerComponentBlendBase
@@ -15,9 +15,7 @@ namespace FilterLib.Blending
         public DifferenceBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
-        {
-            return System.Math.Abs(compBottom - compTop).ClampToByte();
-        }
+        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
+            System.Math.Abs(compBottom - compTop).ClampToByte();
     }
 }

@@ -3,8 +3,8 @@
 namespace FilterLib.Blending
 {
     /// <summary>
-    /// For each pixel, keep the hue and saturation of the bottom color,
-    /// but use the lightness of the top color.
+    /// Keep the hue and saturation of the bottom layer,
+    /// but use the lightness of the top layer.
     /// </summary>
     [Blend]
     public sealed class LightnessBlend : HSLBlendBase
