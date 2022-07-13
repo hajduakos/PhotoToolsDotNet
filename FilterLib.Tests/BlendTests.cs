@@ -67,7 +67,11 @@ namespace FilterLib.Tests
             yield return new TestCaseData("NormalBlend_50.bmp", new NormalBlend(50), 1);
             yield return new TestCaseData("NormalBlend_75.bmp", new NormalBlend(75), 1);
             yield return new TestCaseData("_input2.bmp", new NormalBlend(100), 1);
-        
+
+            yield return new TestCaseData("_input.bmp", new OverlayBlend(0), 2);
+            yield return new TestCaseData("OverlayBlend_80.bmp", new OverlayBlend(80), 2);
+            yield return new TestCaseData("OverlayBlend_100.bmp", new OverlayBlend(100), 2);
+
             yield return new TestCaseData("_input.bmp", new ScreenBlend(0), 2);
             yield return new TestCaseData("ScreenBlend_80.bmp", new ScreenBlend(80), 2);
             yield return new TestCaseData("ScreenBlend_100.bmp", new ScreenBlend(100), 2);
