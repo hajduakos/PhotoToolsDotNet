@@ -80,5 +80,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         [Test]
         public void TestScreenBlend() =>
             Assert.IsInstanceOf<ScreenBlend>(ReflectiveApi.ConstructBlendByName("Screen"));
+
+        [Test]
+        public void TestSubtractBlend() =>
+            Assert.IsInstanceOf<SubtractBlend>(ReflectiveApi.ConstructBlendByName("Subtract"));
     }
 }

@@ -87,6 +87,10 @@ namespace FilterLib.Tests
             yield return new TestCaseData("_input.bmp", new SaturationBlend(0), 2);
             yield return new TestCaseData("SaturationBlend_80.bmp", new SaturationBlend(80), 2);
             yield return new TestCaseData("SaturationBlend_100.bmp", new SaturationBlend(100), 2);
+
+            yield return new TestCaseData("_input.bmp", new SubtractBlend(0), 2);
+            yield return new TestCaseData("SubtractBlend_80.bmp", new SubtractBlend(80), 2);
+            yield return new TestCaseData("SubtractBlend_100.bmp", new SubtractBlend(100), 2);
         }
 
         [Test]
