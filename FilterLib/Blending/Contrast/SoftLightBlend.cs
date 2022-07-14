@@ -1,6 +1,6 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Contrast
 {
     /// <summary>
     /// Soft light blend based on PS formula.

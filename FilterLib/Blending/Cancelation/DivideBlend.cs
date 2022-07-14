@@ -1,6 +1,6 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Cancelation
 {
     /// <summary>
     /// Divide bottom layer by top layer.

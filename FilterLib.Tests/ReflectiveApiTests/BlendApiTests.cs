@@ -1,4 +1,10 @@
-﻿using FilterLib.Blending;
+﻿using FilterLib.Blending.Cancelation;
+using FilterLib.Blending.Component;
+using FilterLib.Blending.Contrast;
+using FilterLib.Blending.Darken;
+using FilterLib.Blending.Inversion;
+using FilterLib.Blending.Lighten;
+using FilterLib.Blending.Normal;
 using NUnit.Framework;
 
 namespace FilterLib.Tests.ReflectiveApiTests

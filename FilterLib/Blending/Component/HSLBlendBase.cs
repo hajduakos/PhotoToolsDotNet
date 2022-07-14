@@ -1,6 +1,6 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Component
 {
     /// <summary>
     /// Base class for blends that operate in the HSL color space.

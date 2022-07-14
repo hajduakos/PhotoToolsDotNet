@@ -1,6 +1,6 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Contrast
 {
     /// <summary>
     /// Do a half-strength multiply blend for dark top pixels and a half-strength

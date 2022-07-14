@@ -1,6 +1,6 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Lighten
 {
     /// <summary>
     /// Divide bottom layer by inverted top layer.

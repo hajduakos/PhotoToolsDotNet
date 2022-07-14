@@ -1,4 +1,6 @@
-﻿using FilterLib.Blending;
+﻿using FilterLib.Blending.Darken;
+using FilterLib.Blending.Lighten;
+using FilterLib.Blending.Normal;
 using FilterLib.Filters.Adjustments;
 using FilterLib.Reporting;
 using FilterLib.Util;

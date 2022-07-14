@@ -1,21 +1,21 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Inversion
 {
     /// <summary>
-    /// Multiply inverted top and inverted bottom layer, and invert result.
+    /// Calculate the (Absolute value) of the difference of the two layers.
     /// </summary>
     [Blend]
-    public sealed class ScreenBlend : PerComponentBlendBase
+    public sealed class DifferenceBlend : PerComponentBlendBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public ScreenBlend(int opacity = 100) : base(opacity) { }
+        public DifferenceBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
         protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
-            (255 - (255 - compBottom) * (255 - compTop) / 255f).ClampToByte();
+            System.Math.Abs(compBottom - compTop).ClampToByte();
     }
 }

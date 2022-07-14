@@ -1,6 +1,6 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Component
 {
     /// <summary>
     /// Keep the hue and lightness of the bottom layer,

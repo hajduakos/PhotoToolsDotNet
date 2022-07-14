@@ -1,21 +1,21 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Inversion
 {
     /// <summary>
-    /// Add bottom and top layer.
+    /// Add layers and subtract double of their multiplication.
     /// </summary>
     [Blend]
-    public sealed class LinearDodgeBlend : PerComponentBlendBase
+    public sealed class ExcludeBlend : PerComponentBlendBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public LinearDodgeBlend(int opacity = 100) : base(opacity) { }
+        public ExcludeBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
         protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
-            (compBottom + compTop).ClampToByte();
+            (compTop + compBottom - 2 * compBottom * compTop / 255f).ClampToByte();
     }
 }

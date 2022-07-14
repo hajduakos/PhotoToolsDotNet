@@ -1,22 +1,22 @@
-﻿namespace FilterLib.Blending
+﻿namespace FilterLib.Blending.Lighten
 {
     /// <summary>
-    /// For each pixel, pick the darker color (based on luminance).
+    /// For each pixel, pick the lighter color (based on luminance).
     /// </summary>
     [Blend]
-    public sealed class DarkerColorBlend : PerPixelBlendBase
+    public sealed class LighterColorBlend : PerPixelBlendBase
     {
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public DarkerColorBlend(int opacity = 100) : base(opacity) { }
+        public LighterColorBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
         protected override unsafe (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB)
         {
-            if (Util.RGB.GetLuminance(botR, botG, botB) > Util.RGB.GetLuminance(topR, topG, topB))
+            if (Util.RGB.GetLuminance(botR, botG, botB) < Util.RGB.GetLuminance(topR, topG, topB))
                 return (topR, topG, topB);
             else
                 return (botR, botG, botB);

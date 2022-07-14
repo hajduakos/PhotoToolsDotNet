@@ -1,21 +1,19 @@
-﻿using FilterLib.Util;
-
-namespace FilterLib.Blending
+﻿namespace FilterLib.Blending.Darken
 {
     /// <summary>
-    /// Subtract top layer from bottom, negative numbers become black.
+    /// Pick the darker value for each component.
     /// </summary>
     [Blend]
-    public sealed class SubtractBlend : PerComponentBlendBase
+    public sealed class DarkenBlend : PerComponentBlendBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public SubtractBlend(int opacity = 100) : base(opacity) { }
+        public DarkenBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
         protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
-            (compBottom - compTop).ClampToByte();
+            System.Math.Min(compBottom, compTop);
     }
 }

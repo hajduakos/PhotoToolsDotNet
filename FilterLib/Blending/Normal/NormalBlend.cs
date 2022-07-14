@@ -1,4 +1,4 @@
-﻿namespace FilterLib.Blending
+﻿namespace FilterLib.Blending.Normal
 {
     /// <summary>
     /// Use the top layer without any arithmetic.

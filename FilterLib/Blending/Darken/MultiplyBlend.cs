@@ -1,21 +1,21 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Darken
 {
     /// <summary>
-    /// Calculate the (Absolute value) of the difference of the two layers.
+    /// Multiply top and bottom layers.
     /// </summary>
     [Blend]
-    public sealed class DifferenceBlend : PerComponentBlendBase
+    public sealed class MultiplyBlend : PerComponentBlendBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public DifferenceBlend(int opacity = 100) : base(opacity) { }
+        public MultiplyBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
         protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
-            System.Math.Abs(compBottom - compTop).ClampToByte();
+            (compBottom * compTop / 255f).ClampToByte();
     }
 }

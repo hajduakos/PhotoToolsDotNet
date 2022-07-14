@@ -1,21 +1,21 @@
 ﻿using FilterLib.Util;
 
-namespace FilterLib.Blending
+namespace FilterLib.Blending.Lighten
 {
     /// <summary>
-    /// Add bottom and top layer, then subtract white.
+    /// Add bottom and top layer.
     /// </summary>
     [Blend]
-    public sealed class LinearBurnBlend : PerComponentBlendBase
+    public sealed class LinearDodgeBlend : PerComponentBlendBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public LinearBurnBlend(int opacity = 100) : base(opacity) { }
+        public LinearDodgeBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
         protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
-            (compBottom + compTop - 255).ClampToByte();
+            (compBottom + compTop).ClampToByte();
     }
 }

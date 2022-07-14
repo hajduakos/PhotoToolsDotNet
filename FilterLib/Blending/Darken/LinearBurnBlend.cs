@@ -1,19 +1,21 @@
-﻿namespace FilterLib.Blending
+﻿using FilterLib.Util;
+
+namespace FilterLib.Blending.Darken
 {
     /// <summary>
-    /// Pick the lighter value for each component.
+    /// Add bottom and top layer, then subtract white.
     /// </summary>
     [Blend]
-    public sealed class LightenBlend : PerComponentBlendBase
+    public sealed class LinearBurnBlend : PerComponentBlendBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public LightenBlend(int opacity = 100) : base(opacity) { }
+        public LinearBurnBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
         protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
-            System.Math.Max(compBottom, compTop);
+            (compBottom + compTop - 255).ClampToByte();
     }
 }
