@@ -39,7 +39,6 @@ namespace FilterLib.Filters.Noise
             int width_3 = image.Width * 3;
             byte[,] neighRGBs = new byte[3, 9]; // Arrays for sorting
             byte[] neighLums = new byte[9];
-            byte swap;
 
             float op1 = strength / 100.0f;
             float op0 = 1 - op1;
@@ -78,15 +77,11 @@ namespace FilterLib.Filters.Noise
                             if (k != min)
                             {
                                 // Swap luminance
-                                swap = neighLums[min];
-                                neighLums[min] = neighLums[k];
-                                neighLums[k] = swap;
+                                (neighLums[min], neighLums[k]) = (neighLums[k], neighLums[min]);
                                 // Swap rgbs
                                 for (int i = 0; i < 3; ++i)
                                 {
-                                    swap = neighRGBs[i, min];
-                                    neighRGBs[i, min] = neighRGBs[i, k];
-                                    neighRGBs[i, k] = swap;
+                                    (neighRGBs[i, min], neighRGBs[i, k]) = (neighRGBs[i, k], neighRGBs[i, min]);
                                 }
                             }
                         }
