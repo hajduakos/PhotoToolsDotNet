@@ -1,5 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
+using Math = System.Math;
 
 namespace FilterLib.Filters.Noise
 {
@@ -10,6 +11,7 @@ namespace FilterLib.Filters.Noise
     public sealed class MedianFilter : FilterInPlaceBase
     {
         private int strength;
+        private int radius;
 
         /// <summary>
         /// Strength [0;100].
@@ -24,10 +26,26 @@ namespace FilterLib.Filters.Noise
         }
 
         /// <summary>
+        /// Radius [0;...].
+        /// </summary>
+        [FilterParam]
+        [FilterParamMin(0)]
+        public int Radius
+        {
+            get { return radius; }
+            set { radius = Math.Max(0, value); }
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="strength">Strength [0;100]</param>
-        public MedianFilter(int strength = 0) => Strength = strength;
+        /// <param name="radius">Radius [0;...]</param>
+        public MedianFilter(int strength = 0, int radius = 0)
+        {
+            Strength = strength;
+            Radius = radius;
+        }
 
         /// <inheritdoc/>
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
@@ -37,41 +55,40 @@ namespace FilterLib.Filters.Noise
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
             int width_3 = image.Width * 3;
-            byte[,] neighRGBs = new byte[3, 9]; // Arrays for sorting
-            byte[] neighLums = new byte[9];
+            int radius_3 = radius * 3;
+            int area = (2 * radius + 1) * (2 * radius + 1);
+            (byte, byte, byte)[] neighRGBs = new (byte, byte, byte)[area]; // Arrays for sorting
+            byte[] neighLums = new byte[area];
 
             float op1 = strength / 100.0f;
             float op0 = 1 - op1;
 
             fixed (byte* newStart = image, oldStart = original)
             {
-                for (int y = 1; y < image.Height - 1; ++y)
+                for (int y = 0; y < image.Height; ++y)
                 {
                     byte* newRow = newStart + y * width_3;
                     byte* oldRow = oldStart + y * width_3;
-                    for (int x = 3; x < width_3 - 3; x += 3)
+                    for (int x = 0; x < width_3; x += 3)
                     {
                         // Collect pixel and surroundings
-                        for (int k = 0; k < 3; ++k)
+                        int n = 0;
+                        for (int y0 = Math.Max(0, y - radius); y0 < image.Height && y0 <= y + radius; ++y0)
                         {
-                            neighRGBs[k, 0] = oldRow[k + x - width_3 - 3];
-                            neighRGBs[k, 1] = oldRow[k + x - width_3];
-                            neighRGBs[k, 2] = oldRow[k + x - width_3 + 3];
-                            neighRGBs[k, 3] = oldRow[k + x - 3];
-                            neighRGBs[k, 4] = oldRow[k + x];
-                            neighRGBs[k, 5] = oldRow[k + x + 3];
-                            neighRGBs[k, 6] = oldRow[k + x + width_3 - 3];
-                            neighRGBs[k, 7] = oldRow[k + x + width_3];
-                            neighRGBs[k, 8] = oldRow[k + x + width_3 + 3];
+                            for (int x0 = Math.Max(0, x - radius_3); x0 < width_3 && x0 <= x + radius_3; x0 += 3)
+                            {
+                                byte* px = oldStart + y0 * width_3 + x0;
+                                neighRGBs[n] = (px[0], px[1], px[2]);
+                                neighLums[n] = (byte)RGB.GetLuminance(px[0], px[1], px[2]);
+                                ++n;
+                            }
                         }
-                        // Calculate luminance values
-                        for (int k = 0; k < 9; ++k)
-                            neighLums[k] = (byte)RGB.GetLuminance(neighRGBs[0, k], neighRGBs[1, k], neighRGBs[2, k]);
-                        // Sort by luminance (only the first 5 elements, since we need the 5th
-                        for (int k = 0; k < 5; ++k)
+                        int med = (int)Math.Ceiling(n / 2f);
+                        // Sort by luminance (only up to the median)
+                        for (int k = 0; k < med; ++k)
                         {
                             int min = k;
-                            for (int l = k + 1; l < 9; ++l)
+                            for (int l = k + 1; l < n; ++l)
                                 if (neighLums[l] < neighLums[min]) min = l;
                             // Swap
                             if (k != min)
@@ -79,16 +96,14 @@ namespace FilterLib.Filters.Noise
                                 // Swap luminance
                                 (neighLums[min], neighLums[k]) = (neighLums[k], neighLums[min]);
                                 // Swap rgbs
-                                for (int i = 0; i < 3; ++i)
-                                {
-                                    (neighRGBs[i, min], neighRGBs[i, k]) = (neighRGBs[i, k], neighRGBs[i, min]);
-                                }
+                                (neighRGBs[min], neighRGBs[k]) = (neighRGBs[k], neighRGBs[min]);
                             }
                         }
                         // Get the median
-                        newRow[x] = (byte)(op0 * newRow[x] + op1 * neighRGBs[0, 4]);
-                        newRow[x + 1] = (byte)(op0 * newRow[x + 1] + op1 * neighRGBs[1, 4]);
-                        newRow[x + 2] = (byte)(op0 * newRow[x + 2] + op1 * neighRGBs[2, 4]);
+                        (byte r, byte g, byte b) = neighRGBs[med - 1];
+                        newRow[x] = (byte)(op0 * newRow[x] + op1 * r);
+                        newRow[x + 1] = (byte)(op0 * newRow[x + 1] + op1 * g);
+                        newRow[x + 2] = (byte)(op0 * newRow[x + 2] + op1 * b);
                     }
                     reporter?.Report(y, 1, image.Height - 2);
                 }

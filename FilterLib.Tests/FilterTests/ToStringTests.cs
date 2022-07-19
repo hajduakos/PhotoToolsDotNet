@@ -84,7 +84,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new PixelateFilter(12), "PixelateFilter(Size: 12, Mode: Average)");
 
             yield return new TestCaseData(new AddNoiseFilter(12, 34, AddNoiseFilter.NoiseType.Monochrome, 56), "AddNoiseFilter(Intensity: 12, Strength: 34, Type: Monochrome, Seed: 56)");
-            yield return new TestCaseData(new MedianFilter(12), "MedianFilter(Strength: 12)");
+            yield return new TestCaseData(new MedianFilter(12, 34), "MedianFilter(Strength: 12, Radius: 34)");
 
             yield return new TestCaseData(new ConvertToPolarFilter(12), "ConvertToPolarFilter(Phase: 12)");
             yield return new TestCaseData(new ConvolutionFilter(new Conv3x3(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)), "ConvolutionFilter(Matrix: [1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11)");

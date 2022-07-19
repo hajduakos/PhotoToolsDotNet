@@ -33,11 +33,13 @@ namespace FilterLib.Tests.ReflectiveApiTests
             IFilter f = ReflectiveApi.ConstructFilterByName("Median");
             Assert.IsInstanceOf<MedianFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "Strength", "50");
+            ReflectiveApi.SetFilterPropertyByName(f, "Radius", "3");
             MedianFilter ff = f as MedianFilter;
             Assert.AreEqual(50, ff.Strength);
+            Assert.AreEqual(3, ff.Radius);
         }
 
         [Test]
-        public void TestMedianParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(MedianFilter)));
+        public void TestMedianParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(MedianFilter)));
     }
 }
