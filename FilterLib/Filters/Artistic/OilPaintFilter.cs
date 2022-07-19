@@ -12,21 +12,21 @@ namespace FilterLib.Filters.Artistic
         private int radius;
 
         /// <summary>
-        /// Brush radius [1;...].
+        /// Brush radius [0;...].
         /// </summary>
         [FilterParam]
-        [FilterParamMin(1)]
+        [FilterParamMin(0)]
         public int Radius
         {
             get { return radius; }
-            set { radius = System.Math.Max(1, value); }
+            set { radius = System.Math.Max(0, value); }
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="radius">Brush radius [1;...]</param>
-        public OilPaintFilter(int radius = 1) => Radius = radius;
+        /// <param name="radius">Brush radius [0;...]</param>
+        public OilPaintFilter(int radius = 0) => Radius = radius;
 
         /// <inheritdoc/>
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
