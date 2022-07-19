@@ -14,6 +14,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("AdaptiveTreshold_1.bmp", new AdaptiveTresholdFilter(1), 1);
             yield return new TestCaseData("AdaptiveTreshold_4.bmp", new AdaptiveTresholdFilter(4), 1);
             yield return new TestCaseData("AdaptiveTreshold_8.bmp", new AdaptiveTresholdFilter(8), 1);
+            yield return new TestCaseData("AdaptiveTreshold_200.bmp", new AdaptiveTresholdFilter(200), 1);
 
             yield return new TestCaseData("_input.bmp", new OilPaintFilter(0), 0);
             yield return new TestCaseData("OilPaint_1.bmp", new OilPaintFilter(1), 1);
