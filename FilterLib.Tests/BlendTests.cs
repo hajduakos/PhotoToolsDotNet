@@ -106,6 +106,10 @@ namespace FilterLib.Tests
             yield return new TestCaseData("_input.bmp", new SubtractBlend(0), 2);
             yield return new TestCaseData("SubtractBlend_80.bmp", new SubtractBlend(80), 2);
             yield return new TestCaseData("SubtractBlend_100.bmp", new SubtractBlend(100), 2);
+
+            yield return new TestCaseData("_input.bmp", new VividLightBlend(0), 2);
+            yield return new TestCaseData("VividLightBlend_80.bmp", new VividLightBlend(80), 2);
+            yield return new TestCaseData("VividLightBlend_100.bmp", new VividLightBlend(100), 2);
         }
 
         [Test]

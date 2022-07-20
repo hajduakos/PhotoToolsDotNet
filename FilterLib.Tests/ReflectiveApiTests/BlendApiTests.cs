@@ -98,5 +98,9 @@ namespace FilterLib.Tests.ReflectiveApiTests
         [Test]
         public void TestSubtractBlend() =>
             Assert.IsInstanceOf<SubtractBlend>(ReflectiveApi.ConstructBlendByName("Subtract"));
+
+        [Test]
+        public void TestVividLightBlend() =>
+            Assert.IsInstanceOf<VividLightBlend>(ReflectiveApi.ConstructBlendByName("VividLight"));
     }
 }
