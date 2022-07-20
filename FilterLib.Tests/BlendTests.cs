@@ -53,6 +53,10 @@ namespace FilterLib.Tests
             yield return new TestCaseData("HardLightBlend_80.bmp", new HardLightBlend(80), 2);
             yield return new TestCaseData("HardLightBlend_100.bmp", new HardLightBlend(100), 2);
 
+            yield return new TestCaseData("_input.bmp", new HardMixBlend(0), 2);
+            yield return new TestCaseData("HardMixBlend_80.bmp", new HardMixBlend(80), 2);
+            yield return new TestCaseData("HardMixBlend_100.bmp", new HardMixBlend(100), 2);
+
             yield return new TestCaseData("_input.bmp", new HueBlend(0), 2);
             yield return new TestCaseData("HueBlend_80.bmp", new HueBlend(80), 2);
             yield return new TestCaseData("HueBlend_100.bmp", new HueBlend(100), 2);

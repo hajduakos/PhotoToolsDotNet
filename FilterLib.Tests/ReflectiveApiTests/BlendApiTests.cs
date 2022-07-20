@@ -48,6 +48,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<HardLightBlend>(ReflectiveApi.ConstructBlendByName("HardLight"));
 
         [Test]
+        public void TestHardMixBlend() =>
+            Assert.IsInstanceOf<HardMixBlend>(ReflectiveApi.ConstructBlendByName("HardMix"));
+
+        [Test]
         public void TestHueBlend() =>
             Assert.IsInstanceOf<HueBlend>(ReflectiveApi.ConstructBlendByName("Hue"));
 
