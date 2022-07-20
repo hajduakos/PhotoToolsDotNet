@@ -77,6 +77,10 @@ namespace FilterLib.Tests
             yield return new TestCaseData("LinearDodgeBlend_80.bmp", new LinearDodgeBlend(80), 2);
             yield return new TestCaseData("LinearDodgeBlend_100.bmp", new LinearDodgeBlend(100), 2);
 
+            yield return new TestCaseData("_input.bmp", new LinearLightBlend(0), 2);
+            yield return new TestCaseData("LinearLightBlend_80.bmp", new LinearLightBlend(80), 2);
+            yield return new TestCaseData("LinearLightBlend_100.bmp", new LinearLightBlend(100), 2);
+
             yield return new TestCaseData("_input.bmp", new MultiplyBlend(0), 2);
             yield return new TestCaseData("MultiplyBlend_80.bmp", new MultiplyBlend(80), 2);
             yield return new TestCaseData("MultiplyBlend_100.bmp", new MultiplyBlend(100), 2);
