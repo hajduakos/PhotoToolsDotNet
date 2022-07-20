@@ -95,6 +95,10 @@ namespace FilterLib.Tests
             yield return new TestCaseData("OverlayBlend_80.bmp", new OverlayBlend(80), 2);
             yield return new TestCaseData("OverlayBlend_100.bmp", new OverlayBlend(100), 2);
 
+            yield return new TestCaseData("_input.bmp", new PinLightBlend(0), 2);
+            yield return new TestCaseData("PinLightBlend_80.bmp", new PinLightBlend(80), 2);
+            yield return new TestCaseData("PinLightBlend_100.bmp", new PinLightBlend(100), 2);
+
             yield return new TestCaseData("_input.bmp", new SaturationBlend(0), 2);
             yield return new TestCaseData("SaturationBlend_80.bmp", new SaturationBlend(80), 2);
             yield return new TestCaseData("SaturationBlend_100.bmp", new SaturationBlend(100), 2);

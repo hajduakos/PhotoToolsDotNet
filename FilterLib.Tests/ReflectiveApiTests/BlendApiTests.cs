@@ -88,6 +88,10 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<OverlayBlend>(ReflectiveApi.ConstructBlendByName("Overlay"));
 
         [Test]
+        public void TestPinLightBlend() =>
+            Assert.IsInstanceOf<PinLightBlend>(ReflectiveApi.ConstructBlendByName("PinLight"));
+
+        [Test]
         public void TestSaturationBlend() =>
             Assert.IsInstanceOf<SaturationBlend>(ReflectiveApi.ConstructBlendByName("Saturation"));
 
