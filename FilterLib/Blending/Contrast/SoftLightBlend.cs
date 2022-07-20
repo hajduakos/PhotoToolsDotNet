@@ -17,14 +17,10 @@ namespace FilterLib.Blending.Contrast
         /// <inheritdoc/>
         protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
         {
-            float bf = compBottom / 255f;
-            float tf = compTop / 255f;
-            float blended;
-            if (tf < .5f)
-                blended = 2 * bf * tf + bf * bf * (1 - 2 * tf);
+            if (compTop <= 127)
+                return (2 * compBottom * compTop / 255f + compBottom / 255f * compBottom / 255f * (255 - 2 * compTop)).ClampToByte();
             else
-                blended = 2 * bf * (1 - tf) + System.MathF.Sqrt(bf) * (2 * tf - 1);
-            return (blended * 255).ClampToByte();
+                return (2 * compBottom / 255f * (255 - compTop) + System.MathF.Sqrt(compBottom / 255f) * (2 * compTop - 255)).ClampToByte();
         }
     }
 }

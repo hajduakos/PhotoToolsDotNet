@@ -1,4 +1,5 @@
 ﻿using FilterLib.Util;
+using Math = System.Math;
 
 namespace FilterLib.Blending.Contrast
 {
@@ -18,12 +19,8 @@ namespace FilterLib.Blending.Contrast
         /// <inheritdoc/>
         protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
         {
-            float bf = compBottom / 255f;
-            float tf = compTop / 255f;
-            float blended;
-            if (tf > 0.5) blended = System.MathF.Max(bf, 2 * tf - 1);
-            else blended = System.MathF.Min(bf, 2 * tf);
-            return (blended * 255).ClampToByte();
+            if (compTop > 127) return Math.Max(compBottom, 2 * compTop - 255).ClampToByte();
+            else return Math.Min(compBottom, 2 * compTop).ClampToByte();
         }
     }
 }

@@ -15,12 +15,7 @@ namespace FilterLib.Blending.Contrast
         public LinearLightBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
-        {
-            float bf = compBottom / 255f;
-            float tf = compTop / 255f;
-            float blended = bf + 2 * tf - 1;
-            return (blended * 255).ClampToByte();
-        }
+        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
+            (compBottom + 2 * compTop - 255).ClampToByte();
     }
 }
