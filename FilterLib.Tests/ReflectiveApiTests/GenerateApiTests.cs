@@ -6,6 +6,24 @@ namespace FilterLib.Tests.ReflectiveApiTests
 {
     public class GenerateApiTests
     {
+        [Test]
+        public void TestLinearGradient()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("LinearGradient");
+            Assert.IsInstanceOf<LinearGradientFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "StartX", "12px");
+            ReflectiveApi.SetFilterPropertyByName(f, "StartY", "23%");
+            ReflectiveApi.SetFilterPropertyByName(f, "EndX", "45px");
+            ReflectiveApi.SetFilterPropertyByName(f, "EndY", "56%");
+            LinearGradientFilter ff = f as LinearGradientFilter;
+            Assert.AreEqual(12, ff.StartX.ToAbsolute(200));
+            Assert.AreEqual(46, ff.StartY.ToAbsolute(200));
+            Assert.AreEqual(45, ff.EndX.ToAbsolute(200));
+            Assert.AreEqual(112, ff.EndY.ToAbsolute(200));
+        }
+
+        [Test]
+        public void TestLinearGradientParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(LinearGradientFilter)));
 
         [Test]
         public void TestMarble()

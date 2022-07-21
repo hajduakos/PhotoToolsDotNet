@@ -75,6 +75,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new PrewittFilter(), "PrewittFilter");
             yield return new TestCaseData(new SobelFilter(), "SobelFilter");
 
+            yield return new TestCaseData(new LinearGradientFilter(Size.Absolute(12), Size.Absolute(34), Size.Relative(.56f), Size.Relative(.78f)), "LinearGradientFilter(StartX: 12px, StartY: 34px, EndX: 56%, EndY: 78%)");
             yield return new TestCaseData(new MarbleFilter(12, 34, 56, 78, 90), "MarbleFilter(HorizontalLines: 12, VerticalLines: 34, Twist: 56, Iterations: 78, Seed: 90)");
             yield return new TestCaseData(new TurbulenceFilter(12, 345), "TurbulenceFilter(Iterations: 12, Seed: 345)");
             yield return new TestCaseData(new WoodRingsFilter(12, 34, 56, 78), "WoodRingsFilter(Twist: 34, Rings: 12, Iterations: 56, Seed: 78)");
