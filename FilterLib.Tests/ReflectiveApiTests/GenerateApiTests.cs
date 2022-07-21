@@ -47,6 +47,25 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestMarbleParCnt() => Assert.AreEqual(5, Common.ParamCount(typeof(MarbleFilter)));
 
         [Test]
+        public void TestRadialGradient()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("RadialGradient");
+            Assert.IsInstanceOf<RadialGradientFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "CenterX", "12px");
+            ReflectiveApi.SetFilterPropertyByName(f, "CenterY", "23%");
+            ReflectiveApi.SetFilterPropertyByName(f, "InnerRadius", "45px");
+            ReflectiveApi.SetFilterPropertyByName(f, "OuterRadius", "56%");
+            RadialGradientFilter ff = f as RadialGradientFilter;
+            Assert.AreEqual(12, ff.CenterX.ToAbsolute(200));
+            Assert.AreEqual(46, ff.CenterY.ToAbsolute(200));
+            Assert.AreEqual(45, ff.InnerRadius.ToAbsolute(200));
+            Assert.AreEqual(112, ff.OuterRadius.ToAbsolute(200));
+        }
+
+        [Test]
+        public void TestRadialGradientParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(RadialGradientFilter)));
+
+        [Test]
         public void TestTurbulence()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Turbulence");

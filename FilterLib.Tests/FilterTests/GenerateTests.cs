@@ -12,9 +12,21 @@ namespace FilterLib.Tests.FilterTests
     {
         internal static IEnumerable<TestCaseData> Data()
         {
+            yield return new TestCaseData("LinearGradientFilter_0pct_0pct_0pct_100pct.bmp",
+                new LinearGradientFilter(Size.Relative(0), Size.Relative(0), Size.Relative(0), Size.Relative(1)), 1);
+            yield return new TestCaseData("LinearGradientFilter_0pct_0pct_100pct_100pct.bmp",
+                new LinearGradientFilter(Size.Relative(0), Size.Relative(0), Size.Relative(1), Size.Relative(1)), 1);
+            yield return new TestCaseData("LinearGradientFilter_25pct_25pct_75pct_75pct.bmp",
+                new LinearGradientFilter(Size.Relative(.25f), Size.Relative(.25f), Size.Relative(.75f), Size.Relative(.75f)), 1);
+
             yield return new TestCaseData("Marble_2_4_5_6_0.bmp", new MarbleFilter(2, 4, 5, 6, 0), 1);
             yield return new TestCaseData("Marble_3_7_2_5_0.bmp", new MarbleFilter(3, 7, 2, 5, 0), 1);
             yield return new TestCaseData("Marble_5_2_10_8_0.bmp", new MarbleFilter(5, 2, 10, 8, 0), 1);
+
+            yield return new TestCaseData("RadialGradientFilter_50pct_50pct_0pct_50pct.bmp",
+                new RadialGradientFilter(Size.Relative(.5f), Size.Relative(.5f), Size.Relative(0), Size.Relative(.5f)), 1);
+            yield return new TestCaseData("RadialGradientFilter_10pct_25pct_25pct_80pct.bmp",
+                new RadialGradientFilter(Size.Relative(.1f), Size.Relative(.25f), Size.Relative(.25f), Size.Relative(.8f)), 1);
 
             yield return new TestCaseData("Turbulence_1_0.bmp", new TurbulenceFilter(1, 0), 1);
             yield return new TestCaseData("Turbulence_5_0.bmp", new TurbulenceFilter(5, 0), 1);
@@ -23,13 +35,6 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("WoodRings_2_0.05_8_0.bmp", new WoodRingsFilter(2, 0.05f, 8, 0), 1);
             yield return new TestCaseData("WoodRings_5_0.1_6_0.bmp", new WoodRingsFilter(5, 0.1f, 6, 0), 1);
             yield return new TestCaseData("WoodRings_8_0.3_7_0.bmp", new WoodRingsFilter(8, 0.3f, 7, 0), 1);
-
-            yield return new TestCaseData("LinearGradientFilter_0pct_0pct_0pct_100pct.bmp",
-                new LinearGradientFilter(Size.Relative(0), Size.Relative(0), Size.Relative(0), Size.Relative(1)), 1);
-            yield return new TestCaseData("LinearGradientFilter_0pct_0pct_100pct_100pct.bmp",
-                new LinearGradientFilter(Size.Relative(0), Size.Relative(0), Size.Relative(1), Size.Relative(1)), 1);
-            yield return new TestCaseData("LinearGradientFilter_25pct_25pct_75pct_75pct.bmp",
-                new LinearGradientFilter(Size.Relative(.25f), Size.Relative(.25f), Size.Relative(.75f), Size.Relative(.75f)), 1);
         }
 
         [Test]
