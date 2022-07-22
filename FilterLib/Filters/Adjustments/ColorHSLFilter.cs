@@ -60,9 +60,9 @@ namespace FilterLib.Filters.Adjustments
         }
 
         // Caches
-        private int[] satMap = null;
-        private int[] lightMap = null;
-        private int[] hueMap = null;
+        private int[] satMap;
+        private int[] lightMap;
+        private int[] hueMap;
 
         /// <inheritdoc/>
         protected override void ApplyStart()

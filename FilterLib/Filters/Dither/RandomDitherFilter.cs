@@ -41,7 +41,7 @@ namespace FilterLib.Filters.Dither
             Seed = seed;
         }
 
-        private Random rnd = null;
+        private Random rnd;
         private float intervalSize;
 
         /// <summary>

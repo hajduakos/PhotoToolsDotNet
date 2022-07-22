@@ -61,9 +61,9 @@ namespace FilterLib.Filters.Adjustments
         }
 
         // Caches
-        private byte[] redMap = null;
-        private byte[] greenMap = null;
-        private byte[] blueMap = null;
+        private byte[] redMap;
+        private byte[] greenMap;
+        private byte[] blueMap;
 
         /// <inheritdoc/>
         protected override void ApplyStart()

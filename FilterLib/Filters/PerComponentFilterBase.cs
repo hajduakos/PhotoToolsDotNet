@@ -6,7 +6,7 @@
     /// </summary>
     public abstract class PerComponentFilterBase : PerPixelFilterBase
     {
-        private byte[] map = null;
+        private byte[] map;
 
         /// <summary>
         /// Map a single (R/G/B) component.
