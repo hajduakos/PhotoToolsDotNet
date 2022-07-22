@@ -130,7 +130,7 @@ namespace FilterLib.Filters.Mosaic
             (float, byte)[,] map = new (float, byte)[Size, Size];
             int nSamples = GetSampleCount();
             float samplingDelta = nSamples == 1 ? 0 : 1f / (nSamples - 1);
-            float radius_squared = MathF.Pow(Size / 4 + 1, 2);
+            float radius_squared = MathF.Pow(Size / 4f + 1, 2);
             int circleTop = Size / 4 - 1;
             int circleBottom = 3 * Size / 4 + 1;
             int topHalfFadeLength = Size / 4 + 1;
@@ -189,7 +189,7 @@ namespace FilterLib.Filters.Mosaic
             float[,] map = new float[Size, Size];
             int nSamples = GetSampleCount();
             float samplingDelta = nSamples == 1 ? 0 : 1f / (nSamples - 1);
-            float radius_squared = MathF.Pow(Size / 4, 2);
+            float radius_squared = MathF.Pow(Size / 4f, 2);
             float center = Size / 2f;
 
             for (int x = 0; x < Size; x++)

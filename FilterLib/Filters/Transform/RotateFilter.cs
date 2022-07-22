@@ -72,10 +72,10 @@ namespace FilterLib.Filters.Transform
             }
             System.Diagnostics.Debug.Assert(rotated != null);
 
-            float crx = rotated.Width / 2;
-            float cry = rotated.Height / 2;
-            float cx = image.Width / 2;
-            float cy = image.Height / 2;
+            float crx = rotated.Width / 2f;
+            float cry = rotated.Height / 2f;
+            float cx = image.Width / 2f;
+            float cy = image.Height / 2f;
             int rotWidth_3 = rotated.Width * 3;
             int x0, y0, x1, y1;
             byte red, green, blue;
