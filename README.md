@@ -2,6 +2,7 @@
 
 [![.NET build](https://github.com/hajduakos/PhotoToolsDotNet/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/hajduakos/PhotoToolsDotNet/actions/workflows/dotnetcore.yml)
 [![Coverage Status](https://coveralls.io/repos/github/hajduakos/PhotoToolsDotNet/badge.svg?branch=master)](https://coveralls.io/github/hajduakos/PhotoToolsDotNet?branch=master)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f1e1a88cd6f54620bd35267fdb96fb62)](https://www.codacy.com/gh/hajduakos/PhotoToolsDotNet/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hajduakos/PhotoToolsDotNet&amp;utm_campaign=Badge_Grade)
 
 Tools for processing photos.
 
