@@ -192,5 +192,18 @@ namespace FilterLib.Tests
             Assert.AreEqual((85, 120, 117), (img[0, h - 1, 0], img[0, h - 1, 1], img[0, h - 1, 2]));
             Assert.AreEqual((181, 174, 157), (img[w - 1, h - 1, 0], img[w - 1, h - 1, 1], img[w - 1, h - 1, 2]));
         }
+
+        [Test]
+        public void TestImageToBitmap()
+        {
+            Image img = new(2, 3);
+            img[0, 0, 0] = 0;
+            img[0, 0, 1] = 1;
+            img[0, 0, 2] = 2;
+            using System.Drawing.Bitmap b = BitmapAdapter.ToBitmap(img);
+            Assert.AreEqual(2, b.Width);
+            Assert.AreEqual(3, b.Height);
+            Assert.AreEqual(System.Drawing.Color.FromArgb(0, 1, 2), b.GetPixel(0, 0));
+        }
     }
 }
