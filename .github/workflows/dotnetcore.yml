@@ -32,3 +32,12 @@ jobs:
     - name: Integration tests (Ubuntu/Mac)
       if: ${{ startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu') }}
       run: cd FilterScript.Test; ./test-all.sh; cd ..
+    - name: Coverage (ubuntu-latest)
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+    - name: Publish coverage report to coveralls.io (ubuntu-latest)
+      if: ${{ matrix.os == 'ubuntu-latest' }}  
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: FilterLib.Tests/TestResults/coverage.info
