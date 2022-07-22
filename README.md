@@ -1,5 +1,6 @@
 # PhotoTools.Net
 
+[![.NET build](https://github.com/hajduakos/PhotoToolsDotNet/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/hajduakos/PhotoToolsDotNet/actions/workflows/dotnetcore.yml)
 [![Coverage Status](https://coveralls.io/repos/github/hajduakos/PhotoToolsDotNet/badge.svg?branch=master)](https://coveralls.io/github/hajduakos/PhotoToolsDotNet?branch=master)
 
 Tools for processing photos.
