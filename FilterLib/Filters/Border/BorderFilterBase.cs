@@ -34,7 +34,7 @@ namespace FilterLib.Filters.Border
         [FilterParam]
         public AntiAliasQuality AntiAlias { get; set; }
 
-        public BorderFilterBase() :
+        protected BorderFilterBase() :
             this(Size.Absolute(0), Size.Absolute(0), BorderPosition.Inside, AntiAliasQuality.Medium)
         { }
 
@@ -45,7 +45,7 @@ namespace FilterLib.Filters.Border
         /// <param name="radius">Border radius</param>
         /// <param name="position">Border position</param>
         /// <param name="antiAlias">Quality of anti-aliasing the rounded corners</param>
-        public BorderFilterBase(Size width, Size radius, BorderPosition position, AntiAliasQuality antiAlias)
+        protected BorderFilterBase(Size width, Size radius, BorderPosition position, AntiAliasQuality antiAlias)
         {
             Width = width;
             Radius = radius;
@@ -91,7 +91,6 @@ namespace FilterLib.Filters.Border
                 reporter?.Report(33, 0, 100);
 
                 // Draw the 4 borders around the image
-                int borderW_3 = borderW * 3;
                 // Top
                 byte* ptr = newStart;
                 for (int y = 0; y < borderW && y < newHeight; ++y)

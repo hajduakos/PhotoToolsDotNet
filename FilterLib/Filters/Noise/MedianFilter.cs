@@ -65,10 +65,9 @@ namespace FilterLib.Filters.Noise
 
             fixed (byte* newStart = image, oldStart = original)
             {
+                byte* newPx = newStart;
                 for (int y = 0; y < image.Height; ++y)
                 {
-                    byte* newRow = newStart + y * width_3;
-                    byte* oldRow = oldStart + y * width_3;
                     for (int x = 0; x < width_3; x += 3)
                     {
                         // Collect pixel and surroundings
@@ -101,9 +100,10 @@ namespace FilterLib.Filters.Noise
                         }
                         // Get the median
                         (byte r, byte g, byte b) = neighRGBs[med - 1];
-                        newRow[x] = (byte)(op0 * newRow[x] + op1 * r);
-                        newRow[x + 1] = (byte)(op0 * newRow[x + 1] + op1 * g);
-                        newRow[x + 2] = (byte)(op0 * newRow[x + 2] + op1 * b);
+                        newPx[0] = (byte)(op0 * newPx[0] + op1 * r);
+                        newPx[1] = (byte)(op0 * newPx[1] + op1 * g);
+                        newPx[2] = (byte)(op0 * newPx[2] + op1 * b);
+                        newPx += 3;
                     }
                     reporter?.Report(y, 1, image.Height - 2);
                 }

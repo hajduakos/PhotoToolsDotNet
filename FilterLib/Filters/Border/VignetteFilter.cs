@@ -51,7 +51,6 @@ namespace FilterLib.Filters.Border
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            int width_3 = image.Width * 3;
             float a1 = Radius.ToAbsolute(image.Width / 2);
             float a0 = ClearRadius.ToAbsolute(image.Width / 2);
             if (a1 < a0) throw new ArgumentException("Radius must be larger than clear zone radius.");

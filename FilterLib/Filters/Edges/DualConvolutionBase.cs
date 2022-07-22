@@ -16,7 +16,7 @@ namespace FilterLib.Filters.Edges
         /// </summary>
         /// <param name="conv1">First convolution</param>
         /// <param name="conv2">Second convolution</param>
-        public DualConvolutionBase(Conv3x3 conv1, Conv3x3 conv2)
+        protected DualConvolutionBase(Conv3x3 conv1, Conv3x3 conv2)
         {
             this.conv1 = new(conv1);
             this.conv2 = new(conv2);

@@ -11,7 +11,7 @@ namespace FilterLib.Blending.Component
         /// Constructor
         /// </summary>
         /// <param name="opacity">Opacity [0:100]</param>
-        public HSLBlendBase(int opacity = 100) : base(opacity) { }
+        protected HSLBlendBase(int opacity = 100) : base(opacity) { }
 
         /// <summary>
         /// Blend two pixels in HSL color space.
