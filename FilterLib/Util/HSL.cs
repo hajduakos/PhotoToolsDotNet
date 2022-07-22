@@ -59,7 +59,7 @@
                     case 3: r = m; g = mid2; b = v; break;
                     case 4: r = mid1; g = m; b = v; break;
                     case 5: r = v; g = m; b = mid2; break;
-                    default: throw new System.Exception($"Sextant {sextant} should be between 0 and 5.");
+                    default: throw new System.InvalidOperationException($"Sextant {sextant} should be between 0 and 5.");
                 }
             }
             return new RGB((int)(r * 255), (int)(g * 255), (int)(b * 255));
