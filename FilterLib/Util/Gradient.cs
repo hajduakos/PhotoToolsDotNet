@@ -66,20 +66,20 @@ namespace FilterLib.Util
 
         private void CheckAndNormalize()
         {
-            if (this.colors.Count != this.stops.Count)
+            if (colors.Count != stops.Count)
                 throw new ArgumentException("Length of colors and stops must be equal.");
-            if (this.colors.Count < 2)
+            if (colors.Count < 2)
                 throw new ArgumentException("At least two colors are required.");
-            for (int i = 0; i < this.stops.Count - 1; ++i)
-                if (this.stops[i] >= this.stops[i + 1])
+            for (int i = 0; i < stops.Count - 1; ++i)
+                if (stops[i] >= stops[i + 1])
                     throw new ArgumentException("Stops must be increasing.");
             // Normalize
-            float first = this.stops[0];
-            for (int i = 0; i < this.stops.Count; ++i)
-                this.stops[i] -= first;
-            float last = this.stops[^1];
-            for (int i = 0; i < this.stops.Count; ++i)
-                this.stops[i] /= last;
+            float first = stops[0];
+            for (int i = 0; i < stops.Count; ++i)
+                stops[i] -= first;
+            float last = stops[^1];
+            for (int i = 0; i < stops.Count; ++i)
+                stops[i] /= last;
         }
 
         /// <summary>

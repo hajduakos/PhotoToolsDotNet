@@ -148,6 +148,14 @@ namespace FilterLib.Tests
         }
 
         [Test]
+        public void TestGradientParseExceptions()
+        {
+            Assert.Throws<FormatException>(() => new Gradient("0 (0 0 0)"));
+            Assert.Throws<FormatException>(() => new Gradient("a , b"));
+            Assert.Throws<ArgumentException>(() => new Gradient("0 (0 0 0), 0 (0 0 0)"));
+        }
+
+        [Test]
         public void TestSize()
         {
             Assert.AreEqual(25, Size.Absolute(25).ToAbsolute(0));
