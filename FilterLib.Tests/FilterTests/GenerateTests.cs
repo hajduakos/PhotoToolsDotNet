@@ -37,10 +37,21 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("WoodRings_8_0.3_7_0.bmp", new WoodRingsFilter(8, 0.3f, 7, 0), 1);
         }
 
+        internal static IEnumerable<TestCaseData> Exceptions()
+        {
+            yield return new TestCaseData("_input.bmp", new LinearGradientFilter(Size.Absolute(0), Size.Absolute(0), Size.Absolute(0), Size.Absolute(0)));
+            yield return new TestCaseData("_input.bmp", new RadialGradientFilter(Size.Absolute(0), Size.Absolute(0), Size.Absolute(1), Size.Absolute(0)));
+        }
+
         [Test]
         [TestCaseSource("Data")]
         public void Test(string expected, IFilter filter, int tolerance) =>
             Assert.IsTrue(Common.CheckFilter("_input.bmp", expected, filter, tolerance));
+
+        [Test]
+        [TestCaseSource("Exceptions")]
+        public void TestEx(string expected, IFilter filter) =>
+            Assert.Throws<System.ArgumentException>(() => Common.CheckFilter("_input.bmp", expected, filter));
 
     }
 }
