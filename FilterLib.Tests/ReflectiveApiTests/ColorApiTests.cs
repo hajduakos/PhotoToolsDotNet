@@ -82,6 +82,13 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestSepiaParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(SepiaFilter)));
 
         [Test]
+        public void TestSolarize() =>
+            Assert.IsInstanceOf<SolarizeFilter>(ReflectiveApi.ConstructFilterByName("Solarize"));
+
+        [Test]
+        public void TestSolarizeParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(SolarizeFilter)));
+
+        [Test]
         public void TestTreshold()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Treshold");

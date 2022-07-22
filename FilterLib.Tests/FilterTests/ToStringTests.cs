@@ -122,6 +122,9 @@ namespace FilterLib.Tests.FilterTests
                 new SepiaFilter(),
                 "SepiaFilter");
             yield return new TestCaseData(
+                new SolarizeFilter(),
+                "SolarizeFilter");
+            yield return new TestCaseData(
                 new TresholdFilter(123),
                 "TresholdFilter(Treshold: 123)");
             yield return new TestCaseData(

@@ -44,7 +44,9 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("_input.bmp", new PosterizeFilter(256), 1);
         
             yield return new TestCaseData("Sepia.bmp", new SepiaFilter(), 1);
-        
+
+            yield return new TestCaseData("Solarize.bmp", new SolarizeFilter(), 0);
+
             yield return new TestCaseData("Treshold_63.bmp", new TresholdFilter(63), 1);
             yield return new TestCaseData("Treshold_127.bmp", new TresholdFilter(127), 1);
             yield return new TestCaseData("Treshold_191.bmp", new TresholdFilter(191), 1);
