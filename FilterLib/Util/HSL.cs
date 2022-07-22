@@ -36,25 +36,21 @@
         public RGB ToRGB()
         {
             float r, g, b, v;
-            float lf = this.L / 100f;
-            float sf = this.S / 100f;
-            float hf = this.H / 360f;
+            float lf = L / 100f;
+            float sf = S / 100f;
+            float hf = H / 360f;
             r = g = b = lf;
             v = (lf <= 0.5f) ? (lf * (1f + sf)) : (lf + sf - lf * sf);
             if (v > 0)
             {
-                float m;
-                float sv;
-                int sextant;
-                float fract, vsf, mid1, mid2;
-                m = lf + lf - v;
-                sv = (v - m) / v;
+                float m = lf + lf - v;
+                float sv = (v - m) / v;
                 hf *= 6f;
-                sextant = (int)hf;
-                fract = hf - sextant;
-                vsf = v * sv * fract;
-                mid1 = m + vsf;
-                mid2 = v - vsf;
+                int sextant = (int)hf;
+                float fract = hf - sextant;
+                float vsf = v * sv * fract;
+                float mid1 = m + vsf;
+                float mid2 = v - vsf;
                 switch (sextant)
                 {
                     case 0: r = v; g = mid1; b = m; break;
@@ -63,6 +59,7 @@
                     case 3: r = m; g = mid2; b = v; break;
                     case 4: r = mid1; g = m; b = v; break;
                     case 5: r = v; g = m; b = mid2; break;
+                    default: throw new System.Exception($"Sextant {sextant} should be between 0 and 5.");
                 }
             }
             return new RGB((int)(r * 255), (int)(g * 255), (int)(b * 255));
