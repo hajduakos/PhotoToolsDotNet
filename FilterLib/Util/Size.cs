@@ -45,7 +45,7 @@ namespace FilterLib.Util
             throw new FormatException("Size must end with '%' or 'px' as unit.");
         }
 
-        private class AbsoluteSize : Size
+        private sealed class AbsoluteSize : Size
         {
             private readonly int val;
             public AbsoluteSize(int val) => this.val = val;
@@ -55,7 +55,7 @@ namespace FilterLib.Util
             public override string ToString() => $"{val}px";
         }
 
-        private class RelativeSize : Size
+        private sealed class RelativeSize : Size
         {
             private readonly float pct;
             public RelativeSize(float percentage) => this.pct = percentage;
