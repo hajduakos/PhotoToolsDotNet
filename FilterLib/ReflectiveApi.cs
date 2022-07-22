@@ -48,7 +48,7 @@ namespace FilterLib
         {
             Type type = GetFilterTypeByName(name);
             if (type == null)
-                throw new ArgumentException("Filter '" + name + "' not found.");
+                throw new ArgumentException($"Filter '{name}' not found.");
 
             foreach (var constr in type.GetConstructors())
             {
@@ -61,7 +61,7 @@ namespace FilterLib
                     return (IFilter)constr.Invoke(parameters.ToArray());
             }
 
-            throw new ArgumentException("No parameterless constructor found for '" + name + "'.");
+            throw new ArgumentException($"No parameterless constructor found for '{name}'.");
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace FilterLib
                 if (pi.Name == name)
                     return pi;
 
-            throw new ArgumentException("Property '" + name + "' not found for '" + type.Name + "'.");
+            throw new ArgumentException($"Property '{name}' not found for '{type.Name}'.");
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace FilterLib
                 if (ci.GetParameters().Length == 1 && ci.GetParameters()[0].ParameterType == typeof(string))
                     return ci.Invoke(new object[] { value });
 
-            throw new ArgumentException("Parsing type '" + type.Name + "' is not yet supported.");
+            throw new ArgumentException($"Parsing type '{type.Name}' is not yet supported.");
         }
 
         /// <summary>
@@ -119,18 +119,18 @@ namespace FilterLib
         /// <param name="value">Value</param>
         private static void RangeCheck(PropertyInfo pi, object value)
         {
-            foreach (var attr in pi.GetCustomAttributes<FilterParamMinAttribute>())
-                if (Convert.ToInt32(value) < attr.Value)
-                    throw new ArgumentOutOfRangeException("Parameter value " + value + " is less than minimum (" + attr.Value + ")");
-            foreach (var attr in pi.GetCustomAttributes<FilterParamMaxAttribute>())
-                if (Convert.ToInt32(value) > attr.Value)
-                    throw new ArgumentOutOfRangeException("Parameter value " + value + " is greater than maximum (" + attr.Value + ")");
-            foreach (var attr in pi.GetCustomAttributes<FilterParamMinFAttribute>())
-                if (Convert.ToDouble(value) < attr.Value)
-                    throw new ArgumentOutOfRangeException("Parameter value " + value + " is less than minimum (" + attr.Value + ")");
-            foreach (var attr in pi.GetCustomAttributes<FilterParamMaxFAttribute>())
-                if (Convert.ToDouble(value) > attr.Value)
-                    throw new ArgumentOutOfRangeException("Parameter value " + value + " is greater than maximum (" + attr.Value + ")");
+            foreach (var v in pi.GetCustomAttributes<FilterParamMinAttribute>().Select(a => a.Value))
+                if (Convert.ToInt32(value) < v)
+                    throw new ArgumentOutOfRangeException($"Parameter value {value} is less than minimum ({v})");
+            foreach (var v in pi.GetCustomAttributes<FilterParamMaxAttribute>().Select(a => a.Value))
+                if (Convert.ToInt32(value) > v)
+                    throw new ArgumentOutOfRangeException($"Parameter value {value} is greater than maximum ({v})");
+            foreach (var v in pi.GetCustomAttributes<FilterParamMinFAttribute>().Select(a => a.Value))
+                if (Convert.ToDouble(value) < v)
+                    throw new ArgumentOutOfRangeException($"Parameter value {value} is less than minimum ({v})");
+            foreach (var v in pi.GetCustomAttributes<FilterParamMaxFAttribute>().Select(a => a.Value))
+                if (Convert.ToDouble(value) > v)
+                    throw new ArgumentOutOfRangeException($"Parameter value {value} is greater than maximum ({v})");
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace FilterLib
         {
             Type type = GetBlendTypeByName(name);
             if (type == null)
-                throw new ArgumentException("Blend '" + name + "' not found.");
+                throw new ArgumentException($"Blend '{name}' not found.");
 
             foreach (var constr in type.GetConstructors())
             {
@@ -194,7 +194,7 @@ namespace FilterLib
                     return (IBlend)constr.Invoke(parameters.ToArray());
             }
 
-            throw new ArgumentException("No parameterless constructor found for '" + name + "'.");
+            throw new ArgumentException($"No parameterless constructor found for '{name}'.");
         }
     }
 }
