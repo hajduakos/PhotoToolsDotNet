@@ -15,7 +15,7 @@ namespace FilterLib.Blending.Cancelation
         public DivideBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
+        protected override byte BlendComponent(byte compBottom, byte compTop)
         {
             if (compTop == 0) return 255;
             return (compBottom / (float)compTop * 255f).ClampToByte();

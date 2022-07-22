@@ -65,7 +65,7 @@ namespace FilterLib.Blending
         /// <param name="topG">Top green</param>
         /// <param name="topB">Top blue</param>
         /// <returns>Blended value (R, G, B)</returns>
-        protected abstract unsafe (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB);
+        protected abstract (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB);
 
         /// <summary>
         /// Gets called when processing ends.

@@ -17,7 +17,7 @@ namespace FilterLib.Blending.Contrast
         public PinLightBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
+        protected override byte BlendComponent(byte compBottom, byte compTop)
         {
             if (compTop > 127) return Math.Max(compBottom, 2 * compTop - 255).ClampToByte();
             else return Math.Min(compBottom, 2 * compTop).ClampToByte();

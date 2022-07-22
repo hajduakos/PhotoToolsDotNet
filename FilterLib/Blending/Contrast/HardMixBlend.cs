@@ -13,7 +13,7 @@
         public HardMixBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
+        protected override byte BlendComponent(byte compBottom, byte compTop) =>
             (byte)(compTop < 255 - compBottom ? 0 : 255);
         
     }

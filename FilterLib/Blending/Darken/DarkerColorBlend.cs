@@ -14,7 +14,7 @@
         public DarkerColorBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB)
+        protected override (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB)
         {
             if (Util.RGB.GetLuminance(botR, botG, botB) > Util.RGB.GetLuminance(topR, topG, topB))
                 return (topR, topG, topB);

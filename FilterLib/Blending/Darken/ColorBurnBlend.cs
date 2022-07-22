@@ -15,7 +15,7 @@ namespace FilterLib.Blending.Darken
         public ColorBurnBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
+        protected override byte BlendComponent(byte compBottom, byte compTop)
         {
             if (compTop == 0) return 0;
             else return (255 - (255 - compBottom) / (float)compTop * 255f).ClampToByte();

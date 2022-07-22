@@ -13,7 +13,7 @@
         public LightenBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
+        protected override byte BlendComponent(byte compBottom, byte compTop) =>
             System.Math.Max(compBottom, compTop);
     }
 }

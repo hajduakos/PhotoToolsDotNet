@@ -15,7 +15,7 @@ namespace FilterLib.Blending.Darken
         public MultiplyBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop) =>
+        protected override byte BlendComponent(byte compBottom, byte compTop) =>
             (compBottom * compTop / 255f).ClampToByte();
     }
 }

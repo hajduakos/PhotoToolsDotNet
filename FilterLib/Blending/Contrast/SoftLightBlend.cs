@@ -15,7 +15,7 @@ namespace FilterLib.Blending.Contrast
         public SoftLightBlend(int opacity = 100) : base(opacity) { }
 
         /// <inheritdoc/>
-        protected override unsafe byte BlendComponent(byte compBottom, byte compTop)
+        protected override byte BlendComponent(byte compBottom, byte compTop)
         {
             if (compTop <= 127)
                 return (2 * compBottom * compTop / 255f + compBottom / 255f * compBottom / 255f * (255 - 2 * compTop)).ClampToByte();
