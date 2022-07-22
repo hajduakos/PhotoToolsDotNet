@@ -32,7 +32,7 @@ namespace FilterLib.Util
         /// </summary>
         /// <param name="start">Start color</param>
         /// <param name="end">End color</param>
-        public Gradient(RGB start, RGB end) : this(new RGB[] { start, end }, new float[] { 0, 1 }) { }
+        public Gradient(RGB start, RGB end) : this(new[] { start, end }, new[] { 0f, 1f }) { }
 
         /// <summary>
         /// Create a uniform gradient between two colors and a midpoint.
@@ -40,7 +40,7 @@ namespace FilterLib.Util
         /// <param name="start">Start color</param>
         /// <param name="mid">Midpoint color</param>
         /// <param name="end">End color</param>
-        public Gradient(RGB start, RGB mid, RGB end) : this(new RGB[] { start, mid, end }, new float[] { 0, 0.5f, 1 }) { }
+        public Gradient(RGB start, RGB mid, RGB end) : this(new[] { start, mid, end }, new[] { 0f, .5f, 1f }) { }
 
         /// <summary>
         /// Parse a gradient from a string of form s (r g b), s (r g b), ..., s (r g b).

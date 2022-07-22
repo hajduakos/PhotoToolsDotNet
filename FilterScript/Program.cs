@@ -39,7 +39,7 @@ namespace FilterScript
                     break;
                 case ".jpg":
                 case ".jpeg":
-                    EncoderParameters eps = new(1) { Param = new EncoderParameter[] { new EncoderParameter(Encoder.Quality, 97L) } };
+                    EncoderParameters eps = new(1) { Param = new[] { new EncoderParameter(Encoder.Quality, 97L) } };
                     output.Save(outputPath, GetEncoder(ImageFormat.Jpeg), eps);
                     break;
                 default:

@@ -48,6 +48,6 @@
                 return 4 * GetItem(x % (1 << (s - 1)), y % (1 << (s - 1)), s - 1) + baseMatrix[x / (1 << (s - 1)) * 2 + y / (1 << (s - 1))];
         }
 
-        private static readonly int[] baseMatrix = new int[] { 0, 2, 3, 1 };
+        private static readonly int[] baseMatrix = new[] { 0, 2, 3, 1 };
     }
 }
