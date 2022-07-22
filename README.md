@@ -1,5 +1,7 @@
 # PhotoTools.Net
 
+[![Coverage Status](https://coveralls.io/repos/github/hajduakos/PhotoToolsDotNet/badge.svg?branch=master)](https://coveralls.io/github/hajduakos/PhotoToolsDotNet?branch=master)
+
 Tools for processing photos.
 
 ## Building
