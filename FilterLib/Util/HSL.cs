@@ -3,7 +3,7 @@
     /// <summary>
     /// Represent a color in the HSL (hue, saturation, lightness) color space.
     /// </summary>
-    public struct HSL
+    public struct HSL : System.IEquatable<HSL>
     {
         /// <summary> Hue </summary>
         public int H { get; private set; }
@@ -22,11 +22,11 @@
         /// <param name="l">Lightness</param>
         public HSL(int h = 0, int s = 0, int l = 0)
         {
-            this.H = h;
-            while (this.H < 0) this.H += 360;
-            this.H %= 360;
-            this.S = s.Clamp(0, 100);
-            this.L = l.Clamp(0, 100);
+            H = h;
+            while (H < 0) H += 360;
+            H %= 360;
+            S = s.Clamp(0, 100);
+            L = l.Clamp(0, 100);
         }
 
         /// <summary>
@@ -73,5 +73,7 @@
         public static bool operator !=(HSL c1, HSL c2) => !(c1 == c2);
 
         public override string ToString() => $"HSL({H}, {S}, {L})";
+
+        public bool Equals(HSL other) => this == other;
     }
 }

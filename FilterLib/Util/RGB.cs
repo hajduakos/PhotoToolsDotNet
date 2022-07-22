@@ -5,7 +5,7 @@ namespace FilterLib.Util
     /// <summary>
     /// Represents a color in the RGB (red, green, blue) color space.
     /// </summary>
-    public struct RGB
+    public struct RGB : System.IEquatable<RGB>
     {
         /// <summary> Red component </summary>
         public byte R { get; private set; }
@@ -90,5 +90,7 @@ namespace FilterLib.Util
         private const float BRatio = .114f;
 
         public static float GetLuminance(byte r, byte g, byte b) => RRatio * r + GRatio * g + BRatio * b;
+
+        public bool Equals(RGB other) => this == other;
     }
 }

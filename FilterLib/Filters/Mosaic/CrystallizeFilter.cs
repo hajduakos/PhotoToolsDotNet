@@ -57,11 +57,10 @@ namespace FilterLib.Filters.Mosaic
             Seed = seed;
         }
 
-
         /// <summary>
         /// Private helper class representing a point
         /// </summary>
-        private struct Cpoint
+        private struct Cpoint : System.IEquatable<Cpoint>
         {
             public int x, y; // Coordinates
 
@@ -70,6 +69,8 @@ namespace FilterLib.Filters.Mosaic
 
             // Get distance from other point (without square root)
             public int Dist(int x1, int y1) => (x - x1) * (x - x1) + (y - y1) * (y - y1);
+
+            public bool Equals(Cpoint other) => x == other.x && y == other.y;
         }
 
         /// <inheritdoc/>
