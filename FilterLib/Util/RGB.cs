@@ -1,4 +1,6 @@
-﻿namespace FilterLib.Util
+﻿using MathF = System.MathF;
+
+namespace FilterLib.Util
 {
     /// <summary>
     /// Represents a color in the RGB (red, green, blue) color space.
@@ -47,6 +49,7 @@
         /// <returns>HSL color</returns>
         public HSL ToHSL()
         {
+            const float EPS = .00001f;
             float h = 0, s = 0, l;
             float rf = R / 255f;
             float gf = G / 255f;
@@ -56,11 +59,11 @@
             float max = rf > gf ? rf : gf;
             max = max > bf ? max : bf;
             l = (max + min) / 2;
-            if (max != min)
+            if (MathF.Abs(max-min) > EPS)
             {
-                if (rf == max) h = (gf - bf) / (max - min);
-                if (gf == max) h = 2 + (bf - rf) / (max - min);
-                if (bf == max) h = 4 + (rf - gf) / (max - min);
+                if (MathF.Abs(rf - max) <= EPS) h = (gf - bf) / (max - min);
+                if (MathF.Abs(gf - max) <= EPS) h = 2 + (bf - rf) / (max - min);
+                if (MathF.Abs(bf - max) <= EPS) h = 4 + (rf - gf) / (max - min);
 
                 if (l < 0.5) s = (max - min) / (max + min);
                 else s = (max - min) / (2f - max - min);
