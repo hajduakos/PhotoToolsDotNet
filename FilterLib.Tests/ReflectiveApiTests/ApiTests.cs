@@ -29,5 +29,13 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestBlendNotExists() =>
             Assert.IsFalse(ReflectiveApi.CheckBlendExists("This should not exist..."));
 
+        [Test]
+        public void TestFilterNotExistsException() =>
+            Assert.Throws<System.ArgumentException>(() => ReflectiveApi.ConstructFilterByName("This should not exist..."));
+
+        [Test]
+        public void TestBlendNotExistsException() =>
+            Assert.Throws<System.ArgumentException>(() => ReflectiveApi.ConstructBlendByName("This should not exist..."));
+
     }
 }
