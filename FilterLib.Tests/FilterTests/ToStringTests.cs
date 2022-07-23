@@ -116,6 +116,9 @@ namespace FilterLib.Tests.FilterTests
                 new OrtonFilter(12, 34),
                 "OrtonFilter(Strength: 12, Radius: 34)");
             yield return new TestCaseData(
+                new OctreeQuantizerFilter(12),
+                "OctreeQuantizerFilter(Levels: 12)");
+            yield return new TestCaseData(
                 new PosterizeFilter(123),
                 "PosterizeFilter(Levels: 123)");
             yield return new TestCaseData(
