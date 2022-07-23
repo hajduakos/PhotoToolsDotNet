@@ -55,6 +55,9 @@ namespace FilterLib.Tests
             Assert.AreEqual(10, new RGB(20, 10, 50).G);
             Assert.AreEqual(50, new RGB(20, 10, 50).B);
             Assert.AreEqual(new RGB(0, 255, 255), new RGB(-10, 270, 1000));
+            Assert.IsTrue(new RGB(0, 255, 255).Equals(new RGB(-10, 270, 1000)));
+            Assert.IsTrue(new RGB(0, 255, 255) == new RGB(-10, 270, 1000));
+            Assert.IsTrue(new RGB(0, 255, 255) != new RGB(1, 2, 3));
         }
 
         [Test]
@@ -64,6 +67,9 @@ namespace FilterLib.Tests
             Assert.AreEqual(10, new HSL(20, 10, 50).S);
             Assert.AreEqual(50, new HSL(20, 10, 50).L);
             Assert.AreEqual(new HSL(10, 100, 0), new HSL(370, 200, -10));
+            Assert.IsTrue(new HSL(10, 100, 0).Equals(new HSL(370, 200, -10)));
+            Assert.IsTrue(new HSL(10, 100, 0) == new HSL(370, 200, -10));
+            Assert.IsTrue(new HSL(10, 100, 0) != new HSL(1, 2, 3));
         }
 
         [Test]
