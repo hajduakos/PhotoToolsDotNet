@@ -34,7 +34,7 @@ namespace FilterLib.Filters.Adjustments
                 totalLost += lumHistogram[dark++];
             // Determine light value
             totalLost = 0;
-            while (lumHistogram[255 - light] < localLimit && totalLost < globalLimit)
+            while (lumHistogram[255 - light] < localLimit && totalLost < globalLimit && 255 - light - 1 > dark)
                 totalLost += lumHistogram[255 - light++];
             return (dark, light);
         }
