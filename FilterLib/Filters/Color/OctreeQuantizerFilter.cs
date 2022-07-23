@@ -203,9 +203,9 @@ namespace FilterLib.Filters.Color
         private sealed class Octree
         {
             // Helper list to keep track of nodes at each level, except the last
-            private List<Node>[] levels;
+            private readonly List<Node>[] levels;
             // Root node which is at level -1
-            private Node root;
+            private readonly Node root;
 
             public Octree()
             {
