@@ -162,6 +162,13 @@ namespace FilterLib.Tests
         }
 
         [Test]
+        public void TestGradientExceptions()
+        {
+            Assert.Throws<ArgumentException>(() => new Gradient(new RGB[] { new(), new() }, new[] { 0f, .5f, 1f }));
+            Assert.Throws<ArgumentException>(() => new Gradient(new RGB[] { new() }, new[] { 1f }));
+        }
+
+        [Test]
         public void TestSize()
         {
             Assert.AreEqual(25, Size.Absolute(25).ToAbsolute(0));
