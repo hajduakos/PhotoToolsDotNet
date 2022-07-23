@@ -16,7 +16,7 @@ namespace FilterLib.Filters.Color
     public sealed class OctreeQuantizerFilter : FilterInPlaceBase
     {
         private int levels;
-
+        
         /// <summary>
         /// Number of colors in the resulting palette.
         /// </summary>
@@ -54,15 +54,14 @@ namespace FilterLib.Filters.Color
                     reporter?.Report(0, y, 2 * image.Height - 1);
                 }
                 // Step 2: build reduced color palette
-                List<(byte, byte, byte)> palette = tree.MakePalette(Levels);
+                tree.Reduce(Levels);
                 // Step 3: replace each color with representative from palette
                 ptr = start;
                 for (int y = 0; y < image.Height; ++y)
                 {
                     for (int x = 0; x < image.Width; ++x)
                     {
-                        int idx = tree.GetPaletteIndex(ptr[0], ptr[1], ptr[2]);
-                        (ptr[0], ptr[1], ptr[2]) = palette[idx];
+                        (ptr[0], ptr[1], ptr[2]) = tree.GetPaletteColor(ptr[0], ptr[1], ptr[2]);
                         ptr += 3;
                     }
                     reporter?.Report(0, image.Height + y, 2 * image.Height - 1);
@@ -86,9 +85,6 @@ namespace FilterLib.Filters.Color
             // Number of pixels having this color
             public int PixelCount { get; set; }
 
-            // Index in the final palette
-            public int PaletteIdx { get; set; }
-
             // Child nodes (can be null)
             public Node[] Children { get; set; }
 
@@ -102,7 +98,6 @@ namespace FilterLib.Filters.Color
                 R = G = B = 0;
                 PixelCount = 0;
                 TotalPixelCount = 0;
-                PaletteIdx = -1; // Not yet known
                 Children = new Node[8];
                 tree.AddNode(level, this);
             }
@@ -140,16 +135,16 @@ namespace FilterLib.Filters.Color
                 }
             }
 
-            // Get the index of a color in the final palette by traversing the
-            // tree and finding the leaf node corresponding to the color
-            public int GetPaletteIndex(int r, int g, int b, int level)
+            // Get the color in the final palette color by traversing the tree and finding
+            // the leaf node corresponding to the given original color
+            public (byte, byte, byte) GetPaletteColor(int r, int g, int b, int level)
             {
                 // Leaf found
-                if (IsLeaf) return PaletteIdx;
+                if (IsLeaf) return GetAvgColor();
                 // Otherwise recurse
                 int index = GetIndex(r, g, b, level);
                 System.Diagnostics.Debug.Assert(Children[index] != null);
-                return Children[index].GetPaletteIndex(r, g, b, level + 1);
+                return Children[index].GetPaletteColor(r, g, b, level + 1);
             }
 
             // Merge child nodes into the node (adding their colors
@@ -206,12 +201,15 @@ namespace FilterLib.Filters.Color
             private readonly List<Node>[] levels;
             // Root node which is at level -1
             private readonly Node root;
+            // Has the tree been already reduced
+            private bool reduced;
 
             public Octree()
             {
                 levels = new List<Node>[MAX_DEPTH];
                 for (int i = 0; i < levels.Length; ++i) levels[i] = new();
                 root = new Node(-1, this);
+                reduced = false;
             }
 
             // Get all leaves, after compression, this list corresponds to the
@@ -227,10 +225,14 @@ namespace FilterLib.Filters.Color
             }
 
             // Add a color recursively to the tree
-            public void AddColor(byte r, byte g, byte b) => root.AddColor(r, g, b, 0, this);
+            public void AddColor(byte r, byte g, byte b)
+            {
+                if (reduced) throw new System.InvalidOperationException("Octree has already been reduced.");
+                root.AddColor(r, g, b, 0, this);
+            }
 
             // Make the reduced palette by merging nodes bottom up until the limit is reached
-            public List<(byte, byte, byte)> MakePalette(int max)
+            public void Reduce(int max)
             {
                 // Get where we start from
                 int leafCount = GetLeaves().Count();
@@ -250,20 +252,11 @@ namespace FilterLib.Filters.Color
 
                 System.Diagnostics.Debug.Assert(GetLeaves().Count() == leafCount);
                 System.Diagnostics.Debug.Assert(leafCount <= max);
-
-                // Create the palette and remember the index in each node for lookup later
-                List<(byte, byte, byte)> palette = new();
-                int paletteIdx = 0;
-                foreach (Node n in GetLeaves())
-                {
-                    palette.Add(n.GetAvgColor());
-                    n.PaletteIdx = paletteIdx++;
-                }
-                return palette;
+                reduced = true;
             }
 
-            // For a given color, get the index of the representative color in the final palette
-            public int GetPaletteIndex(byte r, byte g, byte b) => root.GetPaletteIndex(r, g, b, 0);
+            // For a given color, get the representative color in the final palette
+            public (byte, byte, byte) GetPaletteColor(byte r, byte g, byte b) => root.GetPaletteColor(r, g, b, 0);
         }
     }
 }
