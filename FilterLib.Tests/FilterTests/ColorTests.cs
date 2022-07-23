@@ -35,6 +35,18 @@ namespace FilterLib.Tests.FilterTests
 
             yield return new TestCaseData("Invert.bmp", new InvertFilter(), 0);
 
+            yield return new TestCaseData("OctreeQuantizer_2.bmp", new OctreeQuantizerFilter(2), 1);
+            yield return new TestCaseData("OctreeQuantizer_8.bmp", new OctreeQuantizerFilter(8), 1);
+            yield return new TestCaseData("OctreeQuantizer_16.bmp", new OctreeQuantizerFilter(16), 1);
+            yield return new TestCaseData("OctreeQuantizer_24.bmp", new OctreeQuantizerFilter(24), 1);
+            yield return new TestCaseData("OctreeQuantizer_32.bmp", new OctreeQuantizerFilter(32), 1);
+            yield return new TestCaseData("OctreeQuantizer_64.bmp", new OctreeQuantizerFilter(64), 1);
+            yield return new TestCaseData("OctreeQuantizer_96.bmp", new OctreeQuantizerFilter(96), 1);
+            yield return new TestCaseData("OctreeQuantizer_128.bmp", new OctreeQuantizerFilter(128), 1);
+            yield return new TestCaseData("OctreeQuantizer_256.bmp", new OctreeQuantizerFilter(256), 1);
+            yield return new TestCaseData("_input.bmp", new OctreeQuantizerFilter(160 * 90), 1);
+            yield return new TestCaseData("_input.bmp", new OctreeQuantizerFilter(256 * 256 * 256), 1);
+
             yield return new TestCaseData("_input.bmp", new OrtonFilter(0, 3), 0);
             yield return new TestCaseData("Orton_80_5.bmp", new OrtonFilter(80, 5), 1);
 

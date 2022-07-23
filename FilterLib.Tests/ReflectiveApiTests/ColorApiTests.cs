@@ -47,6 +47,19 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestInvertParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(InvertFilter)));
 
         [Test]
+        public void TestOctreeQuantizer()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("OctreeQuantizer");
+            Assert.IsInstanceOf<OctreeQuantizerFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "Levels", "8");
+            OctreeQuantizerFilter ff = f as OctreeQuantizerFilter;
+            Assert.AreEqual(8, ff.Levels);
+        }
+
+        [Test]
+        public void TestOctreeQuantizerParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(PosterizeFilter)));
+
+        [Test]
         public void TestOrton()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Orton");
