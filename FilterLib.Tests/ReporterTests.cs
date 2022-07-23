@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FilterLib.Tests
 {
-    public class ReportingTests
+    public class ReporterTests
     {
         private class ReporterStub : IReporter
         {

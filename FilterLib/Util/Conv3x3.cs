@@ -47,7 +47,7 @@ namespace FilterLib.Util
             matrix[0, 1] = ml; matrix[1, 1] = mm; matrix[2, 1] = mr;
             matrix[0, 2] = bl; matrix[1, 2] = bm; matrix[2, 2] = br;
             Divisor = (divisor == 0) ? 1 : divisor; // Divisor (can't be 0)
-            this.Bias = bias; // Bias
+            Bias = bias;
         }
 
         /// <summary>

@@ -16,9 +16,9 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("_input_eq.bmp", "ConvertToPolar_72.bmp", new ConvertToPolarFilter(72), 1);
         
             yield return new TestCaseData("_input.bmp", "_input.bmp",
-                new ConvolutionFilter(new Util.Conv3x3(0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0)), 1);
+                new ConvolutionFilter(new Conv3x3(0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0)), 1);
             yield return new TestCaseData("_input.bmp", "Convolution_1_1_1_0_0_0_-1_-1_-1_2_30.bmp",
-                new ConvolutionFilter(new Util.Conv3x3(1, 1, 1, 0, 0, 0, -1, -1, -1, 2, 30)), 1);
+                new ConvolutionFilter(new Conv3x3(1, 1, 1, 0, 0, 0, -1, -1, -1, 2, 30)), 1);
         
             yield return new TestCaseData("_input_eq.bmp", "EquirectToStereo_100_0.bmp",
                 new EquirectangularToStereographicFilter(100, 0), 1);

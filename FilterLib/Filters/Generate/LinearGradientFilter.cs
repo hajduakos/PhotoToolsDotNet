@@ -57,6 +57,7 @@ namespace FilterLib.Filters.Generate
         /// <inheritdoc/>
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
+            reporter?.Start();
             int x1 = StartX.ToAbsolute(image.Width);
             int x2 = EndX.ToAbsolute(image.Width);
             int y1 = StartY.ToAbsolute(image.Height);
@@ -80,8 +81,10 @@ namespace FilterLib.Filters.Generate
                         ptr[0] = ptr[1] = ptr[2] = (t * 255).ClampToByte();
                         ptr += 3;
                     }
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
             }
+            reporter?.Done();
         }
     }
 }
