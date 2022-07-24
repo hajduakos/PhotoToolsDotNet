@@ -16,6 +16,7 @@ using FilterLib.Reporting;
 using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FilterLib.Tests.FilterTests
 {
@@ -139,6 +140,16 @@ namespace FilterLib.Tests.FilterTests
             Assert.IsTrue(rep.StartCalled);
             Assert.IsTrue(rep.Reported);
             Assert.IsTrue(rep.DoneCalled);
+        }
+
+        [Test]
+        public void TestCount()
+        {
+            foreach (var filter in ReflectiveApi.GetFilterTypes())
+            {
+                bool found = Data().Any(tc => tc.Arguments[0].GetType() == filter);
+                Assert.IsTrue(found, $"Reporting test not found for {filter.Name}");
+            }
         }
     }
 }
