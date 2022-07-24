@@ -50,6 +50,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new BoxBlurFilter());
             yield return new TestCaseData(new GaussianBlurFilter(1));
             yield return new TestCaseData(new MotionBlurFilter());
+            yield return new TestCaseData(new ZoomBlurFilter());
 
             yield return new TestCaseData(new FadeBorderFilter(Size.Absolute(1), new RGB()));
             yield return new TestCaseData(new JitterBorderFilter());

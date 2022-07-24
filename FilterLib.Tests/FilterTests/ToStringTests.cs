@@ -80,6 +80,9 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(
                 new MotionBlurFilter(12, 34),
                 "MotionBlurFilter(Length: 12, Angle: 34)");
+            yield return new TestCaseData(
+                new ZoomBlurFilter(Size.Absolute(12), Size.Absolute(34), 56),
+                "ZoomBlurFilter(CenterX: 12px, CenterY: 34px, Amount: 56)");
         }
 
         internal static IEnumerable<TestCaseData> Border()

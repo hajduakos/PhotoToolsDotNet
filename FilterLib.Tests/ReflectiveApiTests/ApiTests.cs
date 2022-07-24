@@ -7,7 +7,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
     {
         [Test]
         public void TestListFilters() =>
-            Assert.AreEqual(69, ReflectiveApi.GetFilterTypes().Count());
+            Assert.AreEqual(70, ReflectiveApi.GetFilterTypes().Count());
 
         [Test]
         public void TestListBlends() =>

@@ -1,5 +1,6 @@
 ﻿using FilterLib.Filters;
 using FilterLib.Filters.Blur;
+using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -24,6 +25,12 @@ namespace FilterLib.Tests.FilterTests
 
             yield return new TestCaseData("_input.bmp", new MotionBlurFilter(0, 0), 1);
             yield return new TestCaseData("MotionBlur_10_30.bmp", new MotionBlurFilter(10, 30), 1);
+
+            yield return new TestCaseData("_input.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 0), 1);
+            yield return new TestCaseData("ZoomBlur_50pct_50pct_20.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 20), 1);
+            yield return new TestCaseData("ZoomBlur_50pct_50pct_50.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 50), 1);
+            yield return new TestCaseData("ZoomBlur_50pct_50pct_100.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 100), 1);
+            yield return new TestCaseData("ZoomBlur_100pct_100pct_30.bmp", new ZoomBlurFilter(Size.Relative(1), Size.Relative(1), 30), 1);
         }
 
         [Test]

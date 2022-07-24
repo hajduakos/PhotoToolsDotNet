@@ -56,5 +56,22 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
         [Test]
         public void TestMotionBlurParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(MotionBlurFilter)));
+
+        [Test]
+        public void TestZoomBlur()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("ZoomBlur");
+            Assert.IsInstanceOf<ZoomBlurFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "CenterX", "10px");
+            ReflectiveApi.SetFilterPropertyByName(f, "CenterY", "20px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Amount", "30");
+            ZoomBlurFilter ff = f as ZoomBlurFilter;
+            Assert.AreEqual(10, ff.CenterX.ToAbsolute(100));
+            Assert.AreEqual(20, ff.CenterY.ToAbsolute(100));
+            Assert.AreEqual(30, ff.Amount);
+        }
+
+        [Test]
+        public void TestZoomBlurParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(ZoomBlurFilter)));
     }
 }
