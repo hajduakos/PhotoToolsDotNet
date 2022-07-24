@@ -172,7 +172,7 @@ namespace FilterLib.Tests
             public void Start() => StartCalled = true;
         }
 
-        private Image img = new(10, 10);
+        private readonly Image img = new(10, 10);
 
         [Test]
         [TestCaseSource("FilterTestCases")]
