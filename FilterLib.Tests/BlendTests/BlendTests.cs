@@ -9,7 +9,7 @@ using FilterLib.Blending.Normal;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace FilterLib.Tests
+namespace FilterLib.Tests.BlendTests
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]

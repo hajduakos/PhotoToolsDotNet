@@ -1,4 +1,12 @@
-﻿using FilterLib.Filters;
+﻿using FilterLib.Blending;
+using FilterLib.Blending.Cancelation;
+using FilterLib.Blending.Component;
+using FilterLib.Blending.Contrast;
+using FilterLib.Blending.Darken;
+using FilterLib.Blending.Inversion;
+using FilterLib.Blending.Lighten;
+using FilterLib.Blending.Normal;
+using FilterLib.Filters;
 using FilterLib.Filters.Adjustments;
 using FilterLib.Filters.Artistic;
 using FilterLib.Filters.Blur;
@@ -18,12 +26,12 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FilterLib.Tests.FilterTests
+namespace FilterLib.Tests
 {
     [TestFixture]
     public class ReportingTests
     {
-        internal static IEnumerable<TestCaseData> Data()
+        internal static IEnumerable<TestCaseData> FilterTestCases()
         {
             yield return new TestCaseData(new AutoLevelsFilter());
             yield return new TestCaseData(new BrightnessFilter());
@@ -107,6 +115,41 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(new RotateLeftFilter());
             yield return new TestCaseData(new RotateRightFilter());
         }
+        internal static IEnumerable<TestCaseData> BlendTestCases()
+        {
+            yield return new TestCaseData(new DivideBlend());
+            yield return new TestCaseData(new SubtractBlend());
+
+            yield return new TestCaseData(new ColorBlend());
+            yield return new TestCaseData(new HueBlend());
+            yield return new TestCaseData(new LightnessBlend());
+            yield return new TestCaseData(new SaturationBlend());
+
+            yield return new TestCaseData(new HardLightBlend());
+            yield return new TestCaseData(new HardMixBlend());
+            yield return new TestCaseData(new LinearLightBlend());
+            yield return new TestCaseData(new OverlayBlend());
+            yield return new TestCaseData(new PinLightBlend());
+            yield return new TestCaseData(new SoftLightBlend());
+            yield return new TestCaseData(new VividLightBlend());
+
+            yield return new TestCaseData(new ColorBurnBlend());
+            yield return new TestCaseData(new DarkenBlend());
+            yield return new TestCaseData(new DarkerColorBlend());
+            yield return new TestCaseData(new LinearBurnBlend());
+            yield return new TestCaseData(new MultiplyBlend());
+
+            yield return new TestCaseData(new DifferenceBlend());
+            yield return new TestCaseData(new ExcludeBlend());
+
+            yield return new TestCaseData(new ColorDodgeBlend());
+            yield return new TestCaseData(new LightenBlend());
+            yield return new TestCaseData(new LighterColorBlend());
+            yield return new TestCaseData(new LinearDodgeBlend());
+            yield return new TestCaseData(new ScreenBlend());
+
+            yield return new TestCaseData(new NormalBlend());
+        }
 
         private sealed class ReporterStub : IReporter
         {
@@ -132,8 +175,8 @@ namespace FilterLib.Tests.FilterTests
         private Image img = new(10, 10);
 
         [Test]
-        [TestCaseSource("Data")]
-        public void Test(IFilter filter)
+        [TestCaseSource("FilterTestCases")]
+        public void TestFilters(IFilter filter)
         {
             ReporterStub rep = new();
             filter.Apply(img, rep);
@@ -143,12 +186,33 @@ namespace FilterLib.Tests.FilterTests
         }
 
         [Test]
-        public void TestCount()
+        [TestCaseSource("BlendTestCases")]
+        public void TestBlends(IBlend blend)
+        {
+            ReporterStub rep = new();
+            blend.Apply(img, img, rep);
+            Assert.IsTrue(rep.StartCalled);
+            Assert.IsTrue(rep.Reported);
+            Assert.IsTrue(rep.DoneCalled);
+        }
+
+        [Test]
+        public void TestAllFilters()
         {
             foreach (var filter in ReflectiveApi.GetFilterTypes())
             {
-                bool found = Data().Any(tc => tc.Arguments[0].GetType() == filter);
+                bool found = FilterTestCases().Any(tc => tc.Arguments[0].GetType() == filter);
                 Assert.IsTrue(found, $"Reporting test not found for {filter.Name}");
+            }
+        }
+
+        [Test]
+        public void TestAllBlends()
+        {
+            foreach (var blend in ReflectiveApi.GetBlendTypes())
+            {
+                bool found = BlendTestCases().Any(tc => tc.Arguments[0].GetType() == blend);
+                Assert.IsTrue(found, $"Reporting test not found for {blend.Name}");
             }
         }
     }
