@@ -1,4 +1,5 @@
-﻿using FilterLib.Reporting;
+﻿using FilterLib.Filters.Transform;
+using FilterLib.Reporting;
 using FilterLib.Util;
 using Math = System.Math;
 using MathF = System.MathF;
@@ -44,14 +45,21 @@ namespace FilterLib.Filters.Other
         }
 
         /// <summary>
+        /// Interpolation mode.
+        /// </summary>
+        [FilterParam]
+        public InterpolationMode Interpolation { get; set; }
+
+        /// <summary>
         /// Constructor with parameter
         /// </summary>
         /// <param name="aov">Angle of view [0;180[</param>
         /// <param name="spin">Spin [0;360]</param>
-        public EquirectangularToStereographicFilter(float aov = 120, float spin = 0)
+        public EquirectangularToStereographicFilter(float aov = 120, float spin = 0, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
         {
             AOV = aov;
             Spin = spin;
+            Interpolation = interpolation;
         }
 
         /// <inheritdoc/>
@@ -89,37 +97,40 @@ namespace FilterLib.Filters.Other
                         float lng = MathF.Atan2(yCorr, xCorr) * 180 / MathF.PI + 180 + spin;
                         if (lng > 360) lng -= 360;
 
-                        // Get X coordinate and points for interpolation in the original image
-                        float xOrg = lng * xMult; // Float point
-                        int x0 = (int)MathF.Floor(xOrg); // First point
-                        if (x0 >= image.Width) x0 = image.Width - 1;
-                        float xFrac = xOrg - x0; // Fraction part
-                        x0 *= 3;
-                        int x1 = (int)MathF.Ceiling(xOrg);
-                        if (x1 >= image.Width) x1 = image.Width - 1;
-                        x1 *= 3; // Second point
-
-                        // Get Y coordinate and points for interpolation in the original image
-                        float yOrg = lat * yMult; // Float point
-                        int y0 = (int)MathF.Floor(yOrg); // First point
-                        if (y0 >= image.Height) y0 = image.Height - 1;
-                        float yFrac = yOrg - y0; // Fraction part
-                        int y1 = (int)MathF.Ceiling(yOrg); // Second point
-                        if (y1 >= image.Height) y1 = image.Height - 1;
-
-                        // Bilinear interpolation
-                        newPtr[0] = (byte)(oldStart[y0 * oldWidth_3 + x0] * (1 - xFrac) * (1 - yFrac)
-                            + oldStart[y1 * oldWidth_3 + x0] * (1 - xFrac) * yFrac
-                            + oldStart[y0 * oldWidth_3 + x1] * xFrac * (1 - yFrac)
-                            + oldStart[y1 * oldWidth_3 + x1] * xFrac * yFrac);
-                        newPtr[1] = (byte)(oldStart[y0 * oldWidth_3 + x0 + 1] * (1 - xFrac) * (1 - yFrac)
-                            + oldStart[y1 * oldWidth_3 + x0 + 1] * (1 - xFrac) * yFrac
-                            + oldStart[y0 * oldWidth_3 + x1 + 1] * xFrac * (1 - yFrac)
-                            + oldStart[y1 * oldWidth_3 + x1 + 1] * xFrac * yFrac);
-                        newPtr[2] = (byte)(oldStart[y0 * oldWidth_3 + x0 + 2] * (1 - xFrac) * (1 - yFrac)
-                            + oldStart[y1 * oldWidth_3 + x0 + 2] * (1 - xFrac) * yFrac
-                            + oldStart[y0 * oldWidth_3 + x1 + 2] * xFrac * (1 - yFrac)
-                            + oldStart[y1 * oldWidth_3 + x1 + 2] * xFrac * yFrac);
+                        float xOrg = lng * xMult;
+                        float yOrg = lat * yMult;
+                        int x0, y0, x1, y1;
+                        switch (Interpolation)
+                        {
+                            case InterpolationMode.NearestNeighbor:
+                                x0 = Math.Min((int)MathF.Round(xOrg), image.Width - 1);
+                                y0 = Math.Min((int)MathF.Round(yOrg), image.Height - 1);
+                                byte* oldPx = oldStart + y0 * oldWidth_3 + x0 * 3;
+                                for (int i = 0; i < 3; ++i) newPtr[i] = oldPx[i];
+                                break;
+                            case InterpolationMode.Bilinear:
+                                x0 = Math.Min((int)MathF.Floor(xOrg), image.Width - 1);
+                                x1 = Math.Min((int)MathF.Ceiling(xOrg), image.Width - 1);
+                                float xRatio1 = xOrg - x0;
+                                float xRatio0 = 1 - xRatio1;
+                                x0 *= 3;
+                                x1 *= 3;
+                                y0 = Math.Min((int)MathF.Floor(yOrg), image.Height - 1);
+                                y1 = Math.Min((int)MathF.Ceiling(yOrg), image.Height - 1);
+                                float yRatio1 = yOrg - y0;
+                                float yRatio0 = 1 - yRatio1;
+                                byte* oldRow0 = oldStart + y0 * oldWidth_3;
+                                byte* oldRow1 = oldStart + y1 * oldWidth_3;
+                                for (int i = 0; i < 3; ++i)
+                                    newPtr[i] = (byte)(
+                                        oldRow0[x0 + i] * xRatio0 * yRatio0 +
+                                        oldRow1[x0 + i] * xRatio0 * yRatio1 +
+                                        oldRow0[x1 + i] * xRatio1 * yRatio0 +
+                                        oldRow1[x1 + i] * xRatio1 * yRatio1);
+                                break;
+                            default:
+                                throw new System.ArgumentException($"Unknown interpolation mode: {Interpolation}.");
+                        }
                         newPtr += 3;
                     }
                     reporter?.Report(y, 0, image.Height - 1);

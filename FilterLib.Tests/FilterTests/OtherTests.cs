@@ -1,5 +1,6 @@
 ﻿using FilterLib.Filters;
 using FilterLib.Filters.Other;
+using FilterLib.Filters.Transform;
 using FilterLib.Util;
 using NUnit.Framework;
 using System;
@@ -20,11 +21,13 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("_input.bmp", "Convolution_1_1_1_0_0_0_-1_-1_-1_2_30.bmp",
                 new ConvolutionFilter(new Conv3x3(1, 1, 1, 0, 0, 0, -1, -1, -1, 2, 30)), 1);
         
-            yield return new TestCaseData("_input_eq.bmp", "EquirectToStereo_100_0.bmp",
-                new EquirectangularToStereographicFilter(100, 0), 1);
-            yield return new TestCaseData("_input_eq.bmp", "EquirectToStereo_120_150.bmp",
-                new EquirectangularToStereographicFilter(120, 150), 1);
-        
+            yield return new TestCaseData("_input_eq.bmp", "EquirectToStereo_100_0_BL.bmp",
+                new EquirectangularToStereographicFilter(100, 0, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("_input_eq.bmp", "EquirectToStereo_120_150_BL.bmp",
+                new EquirectangularToStereographicFilter(120, 150, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("_input_eq.bmp", "EquirectToStereo_80_300_NN.bmp",
+                new EquirectangularToStereographicFilter(80, 300, InterpolationMode.NearestNeighbor), 1);
+
             yield return new TestCaseData("_input.bmp", "_input.bmp",
                 new WavesFilter(Size.Relative(1), Size.Absolute(0), WavesFilter.WaveDirection.Horizontal), 1);
             yield return new TestCaseData("_input.bmp", "_input.bmp",

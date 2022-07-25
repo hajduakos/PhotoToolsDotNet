@@ -49,14 +49,16 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.IsInstanceOf<EquirectangularToStereographicFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "AOV", "123.45");
             ReflectiveApi.SetFilterPropertyByName(f, "Spin", "67.89");
+            ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "Bilinear");
             EquirectangularToStereographicFilter ff = f as EquirectangularToStereographicFilter;
             Assert.AreEqual(123.45f, ff.AOV);
             Assert.AreEqual(67.89f, ff.Spin);
+            Assert.AreEqual(Util.InterpolationMode.Bilinear, ff.Interpolation);
         }
 
         [Test]
         public void TestEquirectangularToStereographicParCnt() =>
-            Assert.AreEqual(2, Common.ParamCount(typeof(EquirectangularToStereographicFilter)));
+            Assert.AreEqual(3, Common.ParamCount(typeof(EquirectangularToStereographicFilter)));
 
         [Test]
         public void TestWaves()

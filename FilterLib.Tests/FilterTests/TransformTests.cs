@@ -4,7 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using CropMode = FilterLib.Filters.Transform.RotateFilter.CropMode;
-using InterpolationMode = FilterLib.Filters.Transform.InterpolationMode;
+using InterpolationMode = FilterLib.Util.InterpolationMode;
 using Size = FilterLib.Util.Size;
 
 namespace FilterLib.Tests.FilterTests

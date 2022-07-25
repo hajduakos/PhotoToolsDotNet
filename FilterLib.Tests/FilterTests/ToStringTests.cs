@@ -242,8 +242,8 @@ namespace FilterLib.Tests.FilterTests
                 new ConvolutionFilter(new Conv3x3(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
                 "ConvolutionFilter(Matrix: [1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11)");
             yield return new TestCaseData(
-                new EquirectangularToStereographicFilter(12, 34),
-                "EquirectangularToStereographicFilter(AOV: 12, Spin: 34)");
+                new EquirectangularToStereographicFilter(12, 34, InterpolationMode.NearestNeighbor),
+                "EquirectangularToStereographicFilter(AOV: 12, Spin: 34, Interpolation: NearestNeighbor)");
             yield return new TestCaseData(
                 new WavesFilter(Size.Absolute(12), Size.Absolute(34), WavesFilter.WaveDirection.Vertical),
                 "WavesFilter(Wavelength: 12px, Amplitude: 34px, Direction: Vertical)");

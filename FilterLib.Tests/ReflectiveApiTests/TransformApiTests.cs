@@ -67,7 +67,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
             ResizeFilter ff = f as ResizeFilter;
             Assert.AreEqual(100, ff.Width.ToAbsolute(500));
             Assert.AreEqual(250, ff.Height.ToAbsolute(500));
-            Assert.AreEqual(InterpolationMode.NearestNeighbor, ff.Interpolation);
+            Assert.AreEqual(Util.InterpolationMode.NearestNeighbor, ff.Interpolation);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
             RotateFilter ff = f as RotateFilter;
             Assert.AreEqual(123.45f, ff.Angle);
             Assert.AreEqual(RotateFilter.CropMode.Fill, ff.Crop);
-            Assert.AreEqual(InterpolationMode.NearestNeighbor, ff.Interpolation);
+            Assert.AreEqual(Util.InterpolationMode.NearestNeighbor, ff.Interpolation);
         }
 
         [Test]
