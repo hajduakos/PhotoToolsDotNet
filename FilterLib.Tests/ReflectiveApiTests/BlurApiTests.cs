@@ -58,6 +58,25 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestMotionBlurParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(MotionBlurFilter)));
 
         [Test]
+        public void TestSpinBlur()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("SpinBlur");
+            Assert.IsInstanceOf<SpinBlurFilter>(f);
+            ReflectiveApi.SetFilterPropertyByName(f, "CenterX", "10px");
+            ReflectiveApi.SetFilterPropertyByName(f, "CenterY", "20px");
+            ReflectiveApi.SetFilterPropertyByName(f, "Angle", "30");
+            ReflectiveApi.SetFilterPropertyByName(f, "Samples", "40");
+            SpinBlurFilter ff = f as SpinBlurFilter;
+            Assert.AreEqual(10, ff.CenterX.ToAbsolute(100));
+            Assert.AreEqual(20, ff.CenterY.ToAbsolute(100));
+            Assert.AreEqual(30, ff.Angle);
+            Assert.AreEqual(40, ff.Samples);
+        }
+
+        [Test]
+        public void TestSpinBlurParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(SpinBlurFilter)));
+
+        [Test]
         public void TestZoomBlur()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ZoomBlur");

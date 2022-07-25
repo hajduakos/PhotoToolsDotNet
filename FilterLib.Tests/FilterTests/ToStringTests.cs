@@ -81,6 +81,9 @@ namespace FilterLib.Tests.FilterTests
                 new MotionBlurFilter(12, 34),
                 "MotionBlurFilter(Length: 12, Angle: 34)");
             yield return new TestCaseData(
+                new SpinBlurFilter(Size.Absolute(12), Size.Absolute(34), 56, 78),
+                "SpinBlurFilter(CenterX: 12px, CenterY: 34px, Angle: 56, Samples: 78)");
+            yield return new TestCaseData(
                 new ZoomBlurFilter(Size.Absolute(12), Size.Absolute(34), 56),
                 "ZoomBlurFilter(CenterX: 12px, CenterY: 34px, Amount: 56)");
         }
