@@ -59,8 +59,8 @@ namespace FilterLib.Tests.FilterTests
                 new AdaptiveTresholdFilter(4),
                 "AdaptiveTresholdFilter(SquareSize: 4)");
             yield return new TestCaseData(
-                new OilPaintFilter(5),
-                "OilPaintFilter(Radius: 5)");
+                new OilPaintFilter(5, 67),
+                "OilPaintFilter(Radius: 5, IntensityLevels: 67)");
             yield return new TestCaseData(
                 new RandomJitterFilter(12, 34),
                 "RandomJitterFilter(Radius: 12, Seed: 34)");

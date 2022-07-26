@@ -25,12 +25,14 @@ namespace FilterLib.Tests.ReflectiveApiTests
             IFilter f = ReflectiveApi.ConstructFilterByName("OilPaint");
             Assert.IsInstanceOf<OilPaintFilter>(f);
             ReflectiveApi.SetFilterPropertyByName(f, "Radius", "8");
+            ReflectiveApi.SetFilterPropertyByName(f, "IntensityLevels", "9");
             OilPaintFilter ff = f as OilPaintFilter;
             Assert.AreEqual(8, ff.Radius);
+            Assert.AreEqual(9, ff.IntensityLevels);
         }
 
         [Test]
-        public void TestOilPaintParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(OilPaintFilter)));
+        public void TestOilPaintParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(OilPaintFilter)));
 
         [Test]
         public void TestRandomJitter()

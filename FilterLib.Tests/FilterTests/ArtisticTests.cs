@@ -16,10 +16,13 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("AdaptiveTreshold_8.bmp", new AdaptiveTresholdFilter(8), 1);
             yield return new TestCaseData("AdaptiveTreshold_200.bmp", new AdaptiveTresholdFilter(200), 1);
 
-            yield return new TestCaseData("_input.bmp", new OilPaintFilter(0), 0);
-            yield return new TestCaseData("OilPaint_1.bmp", new OilPaintFilter(1), 1);
-            yield return new TestCaseData("OilPaint_5.bmp", new OilPaintFilter(5), 1);
-            yield return new TestCaseData("OilPaint_10.bmp", new OilPaintFilter(10), 1);
+            yield return new TestCaseData("_input.bmp", new OilPaintFilter(0, 255), 0);
+            yield return new TestCaseData("OilPaint_1_255.bmp", new OilPaintFilter(1, 255), 1);
+            yield return new TestCaseData("OilPaint_5_255.bmp", new OilPaintFilter(5, 255), 1);
+            yield return new TestCaseData("OilPaint_10_255.bmp", new OilPaintFilter(10, 255), 1);
+            yield return new TestCaseData("OilPaint_1_128.bmp", new OilPaintFilter(1, 128), 1);
+            yield return new TestCaseData("OilPaint_5_64.bmp", new OilPaintFilter(5, 64), 1);
+            yield return new TestCaseData("OilPaint_10_32.bmp", new OilPaintFilter(10, 32), 1);
 
             yield return new TestCaseData("_input.bmp", new RandomJitterFilter(0, 0), 0);
             yield return new TestCaseData("RandomJitter_1_0.bmp", new RandomJitterFilter(1, 0), 0);

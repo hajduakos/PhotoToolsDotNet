@@ -1,4 +1,5 @@
 ﻿using FilterLib.Reporting;
+using FilterLib.Util;
 
 namespace FilterLib.Filters.Artistic
 {
@@ -10,6 +11,7 @@ namespace FilterLib.Filters.Artistic
     public sealed class OilPaintFilter : FilterInPlaceBase
     {
         private int radius;
+        private int intensityLevels;
 
         /// <summary>
         /// Brush radius [0;...].
@@ -23,10 +25,27 @@ namespace FilterLib.Filters.Artistic
         }
 
         /// <summary>
+        /// Number of intensity levels [0;255].
+        /// </summary>
+        [FilterParam]
+        [FilterParamMin(0)]
+        [FilterParamMax(255)]
+        public int IntensityLevels
+        {
+            get { return intensityLevels; }
+            set { intensityLevels = value.Clamp(0, 255); }
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="radius">Brush radius [0;...]</param>
-        public OilPaintFilter(int radius = 0) => Radius = radius;
+        /// <param name="intensityLevels">Number of intensity levels [0;255]</param>
+        public OilPaintFilter(int radius = 0, int intensityLevels = 255)
+        {
+            Radius = radius;
+            IntensityLevels = intensityLevels;
+        }
 
         /// <inheritdoc/>
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
@@ -41,6 +60,7 @@ namespace FilterLib.Filters.Artistic
             int[] green = new int[256];
             int[] blue = new int[256];
             int[] intensities = new int[256];
+            float iMult = intensityLevels / 255f;
             // For each pixel we calculate the frequency of each intensity level within the radius,
             // and also the average R, G and B values corresponding to the intensity levels. Then
             // we replace the current pixel with the R, G, B values corresponding to the most
@@ -63,7 +83,7 @@ namespace FilterLib.Filters.Artistic
                         for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                         {
                             int idx = ySub * width_3 + xSub * 3;
-                            int lum = (int)Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
+                            int lum = (int)(Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
                             ++intensities[lum];
                             red[lum] += oldRow[idx];
                             green[lum] += oldRow[idx + 1];
@@ -86,7 +106,7 @@ namespace FilterLib.Filters.Artistic
                             for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                             {
                                 int idx = ySub * width_3 + x - radius_3 - 3;
-                                int lum = (int)Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
+                                int lum = (int)(Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
                                 --intensities[lum];
                                 red[lum] -= oldRow[idx];
                                 green[lum] -= oldRow[idx + 1];
@@ -99,7 +119,7 @@ namespace FilterLib.Filters.Artistic
                             for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                             {
                                 int idx = ySub * width_3 + x + radius_3;
-                                int lum = (int)Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
+                                int lum = (int)(Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
                                 ++intensities[lum];
                                 red[lum] += oldRow[idx];
                                 green[lum] += oldRow[idx + 1];
