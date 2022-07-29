@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29324.140
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilterLib", "FilterLib\FilterLib.csproj", "{3685D2FE-85CF-43DC-BD42-6D7BF90F71A1}"
 EndProject
@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilterLib.Tests", "FilterLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilterScript", "FilterScript\FilterScript.csproj", "{A6C19EE8-A2B7-4C2C-8E89-8A3B7E775CEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterScript.Test", "FilterScript.Test\FilterScript.Test.csproj", "{EE7AB134-DDC5-4D33-BB09-24792F6FC3D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilterScript.Test", "FilterScript.Test\FilterScript.Test.csproj", "{EE7AB134-DDC5-4D33-BB09-24792F6FC3D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterLib.PerfTest", "FilterLib.PerfTest\FilterLib.PerfTest.csproj", "{9D0877D2-4BCC-422F-BCDE-5D243B5A5F50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{EE7AB134-DDC5-4D33-BB09-24792F6FC3D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE7AB134-DDC5-4D33-BB09-24792F6FC3D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE7AB134-DDC5-4D33-BB09-24792F6FC3D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D0877D2-4BCC-422F-BCDE-5D243B5A5F50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D0877D2-4BCC-422F-BCDE-5D243B5A5F50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D0877D2-4BCC-422F-BCDE-5D243B5A5F50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D0877D2-4BCC-422F-BCDE-5D243B5A5F50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
