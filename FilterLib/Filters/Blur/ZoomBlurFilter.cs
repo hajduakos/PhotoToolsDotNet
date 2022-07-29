@@ -11,6 +11,9 @@ namespace FilterLib.Filters.Blur
     [Filter]
     public sealed class ZoomBlurFilter : FilterInPlaceBase
     {
+        private int amount;
+        private int maxSamples;
+
         /// <summary>
         /// X coordinate of the center.
         /// </summary>
@@ -22,8 +25,6 @@ namespace FilterLib.Filters.Blur
         /// </summary>
         [FilterParam]
         public Size CenterY { get; set; }
-
-        private int amount;
         
         /// <summary>
         /// Blur amount [0;100].
@@ -38,22 +39,35 @@ namespace FilterLib.Filters.Blur
         }
 
         /// <summary>
-        /// Constructor.
+        /// Maximal number of samples [2;...].
         /// </summary>
-        /// <param name="centerX">X coordinate of the center</param>
-        /// <param name="centerY">Y coordinate of the center</param>
-        /// <param name="amount">Blur amount [0;100]</param>
-        public ZoomBlurFilter(Size centerX, Size centerY, int amount)
+        [FilterParam]
+        [FilterParamMin(2)]
+        public int MaxSamples
         {
-            CenterX = centerX;
-            CenterY = centerY;
-            Amount = amount;
+            get { return maxSamples; }
+            set { maxSamples = Math.Max(2, value); }
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ZoomBlurFilter() : this(Size.Absolute(0), Size.Absolute(0), 0) { }
+        /// <param name="centerX">X coordinate of the center</param>
+        /// <param name="centerY">Y coordinate of the center</param>
+        /// <param name="amount">Blur amount [0;100]</param>
+        /// <param name="maxSamples">Maximal number of samples [2;...]</param>
+        public ZoomBlurFilter(Size centerX, Size centerY, int amount, int maxSamples)
+        {
+            CenterX = centerX;
+            CenterY = centerY;
+            Amount = amount;
+            MaxSamples = maxSamples;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ZoomBlurFilter() : this(Size.Absolute(0), Size.Absolute(0), 0, 2) { }
 
         /// <inheritdoc/>
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
@@ -76,7 +90,7 @@ namespace FilterLib.Filters.Blur
                         float distanceFromCenter = MathF.Sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy));
                         float len = distanceFromCenter * amountF;
                         // Number of samples are based on the length (but at least two)
-                        int samples = Math.Max(2, (int)Math.Ceiling(len));
+                        int samples = Math.Max(2, Math.Min(maxSamples, (int)Math.Ceiling(len)));
                         float xLen = (cx - x) * amountF;
                         float yLen = (cy - y) * amountF;
                         float dx = xLen / (samples - 1);

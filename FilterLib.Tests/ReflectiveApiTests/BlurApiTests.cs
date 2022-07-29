@@ -84,13 +84,15 @@ namespace FilterLib.Tests.ReflectiveApiTests
             ReflectiveApi.SetFilterPropertyByName(f, "CenterX", "10px");
             ReflectiveApi.SetFilterPropertyByName(f, "CenterY", "20px");
             ReflectiveApi.SetFilterPropertyByName(f, "Amount", "30");
+            ReflectiveApi.SetFilterPropertyByName(f, "MaxSamples", "40");
             ZoomBlurFilter ff = f as ZoomBlurFilter;
             Assert.AreEqual(10, ff.CenterX.ToAbsolute(100));
             Assert.AreEqual(20, ff.CenterY.ToAbsolute(100));
             Assert.AreEqual(30, ff.Amount);
+            Assert.AreEqual(40, ff.MaxSamples);
         }
 
         [Test]
-        public void TestZoomBlurParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(ZoomBlurFilter)));
+        public void TestZoomBlurParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(ZoomBlurFilter)));
     }
 }

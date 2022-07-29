@@ -32,11 +32,12 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("SpinBlur_50pct_50pct_30_20.bmp", new SpinBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 30, 20), 1);
             yield return new TestCaseData("SpinBlur_50pct_50pct_180_50.bmp", new SpinBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 180, 50), 1);
 
-            yield return new TestCaseData("_input.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 0), 1);
-            yield return new TestCaseData("ZoomBlur_50pct_50pct_20.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 20), 1);
-            yield return new TestCaseData("ZoomBlur_50pct_50pct_50.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 50), 1);
-            yield return new TestCaseData("ZoomBlur_50pct_50pct_100.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 100), 1);
-            yield return new TestCaseData("ZoomBlur_100pct_100pct_30.bmp", new ZoomBlurFilter(Size.Relative(1), Size.Relative(1), 30), 1);
+            yield return new TestCaseData("_input.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 0, 100), 1);
+            yield return new TestCaseData("ZoomBlur_50pct_50pct_20_5.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 20, 5), 1);
+            yield return new TestCaseData("ZoomBlur_50pct_50pct_20_10.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 20, 10), 1);
+            yield return new TestCaseData("ZoomBlur_50pct_50pct_50_100.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 50, 100), 1);
+            yield return new TestCaseData("ZoomBlur_50pct_50pct_100_100.bmp", new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 100, 100), 1);
+            yield return new TestCaseData("ZoomBlur_100pct_100pct_30_100.bmp", new ZoomBlurFilter(Size.Relative(1), Size.Relative(1), 30, 100), 1);
         }
 
         [Test]

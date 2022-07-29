@@ -84,8 +84,8 @@ namespace FilterLib.Tests.FilterTests
                 new SpinBlurFilter(Size.Absolute(12), Size.Absolute(34), 56, 78),
                 "SpinBlurFilter(CenterX: 12px, CenterY: 34px, Angle: 56, Samples: 78)");
             yield return new TestCaseData(
-                new ZoomBlurFilter(Size.Absolute(12), Size.Absolute(34), 56),
-                "ZoomBlurFilter(CenterX: 12px, CenterY: 34px, Amount: 56)");
+                new ZoomBlurFilter(Size.Absolute(12), Size.Absolute(34), 56, 78),
+                "ZoomBlurFilter(CenterX: 12px, CenterY: 34px, Amount: 56, MaxSamples: 78)");
         }
 
         internal static IEnumerable<TestCaseData> Border()
