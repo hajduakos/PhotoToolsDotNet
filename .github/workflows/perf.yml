@@ -1,4 +1,4 @@
-name: .NET build
+name: Performance testss
 
 on: [push, pull_request]
 
