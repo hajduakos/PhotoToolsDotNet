@@ -3,12 +3,31 @@ name: Performance tests
 on: [push, pull_request]
 
 jobs:
-  perf-test:
+  perf-test-current:
     runs-on: windows-latest
-
     steps:
     - name: Check out code
       uses: actions/checkout@v2
+      with:
+        ref: HEAD
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore NuGet dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Perf tests
+      run: FilterLib.PerfTest\bin\Release\net6.0\FilterLib.PerfTest.exe
+
+  perf-test-parent:
+    runs-on: windows-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+      with:
+        ref: HEAD~1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
