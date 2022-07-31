@@ -1,5 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Dither
 {
@@ -38,6 +39,8 @@ namespace FilterLib.Filters.Dither
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             int width_3 = image.Width * 3;
             float intervalSize = 255f / (levels - 1);
             float[,] quantErrArray = new float[width_3, image.Height];
@@ -48,36 +51,41 @@ namespace FilterLib.Filters.Dither
             float[,] diffusionMatrix = matrix.CopyMatrix();
             fixed (byte* start = image)
             {
-                byte* ptr = start;
-                for (int y = 0; y < image.Height; y++)
+                byte* start0 = start;
+                // Components can be processed independently in parallel
+                Parallel.For(0, 3, comp =>
                 {
-                    for (int x = 0; x < width_3; ++x)
+                    byte* ptr = start0 + comp;
+                    for (int y = 0; y < image.Height; y++)
                     {
-                        // Add possible quantization error from before
-                        byte pxWithErrorAdded = (*ptr + quantErrArray[x, y]).ClampToByte();
-                        // Get rounded color
-                        byte roundedColor = (System.MathF.Round(pxWithErrorAdded / intervalSize) * intervalSize).ClampToByte();
-                        // Calculate current quantization error
-                        int quantErr = pxWithErrorAdded - roundedColor;
-                        // Distribute quantization error
-                        // First row
-                        for (int xSub = matrix.Offset + 1; xSub < matrix.Width; ++xSub)
-                            if (x + (xSub - matrix.Offset) * 3 < width_3)
-                                quantErrArray[x + (xSub - matrix.Offset) * 3, y] += quantErr * diffusionMatrix[xSub, 0];
+                        for (int x = 0; x < width_3; x += 3)
+                        {
+                            // Add possible quantization error from before
+                            byte pxWithErrorAdded = (*ptr + quantErrArray[x + comp, y]).ClampToByte();
+                            // Get rounded color
+                            byte roundedColor = (System.MathF.Round(pxWithErrorAdded / intervalSize) * intervalSize).ClampToByte();
+                            // Calculate current quantization error
+                            int quantErr = pxWithErrorAdded - roundedColor;
+                            // Distribute quantization error
+                            // First row
+                            for (int xSub = matrix.Offset + 1; xSub < matrix.Width; ++xSub)
+                                if (x + comp + (xSub - matrix.Offset) * 3 < width_3)
+                                    quantErrArray[x + comp + (xSub - matrix.Offset) * 3, y] += quantErr * diffusionMatrix[xSub, 0];
 
-                        // Other rows
-                        for (int ySub = 1; ySub < matrix.Height; ++ySub)
-                            if (y + ySub < image.Height)
-                                for (int xSub = 0; xSub < matrix.Width; ++xSub)
-                                    if (x + (xSub - matrix.Offset) * 3 < width_3 && x + (xSub - matrix.Offset) * 3 >= 0)
-                                        quantErrArray[x + (xSub - matrix.Offset) * 3, y + ySub] += quantErr * diffusionMatrix[xSub, ySub];
+                            // Other rows
+                            for (int ySub = 1; ySub < matrix.Height; ++ySub)
+                                if (y + ySub < image.Height)
+                                    for (int xSub = 0; xSub < matrix.Width; ++xSub)
+                                        if (x + comp + (xSub - matrix.Offset) * 3 < width_3 && x + comp + (xSub - matrix.Offset) * 3 >= 0)
+                                            quantErrArray[x + comp + (xSub - matrix.Offset) * 3, y + ySub] += quantErr * diffusionMatrix[xSub, ySub];
 
-                        // Replace color
-                        *ptr = roundedColor;
-                        ++ptr;
+                            // Replace color
+                            *ptr = roundedColor;
+                            ptr += 3;
+                        }
+                        if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height * 3);
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                });
             }
             reporter?.Done();
         }
