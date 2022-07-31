@@ -1,6 +1,7 @@
 ﻿using FilterLib.Filters.Other;
 using FilterLib.Reporting;
 using FilterLib.Util;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Edges
 {
@@ -42,26 +43,31 @@ namespace FilterLib.Filters.Edges
 
             // Cache all different combinations
             byte[,] map = new byte[256, 256];
-            for (int x = 0; x <= 255; x++)
+            Parallel.For(0, 256, x =>
+            {
                 for (int y = 0; y < 256; y++)
                     map[x, y] = Combine(x, y);
+            });
 
+            object reporterLock = new();
+            int progress = 0;
             int width_3 = image.Width * 3;
             fixed (byte* imgStart = image, tmpStart = tmp)
             {
-                byte* imgPtr = imgStart;
-                byte* tmpPtr = tmpStart;
-                for (int y = 0; y < image.Height; ++y)
+                byte* imgStart0 = imgStart;
+                byte* tmpStart0 = tmpStart;
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* imgPtr = imgStart0 + y * width_3;
+                    byte* tmpPtr = tmpStart0 + y * width_3;
                     for (int x = 0; x < width_3; ++x)
                     {
                         *imgPtr = map[*imgPtr, *tmpPtr];
                         ++imgPtr;
                         ++tmpPtr;
                     }
-                    subRep?.Report(y + 1, 0, image.Height);
-                }
-
+                    if (subRep != null) lock (reporterLock) subRep.Report(++progress, 0, image.Height);
+                });
             }
             reporter?.Done();
         }
