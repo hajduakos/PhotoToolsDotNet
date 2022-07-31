@@ -1,6 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using System.Threading.Tasks;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Artistic
 {
@@ -52,7 +52,7 @@ namespace FilterLib.Filters.Artistic
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            object reporterLock = new object();
+            object reporterLock = new();
             int progress = 0;
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();

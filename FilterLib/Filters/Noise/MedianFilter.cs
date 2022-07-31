@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using Math = System.Math;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Noise
 {
@@ -51,23 +52,28 @@ namespace FilterLib.Filters.Noise
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
             int width_3 = image.Width * 3;
             int radius_3 = radius * 3;
             int area = (2 * radius + 1) * (2 * radius + 1);
-            (byte, byte, byte)[] neighRGBs = new (byte, byte, byte)[area]; // Arrays for sorting
-            byte[] neighLums = new byte[area];
 
             float op1 = strength / 100.0f;
             float op0 = 1 - op1;
 
             fixed (byte* newStart = image, oldStart = original)
             {
-                byte* newPx = newStart;
-                for (int y = 0; y < image.Height; ++y)
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
+                Parallel.For(0, image.Height, y =>
                 {
+                    (byte, byte, byte)[] neighRGBs = new (byte, byte, byte)[area]; // Arrays for sorting
+                    byte[] neighLums = new byte[area];
+
+                    byte* newPx = newStart0 + y * width_3;
                     for (int x = 0; x < width_3; x += 3)
                     {
                         // Collect pixel and surroundings
@@ -76,7 +82,7 @@ namespace FilterLib.Filters.Noise
                         {
                             for (int x0 = Math.Max(0, x - radius_3); x0 < width_3 && x0 <= x + radius_3; x0 += 3)
                             {
-                                byte* px = oldStart + y0 * width_3 + x0;
+                                byte* px = oldStart0 + y0 * width_3 + x0;
                                 neighRGBs[n] = (px[0], px[1], px[2]);
                                 neighLums[n] = (byte)RGB.GetLuminance(px[0], px[1], px[2]);
                                 ++n;
@@ -105,8 +111,8 @@ namespace FilterLib.Filters.Noise
                         newPx[2] = (byte)(op0 * newPx[2] + op1 * b);
                         newPx += 3;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
             reporter?.Done();
         }
