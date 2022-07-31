@@ -71,6 +71,10 @@ namespace FilterLib.Filters.Mosaic
             public int Dist(int x1, int y1) => (x - x1) * (x - x1) + (y - y1) * (y - y1);
 
             public bool Equals(Cpoint other) => x == other.x && y == other.y;
+
+            public override bool Equals(object obj) => obj is Cpoint cpoint && Equals(cpoint);
+
+            public override int GetHashCode() => x.GetHashCode() ^ y.GetHashCode();
         }
 
         /// <inheritdoc/>
