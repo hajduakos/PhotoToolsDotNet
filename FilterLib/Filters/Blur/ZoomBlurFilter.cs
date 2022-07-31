@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur
 {
@@ -73,6 +74,8 @@ namespace FilterLib.Filters.Blur
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
@@ -82,9 +85,11 @@ namespace FilterLib.Filters.Blur
             int width_3 = image.Width * 3;
             fixed (byte* newStart = image, oldStart = original)
             {
-                byte* newPx = newStart;
-                for (int y = 0; y < image.Height; ++y)
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* newPx = newStart0 + y * width_3;
                     for (int x = 0; x < image.Width; ++x)
                     {
                         float distanceFromCenter = MathF.Sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy));
@@ -105,7 +110,7 @@ namespace FilterLib.Filters.Blur
                             int y0 = (int)Math.Round(y + i * dy - yLen / 2);
                             if (0 <= x0 && x0 < image.Width && 0 <= y0 && y0 < image.Height)
                             {
-                                byte* oldPx = oldStart + y0 * width_3 + x0 * 3;
+                                byte* oldPx = oldStart0 + y0 * width_3 + x0 * 3;
                                 r += oldPx[0];
                                 g += oldPx[1];
                                 b += oldPx[2];
@@ -116,7 +121,7 @@ namespace FilterLib.Filters.Blur
                         // we might get no samples: just use the old pixel then
                         if (n == 0)
                         {
-                            byte* oldPx = oldStart + y * width_3 + x * 3;
+                            byte* oldPx = oldStart0 + y * width_3 + x * 3;
                             r += oldPx[0];
                             g += oldPx[1];
                             b += oldPx[2];
@@ -128,8 +133,8 @@ namespace FilterLib.Filters.Blur
                         newPx[2] = (b / n).ClampToByte();
                         newPx += 3;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
             reporter?.Done();
         }
