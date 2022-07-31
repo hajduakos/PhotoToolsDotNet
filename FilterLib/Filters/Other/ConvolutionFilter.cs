@@ -1,5 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other
 {
@@ -25,6 +26,8 @@ namespace FilterLib.Filters.Other
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(original.Width == image.Width);
@@ -32,10 +35,12 @@ namespace FilterLib.Filters.Other
             int[,] mx = Matrix.CopyMatrix();
             fixed (byte* newStart = image, oldStart = original)
             {
-                byte* newPtr = newStart;
-                byte* oldPtr = oldStart;
-                for (int y = 0; y < image.Height; ++y)
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* oldPtr = oldStart0 + y * width_3;
+                    byte* newPtr = newStart0 + y * width_3;
                     for (int x = 0; x < width_3; ++x)
                     {
                         byte mm = *oldPtr;
@@ -57,8 +62,8 @@ namespace FilterLib.Filters.Other
                         ++newPtr;
                         ++oldPtr;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
             reporter?.Done();
         }
