@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using Math = System.Math;
 using MathF = System.MathF;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur
 {
@@ -47,6 +48,8 @@ namespace FilterLib.Filters.Blur
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
@@ -56,8 +59,11 @@ namespace FilterLib.Filters.Blur
 
             fixed (byte* newStart = image, oldStart = original)
             {
-                for (int y = 0; y < image.Height; ++y)
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* newPx = newStart0 + y * width_3;
                     for (int x = 0; x < width_3; x += 3)
                     {
                         float bSum = 0, gSum = 0, rSum = 0;
@@ -73,19 +79,19 @@ namespace FilterLib.Filters.Blur
                             if (x1 >= 0 && x1 < image.Width && y1 >= 0 && y1 < image.Height)
                             {
                                 int oldIdx = y1 * width_3 + x1 * 3;
-                                rSum += oldStart[oldIdx];
-                                gSum += oldStart[oldIdx + 1];
-                                bSum += oldStart[oldIdx + 2];
+                                rSum += oldStart0[oldIdx];
+                                gSum += oldStart0[oldIdx + 1];
+                                bSum += oldStart0[oldIdx + 2];
                                 ++n;
                             }
                         }
-                        int newIdx = y * width_3 + x;
-                        newStart[newIdx] = (byte)(rSum / n);
-                        newStart[newIdx + 1] = (byte)(gSum / n);
-                        newStart[newIdx + 2] = (byte)(bSum / n);
+                        newPx[0] = (byte)(rSum / n);
+                        newPx[1] = (byte)(gSum / n);
+                        newPx[2] = (byte)(bSum / n);
+                        newPx += 3;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
 
             reporter?.Done();
