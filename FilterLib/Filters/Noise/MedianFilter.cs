@@ -105,7 +105,7 @@ namespace FilterLib.Filters.Noise
                         newPx[2] = (byte)(op0 * newPx[2] + op1 * b);
                         newPx += 3;
                     }
-                    reporter?.Report(y, 1, image.Height - 2);
+                    reporter?.Report(y, 0, image.Height - 1);
                 }
             }
             reporter?.Done();
