@@ -92,7 +92,7 @@ filters.Add(new MeanRemovalFilter());
 filters.Add(new SharpenFilter());
 
 filters.Add(new BoxDownscaleFilter(Size.Relative(.5f), Size.Relative(.5f)));
-filters.Add(new CropFilter(Size.Relative(0), Size.Relative(0), Size.Relative(1), Size.Relative(1)));
+filters.Add(new CropFilter(Size.Relative(.1f), Size.Relative(.1f), Size.Relative(.9f), Size.Relative(.9f)));
 filters.Add(new FlipHorizontalFilter());
 filters.Add(new FlipVerticalFilter());
 filters.Add(new ResizeFilter(Size.Relative(1.1f), Size.Relative(1.1f), InterpolationMode.Bilinear));
@@ -103,9 +103,10 @@ filters.Add(new RotateRightFilter());
 
 const int WIDTH = 4000;
 const int HEIGHT = 3000;
+const int REP = 1;
 
 Image img = new(WIDTH, HEIGHT);
-Random random = new Random();
+Random random = new();
 for (int x = 0; x < WIDTH; x++)
     for (int y = 0; y < HEIGHT; y++)
         for (int c = 0; c < 3; ++c)
@@ -113,8 +114,13 @@ for (int x = 0; x < WIDTH; x++)
 
 foreach (var f in filters)
 {
-    Stopwatch sw = Stopwatch.StartNew();
-    f.Apply(img);
-    sw.Stop();
-    Console.WriteLine($"{f}\t{sw.ElapsedMilliseconds}");
+    long total = 0;
+    for (int i = 0; i < REP; ++i)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        f.Apply(img);
+        sw.Stop();
+        total += sw.ElapsedMilliseconds;
+    }
+    Console.WriteLine($"{f}\t{total / REP}");
 }
