@@ -1,4 +1,5 @@
 ﻿using IReporter = FilterLib.Reporting.IReporter;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters
 {
@@ -11,20 +12,24 @@ namespace FilterLib.Filters
         public override sealed unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
+            int width_3 = image.Width * 3;
             ApplyStart();
             fixed (byte* start = image)
             {
-                byte* ptr = start;
+                byte* start0 = start;
                 // Iterate through each pixel and process individually
-                for (int y = 0; y < image.Height; ++y)
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* ptr = start0 + y * width_3;
                     for (int x = 0; x < image.Width; ++x)
                     {
                         ProcessPixel(ptr, ptr + 1, ptr + 2);
                         ptr += 3;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
 
             }
             ApplyEnd();

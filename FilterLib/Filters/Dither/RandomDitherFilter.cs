@@ -1,4 +1,5 @@
-﻿using FilterLib.Util;
+﻿using FilterLib.Reporting;
+using FilterLib.Util;
 using Random = System.Random;
 
 namespace FilterLib.Filters.Dither
@@ -7,7 +8,7 @@ namespace FilterLib.Filters.Dither
     /// Random dither filter.
     /// </summary>
     [Filter]
-    public sealed class RandomDitherFilter : PerPixelFilterBase
+    public sealed class RandomDitherFilter : FilterInPlaceBase
     {
         private int levels;
 
@@ -40,46 +41,35 @@ namespace FilterLib.Filters.Dither
             Levels = levels;
             Seed = seed;
         }
-
-        private Random rnd;
-        private float intervalSize;
-
-        /// <summary>
-        /// Gets called when filter starts applying.
-        /// </summary>
-        protected override void ApplyStart()
-        {
-            base.ApplyStart();
-            rnd = new Random(Seed);
-            intervalSize = 255f / (levels - 1);
-        }
-
+        
         /// <inheritdoc/>
-        protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
-            float floor, ceil;
-            float nextRnd = rnd.NextSingle();
+            reporter?.Start();
+            Random rnd = new(Seed);
+            float intervalSize = 255f / (levels - 1);
+            fixed (byte* start = image)
+            {
+                byte* ptr = start;
+                // Iterate through each pixel and process individually
+                for (int y = 0; y < image.Height; ++y)
+                {
+                    for (int x = 0; x < image.Width; ++x)
+                    {
+                        float nextRnd = rnd.NextSingle();
 
-            floor = System.MathF.Floor(*r / intervalSize) * intervalSize;
-            ceil = floor + intervalSize;
-            *r = ((floor + nextRnd * intervalSize > *r) ? floor : ceil).ClampToByte();
-            
-            floor = System.MathF.Floor(*g / intervalSize) * intervalSize;
-            ceil = floor + intervalSize;
-            *g = ((floor + nextRnd * intervalSize > *g) ? floor : ceil).ClampToByte();
-            
-            floor = System.MathF.Floor(*b / intervalSize) * intervalSize;
-            ceil = floor + intervalSize;
-            *b = ((floor + nextRnd * intervalSize > *b) ? floor : ceil).ClampToByte();
-        }
-
-        /// <summary>
-        /// Gets called when filter finishes applying.
-        /// </summary>
-        protected override void ApplyEnd()
-        {
-            rnd = null;
-            base.ApplyEnd();
+                        for (int c = 0; c < 3; ++c)
+                        {
+                            float floor = System.MathF.Floor(*ptr / intervalSize) * intervalSize;
+                            float ceil = floor + intervalSize;
+                            *ptr = ((floor + nextRnd * intervalSize > *ptr) ? floor : ceil).ClampToByte();
+                            ++ptr;
+                        }
+                    }
+                    reporter?.Report(y + 1, 0, image.Height);
+                }
+            }
+            reporter?.Done();
         }
     }
 }
