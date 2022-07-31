@@ -1,4 +1,5 @@
 ﻿using FilterLib.Reporting;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur
 {
@@ -48,6 +49,8 @@ namespace FilterLib.Filters.Blur
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             // We do the blurring in 2 steps: first horizontal, then vertical
             Image tmp = new(image.Width, image.Height); // Intermediate result between the 2 steps
             System.Diagnostics.Debug.Assert(image.Width == tmp.Width);
@@ -55,13 +58,15 @@ namespace FilterLib.Filters.Blur
             int radiusX_3 = radiusX * 3;
             fixed (byte* imgStart = image, tmpStart = tmp)
             {
+                byte* imgStart0 = imgStart;
+                byte* tmpStart0 = tmpStart;
                 // Horizontal blur, result is in 'tmp'
                 // For each pixel, we have to calculate the average over a given radius.
                 // To make this more efficient, a rolling window is used
-                for (int y = 0; y < image.Height; ++y)
+                Parallel.For(0, image.Height, y =>
                 {
-                    byte* imgRow = imgStart + (y * width_3);
-                    byte* tmpRow = tmpStart + (y * width_3);
+                    byte* imgRow = imgStart0 + y * width_3;
+                    byte* tmpRow = tmpStart0 + y * width_3;
 
                     // First fill the window
                     int rSum = 0, gSum = 0, bSum = 0, n = 0;
@@ -102,15 +107,17 @@ namespace FilterLib.Filters.Blur
                         tmpRow[x + 2] = (byte)(bSum / n);
                     }
                     // Report progress from 0% to 50%
-                    reporter?.Report(y + 1, 0, image.Height * 2);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height * 2);
+                });
 
                 // Vertical blur, the result is in 'image'
+                progress = 0;
                 int radiusRowOffset = radiusY * width_3;
-                for (int x = 0; x < width_3; x += 3)
+                Parallel.For(0, image.Width, x =>
                 {
-                    byte* imgCol = imgStart + x;
-                    byte* tmpCol = tmpStart + x;
+                    x *= 3;
+                    byte* imgCol = imgStart0 + x;
+                    byte* tmpCol = tmpStart0 + x;
 
                     // First fill the window
                     int rSum = 0, gSum = 0, bSum = 0, n = 0;
@@ -153,8 +160,8 @@ namespace FilterLib.Filters.Blur
                         imgCol[rowOffset + 2] = (byte)(bSum / n);
                     }
                     // Report progress from 50% to 100%
-                    reporter?.Report(x + width_3 + 3, 0, width_3 * 2);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(image.Width + ++progress, 0, image.Width * 2);
+                });
             }
             reporter?.Done();
         }
