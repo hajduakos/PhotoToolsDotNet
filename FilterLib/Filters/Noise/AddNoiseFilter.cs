@@ -1,4 +1,5 @@
-﻿using FilterLib.Util;
+﻿using FilterLib.Reporting;
+using FilterLib.Util;
 using Random = System.Random;
 
 namespace FilterLib.Filters.Noise
@@ -7,7 +8,7 @@ namespace FilterLib.Filters.Noise
     /// Add noise filter.
     /// </summary>
     [Filter]
-    public sealed class AddNoiseFilter : PerPixelFilterBase
+    public sealed class AddNoiseFilter : FilterInPlaceBase
     {
         private int intensity;
         private int strength;
@@ -68,51 +69,47 @@ namespace FilterLib.Filters.Noise
             Seed = seed;
         }
 
-        private int rn, gn, bn;
-        private Random rnd;
-
-        /// <summary>
-        /// Gets called when filter starts applying.
-        /// </summary>
-        protected override void ApplyStart()
-        {
-            base.ApplyStart();
-            rnd = new Random(Seed);
-        }
-
         /// <inheritdoc/>
-        protected override unsafe void ProcessPixel(byte* r, byte* g, byte* b)
+        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
-            // Decide to add noise to this pixel or not
-            if (rnd.Next(1000) < intensity)
+            reporter?.Start();
+            Random rnd = new(Seed);
+            int rn, gn, bn;
+            fixed (byte* start = image)
             {
-                if (Type == NoiseType.Monochrome) // Monochrome noise -> same noise added to each channel
+                byte* ptr = start;
+                // Iterate through each pixel and process individually
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    int noise = (int)((rnd.NextSingle() * 2 - 1) * strength);
-                    rn = *r + noise;
-                    gn = *g + noise;
-                    bn = *b + noise;
+                    for (int x = 0; x < image.Width; ++x)
+                    {
+                        // Decide to add noise to this pixel or not
+                        if (rnd.Next(1000) < intensity)
+                        {
+                            if (Type == NoiseType.Monochrome) // Monochrome noise -> same noise added to each channel
+                            {
+                                int noise = (int)((rnd.NextSingle() * 2 - 1) * strength);
+                                rn = ptr[0] + noise;
+                                gn = ptr[1] + noise;
+                                bn = ptr[2] + noise;
+                            }
+                            else // Color noise -> separate values added to each channel
+                            {
+                                rn = ptr[0] + (int)((rnd.NextSingle() * 2 - 1) * strength);
+                                gn = ptr[1] + (int)((rnd.NextSingle() * 2 - 1) * strength);
+                                bn = ptr[2] + (int)((rnd.NextSingle() * 2 - 1) * strength);
+                            }
+                            // Overwrite old values
+                            ptr[0] = rn.ClampToByte();
+                            ptr[1] = gn.ClampToByte();
+                            ptr[2] = bn.ClampToByte();
+                        }
+                        ptr += 3;
+                    }
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
-                else // Color noise -> separate values added to each channel
-                {
-                    rn = *r + (int)((rnd.NextSingle() * 2 - 1) * strength);
-                    gn = *g + (int)((rnd.NextSingle() * 2 - 1) * strength);
-                    bn = *b + (int)((rnd.NextSingle() * 2 - 1) * strength);
-                }
-                // Overwrite old values
-                *r = rn.ClampToByte();
-                *g = gn.ClampToByte();
-                *b = bn.ClampToByte();
             }
-        }
-
-        /// <summary>
-        /// Gets called when filter finishes applying.
-        /// </summary>
-        protected override void ApplyEnd()
-        {
-            rnd = null;
-            base.ApplyEnd();
+            reporter?.Done();
         }
     }
 }
