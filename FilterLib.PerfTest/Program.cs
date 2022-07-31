@@ -80,7 +80,7 @@ filters.Add(new CrystallizeFilter(20, 50, 0));
 filters.Add(new LegoFilter(32, AntiAliasQuality.Medium));
 filters.Add(new PixelateFilter(32, PixelateFilter.PixelateMode.Average));
 
-filters.Add(new AddNoiseFilter(500,127, AddNoiseFilter.NoiseType.Color, 0));
+filters.Add(new AddNoiseFilter(500, 127, AddNoiseFilter.NoiseType.Color, 0));
 filters.Add(new MedianFilter(50, 2));
 
 filters.Add(new ConvertToPolarFilter(30));
@@ -103,7 +103,9 @@ filters.Add(new RotateRightFilter());
 
 const int WIDTH = 4000;
 const int HEIGHT = 3000;
-const int REP = 1;
+const int REP_MIN = 2;
+const int REP_MAX = 10;
+const int REP_TOTAL_TIME_MINIMUM_MS = 2000;
 
 Image img = new(WIDTH, HEIGHT);
 Random random = new();
@@ -115,12 +117,14 @@ for (int x = 0; x < WIDTH; x++)
 foreach (var f in filters)
 {
     long total = 0;
-    for (int i = 0; i < REP; ++i)
+    int n = 0;
+    while (n < REP_MAX && (n < REP_MIN || total < REP_TOTAL_TIME_MINIMUM_MS))
     {
         Stopwatch sw = Stopwatch.StartNew();
         f.Apply(img);
         sw.Stop();
         total += sw.ElapsedMilliseconds;
+        ++n;
     }
-    Console.WriteLine($"{f}\t{total / REP}");
+    Console.WriteLine($"{f}\t{total / n}");
 }
