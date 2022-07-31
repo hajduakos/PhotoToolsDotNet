@@ -1,5 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
+using System.Threading.Tasks;
 
 namespace FilterLib.Filters.Artistic
 {
@@ -51,15 +52,13 @@ namespace FilterLib.Filters.Artistic
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new object();
+            int progress = 0;
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
             int width_3 = image.Width * 3;
             int radius_3 = radius * 3;
-            int[] red = new int[256];
-            int[] green = new int[256];
-            int[] blue = new int[256];
-            int[] intensities = new int[256];
             float iMult = intensityLevels / 255f;
             // For each pixel we calculate the frequency of each intensity level within the radius,
             // and also the average R, G and B values corresponding to the intensity levels. Then
@@ -70,10 +69,17 @@ namespace FilterLib.Filters.Artistic
             // - But then in each step moving right, we drop one row from the left and add one at the right
             fixed (byte* newStart = image, oldStart = original)
             {
-                for (int y = 0; y < image.Height; ++y)
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
+                Parallel.For(0, image.Height, y =>
                 {
-                    byte* newRow = newStart + y * width_3;
-                    byte* oldRow = oldStart + y * width_3;
+                    byte* newRow = newStart0 + y * width_3;
+                    byte* oldRow = oldStart0 + y * width_3;
+
+                    int[] red = new int[256];
+                    int[] green = new int[256];
+                    int[] blue = new int[256];
+                    int[] intensities = new int[256];
 
                     for (int i = 0; i < 256; ++i) red[i] = green[i] = blue[i] = intensities[i] = 0;
 
@@ -83,7 +89,7 @@ namespace FilterLib.Filters.Artistic
                         for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                         {
                             int idx = ySub * width_3 + xSub * 3;
-                            int lum = (int)(Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
+                            int lum = (int)(RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
                             ++intensities[lum];
                             red[lum] += oldRow[idx];
                             green[lum] += oldRow[idx + 1];
@@ -106,7 +112,7 @@ namespace FilterLib.Filters.Artistic
                             for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                             {
                                 int idx = ySub * width_3 + x - radius_3 - 3;
-                                int lum = (int)(Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
+                                int lum = (int)(RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
                                 --intensities[lum];
                                 red[lum] -= oldRow[idx];
                                 green[lum] -= oldRow[idx + 1];
@@ -119,7 +125,7 @@ namespace FilterLib.Filters.Artistic
                             for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
                             {
                                 int idx = ySub * width_3 + x + radius_3;
-                                int lum = (int)(Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
+                                int lum = (int)(RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
                                 ++intensities[lum];
                                 red[lum] += oldRow[idx];
                                 green[lum] += oldRow[idx + 1];
@@ -133,8 +139,8 @@ namespace FilterLib.Filters.Artistic
                         newRow[x + 1] = (byte)(green[max] / intensities[max]);
                         newRow[x + 2] = (byte)(blue[max] / intensities[max]);
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
             reporter?.Done();
         }
