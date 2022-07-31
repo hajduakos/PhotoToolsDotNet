@@ -1,4 +1,5 @@
 ﻿using FilterLib.Reporting;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Artistic
 {
@@ -32,6 +33,8 @@ namespace FilterLib.Filters.Artistic
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
@@ -40,15 +43,16 @@ namespace FilterLib.Filters.Artistic
 
             fixed (byte* newStart = image, oldStart = original)
             {
-
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
                 // For each pixel we have to calculate the average intensity in a given radius. To make this
                 // more efficient, we go row-by-row and use a moving window:
                 // - First we calculate the full window for the first pixel
                 // - But then in each step moving right, we drop one row from the left and add one at the right
-                for (int y = 0; y < image.Height; ++y)
+                Parallel.For(0, image.Height, y =>
                 {
-                    byte* newRow = newStart + (y * width_3);
-                    byte* oldRow = oldStart + (y * width_3);
+                    byte* newRow = newStart0 + (y * width_3);
+                    byte* oldRow = oldStart0 + (y * width_3);
 
                     float sum = 0;
                     int n = 0;
@@ -96,8 +100,8 @@ namespace FilterLib.Filters.Artistic
                         lum = Util.RGB.GetLuminance(oldRow[x], oldRow[x + 1], oldRow[x + 2]);
                         newRow[x] = newRow[x + 1] = newRow[x + 2] = (byte)(avg < lum ? 255 : 0);
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
             reporter?.Done();
         }
