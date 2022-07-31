@@ -28,7 +28,7 @@ namespace FilterLib.Filters.Transform
                             (row2[width_3 - x - 3 + c], row1[x + c]) = (row1[x + c], row2[width_3 - x - 3 + c]);
                         }
                     }
-                    reporter?.Report(y, 0, hDiv2 - 1);
+                    reporter?.Report(y + 1, 0, hDiv2);
                 }
             }
             reporter?.Done();

@@ -76,7 +76,7 @@ namespace FilterLib.Filters.Dither
                         *ptr = roundedColor;
                         ++ptr;
                     }
-                    reporter?.Report(y, 0, image.Height - 1);
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
             }
             reporter?.Done();

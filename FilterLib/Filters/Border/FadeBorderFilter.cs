@@ -79,7 +79,7 @@ namespace FilterLib.Filters.Border
                             px[2] = (byte)(px[2] * (1 - alpha) + Color.B * alpha);
                         }
                     }
-                    reporter?.Report(k, 0, borderWidth - 1);
+                    reporter?.Report(k + 1, 0, borderWidth);
                 }
             }
             reporter?.Done();

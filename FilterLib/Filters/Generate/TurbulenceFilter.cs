@@ -19,9 +19,9 @@ namespace FilterLib.Filters.Generate
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            reporter?.Report(0, 0, 2 * image.Height - 1);
+            reporter?.Report(0, 0, 2 * image.Height);
             float[,] turb = GenerateTurbulence(image.Width, image.Height);
-            reporter?.Report(image.Height, 0, 2 * image.Height - 1);
+            reporter?.Report(image.Height, 0, 2 * image.Height);
             fixed (byte* start = image)
             {
                 byte* ptr = start;
@@ -32,7 +32,7 @@ namespace FilterLib.Filters.Generate
                         ptr[0] = ptr[1] = ptr[2] = (byte)(turb[x, y] * 255);
                         ptr += 3;
                     }
-                    reporter?.Report(image.Height + y, 0, 2 * image.Height - 1);
+                    reporter?.Report(image.Height + y + 1, 0, 2 * image.Height);
                 }
             }
             reporter?.Done();

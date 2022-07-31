@@ -81,7 +81,7 @@ namespace FilterLib.Filters.Generate
                         else ptr[0] = ptr[1] = ptr[2] = ((MathF.Sqrt(d_2) - ri) / (ro - ri) * 255).ClampToByte();
                         ptr += 3;
                     }
-                    reporter?.Report(y, 0, image.Height - 1);
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
             }
             reporter?.Done();

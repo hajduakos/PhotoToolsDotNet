@@ -92,7 +92,7 @@ namespace FilterLib.Filters.Other
                             newStart[idx2 + 2] = oldStart[idx1 + 2];
                         }
 
-                        reporter?.Report(x, 0, oldWidth_3 - 3);
+                        reporter?.Report(x + 3, 0, oldWidth_3);
                     }
                 }
                 else if (Direction == WaveDirection.Vertical)
@@ -109,7 +109,7 @@ namespace FilterLib.Filters.Other
                         // Iterate through columns and move pixels
                         for (int x = 0; x < oldWidth_3; ++x) newStart[y * newWidth_3 + x + amplitudePx_3 - offset_3] = oldStart[y * oldWidth_3 + x];
 
-                        reporter?.Report(y, 0, image.Height - 1);
+                        reporter?.Report(y + 1, 0, image.Height);
                     }
                 }
                 else throw new System.ArgumentException($"Unknown wave direction: {Direction}.");

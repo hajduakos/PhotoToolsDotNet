@@ -24,7 +24,7 @@ namespace FilterLib.Filters.Transform
                     {
                         (row2[x], row1[x]) = (row1[x], row2[x]);
                     }
-                    reporter?.Report(y, 0, height_div2 - 1);
+                    reporter?.Report(y + 1, 0, height_div2);
                 }
             }
             reporter?.Done();

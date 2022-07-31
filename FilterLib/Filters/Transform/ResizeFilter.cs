@@ -103,7 +103,7 @@ namespace FilterLib.Filters.Transform
                                 throw new System.ArgumentException($"Unknown interpolation mode: {Interpolation}.");
                         }
                     }
-                    reporter?.Report(y, 0, resized.Height - 1);
+                    reporter?.Report(y + 1, 0, resized.Height);
                 }
             }
 

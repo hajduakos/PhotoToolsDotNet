@@ -72,7 +72,7 @@ namespace FilterLib.Filters.Artistic
                         newRow[x + 1] = oldRow[x + idx + 1];
                         newRow[x + 2] = oldRow[x + idx + 2];
                     }
-                    reporter?.Report(y, 0, image.Height - 1);
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
             }
             reporter?.Done();

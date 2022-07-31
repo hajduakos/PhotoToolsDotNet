@@ -43,7 +43,7 @@ namespace FilterLib.Blending
                         topPtr += 3;
                     }
 
-                    reporter?.Report(y, 0, height - 1);
+                    reporter?.Report(y + 1, 0, height);
                 }
             }
             BlendEnd();

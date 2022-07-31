@@ -27,7 +27,7 @@ namespace FilterLib.Filters.Transform
                         newStart[idx + 1] = oldRow[x + 1];
                         newStart[idx + 2] = oldRow[x + 2];
                     }
-                    reporter?.Report(y, 0, image.Height - 1);
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
             }
             reporter?.Done();

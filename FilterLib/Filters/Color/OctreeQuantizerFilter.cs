@@ -51,7 +51,7 @@ namespace FilterLib.Filters.Color
                         tree.AddColor(ptr[0], ptr[1], ptr[2]);
                         ptr += 3;
                     }
-                    reporter?.Report(0, y, 2 * image.Height - 1);
+                    reporter?.Report(y + 1, 0, 2 * image.Height);
                 }
                 // Step 2: build reduced color palette
                 tree.Reduce(Levels);
@@ -64,7 +64,7 @@ namespace FilterLib.Filters.Color
                         (ptr[0], ptr[1], ptr[2]) = tree.GetPaletteColor(ptr[0], ptr[1], ptr[2]);
                         ptr += 3;
                     }
-                    reporter?.Report(0, image.Height + y, 2 * image.Height - 1);
+                    reporter?.Report(image.Height + y + 1, 0, 2 * image.Height);
                 }
             }
             reporter?.Done();

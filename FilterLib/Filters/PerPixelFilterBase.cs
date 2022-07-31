@@ -23,11 +23,10 @@ namespace FilterLib.Filters
                         ProcessPixel(ptr, ptr + 1, ptr + 2);
                         ptr += 3;
                     }
-                    reporter?.Report(y, 0, image.Height - 1);
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
 
             }
-
             ApplyEnd();
             reporter?.Done();
         }

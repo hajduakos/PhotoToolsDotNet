@@ -68,9 +68,9 @@ namespace FilterLib.Filters.Generate
             reporter?.Start();
             float xMul = horizLines / (float)image.Width;
             float yMul = vertLines / (float)image.Height;
-            reporter?.Report(0, 0, 2 * image.Height - 1);
+            reporter?.Report(0, 0, 2 * image.Height);
             float[,] turb = GenerateTurbulence(image.Width, image.Height);
-            reporter?.Report(image.Height, 0, 2 * image.Height - 1);
+            reporter?.Report(image.Height, 0, 2 * image.Height);
 
             fixed (byte* start = image)
             {
@@ -83,7 +83,7 @@ namespace FilterLib.Filters.Generate
                             (byte)(255 * Math.Abs(MathF.Sin(MathF.PI * (x * xMul + y * yMul + twist * turb[x, y]))));
                         ptr += 3;
                     }
-                    reporter?.Report(image.Height + y, 0, 2 * image.Height - 1);
+                    reporter?.Report(image.Height + y + 1, 0, 2 * image.Height);
                 }
             }
             reporter?.Done();

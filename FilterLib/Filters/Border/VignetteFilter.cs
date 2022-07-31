@@ -88,7 +88,7 @@ namespace FilterLib.Filters.Border
                         }
                         ptr += 3;
                     }
-                    reporter?.Report(y, 0, image.Height - 1);
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
             }
             reporter?.Done();

@@ -156,7 +156,7 @@ namespace FilterLib.Filters.Transform
                             row[x + 1] = green;
                             row[x + 2] = red;
                         }
-                        reporter?.Report(y, 0, image.Height - 1);
+                        reporter?.Report(y + 1, 0, image.Height);
                     }
                 }
             }

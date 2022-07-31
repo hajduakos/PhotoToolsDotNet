@@ -82,7 +82,7 @@ namespace FilterLib.Filters.Blur
                         tmpRow[x + 2] = (byte)bSum;
                     }
                     // Report progress from 0% to 50%
-                    reporter?.Report(y, 0, image.Height * 2 - 1);
+                    reporter?.Report(y + 1, 0, image.Height * 2);
                 }
 
                 // Vertical blur, result is in 'image'
@@ -112,7 +112,7 @@ namespace FilterLib.Filters.Blur
                         imgCol[yOffset + 2] = (byte)bSum;
                     }
                     // Report progress from 50% to 100%
-                    reporter?.Report(x + width_3, 0, width_3 * 2 - 3);
+                    reporter?.Report(x + width_3 + 3, 0, width_3 * 2);
                 }
             }
             reporter?.Done();

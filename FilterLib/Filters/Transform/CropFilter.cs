@@ -91,7 +91,7 @@ namespace FilterLib.Filters.Transform
                         newRow[x + 1] = oldRow[x0_3 + x + 1];
                         newRow[x + 2] = oldRow[x0_3 + x + 2];
                     }
-                    reporter?.Report(y, 0, h0 - 1);
+                    reporter?.Report(y + 1, 0, h0);
                 }
             }
             reporter?.Done();

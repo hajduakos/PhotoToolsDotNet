@@ -26,7 +26,7 @@ namespace FilterLib.Filters.Transform
                             (row[width_3 - x - 3 + c], row[x + c]) = (row[x + c], row[width_3 - x - 3 + c]);
                         }
                     }
-                    reporter?.Report(y, 0, image.Height - 1);
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
             }
             reporter?.Done();

@@ -105,7 +105,7 @@ namespace FilterLib.Filters.Transform
                         newPtr[2] = (bSum / weightSum).ClampToByte();
                         newPtr += 3;
                     }
-                    reporter?.Report(y, 0, resized.Height - 1);
+                    reporter?.Report(y + 1, 0, resized.Height);
                 }
                 reporter?.Done();
                 return resized;

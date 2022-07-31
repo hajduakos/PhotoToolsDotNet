@@ -54,9 +54,9 @@ namespace FilterLib.Filters.Generate
         {
             reporter?.Start();
             float sin_mult = MathF.PI * 2 * rings;
-            reporter?.Report(0, 0, 2 * image.Height - 1);
+            reporter?.Report(0, 0, 2 * image.Height);
             float[,] turb = GenerateTurbulence(image.Width, image.Height);
-            reporter?.Report(image.Height, 0, 2 * image.Height - 1);
+            reporter?.Report(image.Height, 0, 2 * image.Height);
             fixed (byte* start = image)
             {
                 byte* ptr = start;
@@ -71,7 +71,7 @@ namespace FilterLib.Filters.Generate
                             (byte)(255 * Math.Abs(MathF.Sin(sin_mult * (MathF.Sqrt(x0 * x0 + y0 * y0) + twist * turb[x, y]))));
                         ptr += 3;
                     }
-                    reporter?.Report(image.Height + y, 0, 2 * image.Height - 1);
+                    reporter?.Report(image.Height + y + 1, 0, 2 * image.Height);
                 }
             }
             reporter?.Done();

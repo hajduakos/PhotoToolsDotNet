@@ -5,7 +5,6 @@
     /// </summary>
     public abstract class PerComponentBlendBase : PerPixelBlendBase
     {
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -21,9 +20,7 @@
         protected abstract byte BlendComponent(byte compBottom, byte compTop);
 
         /// <inheritdoc/>
-        protected override sealed (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB)
-        {
-            return (BlendComponent(botR, topR), BlendComponent(botG, topG), BlendComponent(botB, topB));
-        }
+        protected override sealed (byte, byte, byte) BlendPixel(byte botR, byte botG, byte botB, byte topR, byte topG, byte topB) =>
+            (BlendComponent(botR, topR), BlendComponent(botG, topG), BlendComponent(botB, topB));
     }
 }

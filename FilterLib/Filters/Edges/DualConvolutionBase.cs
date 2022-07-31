@@ -36,9 +36,9 @@ namespace FilterLib.Filters.Edges
             reporter?.Start();
             Image tmp = (Image)image.Clone();
 
-            conv1.ApplyInPlace(tmp, new SubReporter(reporter, 0, 33, 0, 100));
-            conv2.ApplyInPlace(image, new SubReporter(reporter, 34, 66, 0, 100));
-            IReporter subRep = new SubReporter(reporter, 67, 100, 0, 100);
+            conv1.ApplyInPlace(tmp, reporter == null ? null : new SubReporter(reporter, 0, 33, 0, 100));
+            conv2.ApplyInPlace(image, reporter == null ? null : new SubReporter(reporter, 34, 66, 0, 100));
+            IReporter subRep = reporter == null ? null : new SubReporter(reporter, 67, 100, 0, 100);
 
             // Cache all different combinations
             byte[,] map = new byte[256, 256];
@@ -59,7 +59,7 @@ namespace FilterLib.Filters.Edges
                         ++imgPtr;
                         ++tmpPtr;
                     }
-                    subRep.Report(y, 0, image.Height - 1);
+                    subRep?.Report(y + 1, 0, image.Height);
                 }
 
             }

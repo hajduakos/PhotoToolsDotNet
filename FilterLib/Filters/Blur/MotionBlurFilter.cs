@@ -84,7 +84,7 @@ namespace FilterLib.Filters.Blur
                         newStart[newIdx + 1] = (byte)(gSum / n);
                         newStart[newIdx + 2] = (byte)(bSum / n);
                     }
-                    reporter?.Report(y, 0, image.Height - 1);
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
             }
 

@@ -129,7 +129,7 @@ namespace FilterLib.Filters.Mosaic
                         avgColors[x / size_3, y / size, 1] = (byte)(avg * gSum / n + (1 - avg) * startPtr[pnt.y * width_3 + pnt.x * 3 + 1]);
                         avgColors[x / size_3, y / size, 2] = (byte)(avg * bSum / n + (1 - avg) * startPtr[pnt.y * width_3 + pnt.x * 3 + 2]);
                     }
-                    reporter?.Report(y, 0, 2 * image.Height - 1);
+                    reporter?.Report(y + 1, 0, 2 * image.Height);
                 }
 
                 // Third step: draw Voronoi diagram: for each pixel, find the closest crystal point
@@ -161,7 +161,7 @@ namespace FilterLib.Filters.Mosaic
                         for (int i = 0; i < 3; i++)
                             startPtr[y * width_3 + x + i] = avgColors[minPoint.x / size, minPoint.y / size, i];
                     }
-                    reporter?.Report(image.Height + y, 0, 2 * image.Height - 1);
+                    reporter?.Report(image.Height + y + 1, 0, 2 * image.Height);
                 }
             }
             reporter?.Done();

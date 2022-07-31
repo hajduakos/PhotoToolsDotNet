@@ -101,7 +101,7 @@ namespace FilterLib.Filters.Other
                             + oldStart[y0 * width_3 + x1 + 2] * xFrac * (1 - yFrac)
                             + oldStart[y1 * width_3 + x1 + 2] * xFrac * yFrac);
                     }
-                    reporter?.Report(y, 0, image.Height - 1);
+                    reporter?.Report(y + 1, 0, image.Height);
                 }
             }
 
