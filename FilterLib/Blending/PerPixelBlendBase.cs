@@ -1,5 +1,6 @@
 ﻿using FilterLib.Util;
 using Math = System.Math;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Blending
 {
@@ -20,18 +21,22 @@ namespace FilterLib.Blending
         public override sealed unsafe void ApplyInPlace(Image bottom, Image top, Reporting.IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             BlendStart();
             float op1 = Opacity / 100.0f;
             float op0 = 1 - op1;
             fixed (byte* botStart = bottom, topStart = top)
             {
+                byte* botStart0 = botStart;
+                byte* topStart0 = topStart;
                 int height = Math.Min(bottom.Height, top.Height);
                 int width = Math.Min(bottom.Width, top.Width);
 
-                for (int y = 0; y < height; ++y)
+                Parallel.For(0, height, y =>
                 {
-                    byte* botPtr = botStart + (y * bottom.Width * 3);
-                    byte* topPtr = topStart + (y * top.Width * 3);
+                    byte* botPtr = botStart0 + y * bottom.Width * 3;
+                    byte* topPtr = topStart0 + y * top.Width * 3;
 
                     for (int x = 0; x < width; ++x)
                     {
@@ -42,9 +47,8 @@ namespace FilterLib.Blending
                         botPtr += 3;
                         topPtr += 3;
                     }
-
-                    reporter?.Report(y + 1, 0, height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, height);
+                });
             }
             BlendEnd();
             reporter?.Done();
