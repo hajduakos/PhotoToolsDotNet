@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Border
 {
@@ -51,6 +52,8 @@ namespace FilterLib.Filters.Border
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             float a1 = Radius.ToAbsolute(image.Width / 2);
             float a0 = ClearRadius.ToAbsolute(image.Width / 2);
             if (a1 < a0) throw new ArgumentException("Radius must be larger than clear zone radius.");
@@ -60,9 +63,10 @@ namespace FilterLib.Filters.Border
 
             fixed (byte* start = image)
             {
-                byte* ptr = start;
-                for (int y = 0; y < image.Height; ++y)
+                byte* start0 = start;
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* ptr = start0 + y * image.Width * 3;
                     for (int x = 0; x < image.Width; ++x)
                     {
                         // Calculate coordinates with the origin at the center
@@ -88,8 +92,8 @@ namespace FilterLib.Filters.Border
                         }
                         ptr += 3;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
             reporter?.Done();
         }
