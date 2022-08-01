@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Border
 {
@@ -47,37 +48,46 @@ namespace FilterLib.Filters.Border
 
             fixed (byte* start = image)
             {
+                byte* start0 = start;
                 // Draw rectangles with decreasing alpha value
                 for (int k = 0; k < borderWidth; ++k)
                 {
                     float alpha = 1 - k / (float)borderWidth;
                     if (k < image.Height)
                     {
-                        for (int x = 0; x < width_3; x += 3)
+                        Parallel.For(0, image.Width, x =>
                         {
-                            byte* px = start + k * width_3 + x;
+                            x *= 3;
+                            byte* px = start0 + k * width_3 + x;
                             px[0] = (byte)(px[0] * (1 - alpha) + Color.R * alpha);
                             px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
                             px[2] = (byte)(px[2] * (1 - alpha) + Color.B * alpha);
-                            px = start + (image.Height - 1 - k) * width_3 + x;
+                        });
+                        Parallel.For(0, image.Width, x =>
+                        {
+                            x *= 3;
+                            byte* px = start0 + (image.Height - 1 - k) * width_3 + x;
                             px[0] = (byte)(px[0] * (1 - alpha) + Color.R * alpha);
                             px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
                             px[2] = (byte)(px[2] * (1 - alpha) + Color.B * alpha);
-                        }
+                        });
                     }
                     if (k < image.Width)
                     {
-                        for (int y = 0; y < image.Height; ++y)
+                        Parallel.For(0, image.Height, y =>
                         {
-                            byte* px = start + y * width_3 + k * 3;
+                            byte* px = start0 + y * width_3 + k * 3;
                             px[0] = (byte)(px[0] * (1 - alpha) + Color.R * alpha);
                             px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
                             px[2] = (byte)(px[2] * (1 - alpha) + Color.B * alpha);
-                            px = start + y * width_3 + width_3 - (k + 1) * 3;
+                        });
+                        Parallel.For(0, image.Height, y =>
+                        {
+                            byte* px = start0 + y * width_3 + width_3 - (k + 1) * 3;
                             px[0] = (byte)(px[0] * (1 - alpha) + Color.R * alpha);
                             px[1] = (byte)(px[1] * (1 - alpha) + Color.G * alpha);
                             px[2] = (byte)(px[2] * (1 - alpha) + Color.B * alpha);
-                        }
+                        });
                     }
                     reporter?.Report(k + 1, 0, borderWidth);
                 }
