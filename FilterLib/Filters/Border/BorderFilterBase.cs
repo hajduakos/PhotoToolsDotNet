@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Border
 {
@@ -69,15 +70,17 @@ namespace FilterLib.Filters.Border
             Image result = new(newWidth, newHeight);
             fixed (byte* newStart = result, oldStart = image)
             {
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
                 // Draw the image centered
                 int imgOffset = (newWidth - image.Width) / 2;
                 int imgOffset_3 = imgOffset * 3;
                 int oldWidth_3 = image.Width * 3;
                 int newWidth_3 = result.Width * 3;
-                for (int y = 0; y < image.Height; ++y)
+                Parallel.For(0, image.Height, y =>
                 {
-                    byte* newPtr = newStart + (y + imgOffset) * newWidth_3;
-                    byte* oldPtr = oldStart + y * oldWidth_3;
+                    byte* newPtr = newStart0 + (y + imgOffset) * newWidth_3;
+                    byte* oldPtr = oldStart0 + y * oldWidth_3;
 
                     for (int x = 0; x < image.Width; ++x)
                     {
@@ -87,58 +90,60 @@ namespace FilterLib.Filters.Border
                         oldPtr += 3;
                         newPtr += 3;
                     }
-                }
+                });
                 reporter?.Report(33, 0, 100);
 
                 // Draw the 4 borders around the image
                 // Top
-                byte* ptr = newStart;
-                for (int y = 0; y < borderW && y < newHeight; ++y)
+                Parallel.For(0, Math.Min(borderW, newHeight), y =>
                 {
+                    byte* ptr = newStart0 + y * newWidth_3;
                     for (int x = 0; x < result.Width; ++x)
                     {
                         (ptr[0], ptr[1], ptr[2]) = GetBorderAt(x, y);
                         ptr += 3;
                     }
-                }
+                });
                 // Bottom
                 int y0 = Math.Max(0, newHeight - borderW);
-                ptr = newStart + y0 * newWidth_3;
-                for (int y = y0; y < newHeight; ++y)
+                Parallel.For(y0, newHeight, y =>
                 {
+                    byte* ptr = newStart0 + y * newWidth_3;
                     for (int x = 0; x < result.Width; ++x)
                     {
                         (ptr[0], ptr[1], ptr[2]) = GetBorderAt(x, y);
                         ptr += 3;
                     }
-                }
-                // Left and right
-                for (int y = borderW; y < newHeight - borderW; ++y)
+                });
+                // Left
+                Parallel.For(borderW, newHeight - borderW, y =>
                 {
-                    ptr = newStart + y * newWidth_3;
-                    // Left
+                    byte* ptr = newStart0 + y * newWidth_3;
                     for (int x = 0; x < borderW && x < result.Width; ++x)
                     {
                         (ptr[0], ptr[1], ptr[2]) = GetBorderAt(x, y);
                         ptr += 3;
                     }
-                    // Right
+                });
+                // Right
+                Parallel.For(borderW, newHeight - borderW, y =>
+                {
                     int x0 = Math.Max(0, result.Width - borderW);
-                    ptr = newStart + y * newWidth_3 + x0 * 3;
+                    byte* ptr = newStart0 + y * newWidth_3 + x0 * 3;
                     for (int x = x0; x < result.Width; ++x)
                     {
                         (ptr[0], ptr[1], ptr[2]) = GetBorderAt(x, y);
                         ptr += 3;
                     }
-                }
+                });
                 reporter?.Report(67, 0, 100);
 
                 // Draw the circles (rounded corner)
                 int radius_2 = 2 * radius;
                 float[,] alphaMap = GenerateAlphaMap(radius);
-                for (int y = 0; y < radius && y + borderW < newHeight; ++y)
+                Parallel.For(0, Math.Min(radius, newHeight - borderW), y =>
                 {
-                    byte* row = newStart + (y + borderW) * newWidth_3;
+                    byte* row = newStart0 + (y + borderW) * newWidth_3;
                     // Top left
                     for (int x = 0; x < radius && x + borderW < newWidth; ++x)
                     {
@@ -159,11 +164,12 @@ namespace FilterLib.Filters.Border
                         row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
                         row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
                     }
-                }
-                for (int y = radius_2 - 1; y >= radius && newHeight - borderW - radius_2 + y >= 0; --y)
+                });
+                Parallel.For(radius, radius_2, y =>
                 {
                     int yImg = newHeight - borderW - radius_2 + y;
-                    byte* row = newStart + yImg * newWidth_3;
+                    if (yImg < 0) return;
+                    byte* row = newStart0 + yImg * newWidth_3;
                     // Bottom left
                     for (int x = 0; x < radius && x + borderW < newWidth; ++x)
                     {
@@ -184,7 +190,7 @@ namespace FilterLib.Filters.Border
                         row[x_3 + 1] = (a * g + (1 - a) * row[x_3 + 1]).ClampToByte();
                         row[x_3 + 2] = (a * b + (1 - a) * row[x_3 + 2]).ClampToByte();
                     }
-                }
+                });
                 reporter?.Report(100, 0, 100);
             }
             reporter?.Done();
@@ -212,7 +218,7 @@ namespace FilterLib.Filters.Border
             float delta = samples == 1 ? 0 : 1f / (samples - 1);
             int radius_2 = radius * 2;
             float[,] map = new float[radius_2, radius_2];
-            for (int x = 0; x < radius_2; ++x)
+            Parallel.For(0, radius_2, x =>
             {
                 for (int y = 0; y < radius_2; ++y)
                 {
@@ -230,7 +236,7 @@ namespace FilterLib.Filters.Border
                     }
                     map[x, y] = outside / (float)total;
                 }
-            }
+            });
             return map;
         }
     }
