@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Generate
 {
@@ -58,6 +59,8 @@ namespace FilterLib.Filters.Generate
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             int x1 = StartX.ToAbsolute(image.Width);
             int x2 = EndX.ToAbsolute(image.Width);
             int y1 = StartY.ToAbsolute(image.Height);
@@ -68,9 +71,10 @@ namespace FilterLib.Filters.Generate
 
             fixed(byte* start = image)
             {
-                byte* ptr = start;
-                for (int y = 0; y < image.Height; ++y)
+                byte* start0 = start;
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* ptr = start0 + y * image.Width * 3;
                     for (int x = 0; x < image.Width; ++x)
                     {
                         // t corresponds the projection of the current point to the line
@@ -81,8 +85,8 @@ namespace FilterLib.Filters.Generate
                         ptr[0] = ptr[1] = ptr[2] = (t * 255).ClampToByte();
                         ptr += 3;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
             reporter?.Done();
         }
