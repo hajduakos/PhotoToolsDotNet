@@ -2,6 +2,7 @@
 using FilterLib.Util;
 using Math = System.Math;
 using MathF = System.MathF;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
@@ -49,9 +50,11 @@ namespace FilterLib.Filters.Transform
         /// <inheritdoc/>
         public override Image Apply(Image image, IReporter reporter = null)
         {
-            if (MathF.Abs(Angle) < 0.001f) return (Image)image.Clone();
-
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
+            if (MathF.Abs(Angle) < 0.001f) { reporter?.Done(); return (Image)image.Clone(); }
+
             float angRad = Angle / 180 * MathF.PI;
             float sinAng = MathF.Sin(angRad);
             float cosAng = MathF.Cos(angRad);
@@ -77,17 +80,19 @@ namespace FilterLib.Filters.Transform
             float cx = image.Width / 2f;
             float cy = image.Height / 2f;
             int rotWidth_3 = rotated.Width * 3;
-            int x0, y0, x1, y1;
-            byte red, green, blue;
 
             unsafe
             {
                 fixed (byte* start = image, rotStart = rotated)
                 {
-                    for (int y = 0; y < rotated.Height; ++y)
+                    byte* start0 = start;
+                    byte* rotStart0 = rotStart;
+                    Parallel.For(0, rotated.Height, y =>
                     {
+                        int x0, y0, x1, y1;
+                        byte red, green, blue;
                         float yr = cry - y;
-                        byte* row = rotStart + y * rotWidth_3;
+                        byte* row = rotStart0 + y * rotWidth_3;
                         for (int x = 0; x < rotWidth_3; x += 3)
                         {
                             float xr = x / 3 - crx;
@@ -101,7 +106,7 @@ namespace FilterLib.Filters.Transform
                                     y0 = (int)Math.Round(yOrig);
                                     if (x0 >= 0 && x0 < image.Width && y0 >= 0 && y0 < image.Height)
                                     {
-                                        byte* pxOrig = start + y0 * image.Width * 3 + (x0 * 3);
+                                        byte* pxOrig = start0 + y0 * image.Width * 3 + (x0 * 3);
                                         blue = pxOrig[0];
                                         green = pxOrig[1];
                                         red = pxOrig[2];
@@ -119,28 +124,28 @@ namespace FilterLib.Filters.Transform
                                     float redF = 0, greenF = 0, blueF = 0;
                                     if (x0 >= 0 && x0 < image.Width && y0 >= 0 && y0 < image.Height)
                                     {
-                                        byte* pxOrig = start + y0 * image.Width * 3 + (x0 * 3);
+                                        byte* pxOrig = start0 + y0 * image.Width * 3 + (x0 * 3);
                                         blueF += xRatio0 * yRatio0 * pxOrig[0];
                                         greenF += xRatio0 * yRatio0 * pxOrig[1];
                                         redF += xRatio0 * yRatio0 * pxOrig[2];
                                     }
                                     if (x1 >= 0 && x1 < image.Width && y0 >= 0 && y0 < image.Height)
                                     {
-                                        byte* pxOrig = start + y0 * image.Width * 3 + (x1 * 3);
+                                        byte* pxOrig = start0 + y0 * image.Width * 3 + (x1 * 3);
                                         blueF += xRatio1 * yRatio0 * pxOrig[0];
                                         greenF += xRatio1 * yRatio0 * pxOrig[1];
                                         redF += xRatio1 * yRatio0 * pxOrig[2];
                                     }
                                     if (x0 >= 0 && x0 < image.Width && y1 >= 0 && y1 < image.Height)
                                     {
-                                        byte* pxOrig = start + y1 * image.Width * 3 + (x0 * 3);
+                                        byte* pxOrig = start0 + y1 * image.Width * 3 + (x0 * 3);
                                         blueF += xRatio0 * yRatio1 * pxOrig[0];
                                         greenF += xRatio0 * yRatio1 * pxOrig[1];
                                         redF += xRatio0 * yRatio1 * pxOrig[2];
                                     }
                                     if (x1 >= 0 && x1 < image.Width && y1 >= 0 && y1 < image.Height)
                                     {
-                                        byte* pxOrig = start + y1 * image.Width * 3 + (x1 * 3);
+                                        byte* pxOrig = start0 + y1 * image.Width * 3 + (x1 * 3);
                                         blueF += xRatio1 * yRatio1 * pxOrig[0];
                                         greenF += xRatio1 * yRatio1 * pxOrig[1];
                                         redF += xRatio1 * yRatio1 * pxOrig[2];
@@ -156,11 +161,10 @@ namespace FilterLib.Filters.Transform
                             row[x + 1] = green;
                             row[x + 2] = red;
                         }
-                        reporter?.Report(y + 1, 0, image.Height);
-                    }
+                        if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                    });
                 }
             }
-
 
             reporter?.Done();
             return rotated;
