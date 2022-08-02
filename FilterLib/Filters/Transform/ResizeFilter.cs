@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using Math = System.Math;
 using FilterLib.Util;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
@@ -50,6 +51,8 @@ namespace FilterLib.Filters.Transform
         public override unsafe Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             int newWidth = Width.ToAbsolute(image.Width);
             int newHeight = Height.ToAbsolute(image.Height);
 
@@ -59,24 +62,26 @@ namespace FilterLib.Filters.Transform
             Image resized = new(newWidth, newHeight);
 
             int newWidth_3 = resized.Width * 3;
-            int x0, y0, x1, y1;
             // We want to map [0; w-1] to [0; w'-1], hence the (-1) adjustment
             float wScale = resized.Width > 1 ? (image.Width - 1) / (float)(resized.Width - 1) : 0;
             float hScale = resized.Height > 1 ? (image.Height - 1) / (float)(resized.Height - 1) : 0;
 
             fixed (byte* newStart = resized, oldStart = image)
             {
-                for (int y = 0; y < resized.Height; ++y)
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
+                Parallel.For(0, resized.Height, y =>
                 {
-                    byte* newRow = newStart + y * newWidth_3;
+                    byte* newRow = newStart0 + y * newWidth_3;
                     for (int x = 0; x < newWidth_3; x += 3)
                     {
+                        int x0, y0, x1, y1;
                         switch (Interpolation)
                         {
                             case InterpolationMode.NearestNeighbor:
                                 y0 = (int)Math.Round(y * hScale);
                                 x0 = (int)Math.Round(x / 3 * wScale) * 3;
-                                byte* oldRow = oldStart + (y0 * image.Width * 3);
+                                byte* oldRow = oldStart0 + (y0 * image.Width * 3);
                                 for (int i = 0; i < 3; i++) newRow[x + i] = oldRow[x0 + i];
                                 break;
                             case InterpolationMode.Bilinear:
@@ -90,8 +95,8 @@ namespace FilterLib.Filters.Transform
                                 x1 = (int)Math.Ceiling(xf) * 3;
                                 float xRatio1 = xf - x0 / 3;
                                 float xRatio0 = 1 - xRatio1;
-                                byte* oldRow0 = oldStart + (y0 * image.Width * 3);
-                                byte* oldRow1 = oldStart + (y1 * image.Width * 3);
+                                byte* oldRow0 = oldStart0 + (y0 * image.Width * 3);
+                                byte* oldRow1 = oldStart0 + (y1 * image.Width * 3);
                                 for (int i = 0; i < 3; i++)
                                     newRow[x + i] = (byte)(
                                         yRatio0 * xRatio0 * oldRow0[x0 + i] +
@@ -103,8 +108,8 @@ namespace FilterLib.Filters.Transform
                                 throw new System.ArgumentException($"Unknown interpolation mode: {Interpolation}.");
                         }
                     }
-                    reporter?.Report(y + 1, 0, resized.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, resized.Height);
+                });
             }
 
             reporter?.Done();
