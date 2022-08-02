@@ -1,5 +1,6 @@
 ﻿using FilterLib.Reporting;
 using MathF = System.MathF;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other
 {
@@ -38,6 +39,8 @@ namespace FilterLib.Filters.Other
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             // Clone image (the clone won't be modified)
             Image original = (Image)image.Clone();
 
@@ -50,9 +53,11 @@ namespace FilterLib.Filters.Other
 
             fixed (byte* newStart = image, oldStart = original)
             {
-                for (int y = 0; y < image.Height; ++y)
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
+                Parallel.For(0, image.Height, y =>
                 {
-                    byte* newRow = newStart + y * width_3;
+                    byte* newRow = newStart0 + y * width_3;
                     for (int x = 0; x < width_3; x += 3)
                     {
                         // Get corrected coordinates
@@ -88,23 +93,22 @@ namespace FilterLib.Filters.Other
                         if (y1 >= image.Height) y1 = image.Height - 1;
 
                         // Bilinear interpolation
-                        newRow[x] = (byte)(oldStart[y0 * width_3 + x0] * (1 - xFrac) * (1 - yFrac)
-                            + oldStart[y1 * width_3 + x0] * (1 - xFrac) * yFrac
-                            + oldStart[y0 * width_3 + x1] * xFrac * (1 - yFrac)
-                            + oldStart[y1 * width_3 + x1] * xFrac * yFrac);
-                        newRow[x + 1] = (byte)(oldStart[y0 * width_3 + x0 + 1] * (1 - xFrac) * (1 - yFrac)
-                            + oldStart[y1 * width_3 + x0 + 1] * (1 - xFrac) * yFrac
-                            + oldStart[y0 * width_3 + x1 + 1] * xFrac * (1 - yFrac)
-                            + oldStart[y1 * width_3 + x1 + 1] * xFrac * yFrac);
-                        newRow[x + 2] = (byte)(oldStart[y0 * width_3 + x0 + 2] * (1 - xFrac) * (1 - yFrac)
-                            + oldStart[y1 * width_3 + x0 + 2] * (1 - xFrac) * yFrac
-                            + oldStart[y0 * width_3 + x1 + 2] * xFrac * (1 - yFrac)
-                            + oldStart[y1 * width_3 + x1 + 2] * xFrac * yFrac);
+                        newRow[x] = (byte)(oldStart0[y0 * width_3 + x0] * (1 - xFrac) * (1 - yFrac)
+                            + oldStart0[y1 * width_3 + x0] * (1 - xFrac) * yFrac
+                            + oldStart0[y0 * width_3 + x1] * xFrac * (1 - yFrac)
+                            + oldStart0[y1 * width_3 + x1] * xFrac * yFrac);
+                        newRow[x + 1] = (byte)(oldStart0[y0 * width_3 + x0 + 1] * (1 - xFrac) * (1 - yFrac)
+                            + oldStart0[y1 * width_3 + x0 + 1] * (1 - xFrac) * yFrac
+                            + oldStart0[y0 * width_3 + x1 + 1] * xFrac * (1 - yFrac)
+                            + oldStart0[y1 * width_3 + x1 + 1] * xFrac * yFrac);
+                        newRow[x + 2] = (byte)(oldStart0[y0 * width_3 + x0 + 2] * (1 - xFrac) * (1 - yFrac)
+                            + oldStart0[y1 * width_3 + x0 + 2] * (1 - xFrac) * yFrac
+                            + oldStart0[y0 * width_3 + x1 + 2] * xFrac * (1 - yFrac)
+                            + oldStart0[y1 * width_3 + x1 + 2] * xFrac * yFrac);
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
-
             reporter?.Done();
         }
     }
