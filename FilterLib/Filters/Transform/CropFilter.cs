@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using Math = System.Math;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
@@ -63,6 +64,8 @@ namespace FilterLib.Filters.Transform
         public override unsafe Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             int x0 = X.ToAbsolute(image.Width);
             int y0 = Y.ToAbsolute(image.Height);
             int w0 = Width.ToAbsolute(image.Width);
@@ -81,18 +84,15 @@ namespace FilterLib.Filters.Transform
 
             fixed (byte* newStart = cropped, oldStart = image)
             {
-                for (int y = 0; y < h0; ++y)
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
+                Parallel.For(0, h0, y =>
                 {
-                    byte* newRow = newStart + y * newWidth_3;
-                    byte* oldRow = oldStart + (y + y0) * oldWidth_3;
-                    for (int x = 0; x < newWidth_3; x += 3)
-                    {
-                        newRow[x] = oldRow[x0_3 + x];
-                        newRow[x + 1] = oldRow[x0_3 + x + 1];
-                        newRow[x + 2] = oldRow[x0_3 + x + 2];
-                    }
-                    reporter?.Report(y + 1, 0, h0);
-                }
+                    byte* newRow = newStart0 + y * newWidth_3;
+                    byte* oldRow = oldStart0 + (y + y0) * oldWidth_3;
+                    for (int x = 0; x < newWidth_3; ++x) newRow[x] = oldRow[x0_3 + x];
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, h0);
+                });
             }
             reporter?.Done();
             return cropped;
