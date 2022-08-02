@@ -1,4 +1,5 @@
 ﻿using FilterLib.Reporting;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
@@ -12,15 +13,18 @@ namespace FilterLib.Filters.Transform
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
 
             int width_3 = image.Width * 3;
             int hDiv2 = image.Height / 2;
             fixed (byte* start = image)
             {
-                for (int y = 0; y < hDiv2; ++y)
+                byte* start0 = start;
+                Parallel.For(0, hDiv2, y =>
                 {
-                    byte* row1 = start + (y * width_3);
-                    byte* row2 = start + ((image.Height - y - 1) * width_3);
+                    byte* row1 = start0 + (y * width_3);
+                    byte* row2 = start0 + ((image.Height - y - 1) * width_3);
                     for (int x = 0; x < width_3; x += 3)
                     {
                         for (int c = 0; c < 3; ++c)
@@ -28,8 +32,8 @@ namespace FilterLib.Filters.Transform
                             (row2[width_3 - x - 3 + c], row1[x + c]) = (row1[x + c], row2[width_3 - x - 3 + c]);
                         }
                     }
-                    reporter?.Report(y + 1, 0, hDiv2);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, hDiv2);
+                });
             }
             reporter?.Done();
         }
