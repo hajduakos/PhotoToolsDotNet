@@ -1,5 +1,6 @@
 ﻿using Math = System.Math;
 using MathF = System.MathF;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Generate
 {
@@ -54,7 +55,7 @@ namespace FilterLib.Filters.Generate
                 for (int y = 0; y < height; ++y)
                     noise[x, y] = rnd.NextSingle();
 
-            for (int x = 0; x < width; ++x)
+            Parallel.For(0, width, x =>
             {
                 for (int y = 0; y < height; ++y)
                 {
@@ -81,7 +82,7 @@ namespace FilterLib.Filters.Generate
                     }
                     turbulence[x, y] = sum / pow * .5f;
                 }
-            }
+            });
 
             return turbulence;
         }

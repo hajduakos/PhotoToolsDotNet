@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using Math = System.Math;
 using MathF = System.MathF;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Generate
 {
@@ -66,6 +67,8 @@ namespace FilterLib.Filters.Generate
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             float xMul = horizLines / (float)image.Width;
             float yMul = vertLines / (float)image.Height;
             reporter?.Report(0, 0, 2 * image.Height);
@@ -74,17 +77,18 @@ namespace FilterLib.Filters.Generate
 
             fixed (byte* start = image)
             {
-                byte* ptr = start;
-                for (int y = 0; y < image.Height; ++y)
+                byte* start0 = start;
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* ptr = start0 + y * image.Width * 3;
                     for (int x = 0; x < image.Width; ++x)
                     {
                         ptr[0] = ptr[1] = ptr[2] =
                             (byte)(255 * Math.Abs(MathF.Sin(MathF.PI * (x * xMul + y * yMul + twist * turb[x, y]))));
                         ptr += 3;
                     }
-                    reporter?.Report(image.Height + y + 1, 0, 2 * image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(image.Height + ++progress, 0, 2 * image.Height);
+                });
             }
             reporter?.Done();
         }
