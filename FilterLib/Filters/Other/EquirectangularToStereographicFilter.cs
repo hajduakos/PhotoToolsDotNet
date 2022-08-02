@@ -3,6 +3,7 @@ using FilterLib.Reporting;
 using FilterLib.Util;
 using Math = System.Math;
 using MathF = System.MathF;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other
 {
@@ -72,6 +73,8 @@ namespace FilterLib.Filters.Other
             // sphere and the plane. The color on the plane (the result) will take the color from the sphere
             // intersection.
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             int newSize = Math.Min(image.Width, image.Height);
             Image result = new(newSize, newSize);
             float radius = newSize / 4f / MathF.Tan(aov * MathF.PI / 360f); // Radius of the projection sphere
@@ -83,9 +86,11 @@ namespace FilterLib.Filters.Other
             float yMult = 1 / 180f * (image.Height - 1);
             fixed (byte* oldStart = image, newStart = result)
             {
-                byte* newPtr = newStart;
-                for (int y = 0; y < newSize; ++y)
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
+                Parallel.For(0, newSize, y =>
                 {
+                    byte* newPtr = newStart0 + y * newSize_3;
                     for (int x = 0; x < newSize_3; x += 3)
                     {
                         // Get corrected coordinates
@@ -105,7 +110,7 @@ namespace FilterLib.Filters.Other
                             case InterpolationMode.NearestNeighbor:
                                 x0 = Math.Min((int)MathF.Round(xOrg), image.Width - 1);
                                 y0 = Math.Min((int)MathF.Round(yOrg), image.Height - 1);
-                                byte* oldPx = oldStart + y0 * oldWidth_3 + x0 * 3;
+                                byte* oldPx = oldStart0 + y0 * oldWidth_3 + x0 * 3;
                                 for (int i = 0; i < 3; ++i) newPtr[i] = oldPx[i];
                                 break;
                             case InterpolationMode.Bilinear:
@@ -119,8 +124,8 @@ namespace FilterLib.Filters.Other
                                 y1 = Math.Min((int)MathF.Ceiling(yOrg), image.Height - 1);
                                 float yRatio1 = yOrg - y0;
                                 float yRatio0 = 1 - yRatio1;
-                                byte* oldRow0 = oldStart + y0 * oldWidth_3;
-                                byte* oldRow1 = oldStart + y1 * oldWidth_3;
+                                byte* oldRow0 = oldStart0 + y0 * oldWidth_3;
+                                byte* oldRow1 = oldStart0 + y1 * oldWidth_3;
                                 for (int i = 0; i < 3; ++i)
                                     newPtr[i] = (byte)(
                                         oldRow0[x0 + i] * xRatio0 * yRatio0 +
@@ -133,8 +138,8 @@ namespace FilterLib.Filters.Other
                         }
                         newPtr += 3;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
 
             reporter?.Done();
