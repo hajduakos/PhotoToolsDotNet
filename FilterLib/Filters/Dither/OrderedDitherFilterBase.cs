@@ -1,5 +1,6 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Dither
 {
@@ -42,13 +43,16 @@ namespace FilterLib.Filters.Dither
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             float intervalSize = 255f / (levels - 1);
             int width_3 = image.Width * 3;
             fixed (byte* start = image)
             {
-                byte* ptr = start;
-                for (int y = 0; y < image.Height; y++)
+                byte* start0 = start;
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* ptr = start0 + y * width_3;
                     for (int x = 0; x < width_3; ++x)
                     {
                         // We need to round down or up to the nearest multiply of intervalSize.
@@ -59,8 +63,8 @@ namespace FilterLib.Filters.Dither
                         *ptr = (treshold > *ptr ? roundedColor : (roundedColor + intervalSize)).ClampToByte();
                         ++ptr;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                });
             }
             reporter?.Done();
         }
