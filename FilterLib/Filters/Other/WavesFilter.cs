@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using Math = System.Math;
 using MathF = System.MathF;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other
 {
@@ -55,6 +56,8 @@ namespace FilterLib.Filters.Other
         public override unsafe Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             Image result;
 
             int waveLengthPx = Wavelength.ToAbsolute(Direction == WaveDirection.Horizontal ? image.Width : image.Height);
@@ -62,8 +65,8 @@ namespace FilterLib.Filters.Other
 
             if (waveLengthPx == 0) throw new System.ArgumentException("Wavelength cannot be zero.");
 
-            if (Direction == WaveDirection.Horizontal) result = new Image(image.Width, image.Height + 2 * amplitudePx);
-            else result = new Image(image.Width + 2 * amplitudePx, image.Height);
+            if (Direction == WaveDirection.Horizontal) result = new(image.Width, image.Height + 2 * amplitudePx);
+            else result = new(image.Width + 2 * amplitudePx, image.Height);
 
             int oldWidth_3 = image.Width * 3;
             int newWidth_3 = result.Width * 3;
@@ -72,6 +75,8 @@ namespace FilterLib.Filters.Other
 
             fixed (byte* oldStart = image, newStart = result)
             {
+                byte* newStart0 = newStart;
+                byte* oldStart0 = oldStart;
                 if (Direction == WaveDirection.Horizontal)
                 {
                     // Iterate through columns
@@ -83,14 +88,14 @@ namespace FilterLib.Filters.Other
                         else offset = -Math.Min(amplitudePx, -offset);
 
                         // Iterate through rows and move pixels
-                        for (int y = 0; y < image.Height; ++y)
+                        Parallel.For(0, image.Height, y =>
                         {
                             int idx1 = y * oldWidth_3 + x;
                             int idx2 = (y + amplitudePx - offset) * newWidth_3 + x;
-                            newStart[idx2] = oldStart[idx1];
-                            newStart[idx2 + 1] = oldStart[idx1 + 1];
-                            newStart[idx2 + 2] = oldStart[idx1 + 2];
-                        }
+                            newStart0[idx2] = oldStart0[idx1];
+                            newStart0[idx2 + 1] = oldStart0[idx1 + 1];
+                            newStart0[idx2 + 2] = oldStart0[idx1 + 2];
+                        });
 
                         reporter?.Report(x + 3, 0, oldWidth_3);
                     }
@@ -98,7 +103,7 @@ namespace FilterLib.Filters.Other
                 else if (Direction == WaveDirection.Vertical)
                 {
                     // Iterate through rows
-                    for (int y = 0; y < image.Height; ++y)
+                    Parallel.For(0, image.Height, y =>
                     {
                         // Calculate offset
                         int offset = (int)MathF.Round(MathF.Sin(freq * y) * amplitudePx);
@@ -107,10 +112,11 @@ namespace FilterLib.Filters.Other
                         int offset_3 = offset * 3;
 
                         // Iterate through columns and move pixels
-                        for (int x = 0; x < oldWidth_3; ++x) newStart[y * newWidth_3 + x + amplitudePx_3 - offset_3] = oldStart[y * oldWidth_3 + x];
+                        for (int x = 0; x < oldWidth_3; ++x)
+                            newStart0[y * newWidth_3 + x + amplitudePx_3 - offset_3] = oldStart0[y * oldWidth_3 + x];
 
-                        reporter?.Report(y + 1, 0, image.Height);
-                    }
+                        if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
+                    });
                 }
                 else throw new System.ArgumentException($"Unknown wave direction: {Direction}.");
             }
