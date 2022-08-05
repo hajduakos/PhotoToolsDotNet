@@ -1,5 +1,6 @@
 ﻿using FilterLib.Reporting;
 using Math = System.Math;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Mosaic
 {
@@ -45,15 +46,20 @@ namespace FilterLib.Filters.Mosaic
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
+            int width_3 = image.Width * 3;
+            int size_3 = size * 3;
             fixed (byte* start = image)
             {
-                int width_3 = image.Width * 3;
-                int size_3 = size * 3;
-                byte rNew, gNew, bNew;
-
+                byte* start0 = start;
+                int yMax = image.Height / size;
+                if (yMax * size < image.Height) yMax++;
                 // Iterate through block rows
-                for (int y = 0; y < image.Height; y += size)
+                Parallel.For(0, yMax, y =>
                 {
+                    y *= size;
+                    byte rNew, gNew, bNew;
                     // Iterate through block columns
                     for (int x = 0; x < width_3; x += size_3)
                     {
@@ -66,7 +72,7 @@ namespace FilterLib.Filters.Mosaic
                                 int n = 0;
                                 for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
                                 {
-                                    row = start + ((y + ySub) * width_3);
+                                    row = start0 + ((y + ySub) * width_3);
                                     for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                                     {
                                         rSum += row[x + xSub];
@@ -80,7 +86,7 @@ namespace FilterLib.Filters.Mosaic
                                 bNew = (byte)(bSum / n);
                                 break;
                             case PixelateMode.MidPoint:
-                                row = start + (Math.Min(y + size / 2, image.Height - 1) * width_3);
+                                row = start0 + (Math.Min(y + size / 2, image.Height - 1) * width_3);
                                 int xMid = Math.Min(x + (size / 2) * 3, width_3 - 3);
                                 rNew = row[xMid];
                                 gNew = row[xMid + 1];
@@ -93,7 +99,7 @@ namespace FilterLib.Filters.Mosaic
                         // Fill block
                         for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
                         {
-                            row = start + ((y + ySub) * width_3);
+                            row = start0 + ((y + ySub) * width_3);
                             for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                             {
                                 row[x + xSub] = rNew;
@@ -102,8 +108,8 @@ namespace FilterLib.Filters.Mosaic
                             }
                         }
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, yMax);
+                });
             }
             reporter?.Done();
         }
