@@ -144,11 +144,12 @@ namespace FilterLib.Filters.Mosaic
             int bottomHalfFadeLength = Size / 4;
             int bottomHalfStart = Size / 2 + 1;
             float center = Size / 2f;
+            int half = size % 2 == 0 ? size / 2 : size / 2 + 1;
 
-            // Loop through the whole box
-            Parallel.For(0, Size, x =>
+            // Calculate top half
+            for (int x = 0; x < half; x++)
             {
-                for (int y = 0; y < Size; y++)
+                Parallel.For(0, Size, y =>
                 {
                     // Create linear gradient first
                     float baseAlpha = 0; // Nothing is visible by default
@@ -182,8 +183,11 @@ namespace FilterLib.Filters.Mosaic
                     float circleAlpha = samplesInside / (float)samplesTotal;
 
                     map[x, y] = (baseAlpha * circleAlpha, color);
-                }
-            });
+                });
+            }
+            // Mirror bottom half
+            for (int x = half; x < Size; x++)
+                Parallel.For(0, Size, y => map[x, y] = map[Size - x - 1, y]);
 
             return map;
         }
@@ -198,10 +202,13 @@ namespace FilterLib.Filters.Mosaic
             float samplingDelta = nSamples == 1 ? 0 : 1f / (nSamples - 1);
             float radius_squared = MathF.Pow(Size / 4f, 2);
             float center = Size / 2f;
+            int half = size % 2 == 0 ? size / 2 : size / 2 + 1;
 
-            Parallel.For(0, Size, x =>
+            // Calculate top half
+            for (int x = 0; x < half; x++)
             {
-                for (int y = 0; y < Size; y++)
+                // Calculate left half
+                Parallel.For(0, half, y =>
                 {
                     int samplesInside = 0;
                     int samplesTotal = 0;
@@ -216,8 +223,15 @@ namespace FilterLib.Filters.Mosaic
                         }
                     }
                     map[x, y] = samplesInside / (float)samplesTotal;
-                }
-            });
+                });
+                // Mirror right half
+                Parallel.For(half, Size, y => map[x, y] = map[x, Size - y - 1]);
+            }
+
+            // Mirror bottom half
+            for (int x = half; x < Size; x++)
+                Parallel.For(0, Size, y => map[x, y] = map[Size - x - 1, y]);
+
             return map;
         }
     }
