@@ -2,6 +2,7 @@
 using FilterLib.Util;
 using Math = System.Math;
 using MathF = System.MathF;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
@@ -44,6 +45,8 @@ namespace FilterLib.Filters.Transform
         public override unsafe Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             int newWidth = Width.ToAbsolute(image.Width);
             int newHeight = Height.ToAbsolute(image.Height);
 
@@ -60,10 +63,12 @@ namespace FilterLib.Filters.Transform
 
             fixed (byte* newStart = resized, oldStart = image)
             {
+                byte* oldStart0 = oldStart;
+                byte* newStart0 = newStart;
                 // Loop through pixels of the resized image
-                byte* newPtr = newStart;
-                for (int y = 0; y < resized.Height; ++y)
+                Parallel.For(0, resized.Height, y =>
                 {
+                    byte* newPtr = newStart0 + y * resized.Width * 3;
                     for (int x = 0; x < resized.Width; ++x)
                     {
                         // Each pixel corresponds to a "box" in the original image, covering
@@ -92,7 +97,7 @@ namespace FilterLib.Filters.Transform
                                 if (xi < xStart) weightX = 1 - (xStart - xi);
                                 else if (xi + 1 > xEnd) weightX = xEnd - xi;
 
-                                byte* oldPx = oldStart + yi * image.Width * 3 + xi * 3;
+                                byte* oldPx = oldStart0 + yi * image.Width * 3 + xi * 3;
                                 rSum += oldPx[0] * weightX * weightY;
                                 gSum += oldPx[1] * weightX * weightY;
                                 bSum += oldPx[2] * weightX * weightY;
@@ -105,8 +110,8 @@ namespace FilterLib.Filters.Transform
                         newPtr[2] = (bSum / weightSum).ClampToByte();
                         newPtr += 3;
                     }
-                    reporter?.Report(y + 1, 0, resized.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, resized.Height);
+                });
                 reporter?.Done();
                 return resized;
             }
