@@ -81,9 +81,7 @@ namespace FilterLib.Filters.Noise
             int progress = 0;
             int threads = Math.Min(image.Height, MAX_THREADS);
             int threadSize = image.Height / threads;
-            Random rnd0 = new(Seed);
-            Random[] threadRnds = new Random[threads];
-            for (int i = 0; i < threads; ++i) threadRnds[i] = new Random(rnd0.Next());
+            RandomPool rndp = new(threads, Seed);
             fixed (byte* start = image)
             {
                 byte* start0 = start;
@@ -93,7 +91,7 @@ namespace FilterLib.Filters.Noise
                     int yStart = threadSize * i;
                     int yEnd = (i == threads - 1) ? image.Height : yStart + threadSize;
                     byte* ptr = start0 + yStart * image.Width * 3;
-                    Random rnd = threadRnds[i];
+                    Random rnd = rndp[i];
                     int rn, gn, bn;
                     for (int y = yStart; y < yEnd; ++y)
                     {
