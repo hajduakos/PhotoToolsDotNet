@@ -1,5 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
+using Math = System.Math;
+using Parallel = System.Threading.Tasks.Parallel;
 using Random = System.Random;
 
 namespace FilterLib.Filters.Noise
@@ -10,6 +12,8 @@ namespace FilterLib.Filters.Noise
     [Filter]
     public sealed class AddNoiseFilter : FilterInPlaceBase
     {
+        private const int MAX_THREADS = 128;
+
         private int intensity;
         private int strength;
 
@@ -73,41 +77,54 @@ namespace FilterLib.Filters.Noise
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            Random rnd = new(Seed);
-            int rn, gn, bn;
+            object reporterLock = new();
+            int progress = 0;
+            int threads = Math.Min(image.Height, MAX_THREADS);
+            int threadSize = image.Height / threads;
+            Random rnd0 = new(Seed);
+            Random[] threadRnds = new Random[threads];
+            for (int i = 0; i < threads; ++i) threadRnds[i] = new Random(rnd0.Next());
             fixed (byte* start = image)
             {
-                byte* ptr = start;
-                // Iterate through each pixel and process individually
-                for (int y = 0; y < image.Height; ++y)
+                byte* start0 = start;
+
+                Parallel.For(0, threads, i =>
                 {
-                    for (int x = 0; x < image.Width; ++x)
+                    int yStart = threadSize * i;
+                    int yEnd = (i == threads - 1) ? image.Height : yStart + threadSize;
+                    byte* ptr = start0 + yStart * image.Width * 3;
+                    Random rnd = threadRnds[i];
+                    int rn, gn, bn;
+                    for (int y = yStart; y < yEnd; ++y)
                     {
-                        // Decide to add noise to this pixel or not
-                        if (rnd.Next(1000) < intensity)
+                        for (int x = 0; x < image.Width; ++x)
                         {
-                            if (Type == NoiseType.Monochrome) // Monochrome noise -> same noise added to each channel
+                            // Decide to add noise to this pixel or not
+                            if (rnd.Next(1000) < intensity)
                             {
-                                int noise = (int)((rnd.NextSingle() * 2 - 1) * strength);
-                                rn = ptr[0] + noise;
-                                gn = ptr[1] + noise;
-                                bn = ptr[2] + noise;
+                                if (Type == NoiseType.Monochrome) // Monochrome noise -> same noise added to each channel
+                                {
+                                    int noise = (int)((rnd.NextSingle() * 2 - 1) * strength);
+                                    rn = ptr[0] + noise;
+                                    gn = ptr[1] + noise;
+                                    bn = ptr[2] + noise;
+                                }
+                                else // Color noise -> separate values added to each channel
+                                {
+                                    rn = ptr[0] + (int)((rnd.NextSingle() * 2 - 1) * strength);
+                                    gn = ptr[1] + (int)((rnd.NextSingle() * 2 - 1) * strength);
+                                    bn = ptr[2] + (int)((rnd.NextSingle() * 2 - 1) * strength);
+                                }
+                                // Overwrite old values
+                                ptr[0] = rn.ClampToByte();
+                                ptr[1] = gn.ClampToByte();
+                                ptr[2] = bn.ClampToByte();
                             }
-                            else // Color noise -> separate values added to each channel
-                            {
-                                rn = ptr[0] + (int)((rnd.NextSingle() * 2 - 1) * strength);
-                                gn = ptr[1] + (int)((rnd.NextSingle() * 2 - 1) * strength);
-                                bn = ptr[2] + (int)((rnd.NextSingle() * 2 - 1) * strength);
-                            }
-                            // Overwrite old values
-                            ptr[0] = rn.ClampToByte();
-                            ptr[1] = gn.ClampToByte();
-                            ptr[2] = bn.ClampToByte();
+                            ptr += 3;
                         }
-                        ptr += 3;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, threads);
+                });
             }
             reporter?.Done();
         }
