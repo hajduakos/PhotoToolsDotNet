@@ -1,6 +1,7 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Border
 {
@@ -11,6 +12,8 @@ namespace FilterLib.Filters.Border
     [Filter]
     public sealed class JitterBorderFilter : FilterInPlaceBase
     {
+        private const int MAX_THREADS = 128;
+
         /// <summary>
         /// Border width.
         /// </summary>
@@ -51,33 +54,44 @@ namespace FilterLib.Filters.Border
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
+            int threads = Math.Min(image.Height, MAX_THREADS);
+            int threadSize = image.Height / threads;
+            RandomPool rndp = new(threads, Seed);
+
+            int borderWidth = Width.ToAbsolute(Math.Max(image.Width, image.Height));
+            // Starting from the edge of the image, and going inwards, the probability of
+            // coloring a pixel fades off in with a sine transition for smooth results
+            float[] map = new float[borderWidth + 1];
+            Parallel.For(0, borderWidth + 1, x =>
+                  map[x] = MathF.Sin(x / (float)borderWidth * MathF.PI - MathF.PI / 2) / 2 + .5f);
 
             fixed (byte* start = image)
             {
-                Random rnd = new(Seed);
-                int borderWidth = Width.ToAbsolute(Math.Max(image.Width, image.Height));
-                // Starting from the edge of the image, and going inwards, the probability of
-                // coloring a pixel fades off in with a sine transition for smooth results
-                float[] map = new float[borderWidth + 1];
-                for (int x = 0; x <= borderWidth; ++x)
-                    map[x] = MathF.Sin(x / (float)borderWidth * MathF.PI - MathF.PI / 2) / 2 + .5f;
-
-                byte* ptr = start;
-                for (int y = 0; y < image.Height; ++y)
+                byte* start0 = start;
+                Parallel.For(0, threads, i =>
                 {
-                    for (int x = 0; x < image.Width; ++x)
+                    int yStart = threadSize * i;
+                    int yEnd = (i == threads - 1) ? image.Height : yStart + threadSize;
+                    byte* ptr = start0 + yStart * image.Width * 3;
+                    Random rnd = rndp[i];
+                    for (int y = yStart; y < yEnd; ++y)
                     {
-                        int distanceFromNearestEdge = Math.Min(Math.Min(x, y), Math.Min(image.Width - x - 1, image.Height - y - 1));
-                        if (distanceFromNearestEdge <= borderWidth && rnd.NextSingle() > map[distanceFromNearestEdge])
+                        for (int x = 0; x < image.Width; ++x)
                         {
-                            ptr[0] = Color.R;
-                            ptr[1] = Color.G;
-                            ptr[2] = Color.B;
+                            int distanceFromNearestEdge = Math.Min(Math.Min(x, y), Math.Min(image.Width - x - 1, image.Height - y - 1));
+                            if (distanceFromNearestEdge <= borderWidth && rnd.NextSingle() > map[distanceFromNearestEdge])
+                            {
+                                ptr[0] = Color.R;
+                                ptr[1] = Color.G;
+                                ptr[2] = Color.B;
+                            }
+                            ptr += 3;
                         }
-                        ptr += 3;
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, threads);
+                });
             }
             reporter?.Done();
         }
