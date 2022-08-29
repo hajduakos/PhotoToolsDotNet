@@ -1,6 +1,8 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using Random = System.Random;
+using Math = System.Math;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Dither
 {
@@ -10,6 +12,8 @@ namespace FilterLib.Filters.Dither
     [Filter]
     public sealed class RandomDitherFilter : FilterInPlaceBase
     {
+        private const int MAX_THREADS = 128;
+
         private int levels;
 
         /// <summary>
@@ -46,28 +50,39 @@ namespace FilterLib.Filters.Dither
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            Random rnd = new(Seed);
+            object reporterLock = new();
+            int progress = 0;
+            int threads = Math.Min(image.Height, MAX_THREADS);
+            int threadSize = image.Height / threads;
+            RandomPool rndp = new(threads, Seed);
             float intervalSize = 255f / (levels - 1);
             fixed (byte* start = image)
             {
-                byte* ptr = start;
-                // Iterate through each pixel and process individually
-                for (int y = 0; y < image.Height; ++y)
-                {
-                    for (int x = 0; x < image.Width; ++x)
-                    {
-                        float nextRnd = rnd.NextSingle();
+                byte* start0 = start;
 
-                        for (int c = 0; c < 3; ++c)
+                Parallel.For(0, threads, i =>
+                {
+                    int yStart = threadSize * i;
+                    int yEnd = (i == threads - 1) ? image.Height : yStart + threadSize;
+                    byte* ptr = start0 + yStart * image.Width * 3;
+                    Random rnd = rndp[i];
+                    for (int y = yStart; y < yEnd; ++y)
+                    {
+                        for (int x = 0; x < image.Width; ++x)
                         {
-                            float floor = System.MathF.Floor(*ptr / intervalSize) * intervalSize;
-                            float ceil = floor + intervalSize;
-                            *ptr = ((floor + nextRnd * intervalSize > *ptr) ? floor : ceil).ClampToByte();
-                            ++ptr;
+                            float nextRnd = rnd.NextSingle();
+
+                            for (int c = 0; c < 3; ++c)
+                            {
+                                float floor = System.MathF.Floor(*ptr / intervalSize) * intervalSize;
+                                float ceil = floor + intervalSize;
+                                *ptr = ((floor + nextRnd * intervalSize > *ptr) ? floor : ceil).ClampToByte();
+                                ++ptr;
+                            }
                         }
                     }
-                    reporter?.Report(y + 1, 0, image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, threads);
+                });
             }
             reporter?.Done();
         }
