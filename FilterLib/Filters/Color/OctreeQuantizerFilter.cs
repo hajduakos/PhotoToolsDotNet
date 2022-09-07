@@ -2,6 +2,7 @@
 using FilterLib.Util;
 using System.Collections.Generic;
 using System.Linq;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Color
 {
@@ -39,9 +40,12 @@ namespace FilterLib.Filters.Color
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
+            object reporterLock = new();
+            int progress = 0;
             Octree tree = new();
             fixed (byte* start = image)
             {
+                byte* start0 = start;
                 // Step 1: fill tree with colors
                 byte* ptr = start;
                 for (int y = 0; y < image.Height; ++y)
@@ -51,21 +55,21 @@ namespace FilterLib.Filters.Color
                         tree.AddColor(ptr[0], ptr[1], ptr[2]);
                         ptr += 3;
                     }
-                    reporter?.Report(y + 1, 0, 2 * image.Height);
+                    reporter?.Report(++progress, 0, 2 * image.Height);
                 }
                 // Step 2: build reduced color palette
                 tree.Reduce(Levels);
                 // Step 3: replace each color with representative from palette
-                ptr = start;
-                for (int y = 0; y < image.Height; ++y)
+                Parallel.For(0, image.Height, y =>
                 {
+                    byte* p = start0 + y * image.Width * 3;
                     for (int x = 0; x < image.Width; ++x)
                     {
-                        (ptr[0], ptr[1], ptr[2]) = tree.GetPaletteColor(ptr[0], ptr[1], ptr[2]);
-                        ptr += 3;
+                        (p[0], p[1], p[2]) = tree.GetPaletteColor(p[0], p[1], p[2]);
+                        p += 3;
                     }
-                    reporter?.Report(image.Height + y + 1, 0, 2 * image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(image.Height + ++progress, 0, 2 * image.Height);
+                });
             }
             reporter?.Done();
         }
