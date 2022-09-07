@@ -2,6 +2,7 @@
 using FilterLib.Util;
 using Math = System.Math;
 using Random = System.Random;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Mosaic
 {
@@ -81,16 +82,18 @@ namespace FilterLib.Filters.Mosaic
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-
+            object reporterLock = new();
+            int progress = 0;
             // First step: divide the image into a grid with the given size
             // and generate one crystal point in each square
-            Random rnd = new(Seed);
             // Additional points required if the width/height is not dividible by the size
             int crystalsX = image.Width / size + ((image.Width % size) == 0 ? 0 : 1);
             int crystalsY = image.Height / size + ((image.Height % size) == 0 ? 0 : 1);
             Cpoint[,] crystalPts = new Cpoint[crystalsX, crystalsY];
-            for (int xSub = 0; xSub < crystalsX; ++xSub)
+            RandomPool rndp = new(crystalsX, Seed);
+            Parallel.For(0, crystalsX, xSub =>
             {
+                Random rnd = rndp[xSub];
                 for (int ySub = 0; ySub < crystalsY; ++ySub)
                 {
                     crystalPts[xSub, ySub] = new Cpoint(xSub * size + rnd.Next() % size, ySub * size + rnd.Next() % size);
@@ -98,17 +101,21 @@ namespace FilterLib.Filters.Mosaic
                     crystalPts[xSub, ySub].x = Math.Min(crystalPts[xSub, ySub].x, image.Width - 1);
                     crystalPts[xSub, ySub].y = Math.Min(crystalPts[xSub, ySub].y, image.Height - 1);
                 }
-            }
+            });
 
             int width_3 = image.Width * 3;
             int size_3 = size * 3;
             float avg = averaging / 100.0f;
             byte[,,] avgColors = new byte[crystalsX, crystalsY, 3];
-            fixed (byte* startPtr = image)
+            fixed (byte* start = image)
             {
+                byte* start0 = start;
+                int yMax = image.Height / size;
+                if (yMax * size < image.Height) yMax++;
                 // Second step: calculate avarege color of a square in the grid
-                for (int y = 0; y < image.Height; y += size)
+                Parallel.For(0, yMax, y =>
                 {
+                    y *= size;
                     for (int x = 0; x < width_3; x += size_3)
                     {
                         float rSum = 0, gSum = 0, bSum = 0;
@@ -117,24 +124,25 @@ namespace FilterLib.Filters.Mosaic
                         {
                             for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                             {
-                                rSum += startPtr[(y + ySub) * width_3 + x + xSub];
-                                gSum += startPtr[(y + ySub) * width_3 + x + xSub + 1];
-                                bSum += startPtr[(y + ySub) * width_3 + x + xSub + 2];
+                                rSum += start0[(y + ySub) * width_3 + x + xSub];
+                                gSum += start0[(y + ySub) * width_3 + x + xSub + 1];
+                                bSum += start0[(y + ySub) * width_3 + x + xSub + 2];
                                 ++n;
                             }
                         }
                         // Set average color as a combination of the average color and the representative point
                         Cpoint pnt = crystalPts[x / size_3, y / size];
-                        avgColors[x / size_3, y / size, 0] = (byte)(avg * rSum / n + (1 - avg) * startPtr[pnt.y * width_3 + pnt.x * 3]);
-                        avgColors[x / size_3, y / size, 1] = (byte)(avg * gSum / n + (1 - avg) * startPtr[pnt.y * width_3 + pnt.x * 3 + 1]);
-                        avgColors[x / size_3, y / size, 2] = (byte)(avg * bSum / n + (1 - avg) * startPtr[pnt.y * width_3 + pnt.x * 3 + 2]);
+                        avgColors[x / size_3, y / size, 0] = (byte)(avg * rSum / n + (1 - avg) * start0[pnt.y * width_3 + pnt.x * 3]);
+                        avgColors[x / size_3, y / size, 1] = (byte)(avg * gSum / n + (1 - avg) * start0[pnt.y * width_3 + pnt.x * 3 + 1]);
+                        avgColors[x / size_3, y / size, 2] = (byte)(avg * bSum / n + (1 - avg) * start0[pnt.y * width_3 + pnt.x * 3 + 2]);
                     }
-                    reporter?.Report(y + 1, 0, 2 * image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, yMax * 2);
+                });
 
                 // Third step: draw Voronoi diagram: for each pixel, find the closest crystal point
                 // and use that as the color of the pixel
-                for (int y = 0; y < image.Height; ++y)
+                progress = 0;
+                Parallel.For(0, image.Height, y =>
                 {
                     for (int x = 0; x < width_3; x += 3)
                     {
@@ -159,10 +167,10 @@ namespace FilterLib.Filters.Mosaic
 
                         // Set the same color as the closest point color
                         for (int i = 0; i < 3; i++)
-                            startPtr[y * width_3 + x + i] = avgColors[minPoint.x / size, minPoint.y / size, i];
+                            start0[y * width_3 + x + i] = avgColors[minPoint.x / size, minPoint.y / size, i];
                     }
-                    reporter?.Report(image.Height + y + 1, 0, 2 * image.Height);
-                }
+                    if (reporter != null) lock (reporterLock) reporter.Report(image.Height + ++progress, 0, 2 * image.Height);
+                });
             }
             reporter?.Done();
         }
