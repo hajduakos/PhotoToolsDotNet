@@ -1,4 +1,5 @@
-﻿using Math = System.Math;
+﻿using FilterLib.Util;
+using Math = System.Math;
 using MathF = System.MathF;
 using Parallel = System.Threading.Tasks.Parallel;
 
@@ -9,6 +10,8 @@ namespace FilterLib.Filters.Generate
     /// </summary>
     public abstract class GeneratorBase : FilterInPlaceBase
     {
+        private const int MAX_THREADS = 128;
+
         private int iterations;
 
         /// <summary>
@@ -23,7 +26,7 @@ namespace FilterLib.Filters.Generate
         }
 
         /// <summary>
-        /// Number of iterations [1]
+        /// Number of iterations [1;...]
         /// </summary>
         [FilterParam]
         [FilterParamMin(1)]
@@ -50,10 +53,18 @@ namespace FilterLib.Filters.Generate
             int pow = 1 << iterations;
             float[,] noise = new float[width, height];
             float[,] turbulence = new float[width, height];
-            System.Random rnd = new(Seed);
-            for (int x = 0; x < width; ++x)
-                for (int y = 0; y < height; ++y)
-                    noise[x, y] = rnd.NextSingle();
+            int threads = Math.Min(width, MAX_THREADS);
+            int threadSize = width / threads;
+            RandomPool rndp = new(threads, Seed);
+            Parallel.For(0, threads, i =>
+            {
+                int xStart = threadSize * i;
+                int xEnd = (i == threads - 1) ? width : xStart + threadSize;
+                System.Random rnd = rndp[i];
+                for (int x = xStart; x < xEnd; ++x)
+                    for (int y = 0; y < height; ++y)
+                        noise[x, y] = rnd.NextSingle();
+            });
 
             Parallel.For(0, width, x =>
             {
