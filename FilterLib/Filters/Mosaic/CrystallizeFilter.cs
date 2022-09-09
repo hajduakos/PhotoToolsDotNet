@@ -63,7 +63,7 @@ namespace FilterLib.Filters.Mosaic
         /// </summary>
         private struct Cpoint : System.IEquatable<Cpoint>
         {
-            public int x, y; // Coordinates
+            public readonly int x, y; // Coordinates
 
             // Constructor
             public Cpoint(int x = 0, int y = 0) { this.x = x; this.y = y; }
@@ -96,10 +96,9 @@ namespace FilterLib.Filters.Mosaic
                 Random rnd = rndp[xSub];
                 for (int ySub = 0; ySub < crystalsY; ++ySub)
                 {
-                    crystalPts[xSub, ySub] = new Cpoint(xSub * size + rnd.Next() % size, ySub * size + rnd.Next() % size);
-                    // Check bounds
-                    crystalPts[xSub, ySub].x = Math.Min(crystalPts[xSub, ySub].x, image.Width - 1);
-                    crystalPts[xSub, ySub].y = Math.Min(crystalPts[xSub, ySub].y, image.Height - 1);
+                    int cx = Math.Min(xSub * size + rnd.Next() % size, image.Width - 1);
+                    int cy = Math.Min(ySub * size + rnd.Next() % size, image.Height - 1);
+                    crystalPts[xSub, ySub] = new Cpoint(cx, cy);
                 }
             });
 
