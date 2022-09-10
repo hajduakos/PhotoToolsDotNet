@@ -66,6 +66,8 @@
         }
         public override bool Equals(object obj) => obj is HSL h && this == h;
 
+        public bool Equals(HSL other) => this == other;
+
         public override int GetHashCode() => H.GetHashCode() ^ S.GetHashCode() ^ L.GetHashCode();
 
         public static bool operator ==(HSL c1, HSL c2) => c1.H == c2.H && c1.S == c2.S && c1.L == c2.L;
@@ -73,7 +75,5 @@
         public static bool operator !=(HSL c1, HSL c2) => !(c1 == c2);
 
         public override string ToString() => $"HSL({H}, {S}, {L})";
-
-        public bool Equals(HSL other) => this == other;
     }
 }

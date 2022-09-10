@@ -77,6 +77,8 @@ namespace FilterLib.Util
 
         public override bool Equals(object obj) => obj is RGB r && this == r;
 
+        public bool Equals(RGB other) => this == other;
+
         public override int GetHashCode() => (R << 16) | (G << 8) | B;
 
         public static bool operator ==(RGB c1, RGB c2) => c1.R == c2.R && c1.G == c2.G && c1.B == c2.B;
@@ -90,7 +92,5 @@ namespace FilterLib.Util
         private const float BRatio = .114f;
 
         public static float GetLuminance(byte r, byte g, byte b) => RRatio * r + GRatio * g + BRatio * b;
-
-        public bool Equals(RGB other) => this == other;
     }
 }
