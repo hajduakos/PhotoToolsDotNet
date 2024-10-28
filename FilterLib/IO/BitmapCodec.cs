@@ -18,21 +18,17 @@ namespace FilterLib.IO
             return w + 4 - (w % 4);
         }
 
-        private static void WriteUint(Stream stream, uint i)
+        private static void WriteLittleEndianBytes(Stream stream, byte[] bytes)
         {
-            byte[] bytes = System.BitConverter.GetBytes(i);
-            if (!System.BitConverter.IsLittleEndian)
-                System.Array.Reverse(bytes);
+            if (!System.BitConverter.IsLittleEndian) System.Array.Reverse(bytes);
             stream.Write(bytes, 0, bytes.Length);
         }
 
-        private static void WriteUshort(Stream stream, ushort i)
-        {
-            byte[] bytes = System.BitConverter.GetBytes(i);
-            if (!System.BitConverter.IsLittleEndian)
-                System.Array.Reverse(bytes);
-            stream.Write(bytes, 0, bytes.Length);
-        }
+        private static void WriteUint(Stream stream, uint i) =>
+            WriteLittleEndianBytes(stream, System.BitConverter.GetBytes(i));
+
+        private static void WriteUshort(Stream stream, ushort i) =>
+            WriteLittleEndianBytes(stream, System.BitConverter.GetBytes(i));
 
         private static void WriteZeros(Stream stream, int n)
         {
