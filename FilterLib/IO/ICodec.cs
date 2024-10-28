@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace FilterLib.IO
+﻿namespace FilterLib.IO
 {
     /// <summary>
     /// Interface for image codecs, providing functions to read/write images of certain formats.
@@ -12,7 +10,7 @@ namespace FilterLib.IO
         /// </summary>
         /// <param name="img">Image</param>
         /// <param name="stream">Stream</param>
-        public void Write(Image img, Stream stream);
+        public void Write(Image img, System.IO.Stream stream);
 
         /// <summary>
         /// Write the image to a file.
