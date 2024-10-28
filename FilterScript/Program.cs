@@ -1,7 +1,7 @@
 ﻿using FilterLib;
+using FilterLib.IO;
 using FilterScript.Model;
 using System;
-using System.Drawing.Imaging;
 using System.IO;
 
 namespace FilterScript
@@ -21,40 +21,7 @@ namespace FilterScript
             string outputPath = ParseArg(args, "o");
             Script batch = Parser.Parse(File.ReadAllLines(scriptPath));
             Image input = FilterLib.Util.BitmapAdapter.FromBitmapPath(inputPath);
-            using System.Drawing.Bitmap output = FilterLib.Util.BitmapAdapter.ToBitmap(batch.Execute(input));
-            output.Save(outputPath, ImageFormat.Bmp);
-            switch(new FileInfo(outputPath).Extension.ToLower())
-            {
-                case ".bmp":
-                    output.Save(outputPath, ImageFormat.Bmp);
-                    break;
-                case ".gif":
-                    output.Save(outputPath, ImageFormat.Gif);
-                    break;
-                case ".png":
-                    output.Save(outputPath, ImageFormat.Png);
-                    break;
-                case ".tiff":
-                    output.Save(outputPath, ImageFormat.Tiff);
-                    break;
-                case ".jpg":
-                case ".jpeg":
-                    EncoderParameters eps = new(1) { Param = new[] { new EncoderParameter(Encoder.Quality, 97L) } };
-                    output.Save(outputPath, GetEncoder(ImageFormat.Jpeg), eps);
-                    break;
-                default:
-                    Console.WriteLine("Unsupported output extension.");
-                    break;
-            }
-        }
-
-        private static ImageCodecInfo GetEncoder(ImageFormat format)
-        {
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
-            foreach (ImageCodecInfo codec in codecs)
-                if (codec.FormatID == format.Guid)
-                    return codec;
-            return null;
+            new BitmapCodec().WriteFile(batch.Execute(input), outputPath);
         }
 
         static string ParseArg(string[] args, string flag)

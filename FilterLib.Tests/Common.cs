@@ -1,4 +1,5 @@
-﻿using FilterLib.Util;
+﻿using FilterLib.IO;
+using FilterLib.Util;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
@@ -26,8 +27,7 @@ namespace FilterLib.Tests
             }
             if (!ok)
             {
-                using System.Drawing.Bitmap b = BitmapAdapter.ToBitmap(bmpActual);
-                b.Save(path + expected.Replace(".bmp", "_actual.bmp"), ImageFormat.Bmp);
+                new BitmapCodec().WriteFile(bmpActual, path + expected.Replace(".bmp", "_actual.bmp"));
             }
             return ok;
         }
@@ -51,8 +51,7 @@ namespace FilterLib.Tests
             }
             if (!ok)
             {
-                using System.Drawing.Bitmap b = BitmapAdapter.ToBitmap(bmpActual);
-                b.Save(path + expected.Replace(".bmp", "_actual.bmp"), ImageFormat.Bmp);
+                new BitmapCodec().WriteFile(bmpActual, path + expected.Replace(".bmp", "_actual.bmp"));
             }
             return ok;
         }
