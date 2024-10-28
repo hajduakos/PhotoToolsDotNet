@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace FilterLib.IO
+﻿namespace FilterLib.IO
 {
     /// <summary>
     /// Base class for codecs.
@@ -8,19 +6,19 @@ namespace FilterLib.IO
     public abstract class CodecBase : ICodec
     {
         /// <inheritdoc/>
-        public abstract void Write(Image img, Stream stream);
+        public abstract void Write(Image img, System.IO.Stream stream);
 
         /// <inheritdoc/>
         public void WriteFile(Image img, string filename)
         {
-            using Stream stream = File.OpenWrite(filename);
+            using System.IO.Stream stream = System.IO.File.OpenWrite(filename);
             Write(img, stream);
         }
 
         /// <inheritdoc/>
         public byte[] WriteArray(Image img)
         {
-            using MemoryStream stream = new();
+            using System.IO.MemoryStream stream = new();
             Write(img, stream);
             return stream.ToArray();
         }
