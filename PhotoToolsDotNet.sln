@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilterScript", "FilterScrip
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilterScript.Test", "FilterScript.Test\FilterScript.Test.csproj", "{EE7AB134-DDC5-4D33-BB09-24792F6FC3D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterLib.PerfTest", "FilterLib.PerfTest\FilterLib.PerfTest.csproj", "{9D0877D2-4BCC-422F-BCDE-5D243B5A5F50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilterLib.PerfTest", "FilterLib.PerfTest\FilterLib.PerfTest.csproj", "{9D0877D2-4BCC-422F-BCDE-5D243B5A5F50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
