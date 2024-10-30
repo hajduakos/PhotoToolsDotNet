@@ -1,6 +1,6 @@
 # PhotoTools.Net
 
-Tools for processing photos. Implemented in .NET 8.0.
+Cross platform tools for processing photos. Implemented in .NET 8.0.
 
 [![.NET build](https://github.com/hajduakos/PhotoToolsDotNet/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/hajduakos/PhotoToolsDotNet/actions/workflows/dotnetcore.yml)
 [![Coverage Status](https://coveralls.io/repos/github/hajduakos/PhotoToolsDotNet/badge.svg?branch=master)](https://coveralls.io/github/hajduakos/PhotoToolsDotNet?branch=master)
