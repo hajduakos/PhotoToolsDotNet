@@ -3,7 +3,6 @@ using FilterLib.Util;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
-using ImageFormat = System.Drawing.Imaging.ImageFormat;
 
 namespace FilterLib.Tests
 {
@@ -13,12 +12,12 @@ namespace FilterLib.Tests
         {
             string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
 
-            Image bmpOriginal = BitmapAdapter.FromBitmapPath(path + original);
+            Image bmpOriginal = new BitmapCodec().Read(path + original);
             Image bmpActual = filter.Apply(bmpOriginal);
             bool ok;
             if (File.Exists(path + expected))
             {
-                Image bmpExpected = BitmapAdapter.FromBitmapPath(path + expected);
+                Image bmpExpected = new BitmapCodec().Read(path + expected);
                 ok = Compare(bmpActual, bmpExpected, tolerance);
             }
             else
@@ -36,13 +35,13 @@ namespace FilterLib.Tests
         {
             string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
 
-            Image bmpOriginal1 = BitmapAdapter.FromBitmapPath(path + original1);
-            Image bmpOriginal2 = BitmapAdapter.FromBitmapPath(path + original2);
+            Image bmpOriginal1 = new BitmapCodec().Read(path + original1);
+            Image bmpOriginal2 = new BitmapCodec().Read(path + original2);
             Image bmpActual = blend.Apply(bmpOriginal1, bmpOriginal2);
             bool ok;
             if (File.Exists(path + expected))
             {
-                Image bmpExpected = BitmapAdapter.FromBitmapPath(path + expected);
+                Image bmpExpected = new BitmapCodec().Read(path + expected);
                 ok = Compare(bmpActual, bmpExpected, tolerance);
             }
             else

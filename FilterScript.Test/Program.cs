@@ -1,5 +1,5 @@
 ﻿using FilterLib;
-using FilterLib.Util;
+using FilterLib.IO;
 
 namespace FilterScript.Test
 {
@@ -7,8 +7,8 @@ namespace FilterScript.Test
     {
         static int Main(string[] args)
         {
-            Image expected = BitmapAdapter.FromBitmapPath(args[0]);
-            Image actual = BitmapAdapter.FromBitmapPath(args[1]);
+            Image expected = new BitmapCodec().Read(args[0]);
+            Image actual = new BitmapCodec().Read(args[1]);
             if (Compare(actual, expected, 3)) return 0;
             return 1;
         }

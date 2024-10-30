@@ -12,6 +12,7 @@ using FilterLib.Filters.Noise;
 using FilterLib.Filters.Other;
 using FilterLib.Filters.Sharpen;
 using FilterLib.Filters.Transform;
+using FilterLib.IO;
 using FilterLib.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace FilterLib.Tests.FilterTests
     [Parallelizable(ParallelScope.All)]
     public class ToStringTests
     {
-        private static readonly Image pattern = BitmapAdapter.FromBitmapPath(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
+        private static readonly Image pattern = new BitmapCodec().Read(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
 
         internal static IEnumerable<TestCaseData> Adjustments()
         {

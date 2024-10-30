@@ -1,5 +1,6 @@
 ﻿using FilterLib.Filters;
 using FilterLib.Filters.Border;
+using FilterLib.IO;
 using FilterLib.Util;
 using NUnit.Framework;
 using System;
@@ -10,7 +11,7 @@ namespace FilterLib.Tests.FilterTests
     [TestFixture]
     public class BorderTests
     {
-        private static readonly Image pattern = BitmapAdapter.FromBitmapPath(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
+        private static readonly Image pattern = new BitmapCodec().Read(TestContext.CurrentContext.TestDirectory + "/TestImages/_input2.bmp");
         internal static IEnumerable<TestCaseData> Data()
         {
             yield return new TestCaseData("_input.bmp",

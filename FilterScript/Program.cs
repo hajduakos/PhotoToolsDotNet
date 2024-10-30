@@ -20,7 +20,7 @@ namespace FilterScript
             string inputPath = ParseArg(args, "i");
             string outputPath = ParseArg(args, "o");
             Script batch = Parser.Parse(File.ReadAllLines(scriptPath));
-            Image input = FilterLib.Util.BitmapAdapter.FromBitmapPath(inputPath);
+            Image input = new BitmapCodec().Read(inputPath);
             new BitmapCodec().Write(batch.Execute(input), outputPath);
         }
 

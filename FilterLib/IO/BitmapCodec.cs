@@ -131,7 +131,7 @@ namespace FilterLib.IO
                 throw new CodecException($"Unsupported bits per pixel: {bpp}");
             if (ReadUint(dibHeader[16..20]) != 0)
                 throw new CodecException("Unsupported compression");
-            uint pixelArraySize = ReadUint(dibHeader[20..24]);
+            /*uint pixelArraySize =*/ ReadUint(dibHeader[20..24]);
             // Ignore horizontal resolution (bytes 24..28)
             // Ignore vertical resolution (bytes 28..32)
             if (ReadUint(dibHeader[32..36]) != 0)

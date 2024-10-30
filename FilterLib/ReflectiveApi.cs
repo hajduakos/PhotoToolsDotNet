@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Linq;
-using FilterLib.Util;
+using FilterLib.IO;
 
 namespace FilterLib
 {
@@ -102,7 +102,7 @@ namespace FilterLib
             if (type == typeof(Boolean)) return Convert.ToBoolean(value);
             if (type.IsEnum) return Enum.Parse(type, value);
             if (type == typeof(Util.Size)) return Util.Size.FromString(value);
-            if (type == typeof(Image)) return BitmapAdapter.FromBitmapPath(value);
+            if (type == typeof(Image)) return new BitmapCodec().Read(value);
 
             // Try string constructor
             foreach (ConstructorInfo ci in type.GetConstructors())
