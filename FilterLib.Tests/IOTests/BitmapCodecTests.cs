@@ -103,5 +103,19 @@ namespace FilterLib.Tests.IOTests
             Assert.AreEqual(255, img[1, 1, 1]);
             Assert.AreEqual(255, img[1, 1, 2]);
         }
+
+        [Test]
+        public void TestWriteAndReadFile()
+        {
+            string path = TestContext.CurrentContext.TestDirectory + "/TestImages/__test_write.bmp";
+            BitmapCodec codec = new();
+            Image img = new(10, 20);
+            img[2, 5, 1] = 123;
+            codec.Write(img, path);
+            Image img2 = codec.Read(path);
+            Assert.AreEqual(img.Width, img2.Width);
+            Assert.AreEqual(img.Height, img2.Height);
+            Assert.AreEqual(img[2, 5, 1], img2[2, 5, 1]);
+        }
     }
 }
