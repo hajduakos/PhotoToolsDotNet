@@ -21,7 +21,7 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Perf tests
-      run: FilterLib.PerfTest\bin\Release\net6.0\FilterLib.PerfTest.exe
+      run: FilterLib.PerfTest\bin\Release\net8.0\FilterLib.PerfTest.exe
 
   perf-test-parent:
     runs-on: windows-latest
@@ -40,4 +40,4 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Perf tests
-      run: FilterLib.PerfTest\bin\Release\net6.0\FilterLib.PerfTest.exe
+      run: FilterLib.PerfTest\bin\Release\net8.0\FilterLib.PerfTest.exe
