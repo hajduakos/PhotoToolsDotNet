@@ -85,5 +85,87 @@ namespace FilterLib.IO
             WriteDIBHeader(img, stream);
             WritePixelArray(img, stream);
         }
+
+        private static uint ReadUint(byte[] bytes)
+        {
+            if (!System.BitConverter.IsLittleEndian) System.Array.Reverse(bytes);
+            return System.BitConverter.ToUInt32(bytes, 0);
+        }
+
+        private static int ReadInt(byte[] bytes)
+        {
+            if (!System.BitConverter.IsLittleEndian) System.Array.Reverse(bytes);
+            return System.BitConverter.ToInt32(bytes, 0);
+        }
+
+        private static ushort ReadUshort(byte[] bytes)
+        {
+            if (!System.BitConverter.IsLittleEndian) System.Array.Reverse(bytes);
+            return System.BitConverter.ToUInt16(bytes, 0);
+        }
+
+        /// <inheritdoc/>
+        public override Image Read(Stream stream)
+        {
+            byte[] bmpHeader = new byte[BMP_HEADER_SIZE];
+            int cnt = stream.Read(bmpHeader, 0, bmpHeader.Length);
+            if (cnt < bmpHeader.Length)
+                throw new EndOfStreamException($"Expected {bmpHeader.Length} bytes BMP header but got only {cnt}");
+            if (bmpHeader[0] != 0x42 || bmpHeader[1] != 0x4D)
+                throw new CodecException("Invalid start of BMP header");
+            uint pixelArrayOffset = ReadUint(bmpHeader[10..14]);
+            byte[] dibHeader = new byte[DIB_HEADER_SIZE];
+            cnt = stream.Read(dibHeader, 0, dibHeader.Length);
+            if (cnt < dibHeader.Length)
+                throw new EndOfStreamException($"Expected {dibHeader.Length} bytes DIB header but got only {cnt}");
+            uint dibHeaderSize = ReadUint(dibHeader[0..4]);
+            if (dibHeaderSize != DIB_HEADER_SIZE)
+                throw new CodecException($"Expected {DIB_HEADER_SIZE} bytes DIB header but got {dibHeaderSize}");
+            int width = ReadInt(dibHeader[4..8]);
+            int height = ReadInt(dibHeader[8..12]);
+            ushort colorPlanes = ReadUshort(dibHeader[12..14]);
+            if (colorPlanes != 1)
+                throw new CodecException($"Unsupported number of color planes: {colorPlanes}");
+            ushort bpp = ReadUshort(dibHeader[14..16]);
+            if (bpp != 24)
+                throw new CodecException($"Unsupported bits per pixel: {bpp}");
+            if (ReadUint(dibHeader[16..20]) != 0)
+                throw new CodecException("Unsupported compression");
+            uint pixelArraySize = ReadUint(dibHeader[20..24]);
+            // Ignore horizontal resolution (bytes 24..28)
+            // Ignore vertical resolution (bytes 28..32)
+            if (ReadUint(dibHeader[32..36]) != 0)
+                throw new CodecException("Color palettes are not supported");
+            if (ReadUint(dibHeader[36..40]) != 0)
+                throw new CodecException("Important colors are not supported");
+            Image img = new(width, height);
+            if (pixelArrayOffset < BMP_HEADER_SIZE + DIB_HEADER_SIZE)
+                throw new CodecException("Pixel array offset points inside header");
+            uint totalRead = BMP_HEADER_SIZE + DIB_HEADER_SIZE;
+            while (totalRead < pixelArrayOffset)
+            {
+                if (stream.ReadByte() == -1)
+                    throw new EndOfStreamException("Stream ended before pixel array");
+                ++totalRead;
+            }
+            int padding = (int)GetRowSize(img) - img.Width * 3;
+            byte[] bgr = new byte[3];
+            for (int y = img.Height - 1; y >= 0; --y)
+            {
+                for (int x = 0; x < img.Width; ++x)
+                {
+                    cnt = stream.Read(bgr, 0, 3);
+                    if (cnt < 3)
+                        throw new EndOfStreamException("Stream ended inside pixel array");
+                    img[x, y, 0] = bgr[2];
+                    img[x, y, 1] = bgr[1];
+                    img[x, y, 2] = bgr[0];
+                }
+                for (int i = 0; i <padding; ++i)
+                    if (stream.ReadByte() == -1)
+                        throw new EndOfStreamException("Stream ended inside pixel array");
+            }
+             return img;
+        }
     }
 }

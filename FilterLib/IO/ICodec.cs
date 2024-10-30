@@ -25,5 +25,26 @@
         /// <param name="img">Image</param>
         /// <returns>Memory array</returns>
         public byte[] Write(Image img);
+
+        /// <summary>
+        /// Read image from a stream.
+        /// </summary>
+        /// <param name="stream">Stream</param>
+        /// <returns>Image</returns>
+        public Image Read(System.IO.Stream stream);
+
+        /// <summary>
+        /// Read image from a file.
+        /// </summary>
+        /// <param name="filename">Path to file</param>
+        /// <returns>Image</returns>
+        public Image Read(string filename);
+
+        /// <summary>
+        /// Read image from a memory array.
+        /// </summary>
+        /// <param name="data">Memory array</param>
+        /// <returns>Image</returns>
+        public Image Read(byte[] data);
     }
 }
