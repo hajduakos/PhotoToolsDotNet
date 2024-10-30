@@ -6,15 +6,20 @@ namespace FilterLib.Tests.IOTests
 {
     public class BitmapCodecTests
     {
-        [Test]
-        public void TestWrite()
+        private byte[] CreateImage()
         {
             Image img = new(2, 2);
             img[0, 0, 2] = 255; // Red
             img[1, 0, 1] = 255; // Green
             img[0, 1, 0] = 255; // Blue
             img[1, 1, 0] = img[1, 1, 1] = img[1, 1, 2] = 255; // White
-            byte[] bmp = new BitmapCodec().Write(img);
+            return new BitmapCodec().Write(img);
+        }
+
+        [Test]
+        public void TestWrite()
+        {
+            byte[] bmp = CreateImage();
             // BMP header
             Assert.AreEqual(new byte[] {
                 0x42, 0x4D,
@@ -52,174 +57,72 @@ namespace FilterLib.Tests.IOTests
         [Test]
         public void TestReadShortBMPHeader()
         {
-            Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(new byte[] { 0x42, 0x4D }));
+            Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(CreateImage()[0..2]));
         }
 
         [Test]
         public void TestReadInvalidBMPHeader()
         {
-            Assert.Throws<CodecException>(() => new BitmapCodec().Read(new byte[] {
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }));
-            Assert.Throws<CodecException>(() => new BitmapCodec().Read(new byte[] {
-                0x42, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }));
+            byte[] data = CreateImage();
+            data[0] = 0x00;
+            Assert.Throws<CodecException>(() => new BitmapCodec().Read(data));
+            data = CreateImage();
+            data[1] = 0x00;
+            Assert.Throws<CodecException>(() => new BitmapCodec().Read(data));
         }
 
         [Test]
         public void TestReadShortDIBHeader()
         {
-            Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(new byte[] {
-                // BMP header
-                0x42, 0x4D,
-                0x46, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x36, 0x00, 0x00, 0x00,
-                // DIB header (short)
-                0x00,
-            }));
+            Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(CreateImage()[0..20]));
         }
 
         [Test]
         public void TestReadInvalidDIBHeaderSize()
         {
-            Assert.Throws<CodecException>(() => new BitmapCodec().Read(new byte[] {
-                // BMP header
-                0x42, 0x4D,
-                0x46, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x36, 0x00, 0x00, 0x00,
-                // DIB header
-                0x12, 0x34, 0x56, 0x78, // Size invalid
-                0x02, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x01, 0x00,
-                0x18, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x10, 0x00, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-            }));
+            byte[] data = CreateImage();
+            data[15] = 0x12;
+            Assert.Throws<CodecException>(() => new BitmapCodec().Read(data));
         }
 
         [Test]
         public void TestReadUnsupportedColorPlanes()
         {
-            Assert.Throws<CodecException>(() => new BitmapCodec().Read(new byte[] {
-                // BMP header
-                0x42, 0x4D,
-                0x46, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x36, 0x00, 0x00, 0x00,
-                // DIB header
-                0x28, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x12, 0x34, // Invalid color planes
-                0x18, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x10, 0x00, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-            }));
+            byte[] data = CreateImage();
+            data[26] = 0x12;
+            Assert.Throws<CodecException>(() => new BitmapCodec().Read(data));
         }
 
         [Test]
         public void TestReadUnsupportedBPP()
         {
-            Assert.Throws<CodecException>(() => new BitmapCodec().Read(new byte[] {
-                // BMP header
-                0x42, 0x4D,
-                0x46, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x36, 0x00, 0x00, 0x00,
-                // DIB header
-                0x28, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x01, 0x00,
-                0x20, 0x00, // Unsupported BPP
-                0x00, 0x00, 0x00, 0x00,
-                0x10, 0x00, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-            }));
+            byte[] data = CreateImage();
+            data[28] = 0x20;
+            Assert.Throws<CodecException>(() => new BitmapCodec().Read(data));
         }
 
         [Test]
         public void TestReadUnsupportedCompression()
         {
-            Assert.Throws<CodecException>(() => new BitmapCodec().Read(new byte[] {
-                // BMP header
-                0x42, 0x4D,
-                0x46, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x36, 0x00, 0x00, 0x00,
-                // DIB header
-                0x28, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x01, 0x00,
-                0x18, 0x00,
-                0x01, 0x00, 0x00, 0x00, // Unsupported compression
-                0x10, 0x00, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-            }));
+            byte[] data = CreateImage();
+            data[30] = 0x12;
+            Assert.Throws<CodecException>(() => new BitmapCodec().Read(data));
         }
 
         [Test]
         public void TestReadUnsupportedColorPalettes()
         {
-            Assert.Throws<CodecException>(() => new BitmapCodec().Read(new byte[] {
-                // BMP header
-                0x42, 0x4D,
-                0x46, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x36, 0x00, 0x00, 0x00,
-                // DIB header
-                0x28, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x01, 0x00,
-                0x18, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x10, 0x00, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x12, 0x34, 0x56, 0x78, // Unsupported
-                0x00, 0x00, 0x00, 0x00,
-            }));
+            byte[] data = CreateImage();
+            data[46] = 0x56;
+            Assert.Throws<CodecException>(() => new BitmapCodec().Read(data));
         }
 
         [Test]
         public void TestReadUnsupportedImportantColors()
         {
-            Assert.Throws<CodecException>(() => new BitmapCodec().Read(new byte[] {
-                // BMP header
-                0x42, 0x4D,
-                0x46, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x36, 0x00, 0x00, 0x00,
-                // DIB header
-                0x28, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x02, 0x00, 0x00, 0x00,
-                0x01, 0x00,
-                0x18, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x10, 0x00, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x13, 0x0B, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x12, 0x34, 0x56, 0x78, // Unsupported
-            }));
+            byte[] data = CreateImage();
+            data[50] = 0x12;
+            Assert.Throws<CodecException>(() => new BitmapCodec().Read(data));
         }
 
         [Test]
