@@ -9,7 +9,7 @@ namespace FilterLib.IO
     {
         private const uint BMP_HEADER_SIZE = 14;
         private const uint DIB_HEADER_SIZE = 40;
-        private const uint RESOLUTION = 2835; // 72 DPI converted to pixels/metre
+        private const int RESOLUTION = 2835; // 72 DPI converted to pixels/metre
 
         private static uint GetRowSize(Image img)
         {
@@ -25,6 +25,9 @@ namespace FilterLib.IO
         }
 
         private static void WriteUint(Stream stream, uint i) =>
+            WriteLittleEndianBytes(stream, System.BitConverter.GetBytes(i));
+
+        private static void WriteInt(Stream stream, int i) =>
             WriteLittleEndianBytes(stream, System.BitConverter.GetBytes(i));
 
         private static void WriteUshort(Stream stream, ushort i) =>
@@ -49,14 +52,14 @@ namespace FilterLib.IO
         private static void WriteDIBHeader(Image img, Stream stream)
         {
             WriteUint(stream, DIB_HEADER_SIZE); // DIB header size (4 bytes)
-            WriteUint(stream, (uint)img.Width); // Width (4 bytes)
-            WriteUint(stream, (uint)img.Height); // Height, positive for bottom to top order (4 bytes)
+            WriteInt(stream, img.Width); // Width (4 bytes)
+            WriteInt(stream, img.Height); // Height, positive for bottom to top order (4 bytes)
             WriteUshort(stream, 1); // Color planes: 1 (2 bytes)
             WriteUshort(stream, 24); // Bits per pixel (2 bytes)
             WriteZeros(stream, 4); // BI_RGB, no compression (4 bytes)
             WriteUint(stream, (uint)img.Height * GetRowSize(img)); // Size of pixel array (4 bytes)
-            WriteUint(stream, RESOLUTION); // Horizontal resolution (4 bytes)
-            WriteUint(stream, RESOLUTION); // Vertical resolution (4 bytes)
+            WriteInt(stream, RESOLUTION); // Horizontal resolution (4 bytes)
+            WriteInt(stream, RESOLUTION); // Vertical resolution (4 bytes)
             WriteZeros(stream, 4); // 0 colors in palette (4 bytes)
             WriteZeros(stream, 4); // 0 important colors (4 bytes)
         }
