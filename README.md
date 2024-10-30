@@ -16,10 +16,5 @@ Cross platform tools for processing photos. Implemented in .NET 8.0.
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=hajduakos_PhotoToolsDotNet&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=hajduakos_PhotoToolsDotNet)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=hajduakos_PhotoToolsDotNet&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=hajduakos_PhotoToolsDotNet)
 
-## Building
-
-- Build: `dotnet build -c release`
-
-## Testing
-
-- Run tests: `dotnet test -c release`
+Build: `dotnet build -c release`
+Run tests: `dotnet test -c release`
