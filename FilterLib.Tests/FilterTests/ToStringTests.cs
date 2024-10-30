@@ -306,7 +306,7 @@ namespace FilterLib.Tests.FilterTests
         [TestCaseSource("Sharpen")]
         [TestCaseSource("Transform")]
         public void Test(IFilter filter, string expected) =>
-            Assert.AreEqual(expected, filter.ToString());
+            Assert.That(filter.ToString(), Is.EqualTo(expected));
 
         [Test]
         public void TestCount()
@@ -327,7 +327,7 @@ namespace FilterLib.Tests.FilterTests
             foreach (var filter in ReflectiveApi.GetFilterTypes())
             {
                 bool found = data.Any(tc => tc.Arguments[0].GetType() == filter);
-                Assert.IsTrue(found, $"ToString test not found for {filter.Name}");
+                Assert.That(found, $"ToString test not found for {filter.Name}");
             }
         }
     }

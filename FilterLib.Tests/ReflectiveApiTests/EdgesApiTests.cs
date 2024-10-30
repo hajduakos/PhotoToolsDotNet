@@ -7,30 +7,30 @@ namespace FilterLib.Tests.ReflectiveApiTests
     {
         [Test]
         public void TestEdgeDetection() =>
-            Assert.IsInstanceOf<EdgeDetectionFilter>(ReflectiveApi.ConstructFilterByName("EdgeDetection"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("EdgeDetection"), Is.InstanceOf<EdgeDetectionFilter>());
 
         [Test]
-        public void TestEdgeDetectionParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(EdgeDetectionFilter)));
+        public void TestEdgeDetectionParCnt() => Assert.That(Common.ParamCount(typeof(EdgeDetectionFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestEmboss() =>
-            Assert.IsInstanceOf<EmbossFilter>(ReflectiveApi.ConstructFilterByName("Emboss"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("Emboss"), Is.InstanceOf<EmbossFilter>());
 
         [Test]
-        public void TestEmbossParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(EmbossFilter)));
+        public void TestEmbossParCnt() => Assert.That(Common.ParamCount(typeof(EmbossFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestPrewitt() =>
-            Assert.IsInstanceOf<PrewittFilter>(ReflectiveApi.ConstructFilterByName("Prewitt"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("Prewitt"), Is.InstanceOf<PrewittFilter>());
 
         [Test]
-        public void TestPrewittParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(PrewittFilter)));
+        public void TestPrewittParCnt() => Assert.That(Common.ParamCount(typeof(PrewittFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestSobel() =>
-            Assert.IsInstanceOf<SobelFilter>(ReflectiveApi.ConstructFilterByName("Sobel"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("Sobel"), Is.InstanceOf<SobelFilter>());
 
         [Test]
-        public void TestSobelParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(SobelFilter)));
+        public void TestSobelParCnt() => Assert.That(Common.ParamCount(typeof(SobelFilter)), Is.EqualTo(0));
     }
 }

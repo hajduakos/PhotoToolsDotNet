@@ -48,7 +48,7 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         [TestCaseSource("Data")]
         public void Test(string input, string expected, IFilter filter, int tolerance) =>
-            Assert.IsTrue(Common.CheckFilter(input, expected, filter, tolerance));
+            Assert.That(Common.CheckFilter(input, expected, filter, tolerance));
 
         [Test]
         [TestCaseSource("Exceptions")]

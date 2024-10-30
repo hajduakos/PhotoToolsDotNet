@@ -7,16 +7,16 @@ namespace FilterLib.Tests.ReflectiveApiTests
     {
         [Test]
         public void TestSharpen() =>
-            Assert.IsInstanceOf<SharpenFilter>(ReflectiveApi.ConstructFilterByName("Sharpen"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("Sharpen"), Is.InstanceOf<SharpenFilter>());
 
         [Test]
-        public void TestSharpenParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(SharpenFilter)));
+        public void TestSharpenParCnt() => Assert.That(Common.ParamCount(typeof(SharpenFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestMeanRemoval() =>
-            Assert.IsInstanceOf<MeanRemovalFilter>(ReflectiveApi.ConstructFilterByName("MeanRemoval"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("MeanRemoval"), Is.InstanceOf<MeanRemovalFilter>());
 
         [Test]
-        public void TestMeanRemovalParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(MeanRemovalFilter)));
+        public void TestMeanRemovalParCnt() => Assert.That(Common.ParamCount(typeof(MeanRemovalFilter)), Is.EqualTo(0));
     }
 }

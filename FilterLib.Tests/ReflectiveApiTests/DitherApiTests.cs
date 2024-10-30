@@ -10,134 +10,134 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestBayerDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("BayerDither");
-            Assert.IsInstanceOf<BayerDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<BayerDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             ReflectiveApi.SetFilterPropertyByName(f, "Size", "8");
             BayerDitherFilter ff = f as BayerDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
-            Assert.AreEqual(8, ff.Size);
+            Assert.That(ff.Levels, Is.EqualTo(50));
+            Assert.That(ff.Size, Is.EqualTo(8));
         }
 
         [Test]
-        public void TestBayerDitherParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(BayerDitherFilter)));
+        public void TestBayerDitherParCnt() => Assert.That(Common.ParamCount(typeof(BayerDitherFilter)), Is.EqualTo(2));
 
         [Test]
         public void TestAtkinsonDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("AtkinsonDither");
-            Assert.IsInstanceOf<AtkinsonDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<AtkinsonDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             AtkinsonDitherFilter ff = f as AtkinsonDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(50));
         }
 
         [Test]
-        public void TestAtkinsonDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(AtkinsonDitherFilter)));
+        public void TestAtkinsonDitherParCnt() => Assert.That(Common.ParamCount(typeof(AtkinsonDitherFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestBurkesDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("BurkesDither");
-            Assert.IsInstanceOf<BurkesDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<BurkesDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             BurkesDitherFilter ff = f as BurkesDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(50));
         }
 
         [Test]
-        public void TestBurkesDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(BurkesDitherFilter)));
+        public void TestBurkesDitherParCnt() => Assert.That(Common.ParamCount(typeof(BurkesDitherFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestFanDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("FanDither");
-            Assert.IsInstanceOf<FanDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<FanDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             FanDitherFilter ff = f as FanDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(50));
         }
 
         [Test]
-        public void TestFanDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(FanDitherFilter)));
+        public void TestFanDitherParCnt() => Assert.That(Common.ParamCount(typeof(FanDitherFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestShiauFanDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ShiauFanDither");
-            Assert.IsInstanceOf<ShiauFanDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<ShiauFanDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             ShiauFanDitherFilter ff = f as ShiauFanDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(50));
         }
 
         [Test]
-        public void TestShiauFanDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(ShiauFanDitherFilter)));
+        public void TestShiauFanDitherParCnt() => Assert.That(Common.ParamCount(typeof(ShiauFanDitherFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestFloydSteinbergDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("FloydSteinbergDither");
-            Assert.IsInstanceOf<FloydSteinbergDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<FloydSteinbergDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             FloydSteinbergDitherFilter ff = f as FloydSteinbergDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(50));
         }
 
         [Test]
-        public void TestFloydSteinbergDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(FloydSteinbergDitherFilter)));
+        public void TestFloydSteinbergDitherParCnt() => Assert.That(Common.ParamCount(typeof(FloydSteinbergDitherFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestJarvisJudiceNinkeDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("JarvisJudiceNinkeDither");
-            Assert.IsInstanceOf<JarvisJudiceNinkeDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<JarvisJudiceNinkeDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             JarvisJudiceNinkeDitherFilter ff = f as JarvisJudiceNinkeDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(50));
         }
 
         [Test]
-        public void TestJarvisJudiceNinkeDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(JarvisJudiceNinkeDitherFilter)));
+        public void TestJarvisJudiceNinkeDitherParCnt() => Assert.That(Common.ParamCount(typeof(JarvisJudiceNinkeDitherFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestRandomDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("RandomDither");
-            Assert.IsInstanceOf<RandomDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<RandomDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             ReflectiveApi.SetFilterPropertyByName(f, "Seed", "123");
             RandomDitherFilter ff = f as RandomDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
-            Assert.AreEqual(123, ff.Seed);
+            Assert.That(ff.Levels, Is.EqualTo(50));
+            Assert.That(ff.Seed, Is.EqualTo(123));
         }
 
         [Test]
-        public void TestRandomDitherParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(RandomDitherFilter)));
+        public void TestRandomDitherParCnt() => Assert.That(Common.ParamCount(typeof(RandomDitherFilter)), Is.EqualTo(2));
 
         [Test]
         public void TestSierraDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("SierraDither");
-            Assert.IsInstanceOf<SierraDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<SierraDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             SierraDitherFilter ff = f as SierraDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(50));
         }
 
         [Test]
-        public void TestSierraDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(SierraDitherFilter)));
+        public void TestSierraDitherParCnt() => Assert.That(Common.ParamCount(typeof(SierraDitherFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestStuckiDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("StuckiDither");
-            Assert.IsInstanceOf<StuckiDitherFilter>(f);
+            Assert.That(f, Is.InstanceOf<StuckiDitherFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
             StuckiDitherFilter ff = f as StuckiDitherFilter;
-            Assert.AreEqual(50, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(50));
         }
 
         [Test]
-        public void TestStuckiDitherParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(StuckiDitherFilter)));
+        public void TestStuckiDitherParCnt() => Assert.That(Common.ParamCount(typeof(StuckiDitherFilter)), Is.EqualTo(1));
     }
 }

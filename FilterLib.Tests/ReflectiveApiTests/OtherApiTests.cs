@@ -10,71 +10,71 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestConvertToPolar()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ConvertToPolar");
-            Assert.IsInstanceOf<ConvertToPolarFilter>(f);
+            Assert.That(f, Is.InstanceOf<ConvertToPolarFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Phase", "123.45");
             ConvertToPolarFilter ff = f as ConvertToPolarFilter;
-            Assert.AreEqual(123.45f, ff.Phase);
+            Assert.That(ff.Phase, Is.EqualTo(123.45f));
         }
 
         [Test]
-        public void TestConvertToPolarParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(ConvertToPolarFilter)));
+        public void TestConvertToPolarParCnt() => Assert.That(Common.ParamCount(typeof(ConvertToPolarFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestConvolution()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Convolution");
-            Assert.IsInstanceOf<ConvolutionFilter>(f);
+            Assert.That(f, Is.InstanceOf<ConvolutionFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Matrix", "[1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11");
             ConvolutionFilter ff = f as ConvolutionFilter;
-            Assert.AreEqual(1, ff.Matrix[0, 0]);
-            Assert.AreEqual(2, ff.Matrix[1, 0]);
-            Assert.AreEqual(3, ff.Matrix[2, 0]);
-            Assert.AreEqual(4, ff.Matrix[0, 1]);
-            Assert.AreEqual(5, ff.Matrix[1, 1]);
-            Assert.AreEqual(6, ff.Matrix[2, 1]);
-            Assert.AreEqual(7, ff.Matrix[0, 2]);
-            Assert.AreEqual(8, ff.Matrix[1, 2]);
-            Assert.AreEqual(9, ff.Matrix[2, 2]);
-            Assert.AreEqual(10, ff.Matrix.Divisor);
-            Assert.AreEqual(11, ff.Matrix.Bias);
+            Assert.That(ff.Matrix[0, 0], Is.EqualTo(1));
+            Assert.That(ff.Matrix[1, 0], Is.EqualTo(2));
+            Assert.That(ff.Matrix[2, 0], Is.EqualTo(3));
+            Assert.That(ff.Matrix[0, 1], Is.EqualTo(4));
+            Assert.That(ff.Matrix[1, 1], Is.EqualTo(5));
+            Assert.That(ff.Matrix[2, 1], Is.EqualTo(6));
+            Assert.That(ff.Matrix[0, 2], Is.EqualTo(7));
+            Assert.That(ff.Matrix[1, 2], Is.EqualTo(8));
+            Assert.That(ff.Matrix[2, 2], Is.EqualTo(9));
+            Assert.That(ff.Matrix.Divisor, Is.EqualTo(10));
+            Assert.That(ff.Matrix.Bias, Is.EqualTo(11));
         }
 
         [Test]
-        public void TestConvolutionParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(ConvolutionFilter)));
+        public void TestConvolutionParCnt() => Assert.That(Common.ParamCount(typeof(ConvolutionFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestEquirectangularToStereographic()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("EquirectangularToStereographic");
-            Assert.IsInstanceOf<EquirectangularToStereographicFilter>(f);
+            Assert.That(f, Is.InstanceOf<EquirectangularToStereographicFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "AOV", "123.45");
             ReflectiveApi.SetFilterPropertyByName(f, "Spin", "67.89");
             ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "Bilinear");
             EquirectangularToStereographicFilter ff = f as EquirectangularToStereographicFilter;
-            Assert.AreEqual(123.45f, ff.AOV);
-            Assert.AreEqual(67.89f, ff.Spin);
-            Assert.AreEqual(Util.InterpolationMode.Bilinear, ff.Interpolation);
+            Assert.That(ff.AOV, Is.EqualTo(123.45f));
+            Assert.That(ff.Spin, Is.EqualTo(67.89f));
+            Assert.That(ff.Interpolation, Is.EqualTo(Util.InterpolationMode.Bilinear));
         }
 
         [Test]
         public void TestEquirectangularToStereographicParCnt() =>
-            Assert.AreEqual(3, Common.ParamCount(typeof(EquirectangularToStereographicFilter)));
+            Assert.That(Common.ParamCount(typeof(EquirectangularToStereographicFilter)), Is.EqualTo(3));
 
         [Test]
         public void TestWaves()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Waves");
-            Assert.IsInstanceOf<WavesFilter>(f);
+            Assert.That(f, Is.InstanceOf<WavesFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Wavelength", "50%");
             ReflectiveApi.SetFilterPropertyByName(f, "Amplitude", "40px");
             ReflectiveApi.SetFilterPropertyByName(f, "Direction", "Vertical");
             WavesFilter ff = f as WavesFilter;
-            Assert.AreEqual(200, ff.Wavelength.ToAbsolute(400));
-            Assert.AreEqual(40, ff.Amplitude.ToAbsolute(0));
-            Assert.AreEqual(WavesFilter.WaveDirection.Vertical, ff.Direction);
+            Assert.That(ff.Wavelength.ToAbsolute(400), Is.EqualTo(200));
+            Assert.That(ff.Amplitude.ToAbsolute(0), Is.EqualTo(40));
+            Assert.That(ff.Direction, Is.EqualTo(WavesFilter.WaveDirection.Vertical));
         }
 
         [Test]
-        public void TestWavesParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(WavesFilter)));
+        public void TestWavesParCnt() => Assert.That(Common.ParamCount(typeof(WavesFilter)), Is.EqualTo(3));
     }
 }

@@ -33,6 +33,6 @@ namespace FilterLib.Tests.FilterTests
         [Test]
         [TestCaseSource("Data")]
         public void Test(string expected, IFilter filter, int tolerance) =>
-            Assert.IsTrue(Common.CheckFilter("_input.bmp", expected, filter, tolerance));
+            Assert.That(Common.CheckFilter("_input.bmp", expected, filter, tolerance));
     }
 }

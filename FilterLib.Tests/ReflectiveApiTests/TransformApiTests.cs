@@ -11,104 +11,104 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestBoxDownscale()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("BoxDownscale");
-            Assert.IsInstanceOf<BoxDownscaleFilter>(f);
+            Assert.That(f, Is.InstanceOf<BoxDownscaleFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Width", "100px");
             ReflectiveApi.SetFilterPropertyByName(f, "Height", "50%");
             BoxDownscaleFilter ff = f as BoxDownscaleFilter;
-            Assert.AreEqual(100, ff.Width.ToAbsolute(500));
-            Assert.AreEqual(250, ff.Height.ToAbsolute(500));
+            Assert.That(ff.Width.ToAbsolute(500), Is.EqualTo(100));
+            Assert.That(ff.Height.ToAbsolute(500), Is.EqualTo(250));
         }
 
         [Test]
-        public void TestBoxDownscaleParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(BoxDownscaleFilter)));
+        public void TestBoxDownscaleParCnt() => Assert.That(Common.ParamCount(typeof(BoxDownscaleFilter)), Is.EqualTo(2));
 
         [Test]
         public void TestCrop()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Crop");
-            Assert.IsInstanceOf<CropFilter>(f);
+            Assert.That(f, Is.InstanceOf<CropFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "X", "10px");
             ReflectiveApi.SetFilterPropertyByName(f, "Y", "25%");
             ReflectiveApi.SetFilterPropertyByName(f, "Width", "100px");
             ReflectiveApi.SetFilterPropertyByName(f, "Height", "50%");
             CropFilter ff = f as CropFilter;
-            Assert.AreEqual(10, ff.X.ToAbsolute(500));
-            Assert.AreEqual(125, ff.Y.ToAbsolute(500));
-            Assert.AreEqual(100, ff.Width.ToAbsolute(500));
-            Assert.AreEqual(250, ff.Height.ToAbsolute(500));
+            Assert.That(ff.X.ToAbsolute(500), Is.EqualTo(10));
+            Assert.That(ff.Y.ToAbsolute(500), Is.EqualTo(125));
+            Assert.That(ff.Width.ToAbsolute(500), Is.EqualTo(100));
+            Assert.That(ff.Height.ToAbsolute(500), Is.EqualTo(250));
         }
 
         [Test]
-        public void TestCropParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(CropFilter)));
+        public void TestCropParCnt() => Assert.That(Common.ParamCount(typeof(CropFilter)), Is.EqualTo(4));
 
 
         [Test]
         public void TestFlipHorizontal() =>
-            Assert.IsInstanceOf<FlipHorizontalFilter>(ReflectiveApi.ConstructFilterByName("FlipHorizontal"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("FlipHorizontal"), Is.InstanceOf<FlipHorizontalFilter>());
 
         [Test]
-        public void TestFlipHorizontalParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(FlipHorizontalFilter)));
+        public void TestFlipHorizontalParCnt() => Assert.That(Common.ParamCount(typeof(FlipHorizontalFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestFlipVertical() =>
-            Assert.IsInstanceOf<FlipVerticalFilter>(ReflectiveApi.ConstructFilterByName("FlipVertical"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("FlipVertical"), Is.InstanceOf<FlipVerticalFilter>());
 
         [Test]
-        public void TestFlipVerticalParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(FlipVerticalFilter)));
+        public void TestFlipVerticalParCnt() => Assert.That(Common.ParamCount(typeof(FlipVerticalFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestResize()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Resize");
-            Assert.IsInstanceOf<ResizeFilter>(f);
+            Assert.That(f, Is.InstanceOf<ResizeFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Width", "100px");
             ReflectiveApi.SetFilterPropertyByName(f, "Height", "50%");
             ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "NearestNeighbor");
             ResizeFilter ff = f as ResizeFilter;
-            Assert.AreEqual(100, ff.Width.ToAbsolute(500));
-            Assert.AreEqual(250, ff.Height.ToAbsolute(500));
-            Assert.AreEqual(Util.InterpolationMode.NearestNeighbor, ff.Interpolation);
+            Assert.That(ff.Width.ToAbsolute(500), Is.EqualTo(100));
+            Assert.That(ff.Height.ToAbsolute(500), Is.EqualTo(250));
+            Assert.That(ff.Interpolation, Is.EqualTo(Util.InterpolationMode.NearestNeighbor));
         }
 
         [Test]
-        public void TestResizeParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(ResizeFilter)));
+        public void TestResizeParCnt() => Assert.That(Common.ParamCount(typeof(ResizeFilter)), Is.EqualTo(3));
 
         [Test]
         public void TestRotate()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Rotate");
-            Assert.IsInstanceOf<RotateFilter>(f);
+            Assert.That(f, Is.InstanceOf<RotateFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Angle", "123.45");
             ReflectiveApi.SetFilterPropertyByName(f, "Crop", "Fill");
             ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "NearestNeighbor");
             RotateFilter ff = f as RotateFilter;
-            Assert.AreEqual(123.45f, ff.Angle);
-            Assert.AreEqual(RotateFilter.CropMode.Fill, ff.Crop);
-            Assert.AreEqual(Util.InterpolationMode.NearestNeighbor, ff.Interpolation);
+            Assert.That(ff.Angle, Is.EqualTo(123.45f));
+            Assert.That(ff.Crop, Is.EqualTo(RotateFilter.CropMode.Fill));
+            Assert.That(ff.Interpolation, Is.EqualTo(Util.InterpolationMode.NearestNeighbor));
         }
 
         [Test]
-        public void TestRotateParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(RotateFilter)));
+        public void TestRotateParCnt() => Assert.That(Common.ParamCount(typeof(RotateFilter)), Is.EqualTo(3));
 
         [Test]
         public void TestRotate180() => 
-            Assert.IsInstanceOf<Rotate180Filter>(ReflectiveApi.ConstructFilterByName("Rotate180"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("Rotate180"), Is.InstanceOf<Rotate180Filter>());
 
         [Test]
-        public void TestRotate180ParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(Rotate180Filter)));
+        public void TestRotate180ParCnt() => Assert.That(Common.ParamCount(typeof(Rotate180Filter)), Is.EqualTo(0));
 
         [Test]
         public void TestRotateLeft() => 
-            Assert.IsInstanceOf<RotateLeftFilter>(ReflectiveApi.ConstructFilterByName("RotateLeft"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("RotateLeft"), Is.InstanceOf<RotateLeftFilter>());
 
         [Test]
-        public void TestRotateLeftParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(RotateLeftFilter)));
+        public void TestRotateLeftParCnt() => Assert.That(Common.ParamCount(typeof(RotateLeftFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestRotateRight() => 
-            Assert.IsInstanceOf<RotateRightFilter>(ReflectiveApi.ConstructFilterByName("RotateRight"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("RotateRight"), Is.InstanceOf<RotateRightFilter>());
 
         [Test]
-        public void TestRotateRightParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(RotateRightFilter)));
+        public void TestRotateRightParCnt() => Assert.That(Common.ParamCount(typeof(RotateRightFilter)), Is.EqualTo(0));
     }
 }

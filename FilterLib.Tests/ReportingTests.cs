@@ -182,9 +182,9 @@ namespace FilterLib.Tests
         {
             ReporterStub rep = new();
             filter.Apply(img, rep);
-            Assert.IsTrue(rep.StartCalled);
-            Assert.IsTrue(rep.Reported);
-            Assert.IsTrue(rep.DoneCalled);
+            Assert.That(rep.StartCalled);
+            Assert.That(rep.Reported);
+            Assert.That(rep.DoneCalled);
         }
 
         [Test]
@@ -193,9 +193,9 @@ namespace FilterLib.Tests
         {
             ReporterStub rep = new();
             blend.Apply(img, img, rep);
-            Assert.IsTrue(rep.StartCalled);
-            Assert.IsTrue(rep.Reported);
-            Assert.IsTrue(rep.DoneCalled);
+            Assert.That(rep.StartCalled);
+            Assert.That(rep.Reported);
+            Assert.That(rep.DoneCalled);
         }
 
         [Test]
@@ -204,7 +204,7 @@ namespace FilterLib.Tests
             foreach (var filter in ReflectiveApi.GetFilterTypes())
             {
                 bool found = FilterTestCases().Any(tc => tc.Arguments[0].GetType() == filter);
-                Assert.IsTrue(found, $"Reporting test not found for {filter.Name}");
+                Assert.That(found, $"Reporting test not found for {filter.Name}");
             }
         }
 
@@ -214,7 +214,7 @@ namespace FilterLib.Tests
             foreach (var blend in ReflectiveApi.GetBlendTypes())
             {
                 bool found = BlendTestCases().Any(tc => tc.Arguments[0].GetType() == blend);
-                Assert.IsTrue(found, $"Reporting test not found for {blend.Name}");
+                Assert.That(found, $"Reporting test not found for {blend.Name}");
             }
         }
     }

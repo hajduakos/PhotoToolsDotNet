@@ -11,35 +11,35 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestAddNoise()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("AddNoise");
-            Assert.IsInstanceOf<AddNoiseFilter>(f);
+            Assert.That(f, Is.InstanceOf<AddNoiseFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Intensity", "50");
             ReflectiveApi.SetFilterPropertyByName(f, "Strength", "60");
             ReflectiveApi.SetFilterPropertyByName(f, "Seed", "70");
             ReflectiveApi.SetFilterPropertyByName(f, "Type", "Monochrome");
             AddNoiseFilter ff = f as AddNoiseFilter;
-            Assert.AreEqual(50, ff.Intensity);
-            Assert.AreEqual(60, ff.Strength);
-            Assert.AreEqual(70, ff.Seed);
-            Assert.AreEqual(AddNoiseFilter.NoiseType.Monochrome, ff.Type);
+            Assert.That(ff.Intensity, Is.EqualTo(50));
+            Assert.That(ff.Strength, Is.EqualTo(60));
+            Assert.That(ff.Seed, Is.EqualTo(70));
+            Assert.That(ff.Type, Is.EqualTo(AddNoiseFilter.NoiseType.Monochrome));
         }
 
         [Test]
-        public void TestAddNoiseParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(AddNoiseFilter)));
+        public void TestAddNoiseParCnt() => Assert.That(Common.ParamCount(typeof(AddNoiseFilter)), Is.EqualTo(4));
 
 
         [Test]
         public void TestMedian()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Median");
-            Assert.IsInstanceOf<MedianFilter>(f);
+            Assert.That(f, Is.InstanceOf<MedianFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Strength", "50");
             ReflectiveApi.SetFilterPropertyByName(f, "Radius", "3");
             MedianFilter ff = f as MedianFilter;
-            Assert.AreEqual(50, ff.Strength);
-            Assert.AreEqual(3, ff.Radius);
+            Assert.That(ff.Strength, Is.EqualTo(50));
+            Assert.That(ff.Radius, Is.EqualTo(3));
         }
 
         [Test]
-        public void TestMedianParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(MedianFilter)));
+        public void TestMedianParCnt() => Assert.That(Common.ParamCount(typeof(MedianFilter)), Is.EqualTo(2));
     }
 }

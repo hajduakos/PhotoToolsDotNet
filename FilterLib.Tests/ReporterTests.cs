@@ -34,7 +34,7 @@ namespace FilterLib.Tests
             sub.Start();
             sub.Report(10, 0, 20); // Middle will be 75
             sub.Done();
-            Assert.AreEqual(new List<int> {0, 25, 50, 50, 75, 100 }, rs.Reports);
+            Assert.That(rs.Reports, Is.EquivalentTo(new List<int> { 0, 25, 50, 50, 75, 100 }));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace FilterLib.Tests
             // Sub-sub reporter for 500-1000
             IReporter sub2 = new SubReporter(sub, 500, 1000, 0, 1000);
             sub2.Report(500, 0, 1000); // Report into middle --> 37.5
-            Assert.AreEqual(new List<int> { 375 }, rs.Reports);
+            Assert.That(rs.Reports, Is.EquivalentTo(new List<int> { 375 }));
 
         }
     }

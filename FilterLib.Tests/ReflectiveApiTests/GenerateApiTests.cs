@@ -10,93 +10,93 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestLinearGradient()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("LinearGradient");
-            Assert.IsInstanceOf<LinearGradientFilter>(f);
+            Assert.That(f, Is.InstanceOf<LinearGradientFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "StartX", "12px");
             ReflectiveApi.SetFilterPropertyByName(f, "StartY", "23%");
             ReflectiveApi.SetFilterPropertyByName(f, "EndX", "45px");
             ReflectiveApi.SetFilterPropertyByName(f, "EndY", "56%");
             LinearGradientFilter ff = f as LinearGradientFilter;
-            Assert.AreEqual(12, ff.StartX.ToAbsolute(200));
-            Assert.AreEqual(46, ff.StartY.ToAbsolute(200));
-            Assert.AreEqual(45, ff.EndX.ToAbsolute(200));
-            Assert.AreEqual(112, ff.EndY.ToAbsolute(200));
+            Assert.That(ff.StartX.ToAbsolute(200), Is.EqualTo(12));
+            Assert.That(ff.StartY.ToAbsolute(200), Is.EqualTo(46));
+            Assert.That(ff.EndX.ToAbsolute(200), Is.EqualTo(45));
+            Assert.That(ff.EndY.ToAbsolute(200), Is.EqualTo(112));
         }
 
         [Test]
-        public void TestLinearGradientParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(LinearGradientFilter)));
+        public void TestLinearGradientParCnt() => Assert.That(Common.ParamCount(typeof(LinearGradientFilter)), Is.EqualTo(4));
 
         [Test]
         public void TestMarble()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Marble");
-            Assert.IsInstanceOf<MarbleFilter>(f);
+            Assert.That(f, Is.InstanceOf<MarbleFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "HorizontalLines", "1");
             ReflectiveApi.SetFilterPropertyByName(f, "VerticalLines", "2");
             ReflectiveApi.SetFilterPropertyByName(f, "Twist", "3");
             ReflectiveApi.SetFilterPropertyByName(f, "Iterations", "4");
             ReflectiveApi.SetFilterPropertyByName(f, "Seed", "5");
             MarbleFilter ff = f as MarbleFilter;
-            Assert.AreEqual(1, ff.HorizontalLines);
-            Assert.AreEqual(2, ff.VerticalLines);
-            Assert.AreEqual(3, ff.Twist);
-            Assert.AreEqual(4, ff.Iterations);
-            Assert.AreEqual(5, ff.Seed);
+            Assert.That(ff.HorizontalLines, Is.EqualTo(1));
+            Assert.That(ff.VerticalLines, Is.EqualTo(2));
+            Assert.That(ff.Twist, Is.EqualTo(3));
+            Assert.That(ff.Iterations, Is.EqualTo(4));
+            Assert.That(ff.Seed, Is.EqualTo(5));
         }
 
         [Test]
-        public void TestMarbleParCnt() => Assert.AreEqual(5, Common.ParamCount(typeof(MarbleFilter)));
+        public void TestMarbleParCnt() => Assert.That(Common.ParamCount(typeof(MarbleFilter)), Is.EqualTo(5));
 
         [Test]
         public void TestRadialGradient()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("RadialGradient");
-            Assert.IsInstanceOf<RadialGradientFilter>(f);
+            Assert.That(f, Is.InstanceOf<RadialGradientFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "CenterX", "12px");
             ReflectiveApi.SetFilterPropertyByName(f, "CenterY", "23%");
             ReflectiveApi.SetFilterPropertyByName(f, "InnerRadius", "45px");
             ReflectiveApi.SetFilterPropertyByName(f, "OuterRadius", "56%");
             RadialGradientFilter ff = f as RadialGradientFilter;
-            Assert.AreEqual(12, ff.CenterX.ToAbsolute(200));
-            Assert.AreEqual(46, ff.CenterY.ToAbsolute(200));
-            Assert.AreEqual(45, ff.InnerRadius.ToAbsolute(200));
-            Assert.AreEqual(112, ff.OuterRadius.ToAbsolute(200));
+            Assert.That(ff.CenterX.ToAbsolute(200), Is.EqualTo(12));
+            Assert.That(ff.CenterY.ToAbsolute(200), Is.EqualTo(46));
+            Assert.That(ff.InnerRadius.ToAbsolute(200), Is.EqualTo(45));
+            Assert.That(ff.OuterRadius.ToAbsolute(200), Is.EqualTo(112));
         }
 
         [Test]
-        public void TestRadialGradientParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(RadialGradientFilter)));
+        public void TestRadialGradientParCnt() => Assert.That(Common.ParamCount(typeof(RadialGradientFilter)), Is.EqualTo(4));
 
         [Test]
         public void TestTurbulence()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Turbulence");
-            Assert.IsInstanceOf<TurbulenceFilter>(f);
+            Assert.That(f, Is.InstanceOf<TurbulenceFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Iterations", "4");
             ReflectiveApi.SetFilterPropertyByName(f, "Seed", "5");
             TurbulenceFilter ff = f as TurbulenceFilter;
-            Assert.AreEqual(4, ff.Iterations);
-            Assert.AreEqual(5, ff.Seed);
+            Assert.That(ff.Iterations, Is.EqualTo(4));
+            Assert.That(ff.Seed, Is.EqualTo(5));
         }
 
         [Test]
-        public void TestTurbulenceParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(TurbulenceFilter)));
+        public void TestTurbulenceParCnt() => Assert.That(Common.ParamCount(typeof(TurbulenceFilter)), Is.EqualTo(2));
 
         [Test]
         public void TestWoodRings()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("WoodRings");
-            Assert.IsInstanceOf<WoodRingsFilter>(f);
+            Assert.That(f, Is.InstanceOf<WoodRingsFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Rings", "1");
             ReflectiveApi.SetFilterPropertyByName(f, "Twist", "3");
             ReflectiveApi.SetFilterPropertyByName(f, "Iterations", "4");
             ReflectiveApi.SetFilterPropertyByName(f, "Seed", "5");
             WoodRingsFilter ff = f as WoodRingsFilter;
-            Assert.AreEqual(1, ff.Rings);
-            Assert.AreEqual(3, ff.Twist);
-            Assert.AreEqual(4, ff.Iterations);
-            Assert.AreEqual(5, ff.Seed);
+            Assert.That(ff.Rings, Is.EqualTo(1));
+            Assert.That(ff.Twist, Is.EqualTo(3));
+            Assert.That(ff.Iterations, Is.EqualTo(4));
+            Assert.That(ff.Seed, Is.EqualTo(5));
         }
 
         [Test]
-        public void TestWoodRingsParCnt() => Assert.AreEqual(4, Common.ParamCount(typeof(WoodRingsFilter)));
+        public void TestWoodRingsParCnt() => Assert.That(Common.ParamCount(typeof(WoodRingsFilter)), Is.EqualTo(4));
     }
 }

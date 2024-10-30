@@ -7,27 +7,27 @@ namespace FilterLib.Tests.ReflectiveApiTests
     {
         [Test]
         public void TestListFilters() =>
-            Assert.AreEqual(71, ReflectiveApi.GetFilterTypes().Count());
+            Assert.That(ReflectiveApi.GetFilterTypes().Count(), Is.EqualTo(71));
 
         [Test]
         public void TestListBlends() =>
-            Assert.AreEqual(26, ReflectiveApi.GetBlendTypes().Count());
+            Assert.That(ReflectiveApi.GetBlendTypes().Count(), Is.EqualTo(26));
 
         [Test]
         public void TestFilterExists() =>
-            Assert.IsTrue(ReflectiveApi.CheckFilterExists(typeof(Filters.Color.InvertFilter).Name));
+            Assert.That(ReflectiveApi.CheckFilterExists(typeof(Filters.Color.InvertFilter).Name));
 
         [Test]
         public void TestFilterNotExists() =>
-            Assert.IsFalse(ReflectiveApi.CheckFilterExists("This should not exist..."));
+            Assert.That(ReflectiveApi.CheckFilterExists("This should not exist..."), Is.False);
 
         [Test]
         public void TestBlendExists() =>
-            Assert.IsTrue(ReflectiveApi.CheckBlendExists(typeof(Blending.Normal.NormalBlend).Name));
+            Assert.That(ReflectiveApi.CheckBlendExists(typeof(Blending.Normal.NormalBlend).Name));
 
         [Test]
         public void TestBlendNotExists() =>
-            Assert.IsFalse(ReflectiveApi.CheckBlendExists("This should not exist..."));
+            Assert.That(ReflectiveApi.CheckBlendExists("This should not exist..."), Is.False);
 
         [Test]
         public void TestFilterNotExistsException() =>

@@ -8,112 +8,112 @@ namespace FilterLib.Tests.ReflectiveApiTests
     {
         [Test]
         public void TestAutoLevels() =>
-            Assert.IsInstanceOf<AutoLevelsFilter>(ReflectiveApi.ConstructFilterByName("AutoLevels"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("AutoLevels"), Is.InstanceOf<AutoLevelsFilter>());
 
         [Test]
-        public void TestAutoLevelsParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(AutoLevelsFilter)));
+        public void TestAutoLevelsParCnt() => Assert.That(Common.ParamCount(typeof(AutoLevelsFilter)), Is.EqualTo(0));
         
         [Test]
         public void TestBrightness()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Brightness");
-            Assert.IsInstanceOf<BrightnessFilter>(f);
+            Assert.That(f, Is.InstanceOf<BrightnessFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Brightness", "80");
             BrightnessFilter ff = f as BrightnessFilter;
-            Assert.AreEqual(80, ff.Brightness);
+            Assert.That(ff.Brightness, Is.EqualTo(80));
         }
 
         [Test]
-        public void TestBrightnessParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(BrightnessFilter)));
+        public void TestBrightnessParCnt() => Assert.That(Common.ParamCount(typeof(BrightnessFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestColorHSL()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ColorHSL");
-            Assert.IsInstanceOf<ColorHSLFilter>(f);
+            Assert.That(f, Is.InstanceOf<ColorHSLFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Hue", "10");
             ReflectiveApi.SetFilterPropertyByName(f, "Saturation", "20");
             ReflectiveApi.SetFilterPropertyByName(f, "Lightness", "30");
             ColorHSLFilter ff = f as ColorHSLFilter;
-            Assert.AreEqual(10, ff.Hue);
-            Assert.AreEqual(20, ff.Saturation);
-            Assert.AreEqual(30, ff.Lightness);
+            Assert.That(ff.Hue, Is.EqualTo(10));
+            Assert.That(ff.Saturation, Is.EqualTo(20));
+            Assert.That(ff.Lightness, Is.EqualTo(30));
         }
 
         [Test]
-        public void TestColorHSLParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(ColorHSLFilter)));
+        public void TestColorHSLParCnt() => Assert.That(Common.ParamCount(typeof(ColorHSLFilter)), Is.EqualTo(3));
 
         [Test]
         public void TestColorRGB()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ColorRGB");
-            Assert.IsInstanceOf<ColorRGBFilter>(f);
+            Assert.That(f, Is.InstanceOf<ColorRGBFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Red", "10");
             ReflectiveApi.SetFilterPropertyByName(f, "Green", "20");
             ReflectiveApi.SetFilterPropertyByName(f, "Blue", "30");
             ColorRGBFilter ff = f as ColorRGBFilter;
-            Assert.AreEqual(10, ff.Red);
-            Assert.AreEqual(20, ff.Green);
-            Assert.AreEqual(30, ff.Blue);
+            Assert.That(ff.Red, Is.EqualTo(10));
+            Assert.That(ff.Green, Is.EqualTo(20));
+            Assert.That(ff.Blue, Is.EqualTo(30));
         }
 
         [Test]
-        public void TestColorRGBParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(ColorRGBFilter)));
+        public void TestColorRGBParCnt() => Assert.That(Common.ParamCount(typeof(ColorRGBFilter)), Is.EqualTo(3));
 
         [Test]
         public void TestContrast()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Contrast");
-            Assert.IsInstanceOf<ContrastFilter>(f);
+            Assert.That(f, Is.InstanceOf<ContrastFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Contrast", "-50");
             ContrastFilter ff = f as ContrastFilter;
-            Assert.AreEqual(-50, ff.Contrast);
+            Assert.That(ff.Contrast, Is.EqualTo(-50));
         }
 
         [Test]
-        public void TestContrastParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(ContrastFilter)));
+        public void TestContrastParCnt() => Assert.That(Common.ParamCount(typeof(ContrastFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestGamma()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Gamma");
-            Assert.IsInstanceOf<GammaFilter>(f);
+            Assert.That(f, Is.InstanceOf<GammaFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Gamma", "1.5");
             GammaFilter ff = f as GammaFilter;
-            Assert.AreEqual(1.5f, ff.Gamma);
+            Assert.That(ff.Gamma, Is.EqualTo(1.5f));
         }
 
         [Test]
-        public void TestGammaParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(GammaFilter)));
+        public void TestGammaParCnt() => Assert.That(Common.ParamCount(typeof(GammaFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestLevels()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Levels");
-            Assert.IsInstanceOf<LevelsFilter>(f);
+            Assert.That(f, Is.InstanceOf<LevelsFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Dark", "10");
             ReflectiveApi.SetFilterPropertyByName(f, "Light", "240");
             LevelsFilter ff = f as LevelsFilter;
-            Assert.AreEqual(10, ff.Dark);
-            Assert.AreEqual(240, ff.Light);
+            Assert.That(ff.Dark, Is.EqualTo(10));
+            Assert.That(ff.Light, Is.EqualTo(240));
         }
 
         [Test]
-        public void TestLevelsParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(LevelsFilter)));
+        public void TestLevelsParCnt() => Assert.That(Common.ParamCount(typeof(LevelsFilter)), Is.EqualTo(2));
 
         [Test]
         public void TestShadowsHighlights()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ShadowsHighlights");
-            Assert.IsInstanceOf<ShadowsHighlightsFilter>(f);
+            Assert.That(f, Is.InstanceOf<ShadowsHighlightsFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Brighten", "10");
             ReflectiveApi.SetFilterPropertyByName(f, "Darken", "40");
             ShadowsHighlightsFilter ff = f as ShadowsHighlightsFilter;
-            Assert.AreEqual(10, ff.Brighten);
-            Assert.AreEqual(40, ff.Darken);
+            Assert.That(ff.Brighten, Is.EqualTo(10));
+            Assert.That(ff.Darken, Is.EqualTo(40));
         }
 
         [Test]
-        public void TestShadowsHighlightsParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(ShadowsHighlightsFilter)));
+        public void TestShadowsHighlightsParCnt() => Assert.That(Common.ParamCount(typeof(ShadowsHighlightsFilter)), Is.EqualTo(2));
     }
 }

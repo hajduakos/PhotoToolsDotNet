@@ -21,14 +21,14 @@ namespace FilterLib.Tests.IOTests
         {
             byte[] bmp = CreateImage();
             // BMP header
-            Assert.AreEqual(new byte[] {
+            Assert.That(bmp[0..14], Is.EqualTo(new byte[] {
                 0x42, 0x4D,
                 0x46, 0x00, 0x00, 0x00,
                 0x00, 0x00, 0x00, 0x00,
                 0x36, 0x00, 0x00, 0x00,
-            }, bmp[0..14]);
+            }));
             // DIB header
-            Assert.AreEqual(new byte[]
+            Assert.That(bmp[14..54], Is.EqualTo(new byte[]
             {
                 0x28, 0x00, 0x00, 0x00,
                 0x02, 0x00, 0x00, 0x00,
@@ -41,9 +41,9 @@ namespace FilterLib.Tests.IOTests
                 0x13, 0x0B, 0x00, 0x00,
                 0x00, 0x00, 0x00, 0x00,
                 0x00, 0x00, 0x00, 0x00,
-            }, bmp[14..54]);
+            }));
             // Pixel array
-            Assert.AreEqual(new byte[]
+            Assert.That(bmp[54..], Is.EqualTo(new byte[]
             {
                 0x00, 0x00, 0xFF,
                 0xFF, 0xFF, 0xFF,
@@ -51,7 +51,7 @@ namespace FilterLib.Tests.IOTests
                 0xFF, 0x00, 0x00,
                 0x00, 0xFF, 0x00,
                 0x00, 0x00,
-            }, bmp[54..]);
+            }));
         }
 
         [Test]
@@ -185,14 +185,14 @@ namespace FilterLib.Tests.IOTests
                 0x00, 0xFF, 0x00,
                 0x00, 0x00,
             });
-            Assert.AreEqual(2, img.Width);
-            Assert.AreEqual(2, img.Height);
-            Assert.AreEqual(255, img[0, 0, 2]);
-            Assert.AreEqual(255, img[1, 0, 1]);
-            Assert.AreEqual(255, img[0, 1, 0]);
-            Assert.AreEqual(255, img[1, 1, 0]);
-            Assert.AreEqual(255, img[1, 1, 1]);
-            Assert.AreEqual(255, img[1, 1, 2]);
+            Assert.That(img.Width, Is.EqualTo(2));
+            Assert.That(img.Height, Is.EqualTo(2));
+            Assert.That(img[0, 0, 2], Is.EqualTo(255));
+            Assert.That(img[1, 0, 1], Is.EqualTo(255));
+            Assert.That(img[0, 1, 0], Is.EqualTo(255));
+            Assert.That(img[1, 1, 0], Is.EqualTo(255));
+            Assert.That(img[1, 1, 1], Is.EqualTo(255));
+            Assert.That(img[1, 1, 2], Is.EqualTo(255));
         }
 
         [Test]
@@ -204,9 +204,9 @@ namespace FilterLib.Tests.IOTests
             img[2, 5, 1] = 123;
             codec.Write(img, path);
             Image img2 = codec.Read(path);
-            Assert.AreEqual(img.Width, img2.Width);
-            Assert.AreEqual(img.Height, img2.Height);
-            Assert.AreEqual(img[2, 5, 1], img2[2, 5, 1]);
+            Assert.That(img2.Width, Is.EqualTo(img.Width));
+            Assert.That(img2.Height, Is.EqualTo(img.Height));
+            Assert.That(img2[2, 5, 1], Is.EqualTo(img[2, 5, 1]));
         }
     }
 }

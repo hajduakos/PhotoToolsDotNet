@@ -11,120 +11,120 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestGradientMap()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("GradientMap");
-            Assert.IsInstanceOf<GradientMapFilter>(f);
+            Assert.That(f, Is.InstanceOf<GradientMapFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "GradientMap", "0 (255 0 0), 0.5 (255 255 0), 1 (0 255 0)");
             GradientMapFilter ff = f as GradientMapFilter;
-            Assert.AreEqual(new RGB(255, 0, 0), ff.GradientMap.GetColor(0));
-            Assert.AreEqual(new RGB(255, 255, 0), ff.GradientMap.GetColor(0.5f));
-            Assert.AreEqual(new RGB(0, 255, 0), ff.GradientMap.GetColor(1));
+            Assert.That(ff.GradientMap.GetColor(0), Is.EqualTo(new RGB(255, 0, 0)));
+            Assert.That(ff.GradientMap.GetColor(0.5f), Is.EqualTo(new RGB(255, 255, 0)));
+            Assert.That(ff.GradientMap.GetColor(1), Is.EqualTo(new RGB(0, 255, 0)));
         }
 
         [Test]
-        public void TestGradientMapParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(GradientMapFilter)));
+        public void TestGradientMapParCnt() => Assert.That(Common.ParamCount(typeof(GradientMapFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestGrayscale()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Grayscale" );
-            Assert.IsInstanceOf<GrayscaleFilter>(f);
+            Assert.That(f, Is.InstanceOf<GrayscaleFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Red", "10");
             ReflectiveApi.SetFilterPropertyByName(f, "Green", "20");
             ReflectiveApi.SetFilterPropertyByName(f, "Blue", "30");
             GrayscaleFilter ff = f as GrayscaleFilter;
-            Assert.AreEqual(10, ff.Red);
-            Assert.AreEqual(20, ff.Green);
-            Assert.AreEqual(30, ff.Blue);
+            Assert.That(ff.Red, Is.EqualTo(10));
+            Assert.That(ff.Green, Is.EqualTo(20));
+            Assert.That(ff.Blue, Is.EqualTo(30));
         }
 
         [Test]
-        public void TestGrayscaleParCnt() => Assert.AreEqual(3, Common.ParamCount(typeof(GrayscaleFilter)));
+        public void TestGrayscaleParCnt() => Assert.That(Common.ParamCount(typeof(GrayscaleFilter)), Is.EqualTo(3));
 
         [Test]
         public void TestInvert() => 
-            Assert.IsInstanceOf<InvertFilter>(ReflectiveApi.ConstructFilterByName("Invert"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("Invert"), Is.InstanceOf<InvertFilter>());
 
         [Test]
-        public void TestInvertParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(InvertFilter)));
+        public void TestInvertParCnt() => Assert.That(Common.ParamCount(typeof(InvertFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestOctreeQuantizer()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("OctreeQuantizer");
-            Assert.IsInstanceOf<OctreeQuantizerFilter>(f);
+            Assert.That(f, Is.InstanceOf<OctreeQuantizerFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "8");
             OctreeQuantizerFilter ff = f as OctreeQuantizerFilter;
-            Assert.AreEqual(8, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(8));
         }
 
         [Test]
-        public void TestOctreeQuantizerParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(PosterizeFilter)));
+        public void TestOctreeQuantizerParCnt() => Assert.That(Common.ParamCount(typeof(PosterizeFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestOrton()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Orton");
-            Assert.IsInstanceOf<OrtonFilter>(f);
+            Assert.That(f, Is.InstanceOf<OrtonFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Strength", "50");
             ReflectiveApi.SetFilterPropertyByName(f, "Radius", "10");
             OrtonFilter ff = f as OrtonFilter;
-            Assert.AreEqual(50, ff.Strength);
-            Assert.AreEqual(10, ff.Radius);
+            Assert.That(ff.Strength, Is.EqualTo(50));
+            Assert.That(ff.Radius, Is.EqualTo(10));
         }
 
         [Test]
-        public void TestOrtonParCnt() => Assert.AreEqual(2, Common.ParamCount(typeof(OrtonFilter)));
+        public void TestOrtonParCnt() => Assert.That(Common.ParamCount(typeof(OrtonFilter)), Is.EqualTo(2));
 
         [Test]
         public void TestPosterize()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Posterize");
-            Assert.IsInstanceOf<PosterizeFilter>(f);
+            Assert.That(f, Is.InstanceOf<PosterizeFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "8");
             PosterizeFilter ff = f as PosterizeFilter;
-            Assert.AreEqual(8, ff.Levels);
+            Assert.That(ff.Levels, Is.EqualTo(8));
         }
 
         [Test]
-        public void TestPosterizeParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(PosterizeFilter)));
+        public void TestPosterizeParCnt() => Assert.That(Common.ParamCount(typeof(PosterizeFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestSepia() =>
-            Assert.IsInstanceOf<SepiaFilter>(ReflectiveApi.ConstructFilterByName("Sepia"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("Sepia"), Is.InstanceOf<SepiaFilter>());
 
         [Test]
-        public void TestSepiaParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(SepiaFilter)));
+        public void TestSepiaParCnt() => Assert.That(Common.ParamCount(typeof(SepiaFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestSolarize() =>
-            Assert.IsInstanceOf<SolarizeFilter>(ReflectiveApi.ConstructFilterByName("Solarize"));
+            Assert.That(ReflectiveApi.ConstructFilterByName("Solarize"), Is.InstanceOf<SolarizeFilter>());
 
         [Test]
-        public void TestSolarizeParCnt() => Assert.AreEqual(0, Common.ParamCount(typeof(SolarizeFilter)));
+        public void TestSolarizeParCnt() => Assert.That(Common.ParamCount(typeof(SolarizeFilter)), Is.EqualTo(0));
 
         [Test]
         public void TestTreshold()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Treshold");
-            Assert.IsInstanceOf<TresholdFilter>(f);
+            Assert.That(f, Is.InstanceOf<TresholdFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Treshold", "127");
             TresholdFilter ff = f as TresholdFilter;
-            Assert.AreEqual(127, ff.Treshold);
+            Assert.That(ff.Treshold, Is.EqualTo(127));
         }
 
         [Test]
-        public void TestTresholdParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(TresholdFilter)));
+        public void TestTresholdParCnt() => Assert.That(Common.ParamCount(typeof(TresholdFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestVintage()
         {
              IFilter f = ReflectiveApi.ConstructFilterByName("Vintage");
-            Assert.IsInstanceOf<VintageFilter>(f);
+            Assert.That(f, Is.InstanceOf<VintageFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Strength", "80");
             VintageFilter ff = f as VintageFilter;
-            Assert.AreEqual(80, ff.Strength);
+            Assert.That(ff.Strength, Is.EqualTo(80));
         }
 
         [Test]
-        public void TestVintageParCnt() => Assert.AreEqual(1, Common.ParamCount(typeof(VintageFilter)));
+        public void TestVintageParCnt() => Assert.That(Common.ParamCount(typeof(VintageFilter)), Is.EqualTo(1));
     }
 }
