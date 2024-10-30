@@ -126,6 +126,36 @@ namespace FilterLib.Tests.IOTests
         }
 
         [Test]
+        public void TestReadInvalidPixelArrayOffset()
+        {
+            byte[] data = CreateImage();
+            data[10] = 0x01;
+            data[11] = 0x00;
+            data[12] = 0x00;
+            data[13] = 0x00;
+            Assert.Throws<CodecException>(() => new BitmapCodec().Read(data));
+        }
+
+        [Test]
+        public void TestReadPixelArrayOffsetOutside()
+        {
+            byte[] data = CreateImage();
+            data[10] = 0xFF;
+            data[11] = 0x00;
+            data[12] = 0x00;
+            data[13] = 0x00;
+            Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(data));
+        }
+
+        [Test]
+        public void TestReadPixelArrayTooShort()
+        {
+            byte[] data = CreateImage();
+            Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(data[..^10]));
+            Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(data[..^1]));
+        }
+
+        [Test]
         public void TestRead()
         {
             Image img = new BitmapCodec().Read(new byte[]
