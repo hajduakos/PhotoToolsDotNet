@@ -27,7 +27,7 @@ namespace FilterLib.Tests
             }
             if (!ok)
             {
-                new BitmapCodec().WriteFile(bmpActual, path + expected.Replace(".bmp", "_actual.bmp"));
+                new BitmapCodec().Write(bmpActual, path + expected.Replace(".bmp", "_actual.bmp"));
             }
             return ok;
         }
@@ -51,7 +51,7 @@ namespace FilterLib.Tests
             }
             if (!ok)
             {
-                new BitmapCodec().WriteFile(bmpActual, path + expected.Replace(".bmp", "_actual.bmp"));
+                new BitmapCodec().Write(bmpActual, path + expected.Replace(".bmp", "_actual.bmp"));
             }
             return ok;
         }

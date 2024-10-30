@@ -17,13 +17,13 @@
         /// </summary>
         /// <param name="img">Image</param>
         /// <param name="filename">Path to file</param>
-        public void WriteFile(Image img, string filename);
+        public void Write(Image img, string filename);
 
         /// <summary>
         /// Write the image into a memory array.
         /// </summary>
         /// <param name="img">Image</param>
         /// <returns>Memory array</returns>
-        public byte[] WriteArray(Image img);
+        public byte[] Write(Image img);
     }
 }

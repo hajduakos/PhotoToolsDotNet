@@ -21,7 +21,7 @@ namespace FilterScript
             string outputPath = ParseArg(args, "o");
             Script batch = Parser.Parse(File.ReadAllLines(scriptPath));
             Image input = FilterLib.Util.BitmapAdapter.FromBitmapPath(inputPath);
-            new BitmapCodec().WriteFile(batch.Execute(input), outputPath);
+            new BitmapCodec().Write(batch.Execute(input), outputPath);
         }
 
         static string ParseArg(string[] args, string flag)

@@ -9,14 +9,14 @@
         public abstract void Write(Image img, System.IO.Stream stream);
 
         /// <inheritdoc/>
-        public void WriteFile(Image img, string filename)
+        public void Write(Image img, string filename)
         {
             using System.IO.Stream stream = System.IO.File.OpenWrite(filename);
             Write(img, stream);
         }
 
         /// <inheritdoc/>
-        public byte[] WriteArray(Image img)
+        public byte[] Write(Image img)
         {
             using System.IO.MemoryStream stream = new();
             Write(img, stream);

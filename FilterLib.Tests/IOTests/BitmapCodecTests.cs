@@ -13,7 +13,7 @@ namespace FilterLib.Tests.IOTests
             img[1, 0, 1] = 255; // Green
             img[0, 1, 0] = 255; // Blue
             img[1, 1, 0] = img[1, 1, 1] = img[1, 1, 2] = 255; // White
-            byte[] bmp = new BitmapCodec().WriteArray(img);
+            byte[] bmp = new BitmapCodec().Write(img);
             // BMP header
             Assert.AreEqual(new byte[] {
                 0x42, 0x4D,
