@@ -18,3 +18,8 @@ Cross platform tools for processing photos. Implemented in .NET 8.0.
 
 Build: `dotnet build -c release`
 Run tests: `dotnet test -c release`
+
+![Sample](FilterLib.Tests/TestImages/_input.bmp)
+![Sample](FilterLib.Tests/TestImages/Brightness_50.bmp)
+![Sample](FilterLib.Tests/TestImages/Crystallize_10_100_0.bmp)
+![Sample](FilterLib.Tests/TestImages/ColorRGB_100_0_0.bmp)
