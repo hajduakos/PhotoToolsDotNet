@@ -48,7 +48,6 @@ namespace FilterLib.Filters.Dither
                 for (int y = 0; y < image.Height; y++)
                     quantErrArray[x, y] = 0;
 
-            float[,] diffusionMatrix = matrix.CopyMatrix();
             fixed (byte* start = image)
             {
                 byte* start0 = start;
@@ -70,14 +69,14 @@ namespace FilterLib.Filters.Dither
                             // First row
                             for (int xSub = matrix.Offset + 1; xSub < matrix.Width; ++xSub)
                                 if (x + comp + (xSub - matrix.Offset) * 3 < width_3)
-                                    quantErrArray[x + comp + (xSub - matrix.Offset) * 3, y] += quantErr * diffusionMatrix[xSub, 0];
+                                    quantErrArray[x + comp + (xSub - matrix.Offset) * 3, y] += quantErr * matrix[xSub, 0];
 
                             // Other rows
                             for (int ySub = 1; ySub < matrix.Height; ++ySub)
                                 if (y + ySub < image.Height)
                                     for (int xSub = 0; xSub < matrix.Width; ++xSub)
                                         if (x + comp + (xSub - matrix.Offset) * 3 < width_3 && x + comp + (xSub - matrix.Offset) * 3 >= 0)
-                                            quantErrArray[x + comp + (xSub - matrix.Offset) * 3, y + ySub] += quantErr * diffusionMatrix[xSub, ySub];
+                                            quantErrArray[x + comp + (xSub - matrix.Offset) * 3, y + ySub] += quantErr * matrix[xSub, ySub];
 
                             // Replace color
                             *ptr = roundedColor;

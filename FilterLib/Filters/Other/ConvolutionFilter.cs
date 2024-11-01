@@ -32,7 +32,6 @@ namespace FilterLib.Filters.Other
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(original.Width == image.Width);
             int width_3 = image.Width * 3;
-            int[,] mx = Matrix.CopyMatrix();
             fixed (byte* newStart = image, oldStart = original)
             {
                 byte* newStart0 = newStart;
@@ -53,9 +52,9 @@ namespace FilterLib.Filters.Other
                         byte bm = y < image.Height - 1 ? oldPtr[width_3] : mm;
                         byte br = y < image.Height - 1 && x < width_3 - 3 ? oldPtr[width_3 + 3] : mm;
                         float nVal = (
-                            tl * mx[0, 0] + tm * mx[1, 0] + tr * mx[2, 0] +
-                            ml * mx[0, 1] + mm * mx[1, 1] + mr * mx[2, 1] +
-                            bl * mx[0, 2] + bm * mx[1, 2] + br * mx[2, 2])
+                            tl * Matrix[0, 0] + tm * Matrix[1, 0] + tr * Matrix[2, 0] +
+                            ml * Matrix[0, 1] + mm * Matrix[1, 1] + mr * Matrix[2, 1] +
+                            bl * Matrix[0, 2] + bm * Matrix[1, 2] + br * Matrix[2, 2])
                             / Matrix.Divisor + Matrix.Bias;
 
                         *newPtr = nVal.ClampToByte();

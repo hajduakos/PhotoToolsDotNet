@@ -6,7 +6,7 @@ namespace FilterLib.Util
     /// <summary>
     /// 3x3 convolution matrix structure.
     /// </summary>
-    public struct Conv3x3
+    public readonly struct Conv3x3
     {
         private readonly int[,] matrix;
 
@@ -16,10 +16,7 @@ namespace FilterLib.Util
         /// <param name="i"></param>
         /// <param name="j"></param>
         /// <returns></returns>
-        public int this[int i, int j]
-        {
-            get { return matrix[i, j]; }
-        }
+        public readonly int this[int i, int j] => matrix[i, j];
 
         /// <summary> Divisor </summary>
         public readonly int Divisor;
@@ -79,20 +76,9 @@ namespace FilterLib.Util
         }
 
         /// <summary>
-        /// Create a copy of the matrix array.
-        /// </summary>
-        /// <returns>A new copy of the matrix array</returns>
-        public int[,] CopyMatrix()
-        {
-            int[,] copy = new int[3, 3];
-            Array.Copy(matrix, copy, 3 * 3);
-            return copy;
-        }
-
-        /// <summary>
         /// Convert to string </summary>
         /// <returns>String representation of the convolution matrix</returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return "[" + matrix[0, 0] + " " + matrix[1, 0] + " " + matrix[2, 0] + " ; " +
                    matrix[0, 1] + " " + matrix[1, 1] + " " + matrix[2, 1] + " ; " +
