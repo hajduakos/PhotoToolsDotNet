@@ -6,7 +6,7 @@ namespace FilterLib.Tests.IOTests
 {
     public class BitmapCodecTests
     {
-        private byte[] CreateImage()
+        private static byte[] CreateImage()
         {
             Image img = new(2, 2);
             img[0, 0, 2] = 255; // Red

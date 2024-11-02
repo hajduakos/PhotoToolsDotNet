@@ -40,7 +40,7 @@
 
         private float GetItem(int x, int y) => (1f + GetItem(x, y, size)) / (1f + Width * Height);
 
-        private int GetItem(int x, int y, int s)
+        private static int GetItem(int x, int y, int s)
         {
             if (s == 1)
                 return baseMatrix[x * 2 + y];
