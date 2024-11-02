@@ -95,17 +95,19 @@ namespace FilterLib.Tests
         }
 
         [Test]
-        public void TestConv3x3Parse()
+        public void TestConvolutionMatrixParse()
         {
-            Conv3x3 c = new("[1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11");
+            ConvolutionMatrix c = new("[[1, 2, 3], [4, 5, 6], [7, 8, 9]] / 10 + 11");
+            Assert.That(c.Width, Is.EqualTo(3));
+            Assert.That(c.Height, Is.EqualTo(3));
             Assert.That(c[0, 0], Is.EqualTo(1));
-            Assert.That(c[1, 0], Is.EqualTo(2));
-            Assert.That(c[2, 0], Is.EqualTo(3));
-            Assert.That(c[0, 1], Is.EqualTo(4));
+            Assert.That(c[0, 1], Is.EqualTo(2));
+            Assert.That(c[0, 2], Is.EqualTo(3));
+            Assert.That(c[1, 0], Is.EqualTo(4));
             Assert.That(c[1, 1], Is.EqualTo(5));
-            Assert.That(c[2, 1], Is.EqualTo(6));
-            Assert.That(c[0, 2], Is.EqualTo(7));
-            Assert.That(c[1, 2], Is.EqualTo(8));
+            Assert.That(c[1, 2], Is.EqualTo(6));
+            Assert.That(c[2, 0], Is.EqualTo(7));
+            Assert.That(c[2, 1], Is.EqualTo(8));
             Assert.That(c[2, 2], Is.EqualTo(9));
             Assert.That(c.Divisor, Is.EqualTo(10));
             Assert.That(c.Bias, Is.EqualTo(11));

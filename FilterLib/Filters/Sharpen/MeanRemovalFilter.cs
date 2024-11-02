@@ -1,4 +1,4 @@
-﻿using Conv3x3 = FilterLib.Util.Conv3x3;
+﻿using ConvolutionMatrix = FilterLib.Util.ConvolutionMatrix;
 using ConvolutionFilter = FilterLib.Filters.Other.ConvolutionFilter;
 using IReporter = FilterLib.Reporting.IReporter;
 
@@ -10,7 +10,7 @@ namespace FilterLib.Filters.Sharpen
     [Filter]
     public sealed class MeanRemovalFilter : FilterInPlaceBase
     {
-        private readonly ConvolutionFilter conv = new(new Conv3x3(-1, -1, -1, -1, 9, -1, -1, -1, -1, 1, 0));
+        private readonly ConvolutionFilter conv = new(new ConvolutionMatrix(new int[,] { { -1, -1, -1 }, { -1, 9, -1 }, { -1, -1, -1 } }, 1, 0));
 
         /// <inheritdoc/>
         public override void ApplyInPlace(Image image, IReporter reporter = null) => conv.ApplyInPlace(image, reporter);

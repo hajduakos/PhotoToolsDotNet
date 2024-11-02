@@ -15,11 +15,15 @@ namespace FilterLib.Tests.FilterTests
         internal static IEnumerable<TestCaseData> Data()
         {
             yield return new TestCaseData("_input_eq.bmp", "ConvertToPolar_72.bmp", new ConvertToPolarFilter(72), 1);
-        
+
             yield return new TestCaseData("_input.bmp", "_input.bmp",
-                new ConvolutionFilter(new Conv3x3(0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0)), 1);
-            yield return new TestCaseData("_input.bmp", "Convolution_1_1_1_0_0_0_-1_-1_-1_2_30.bmp",
-                new ConvolutionFilter(new Conv3x3(1, 1, 1, 0, 0, 0, -1, -1, -1, 2, 30)), 1);
+                new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, }, }, 1, 0)), 1);
+            yield return new TestCaseData("_input.bmp", "_input.bmp",
+                new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 0, 1, 0 } }, 1, 0)), 1);
+            yield return new TestCaseData("_input.bmp", "_input.bmp",
+                new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0 } }, 1, 0)), 1);
+            yield return new TestCaseData("_input.bmp", "Convolution_1_0_-1_1_0_-1_1_0_-1_2_30.bmp",
+                new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1 } }, 2, 30)), 1);
         
             yield return new TestCaseData("_input_eq.bmp", "EquirectToStereo_100_0_BL.bmp",
                 new EquirectangularToStereographicFilter(100, 0, InterpolationMode.Bilinear), 1);

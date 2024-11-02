@@ -240,8 +240,11 @@ namespace FilterLib.Tests.FilterTests
                 new ConvertToPolarFilter(12),
                 "ConvertToPolarFilter(Phase: 12)");
             yield return new TestCaseData(
-                new ConvolutionFilter(new Conv3x3(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
-                "ConvolutionFilter(Matrix: [1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11)");
+                new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } }, 10, 11)),
+                "ConvolutionFilter(Matrix: [[1, 2, 3], [4, 5, 6], [7, 8, 9]] / 10 + 11)");
+            yield return new TestCaseData(
+                new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, 2, 3 }, { 4, 5, 6 } }, 7, 8)),
+                "ConvolutionFilter(Matrix: [[1, 2, 3], [4, 5, 6]] / 7 + 8)");
             yield return new TestCaseData(
                 new EquirectangularToStereographicFilter(12, 34, InterpolationMode.NearestNeighbor),
                 "EquirectangularToStereographicFilter(AOV: 12, Spin: 34, Interpolation: NearestNeighbor)");

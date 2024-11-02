@@ -24,16 +24,16 @@ namespace FilterLib.Tests.ReflectiveApiTests
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Convolution");
             Assert.That(f, Is.InstanceOf<ConvolutionFilter>());
-            ReflectiveApi.SetFilterPropertyByName(f, "Matrix", "[1 2 3 ; 4 5 6 ; 7 8 9] / 10 + 11");
+            ReflectiveApi.SetFilterPropertyByName(f, "Matrix", "[[1, 2, 3], [4, 5, 6], [7, 8, 9]] / 10 + 11");
             ConvolutionFilter ff = f as ConvolutionFilter;
             Assert.That(ff.Matrix[0, 0], Is.EqualTo(1));
-            Assert.That(ff.Matrix[1, 0], Is.EqualTo(2));
-            Assert.That(ff.Matrix[2, 0], Is.EqualTo(3));
-            Assert.That(ff.Matrix[0, 1], Is.EqualTo(4));
+            Assert.That(ff.Matrix[0, 1], Is.EqualTo(2));
+            Assert.That(ff.Matrix[0, 2], Is.EqualTo(3));
+            Assert.That(ff.Matrix[1, 0], Is.EqualTo(4));
             Assert.That(ff.Matrix[1, 1], Is.EqualTo(5));
-            Assert.That(ff.Matrix[2, 1], Is.EqualTo(6));
-            Assert.That(ff.Matrix[0, 2], Is.EqualTo(7));
-            Assert.That(ff.Matrix[1, 2], Is.EqualTo(8));
+            Assert.That(ff.Matrix[1, 2], Is.EqualTo(6));
+            Assert.That(ff.Matrix[2, 0], Is.EqualTo(7));
+            Assert.That(ff.Matrix[2, 1], Is.EqualTo(8));
             Assert.That(ff.Matrix[2, 2], Is.EqualTo(9));
             Assert.That(ff.Matrix.Divisor, Is.EqualTo(10));
             Assert.That(ff.Matrix.Bias, Is.EqualTo(11));

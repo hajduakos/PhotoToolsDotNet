@@ -84,7 +84,7 @@ filters.Add(new AddNoiseFilter(500, 127, AddNoiseFilter.NoiseType.Color, 0));
 filters.Add(new MedianFilter(50, 2));
 
 filters.Add(new ConvertToPolarFilter(30));
-filters.Add(new ConvolutionFilter(new Conv3x3(1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 30)));
+filters.Add(new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } }, 9, 30)));
 filters.Add(new EquirectangularToStereographicFilter(90, 30, InterpolationMode.Bilinear));
 filters.Add(new WavesFilter(Size.Relative(.5f), Size.Relative(.3f), WavesFilter.WaveDirection.Horizontal));
 

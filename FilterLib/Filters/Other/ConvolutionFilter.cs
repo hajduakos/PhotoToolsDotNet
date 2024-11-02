@@ -14,13 +14,18 @@ namespace FilterLib.Filters.Other
         /// Convolution matrix.
         /// </summary>
         [FilterParam]
-        public Conv3x3 Matrix { get; set; }
+        public ConvolutionMatrix Matrix { get; set; }
+
+        /// <summary>
+        /// Default constructor representing the identity function.
+        /// </summary>
+        public ConvolutionFilter() : this(new ConvolutionMatrix()) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="matrix">Convolution matrix</param>
-        public ConvolutionFilter(Conv3x3 matrix = new Conv3x3()) => Matrix = matrix;
+        public ConvolutionFilter(ConvolutionMatrix matrix) => Matrix = matrix;
 
         /// <inheritdoc/>
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
@@ -32,34 +37,29 @@ namespace FilterLib.Filters.Other
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(original.Width == image.Width);
             int width_3 = image.Width * 3;
+            int center_x = Matrix.Width / 2;
+            int center_y = Matrix.Height / 2;
             fixed (byte* newStart = image, oldStart = original)
             {
                 byte* newStart0 = newStart;
                 byte* oldStart0 = oldStart;
                 Parallel.For(0, image.Height, y =>
                 {
-                    byte* oldPtr = oldStart0 + y * width_3;
                     byte* newPtr = newStart0 + y * width_3;
                     for (int x = 0; x < width_3; ++x)
                     {
-                        byte mm = *oldPtr;
-                        byte tl = y > 0 && x >= 3 ? oldPtr[-width_3 - 3] : mm;
-                        byte tm = y > 0 ? oldPtr[-width_3] : mm;
-                        byte tr = y > 0 && x < width_3 - 3 ? oldPtr[-width_3 + 3] : mm;
-                        byte ml = x >= 3 ? oldPtr[-3] : mm;
-                        byte mr = x < width_3 - 3 ? oldPtr[3] : mm;
-                        byte bl = y < image.Height - 1 && x >= 3 ? oldPtr[width_3 - 3] : mm;
-                        byte bm = y < image.Height - 1 ? oldPtr[width_3] : mm;
-                        byte br = y < image.Height - 1 && x < width_3 - 3 ? oldPtr[width_3 + 3] : mm;
-                        float nVal = (
-                            tl * Matrix[0, 0] + tm * Matrix[1, 0] + tr * Matrix[2, 0] +
-                            ml * Matrix[0, 1] + mm * Matrix[1, 1] + mr * Matrix[2, 1] +
-                            bl * Matrix[0, 2] + bm * Matrix[1, 2] + br * Matrix[2, 2])
-                            / Matrix.Divisor + Matrix.Bias;
-
-                        *newPtr = nVal.ClampToByte();
+                        float sum = 0;
+                        for (int mx = 0; mx < Matrix.Width; ++mx)
+                        {
+                            int oldX = (x / 3 - center_x + mx).Clamp(0, image.Width - 1) * 3 + x % 3;
+                            for (int my = 0; my < Matrix.Height; ++my)
+                            {
+                                int oldY = (y - center_y + my).Clamp(0, image.Height - 1);
+                                sum += oldStart0[oldY * width_3 + oldX] * Matrix[mx, my];
+                            }
+                        }
+                        *newPtr = (sum / Matrix.Divisor + Matrix.Bias).ClampToByte();
                         ++newPtr;
-                        ++oldPtr;
                     }
                     if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
                 });

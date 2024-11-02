@@ -100,7 +100,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new MedianFilter());
 
             yield return new TestCaseData(new ConvertToPolarFilter());
-            yield return new TestCaseData(new ConvolutionFilter(new Conv3x3(0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0)));
+            yield return new TestCaseData(new ConvolutionFilter());
             yield return new TestCaseData(new EquirectangularToStereographicFilter());
             yield return new TestCaseData(new WavesFilter());
 
