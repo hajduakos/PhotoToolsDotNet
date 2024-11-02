@@ -46,10 +46,7 @@ namespace FilterLib
         /// <returns>Filter instance</returns>
         public static IFilter ConstructFilterByName(string name)
         {
-            Type type = GetFilterTypeByName(name);
-            if (type == null)
-                throw new ArgumentException($"Filter '{name}' not found.");
-
+            Type type = GetFilterTypeByName(name) ?? throw new ArgumentException($"Filter '{name}' not found.");
             foreach (var constr in type.GetConstructors())
             {
                 List<object> parameters = new();
@@ -179,10 +176,7 @@ namespace FilterLib
         /// <returns>Blend instance</returns>
         public static IBlend ConstructBlendByName(string name)
         {
-            Type type = GetBlendTypeByName(name);
-            if (type == null)
-                throw new ArgumentException($"Blend '{name}' not found.");
-
+            Type type = GetBlendTypeByName(name) ?? throw new ArgumentException($"Blend '{name}' not found.");
             foreach (var constr in type.GetConstructors())
             {
                 List<object> parameters = new();
