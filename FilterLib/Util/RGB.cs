@@ -47,7 +47,7 @@ namespace FilterLib.Util
         /// Convert to HSL color.
         /// </summary>
         /// <returns>HSL color</returns>
-        public HSL ToHSL()
+        public readonly HSL ToHSL()
         {
             const float EPS = .00001f;
             float h = 0, s = 0, l;
@@ -75,17 +75,17 @@ namespace FilterLib.Util
             return new HSL((int)h, (int)s, (int)l);
         }
 
-        public override bool Equals(object obj) => obj is RGB r && this == r;
+        public override readonly bool Equals(object obj) => obj is RGB r && this == r;
 
-        public bool Equals(RGB other) => this == other;
+        public readonly bool Equals(RGB other) => this == other;
 
-        public override int GetHashCode() => (R << 16) | (G << 8) | B;
+        public override readonly int GetHashCode() => (R << 16) | (G << 8) | B;
 
         public static bool operator ==(RGB c1, RGB c2) => c1.R == c2.R && c1.G == c2.G && c1.B == c2.B;
 
         public static bool operator !=(RGB c1, RGB c2) => !(c1 == c2);
 
-        public override string ToString() => $"RGB({R}, {G}, {B})";
+        public override readonly string ToString() => $"RGB({R}, {G}, {B})";
 
         private const float RRatio = .299f;
         private const float GRatio = .587f;

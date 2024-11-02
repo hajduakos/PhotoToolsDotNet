@@ -33,7 +33,7 @@
         /// Convert to RGB color.
         /// </summary>
         /// <returns>RGB color</returns>
-        public RGB ToRGB()
+        public readonly RGB ToRGB()
         {
             float r, g, b, v;
             float lf = L / 100f;
@@ -64,16 +64,16 @@
             }
             return new RGB((int)(r * 255), (int)(g * 255), (int)(b * 255));
         }
-        public override bool Equals(object obj) => obj is HSL h && this == h;
+        public override readonly bool Equals(object obj) => obj is HSL h && this == h;
 
-        public bool Equals(HSL other) => this == other;
+        public readonly bool Equals(HSL other) => this == other;
 
-        public override int GetHashCode() => H.GetHashCode() ^ S.GetHashCode() ^ L.GetHashCode();
+        public override readonly int GetHashCode() => H.GetHashCode() ^ S.GetHashCode() ^ L.GetHashCode();
 
         public static bool operator ==(HSL c1, HSL c2) => c1.H == c2.H && c1.S == c2.S && c1.L == c2.L;
 
         public static bool operator !=(HSL c1, HSL c2) => !(c1 == c2);
 
-        public override string ToString() => $"HSL({H}, {S}, {L})";
+        public override readonly string ToString() => $"HSL({H}, {S}, {L})";
     }
 }

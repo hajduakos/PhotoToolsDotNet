@@ -61,7 +61,7 @@ namespace FilterLib.Filters.Mosaic
         /// <summary>
         /// Private helper class representing a point
         /// </summary>
-        private struct Cpoint : System.IEquatable<Cpoint>
+        private readonly struct Cpoint : System.IEquatable<Cpoint>
         {
             public readonly int x, y; // Coordinates
 
