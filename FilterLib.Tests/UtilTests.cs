@@ -142,6 +142,8 @@ namespace FilterLib.Tests
             Assert.Throws<ArgumentException>(() => new ConvolutionMatrix(""));
             Assert.Throws<ArgumentException>(() => new ConvolutionMatrix("this is not valid"));
             Assert.Throws<ArgumentException>(() => new ConvolutionMatrix("[still not valid]"));
+            Assert.Throws<ArgumentException>(() => new ConvolutionMatrix("[]/0+0"));
+            Assert.Throws<ArgumentException>(() => new ConvolutionMatrix("[[], [1]]/0+0"));
         }
 
         [Test]
