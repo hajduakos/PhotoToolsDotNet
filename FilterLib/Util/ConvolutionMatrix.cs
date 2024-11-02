@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -69,19 +70,15 @@ namespace FilterLib.Util
             str = Regex.Replace(str, @"\s+", " ").Trim();
             Match match = Regex.Match(str, @"\[(.*)\]\s*\/\s*(-?\d+)\s*\+\s*(-?\d+)");
             if (!match.Success) throw new ArgumentException("String does not match expected format");
-            String matrixStr = match.Groups[1].Value;
             List<List<int>> mx = [];
-            int start = matrixStr.IndexOf('[');
-            if (start == -1) throw new ArgumentException("No column opening [ found");
-            while (start != -1)
+            Match subMatch = Regex.Match(match.Groups[1].Value, @"\[([^\]]+)\]");
+            while (subMatch.Success)
             {
-                int end = matrixStr.IndexOf(']', start);
-                if (end == -1) throw new ArgumentException("No matching ] found for [");
                 List<int> col = [];
-                foreach (string s in matrixStr[(start+1)..end].Split(", "))
+                foreach (string s in subMatch.Groups[1].Value.Split(", "))
                     col.Add(int.Parse(s));
                 mx.Add(col);
-                start = matrixStr.IndexOf('[', end + 1);
+                subMatch = subMatch.NextMatch();
             }
             Divisor = int.Parse(match.Groups[2].Value);
             if (Divisor == 0)
