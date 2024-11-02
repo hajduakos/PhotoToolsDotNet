@@ -58,6 +58,16 @@ namespace FilterLib.Tests
             Assert.That(new RGB(0, 255, 255).Equals(new RGB(-10, 270, 1000)));
             Assert.That(new RGB(0, 255, 255) == new RGB(-10, 270, 1000));
             Assert.That(new RGB(0, 255, 255) != new RGB(1, 2, 3));
+            Assert.That(new RGB(12, 34, 56).GetHashCode() == new RGB(12, 34, 56).GetHashCode());
+        }
+
+        [Test]
+        public void TestRGBParse()
+        {
+            Assert.That(new RGB("(12, 34, 56)"), Is.EqualTo(new RGB(12, 34, 56)));
+            Assert.That(new RGB("RGB(12, 34, 56)"), Is.EqualTo(new RGB(12, 34, 56)));
+            Assert.Throws<ArgumentException>(() => new RGB("(1, 2)"));
+            Assert.Throws<ArgumentException>(() => new RGB("(1, 2, 3, 4)"));
         }
 
         [Test]
@@ -71,6 +81,7 @@ namespace FilterLib.Tests
             Assert.That(new HSL(10, 100, 0) == new HSL(370, 200, -10));
             Assert.That(new HSL(10, 100, 0) != new HSL(1, 2, 3));
             Assert.That(new HSL(-10, 0, 0).H, Is.EqualTo(350));
+            Assert.That(new HSL(12, 34, 56).GetHashCode() == new HSL(12, 34, 56).GetHashCode());
         }
 
         [Test]
