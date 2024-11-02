@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -55,7 +54,7 @@ namespace FilterLib.Util
                 for (int y = 0; y < Height; ++y)
                     this.weights[x, y] = matrix[x, y];
             if (divisor == 0)
-                throw new ArgumentException("Divisor cannot be 0.");
+                throw new ArithmeticException("Divisor cannot be 0.");
             Divisor = divisor;
             Bias = bias;
         }
@@ -82,7 +81,7 @@ namespace FilterLib.Util
             }
             Divisor = int.Parse(match.Groups[2].Value);
             if (Divisor == 0)
-                throw new ArgumentException("Divisor cannot be 0.");
+                throw new ArithmeticException("Divisor cannot be 0.");
             Bias = int.Parse(match.Groups[3].Value);
 
             Width = mx.Count;
