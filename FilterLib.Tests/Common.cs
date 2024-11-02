@@ -1,5 +1,4 @@
 ﻿using FilterLib.IO;
-using FilterLib.Util;
 using NUnit.Framework;
 using System.IO;
 using System.Linq;

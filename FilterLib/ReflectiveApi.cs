@@ -1,11 +1,11 @@
 ﻿using FilterLib.Blending;
 using FilterLib.Filters;
+using FilterLib.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
 using System.Linq;
-using FilterLib.IO;
+using System.Reflection;
 
 namespace FilterLib
 {

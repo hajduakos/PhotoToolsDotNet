@@ -1,6 +1,5 @@
 ﻿using FilterLib.Filters;
 using FilterLib.Filters.Other;
-using FilterLib.Filters.Transform;
 using FilterLib.Util;
 using NUnit.Framework;
 using System;

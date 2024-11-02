@@ -1,5 +1,5 @@
-﻿using FilterLib.Blending;
-using FilterLib;
+﻿using FilterLib;
+using FilterLib.Blending;
 
 namespace FilterScript.Model
 {

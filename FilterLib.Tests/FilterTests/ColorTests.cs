@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
+﻿using FilterLib.Filters;
 using FilterLib.Filters.Color;
 using FilterLib.Util;
+using NUnit.Framework;
 using System.Collections.Generic;
-using FilterLib.Filters;
 
 namespace FilterLib.Tests.FilterTests
 {

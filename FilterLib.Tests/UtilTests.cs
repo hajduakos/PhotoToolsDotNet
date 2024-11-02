@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using FilterLib.Util;
+using NUnit.Framework;
 using System;
 
 namespace FilterLib.Tests

@@ -1,5 +1,5 @@
-﻿using ConvolutionMatrix = FilterLib.Util.ConvolutionMatrix;
-using ConvolutionFilter = FilterLib.Filters.Other.ConvolutionFilter;
+﻿using ConvolutionFilter = FilterLib.Filters.Other.ConvolutionFilter;
+using ConvolutionMatrix = FilterLib.Util.ConvolutionMatrix;
 using IReporter = FilterLib.Reporting.IReporter;
 
 namespace FilterLib.Filters.Blur

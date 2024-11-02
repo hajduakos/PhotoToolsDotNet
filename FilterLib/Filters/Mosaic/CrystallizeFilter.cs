@@ -1,8 +1,8 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using Math = System.Math;
-using Random = System.Random;
 using Parallel = System.Threading.Tasks.Parallel;
+using Random = System.Random;
 
 namespace FilterLib.Filters.Mosaic
 {

@@ -1,5 +1,4 @@
-﻿using FilterLib.Filters.Transform;
-using FilterLib.Reporting;
+﻿using FilterLib.Reporting;
 using FilterLib.Util;
 using Math = System.Math;
 using MathF = System.MathF;

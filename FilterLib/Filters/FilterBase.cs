@@ -1,6 +1,6 @@
 ﻿using FilterLib.Reporting;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 namespace FilterLib.Filters
 {

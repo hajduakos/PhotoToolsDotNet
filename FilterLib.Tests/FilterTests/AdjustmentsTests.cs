@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
+﻿using FilterLib.Filters;
 using FilterLib.Filters.Adjustments;
-using System.Collections.Generic;
-using FilterLib.Filters;
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace FilterLib.Tests.FilterTests
 {

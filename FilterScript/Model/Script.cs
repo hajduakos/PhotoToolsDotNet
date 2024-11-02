@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using FilterLib;
+﻿using FilterLib;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FilterScript.Model

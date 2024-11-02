@@ -1,8 +1,8 @@
 ﻿using FilterLib.Reporting;
 using FilterLib.Util;
-using Random = System.Random;
 using Math = System.Math;
 using Parallel = System.Threading.Tasks.Parallel;
+using Random = System.Random;
 
 namespace FilterLib.Filters.Dither
 {

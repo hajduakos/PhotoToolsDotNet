@@ -1,6 +1,6 @@
 ﻿using FilterLib.Reporting;
-using Math = System.Math;
 using FilterLib.Util;
+using Math = System.Math;
 using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
