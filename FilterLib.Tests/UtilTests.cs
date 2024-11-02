@@ -70,6 +70,7 @@ namespace FilterLib.Tests
             Assert.That(new HSL(10, 100, 0).Equals(new HSL(370, 200, -10)));
             Assert.That(new HSL(10, 100, 0) == new HSL(370, 200, -10));
             Assert.That(new HSL(10, 100, 0) != new HSL(1, 2, 3));
+            Assert.That(new HSL(-10, 0, 0).H, Is.EqualTo(350));
         }
 
         [Test]
