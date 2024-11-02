@@ -136,6 +136,14 @@ namespace FilterLib.Tests
         }
 
         [Test]
+        public void TestConcolutionMatrixParseInvalid()
+        {
+            Assert.Throws<ArgumentException>(() => new ConvolutionMatrix(""));
+            Assert.Throws<ArgumentException>(() => new ConvolutionMatrix("this is not valid"));
+            Assert.Throws<ArgumentException>(() => new ConvolutionMatrix("[still not valid]"));
+        }
+
+        [Test]
         public void TestGradientOf2()
         {
             Gradient g = new(new RGB(255, 100, 0), new RGB(0, 50, 255));

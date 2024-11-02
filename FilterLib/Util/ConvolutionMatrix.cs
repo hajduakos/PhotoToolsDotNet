@@ -68,10 +68,14 @@ namespace FilterLib.Util
         {
             str = Regex.Replace(str, @"\s+", " ").Trim();
             List<List<int>> mx = [];
+            if (str.Length < "[[1]]/1+0".Length) throw new ArgumentException("String too short");
+            if (str[0] != '[') throw new ArgumentException("Matrix opening [ not found");
             int start = str.IndexOf('[', 1);
+            if (start == -1) throw new ArgumentException("No column opening [ found");
             while (start != -1)
             {
                 int end = str.IndexOf(']', start);
+                if (end == -1) throw new ArgumentException("No matching ] found for [");
                 List<int> col = [];
                 foreach (string s in str[(start+1)..end].Split(", "))
                     col.Add(int.Parse(s));
