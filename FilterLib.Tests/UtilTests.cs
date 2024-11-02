@@ -95,6 +95,28 @@ namespace FilterLib.Tests
         }
 
         [Test]
+        public void TestConvolutionMatrixOrder()
+        {
+            ConvolutionMatrix c = new(new int[,] { { 1, 2, 3 }, { 4, 5, 6 } }, 7, 8);
+            Assert.That(c.Width, Is.EqualTo(2));
+            Assert.That(c.Height, Is.EqualTo(3));
+            Assert.That(c[0, 0], Is.EqualTo(1));
+            Assert.That(c[0, 1], Is.EqualTo(2));
+            Assert.That(c[0, 2], Is.EqualTo(3));
+            Assert.That(c[1, 0], Is.EqualTo(4));
+            Assert.That(c[1, 1], Is.EqualTo(5));
+            Assert.That(c[1, 2], Is.EqualTo(6));
+            Assert.That(c.Divisor, Is.EqualTo(7));
+            Assert.That(c.Bias, Is.EqualTo(8));
+        }
+
+        [Test]
+        public void TestConvolutionMatrixZeroDivisor()
+        {
+            Assert.Throws<ArgumentException>(() => new ConvolutionMatrix(new int[,] { { 1 } }, 0, 0));
+        }
+
+        [Test]
         public void TestConvolutionMatrixParse()
         {
             ConvolutionMatrix c = new("[[1, 2, 3], [4, 5, 6], [7, 8, 9]] / 10 + 11");
