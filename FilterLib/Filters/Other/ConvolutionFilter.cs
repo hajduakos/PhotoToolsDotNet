@@ -48,6 +48,17 @@ namespace FilterLib.Filters.Other
                     byte* newPtr = newStart0 + y * width_3;
                     for (int x = 0; x < width_3; ++x)
                     {
+                        // We align the center of the matrix (M) on the current pixel (X) in the
+                        // image (O) and the do a weighted sum of the covered pixels:
+                        //
+                        //       MMMMM
+                        // OOOOOOMMMMM
+                        // OOOOOOMMXMM
+                        // OOOOOOMMMMM
+                        // OOOOOOMMMMM
+                        // OOOOOOOOOO
+                        //
+                        // Matrix elements outside are mapped on the nearest pixel within the image.
                         float sum = 0;
                         for (int mx = 0; mx < Matrix.Width; ++mx)
                         {
