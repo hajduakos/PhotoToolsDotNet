@@ -67,23 +67,26 @@ namespace FilterLib.Util
         public ConvolutionMatrix(string str)
         {
             str = Regex.Replace(str, @"\s+", " ").Trim();
+            Match match = Regex.Match(str, @"\[(.*)\]\s*\/\s*(-?\d+)\s*\+\s*(-?\d+)");
+            if (!match.Success) throw new ArgumentException("String does not match expected format");
+            String matrixStr = match.Groups[1].Value;
             List<List<int>> mx = [];
-            if (str.Length < "[[1]]/1+0".Length) throw new ArgumentException("String too short");
-            if (str[0] != '[') throw new ArgumentException("Matrix opening [ not found");
-            int start = str.IndexOf('[', 1);
+            int start = matrixStr.IndexOf('[');
             if (start == -1) throw new ArgumentException("No column opening [ found");
             while (start != -1)
             {
-                int end = str.IndexOf(']', start);
+                int end = matrixStr.IndexOf(']', start);
                 if (end == -1) throw new ArgumentException("No matching ] found for [");
                 List<int> col = [];
-                foreach (string s in str[(start+1)..end].Split(", "))
+                foreach (string s in matrixStr[(start+1)..end].Split(", "))
                     col.Add(int.Parse(s));
                 mx.Add(col);
-                start = str.IndexOf('[', end + 1);
+                start = matrixStr.IndexOf('[', end + 1);
             }
-            Divisor = int.Parse(str.Split("/")[1].Split("+")[0]);
-            Bias = int.Parse(str.Split("/")[1].Split("+")[1]);
+            Divisor = int.Parse(match.Groups[2].Value);
+            if (Divisor == 0)
+                throw new ArgumentException("Divisor cannot be 0.");
+            Bias = int.Parse(match.Groups[3].Value);
 
             Width = mx.Count;
             if (Width == 0) throw new ArgumentException("Matrix cannot be empty");

@@ -114,6 +114,7 @@ namespace FilterLib.Tests
         public void TestConvolutionMatrixZeroDivisor()
         {
             Assert.Throws<ArgumentException>(() => new ConvolutionMatrix(new int[,] { { 1 } }, 0, 0));
+            Assert.Throws<ArgumentException>(() => new ConvolutionMatrix("[[1]]/0+0"));
         }
 
         [Test]
