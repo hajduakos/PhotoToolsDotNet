@@ -20,7 +20,7 @@ namespace FilterScript.Model
         }
         public Image Execute()
         {
-            if (result == null) result = Blend.Apply(BottomParent.Execute(), TopParent.Execute());
+            result ??= Blend.Apply(BottomParent.Execute(), TopParent.Execute());
             return result;
         }
 

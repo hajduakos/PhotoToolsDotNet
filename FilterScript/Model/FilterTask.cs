@@ -17,7 +17,7 @@ namespace FilterScript.Model
         }
         public Image Execute()
         {
-            if (result == null) result = Filter.Apply(Parent.Execute());
+            result ??= Filter.Apply(Parent.Execute());
             return result;
         }
 
