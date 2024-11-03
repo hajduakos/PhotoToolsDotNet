@@ -17,13 +17,19 @@ namespace FilterLib.Filters.Transform
         /// </summary>
         public enum SkewDirection { Horizontal, Vertical }
 
+        private float angle;
+
         /// <summary>
         /// Skew angle in degrees ]-90;90[.
         /// </summary>
         [FilterParam]
         [FilterParamMinF(-90)]
         [FilterParamMaxF(90)]
-        public float Angle { get; set; }
+        public float Angle
+        {
+            get { return angle; }
+            set { angle = value.Clamp(-89.99f, 89.99f); }
+        }
 
         /// <summary>
         /// Direction.
@@ -37,7 +43,7 @@ namespace FilterLib.Filters.Transform
         /// <param name="angle">Skew angle in degrees ]-90;90[</param>
         public SkewFilter(float angle = 0, SkewDirection direction = SkewDirection.Horizontal)
         {
-            Angle = angle.Clamp(-90, 90);
+            Angle = angle;
             Direction = direction;
         }
 
