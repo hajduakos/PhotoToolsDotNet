@@ -154,6 +154,9 @@ namespace FilterLib.Tests.FilterTests
                 new BurkesDitherFilter(123),
                 "BurkesDitherFilter(Levels: 123)");
             yield return new TestCaseData(
+                new ClusterDotDitherFilter(123),
+                "ClusterDotDitherFilter(Levels: 123)");
+            yield return new TestCaseData(
                 new FanDitherFilter(123),
                 "FanDitherFilter(Levels: 123)");
             yield return new TestCaseData(

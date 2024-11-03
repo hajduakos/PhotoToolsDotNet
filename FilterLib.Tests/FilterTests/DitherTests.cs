@@ -25,6 +25,12 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("Grayscale_30_59_11.bmp", "BayerDither_2_5_bw.bmp", new BayerDitherFilter(2, 5), 1);
             yield return new TestCaseData("Grayscale_30_59_11.bmp", "BayerDither_4_4_bw.bmp", new BayerDitherFilter(4, 4), 1);
 
+            yield return new TestCaseData("_input.bmp", "ClusterDotDither_2.bmp", new ClusterDotDitherFilter(2), 1);
+            yield return new TestCaseData("_input.bmp", "ClusterDotDither_4.bmp", new ClusterDotDitherFilter(4), 1);
+            yield return new TestCaseData("_input.bmp", "_input.bmp", new ClusterDotDitherFilter(256), 1);
+            yield return new TestCaseData("Grayscale_30_59_11.bmp", "ClusterDotDither_2_bw.bmp", new ClusterDotDitherFilter(2), 1);
+            yield return new TestCaseData("Grayscale_30_59_11.bmp", "ClusterDotDither_4_bw.bmp", new ClusterDotDitherFilter(4), 1);
+
             yield return new TestCaseData("_input.bmp", "AtkinsonDither_2.bmp", new AtkinsonDitherFilter(2), 1);
             yield return new TestCaseData("_input.bmp", "AtkinsonDither_4.bmp", new AtkinsonDitherFilter(4), 1);
             yield return new TestCaseData("_input.bmp", "_input.bmp", new AtkinsonDitherFilter(256), 1);

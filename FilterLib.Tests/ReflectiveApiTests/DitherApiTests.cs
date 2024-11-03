@@ -20,6 +20,18 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
         [Test]
         public void TestBayerDitherParCnt() => Assert.That(Common.ParamCount(typeof(BayerDitherFilter)), Is.EqualTo(2));
+        [Test]
+        public void TestClusterDotDither()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("ClusterDotDither");
+            Assert.That(f, Is.InstanceOf<ClusterDotDitherFilter>());
+            ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
+            ClusterDotDitherFilter ff = f as ClusterDotDitherFilter;
+            Assert.That(ff.Levels, Is.EqualTo(50));
+        }
+
+        [Test]
+        public void TestClusterDotDitherParCnt() => Assert.That(Common.ParamCount(typeof(ClusterDotDitherFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestAtkinsonDither()
