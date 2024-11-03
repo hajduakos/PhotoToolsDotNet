@@ -25,7 +25,7 @@
             };
             for (int x = 0; x < matrix.GetLength(0); x++)
                 for (int y = 0; y < matrix.GetLength(1); y++)
-                    matrix[x, y] /= 64f;
+                    matrix[x, y] = (1f + matrix[x, y]) / 65f;
         }
 
         /// <inheritdoc/>
