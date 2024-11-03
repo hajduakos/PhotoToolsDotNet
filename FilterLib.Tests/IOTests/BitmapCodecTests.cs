@@ -151,7 +151,7 @@ namespace FilterLib.Tests.IOTests
         public void TestReadPixelArrayTooShort()
         {
             byte[] data = CreateImage();
-            Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(data[..^10]));
+            Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(data[..^3]));
             Assert.Throws<EndOfStreamException>(() => new BitmapCodec().Read(data[..^1]));
         }
 
