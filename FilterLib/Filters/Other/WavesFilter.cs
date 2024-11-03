@@ -66,7 +66,8 @@ namespace FilterLib.Filters.Other
             if (waveLengthPx == 0) throw new System.ArgumentException("Wavelength cannot be zero.");
 
             if (Direction == WaveDirection.Horizontal) result = new(image.Width, image.Height + 2 * amplitudePx);
-            else result = new(image.Width + 2 * amplitudePx, image.Height);
+            else if (Direction == WaveDirection.Vertical) result = new(image.Width + 2 * amplitudePx, image.Height);
+            else throw new System.ArgumentException($"Unknown wave direction: {Direction}.");
 
             int oldWidth_3 = image.Width * 3;
             int newWidth_3 = result.Width * 3;
