@@ -73,6 +73,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new AtkinsonDitherFilter());
             yield return new TestCaseData(new BayerDitherFilter());
             yield return new TestCaseData(new BurkesDitherFilter());
+            yield return new TestCaseData(new ClusterDotDitherFilter());
             yield return new TestCaseData(new FanDitherFilter());
             yield return new TestCaseData(new FloydSteinbergDitherFilter());
             yield return new TestCaseData(new JarvisJudiceNinkeDitherFilter());
