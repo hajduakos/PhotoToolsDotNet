@@ -81,21 +81,18 @@ namespace FilterLib.Filters.Other
                 if (Direction == WaveDirection.Horizontal)
                 {
                     // Iterate through columns
-                    for (int x = 0; x < oldWidth_3; x += 3)
+                    for (int x = 0; x < oldWidth_3; ++x)
                     {
                         // Calculate offset
-                        int offset = (int)MathF.Round(MathF.Sin(freq * x / 3) * amplitudePx);
+                        int x_div_3 = x / 3;
+                        int offset = (int)MathF.Round(MathF.Sin(freq * x_div_3) * amplitudePx);
                         if (offset > 0) offset = Math.Min(amplitudePx, offset);
                         else offset = -Math.Min(amplitudePx, -offset);
 
                         // Iterate through rows and move pixels
                         Parallel.For(0, image.Height, y =>
                         {
-                            int idx1 = y * oldWidth_3 + x;
-                            int idx2 = (y + amplitudePx - offset) * newWidth_3 + x;
-                            newStart0[idx2] = oldStart0[idx1];
-                            newStart0[idx2 + 1] = oldStart0[idx1 + 1];
-                            newStart0[idx2 + 2] = oldStart0[idx1 + 2];
+                            newStart0[(y + amplitudePx - offset) * newWidth_3 + x] = oldStart0[y * oldWidth_3 + x];
                         });
 
                         reporter?.Report(x + 3, 0, oldWidth_3);
