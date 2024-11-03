@@ -190,6 +190,9 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(
                 new SobelFilter(),
                 "SobelFilter");
+            yield return new TestCaseData(
+                new ScharrFilter(),
+                "ScharrFilter");
         }
 
         internal static IEnumerable<TestCaseData> Generate()

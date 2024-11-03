@@ -85,6 +85,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new EmbossFilter());
             yield return new TestCaseData(new PrewittFilter());
             yield return new TestCaseData(new SobelFilter());
+            yield return new TestCaseData(new ScharrFilter());
 
             yield return new TestCaseData(new LinearGradientFilter());
             yield return new TestCaseData(new MarbleFilter());

@@ -18,6 +18,8 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("Prewitt.bmp", new PrewittFilter(), 1);
 
             yield return new TestCaseData("Sobel.bmp", new SobelFilter(), 1);
+
+            yield return new TestCaseData("Scharr.bmp", new ScharrFilter(), 1);
         }
 
         [Test]

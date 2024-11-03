@@ -32,5 +32,12 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
         [Test]
         public void TestSobelParCnt() => Assert.That(Common.ParamCount(typeof(SobelFilter)), Is.EqualTo(0));
+
+        [Test]
+        public void TestScharr() =>
+            Assert.That(ReflectiveApi.ConstructFilterByName("Scharr"), Is.InstanceOf<ScharrFilter>());
+
+        [Test]
+        public void TestScharrParCnt() => Assert.That(Common.ParamCount(typeof(ScharrFilter)), Is.EqualTo(0));
     }
 }
