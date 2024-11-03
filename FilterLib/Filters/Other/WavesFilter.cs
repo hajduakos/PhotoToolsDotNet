@@ -56,8 +56,6 @@ namespace FilterLib.Filters.Other
         public override unsafe Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            object reporterLock = new();
-            int progress = 0;
             Image result;
 
             int waveLengthPx = Wavelength.ToAbsolute(Direction == WaveDirection.Horizontal ? image.Width : image.Height);
@@ -94,14 +92,13 @@ namespace FilterLib.Filters.Other
                         {
                             newStart0[(y + amplitudePx - offset) * newWidth_3 + x] = oldStart0[y * oldWidth_3 + x];
                         });
-
                         reporter?.Report(x + 3, 0, oldWidth_3);
                     }
                 }
                 else if (Direction == WaveDirection.Vertical)
                 {
                     // Iterate through rows
-                    Parallel.For(0, image.Height, y =>
+                    for (int y = 0; y < image.Height; ++y)
                     {
                         // Calculate offset
                         int offset = (int)MathF.Round(MathF.Sin(freq * y) * amplitudePx);
@@ -110,11 +107,12 @@ namespace FilterLib.Filters.Other
                         int offset_3 = offset * 3;
 
                         // Iterate through columns and move pixels
-                        for (int x = 0; x < oldWidth_3; ++x)
+                        Parallel.For(0, oldWidth_3, x =>
+                        {
                             newStart0[y * newWidth_3 + x + amplitudePx_3 - offset_3] = oldStart0[y * oldWidth_3 + x];
-
-                        if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
-                    });
+                        });
+                        reporter?.Report(y + 1, 0, image.Height);
+                    }
                 }
                 else throw new System.ArgumentException($"Unknown wave direction: {Direction}.");
             }
