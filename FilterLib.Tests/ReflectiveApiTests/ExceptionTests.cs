@@ -39,6 +39,13 @@ namespace FilterLib.Tests.ReflectiveApiTests
         }
 
         [Test]
+        public void TestParamGreaterF()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Skew");
+            Assert.Throws<ArgumentOutOfRangeException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Angle", "91"));
+        }
+
+        [Test]
         public void TestParamLessF()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("Gamma");
