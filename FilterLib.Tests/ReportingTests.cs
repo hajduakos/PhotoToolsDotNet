@@ -116,6 +116,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new RotateFilter(10));
             yield return new TestCaseData(new RotateLeftFilter());
             yield return new TestCaseData(new RotateRightFilter());
+            yield return new TestCaseData(new SkewFilter());
         }
         internal static IEnumerable<TestCaseData> BlendTestCases()
         {

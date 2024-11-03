@@ -66,6 +66,13 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("RotateLeft.bmp", new RotateLeftFilter(), 0);
 
             yield return new TestCaseData("RotateRight.bmp", new RotateRightFilter(), 0);
+
+            yield return new TestCaseData("_input.bmp", new SkewFilter(0, SkewFilter.SkewDirection.Horizontal), 1);
+            yield return new TestCaseData("_input.bmp", new SkewFilter(0, SkewFilter.SkewDirection.Vertical), 1);
+            yield return new TestCaseData("Skew_30_Horizontal.bmp", new SkewFilter(30, SkewFilter.SkewDirection.Horizontal), 1);
+            yield return new TestCaseData("Skew_-45_Horizontal.bmp", new SkewFilter(-45, SkewFilter.SkewDirection.Horizontal), 1);
+            yield return new TestCaseData("Skew_30_Vertical.bmp", new SkewFilter(30, SkewFilter.SkewDirection.Vertical), 1);
+            yield return new TestCaseData("Skew_-10_Vertical.bmp", new SkewFilter(-10, SkewFilter.SkewDirection.Vertical), 1);
         }
 
         internal static IEnumerable<TestCaseData> Exceptions()

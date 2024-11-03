@@ -110,5 +110,20 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
         [Test]
         public void TestRotateRightParCnt() => Assert.That(Common.ParamCount(typeof(RotateRightFilter)), Is.EqualTo(0));
+
+        [Test]
+        public void TestSkew()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Skew");
+            Assert.That(f, Is.InstanceOf<SkewFilter>());
+            ReflectiveApi.SetFilterPropertyByName(f, "Angle", "12.34");
+            ReflectiveApi.SetFilterPropertyByName(f, "Direction", "Vertical");
+            SkewFilter ff = f as SkewFilter;
+            Assert.That(ff.Angle, Is.EqualTo(12.34f));
+            Assert.That(ff.Direction, Is.EqualTo(SkewFilter.SkewDirection.Vertical));
+        }
+
+        [Test]
+        public void TestSkewParCnt() => Assert.That(Common.ParamCount(typeof(SkewFilter)), Is.EqualTo(2));
     }
 }

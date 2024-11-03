@@ -292,6 +292,9 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(
                 new RotateRightFilter(),
                 "RotateRightFilter");
+            yield return new TestCaseData(
+                new SkewFilter(12.34f, SkewFilter.SkewDirection.Vertical),
+                "SkewFilter(Angle: 12.34, Direction: Vertical)");
         }
 
         [Test]
