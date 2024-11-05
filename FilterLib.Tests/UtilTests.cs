@@ -237,5 +237,16 @@ namespace FilterLib.Tests
             Assert.Throws<FormatException>(() => Size.FromString("123percent"));
             Assert.Throws<FormatException>(() => Size.FromString("123pixels"));
         }
+
+        [Test]
+        public void TestHistogram()
+        {
+            Image img = new(2, 3);
+            img[0, 0, 0] = img[0, 0, 1] = img[0, 0, 2] = 100;
+            int[] hist = Histogram.GetLuminanceHistogram(img);
+            Assert.That(hist.Length, Is.EqualTo(256));
+            Assert.That(hist[0], Is.EqualTo(5));
+            Assert.That(hist[100], Is.EqualTo(1));
+        }
     }
 }
