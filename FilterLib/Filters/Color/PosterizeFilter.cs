@@ -1,4 +1,5 @@
 ﻿using FilterLib.Util;
+using System.IO;
 using MathF = System.MathF;
 
 namespace FilterLib.Filters.Color
@@ -10,6 +11,7 @@ namespace FilterLib.Filters.Color
     public sealed class PosterizeFilter : PerComponentFilterBase
     {
         private int levels;
+        private float div;
 
         /// <summary>
         /// Number of levels [2:256].
@@ -20,7 +22,11 @@ namespace FilterLib.Filters.Color
         public int Levels
         {
             get { return levels; }
-            set { levels = value.Clamp(2, 256); }
+            set
+            {
+                levels = value.Clamp(2, 256);
+                div = 255f / (levels - 1);
+            }
         }
 
         /// <summary>
@@ -30,10 +36,6 @@ namespace FilterLib.Filters.Color
         public PosterizeFilter(int levels = 256) => Levels = levels;
 
         /// <inheritdoc/>
-        protected override byte MapComponent(byte comp)
-        {
-            float div = 255f / (levels - 1);
-            return (byte)MathF.Round(MathF.Round(comp / div) * div);
-        }
+        protected override byte MapComponent(byte comp) => (byte)MathF.Round(MathF.Round(comp / div) * div);
     }
 }
