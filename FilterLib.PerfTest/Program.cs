@@ -16,90 +16,97 @@ using FilterLib.Filters.Transform;
 using FilterLib.Util;
 using System.Diagnostics;
 
-List<IFilter> filters = new();
-filters.Add(new AutoLevelsFilter());
-filters.Add(new BrightnessFilter(123));
-filters.Add(new ColorHSLFilter(100, 40, -40));
-filters.Add(new ColorRGBFilter(50, -50, 60));
-filters.Add(new ContrastFilter(70));
-filters.Add(new GammaFilter(3f));
-filters.Add(new LevelsFilter(40, 120));
-filters.Add(new ShadowsHighlightsFilter(20, 40));
+List<IFilter> filters =
+[
+    // Adjustments
+    new AutoLevelsFilter(),
+    new BrightnessFilter(123),
+    new ColorHSLFilter(100, 40, -40),
+    new ColorRGBFilter(50, -50, 60),
+    new ContrastFilter(70),
+    new GammaFilter(3f),
+    new LevelsFilter(40, 120),
+    new ShadowsHighlightsFilter(20, 40),
+    // Artistic
+    new AdaptiveTresholdFilter(10),
+    new OilPaintFilter(10, 127),
+    new RandomJitterFilter(20, 0),
+    // Blur
+    new BlurFilter(),
+    new BoxBlurFilter(10, 20),
+    new GaussianBlurFilter(20),
+    new MotionBlurFilter(20, 32),
+    new SpinBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 30, 10),
+    new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 70, 10),
+    // Border
+    new FadeBorderFilter(Size.Absolute(20), new(0, 0, 0)),
+    new JitterBorderFilter(Size.Relative(.2f), new(0, 0, 0), 0),
+    new PatternBorderFilter(Size.Relative(.2f), Size.Relative(.2f), new(10, 10), BorderPosition.Outside, AntiAliasQuality.Medium),
+    new SimpleBorderFilter(Size.Relative(.2f), Size.Relative(.2f), new(0, 0, 0), BorderPosition.Outside, AntiAliasQuality.Medium),
+    new VignetteFilter(Size.Relative(1f), Size.Relative(.5f), new(0, 0, 0)),
+    // Color
+    new GradientMapFilter(new(new(0, 0, 255), new(0, 255, 255), new(0, 255, 0))),
+    new GrayscaleFilter(33, 34, 33),
+    new InvertFilter(),
+    new OctreeQuantizerFilter(32),
+    new OrtonFilter(50, 10),
+    new PosterizeFilter(4),
+    new SepiaFilter(),
+    new SolarizeFilter(),
+    new TresholdFilter(127),
+    new VintageFilter(50),
+    // Dither
+    new AtkinsonDitherFilter(4),
+    new BayerDitherFilter(4, 8),
+    new BurkesDitherFilter(4),
+    new ClusterDotDitherFilter(),
+    new FanDitherFilter(4),
+    new FloydSteinbergDitherFilter(4),
+    new JarvisJudiceNinkeDitherFilter(4),
+    new RandomDitherFilter(4, 0),
+    new ShiauFanDitherFilter(4),
+    new SierraDitherFilter(4),
+    new StuckiDitherFilter(4),
+    // Edges
+    new EdgeDetectionFilter(),
+    new EmbossFilter(),
+    new PrewittFilter(),
+    new ScharrFilter(),
+    new SobelFilter(),
+    // Generate
+    new LinearGradientFilter(Size.Relative(0), Size.Relative(0), Size.Relative(1), Size.Relative(1)),
+    new MarbleFilter(10, 10, 5, 5, 0),
+    new RadialGradientFilter(Size.Relative(.5f), Size.Relative(.5f), Size.Relative(.1f), Size.Relative(.9f)),
+    new TurbulenceFilter(5, 0),
+    new WoodRingsFilter(5, 5, 5, 0),
+    // Mosaic
+    new CrystallizeFilter(20, 50, 0),
+    new LegoFilter(32, AntiAliasQuality.Medium),
+    new PixelateFilter(32, PixelateFilter.PixelateMode.Average),
+    // Noise
+    new AddNoiseFilter(500, 127, AddNoiseFilter.NoiseType.Color, 0),
+    new MedianFilter(50, 2),
+    // Other
+    new ConvertToPolarFilter(30),
+    new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } }, 9, 30)),
+    new EquirectangularToStereographicFilter(90, 30, InterpolationMode.Bilinear),
+    new WavesFilter(Size.Relative(.5f), Size.Relative(.3f), WavesFilter.WaveDirection.Horizontal),
+    // Sharpen
+    new MeanRemovalFilter(),
+    new SharpenFilter(),
+    // Transform
+    new BoxDownscaleFilter(Size.Relative(.5f), Size.Relative(.5f)),
+    new CropFilter(Size.Relative(.1f), Size.Relative(.1f), Size.Relative(.9f), Size.Relative(.9f)),
+    new FlipHorizontalFilter(),
+    new FlipVerticalFilter(),
+    new ResizeFilter(Size.Relative(1.1f), Size.Relative(1.1f), InterpolationMode.Bilinear),
+    new Rotate180Filter(),
+    new RotateFilter(10, RotateFilter.CropMode.Fit, InterpolationMode.Bilinear),
+    new RotateLeftFilter(),
+    new RotateRightFilter(),
+    new SkewFilter(45),
+];
 
-filters.Add(new AdaptiveTresholdFilter(10));
-filters.Add(new OilPaintFilter(10, 127));
-filters.Add(new RandomJitterFilter(20, 0));
-
-filters.Add(new BlurFilter());
-filters.Add(new BoxBlurFilter(10, 20));
-filters.Add(new GaussianBlurFilter(20));
-filters.Add(new MotionBlurFilter(20, 32));
-filters.Add(new SpinBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 30, 10));
-filters.Add(new ZoomBlurFilter(Size.Relative(.5f), Size.Relative(.5f), 70, 10));
-
-filters.Add(new FadeBorderFilter(Size.Absolute(20), new(0, 0, 0)));
-filters.Add(new JitterBorderFilter(Size.Relative(.2f), new(0, 0, 0), 0));
-filters.Add(new PatternBorderFilter(Size.Relative(.2f), Size.Relative(.2f), new(10, 10), BorderPosition.Outside, AntiAliasQuality.Medium));
-filters.Add(new SimpleBorderFilter(Size.Relative(.2f), Size.Relative(.2f), new(0, 0, 0), BorderPosition.Outside, AntiAliasQuality.Medium));
-filters.Add(new VignetteFilter(Size.Relative(1f), Size.Relative(.5f), new(0, 0, 0)));
-
-filters.Add(new GradientMapFilter(new(new(0, 0, 255), new(0, 255, 255), new(0, 255, 0))));
-filters.Add(new GrayscaleFilter(33, 34, 33));
-filters.Add(new InvertFilter());
-filters.Add(new OctreeQuantizerFilter(32));
-filters.Add(new OrtonFilter(50, 10));
-filters.Add(new PosterizeFilter(4));
-filters.Add(new SepiaFilter());
-filters.Add(new SolarizeFilter());
-filters.Add(new TresholdFilter(127));
-filters.Add(new VintageFilter(50));
-
-filters.Add(new AtkinsonDitherFilter(4));
-filters.Add(new BayerDitherFilter(4, 8));
-filters.Add(new BurkesDitherFilter(4));
-filters.Add(new FanDitherFilter(4));
-filters.Add(new FloydSteinbergDitherFilter(4));
-filters.Add(new JarvisJudiceNinkeDitherFilter(4));
-filters.Add(new RandomDitherFilter(4, 0));
-filters.Add(new ShiauFanDitherFilter(4));
-filters.Add(new SierraDitherFilter(4));
-filters.Add(new StuckiDitherFilter(4));
-
-filters.Add(new EdgeDetectionFilter());
-filters.Add(new EmbossFilter());
-filters.Add(new PrewittFilter());
-filters.Add(new SobelFilter());
-
-filters.Add(new LinearGradientFilter(Size.Relative(0), Size.Relative(0), Size.Relative(1), Size.Relative(1)));
-filters.Add(new MarbleFilter(10, 10, 5, 5, 0));
-filters.Add(new RadialGradientFilter(Size.Relative(.5f), Size.Relative(.5f), Size.Relative(.1f), Size.Relative(.9f)));
-filters.Add(new TurbulenceFilter(5, 0));
-filters.Add(new WoodRingsFilter(5, 5, 5, 0));
-
-filters.Add(new CrystallizeFilter(20, 50, 0));
-filters.Add(new LegoFilter(32, AntiAliasQuality.Medium));
-filters.Add(new PixelateFilter(32, PixelateFilter.PixelateMode.Average));
-
-filters.Add(new AddNoiseFilter(500, 127, AddNoiseFilter.NoiseType.Color, 0));
-filters.Add(new MedianFilter(50, 2));
-
-filters.Add(new ConvertToPolarFilter(30));
-filters.Add(new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } }, 9, 30)));
-filters.Add(new EquirectangularToStereographicFilter(90, 30, InterpolationMode.Bilinear));
-filters.Add(new WavesFilter(Size.Relative(.5f), Size.Relative(.3f), WavesFilter.WaveDirection.Horizontal));
-
-filters.Add(new MeanRemovalFilter());
-filters.Add(new SharpenFilter());
-
-filters.Add(new BoxDownscaleFilter(Size.Relative(.5f), Size.Relative(.5f)));
-filters.Add(new CropFilter(Size.Relative(.1f), Size.Relative(.1f), Size.Relative(.9f), Size.Relative(.9f)));
-filters.Add(new FlipHorizontalFilter());
-filters.Add(new FlipVerticalFilter());
-filters.Add(new ResizeFilter(Size.Relative(1.1f), Size.Relative(1.1f), InterpolationMode.Bilinear));
-filters.Add(new Rotate180Filter());
-filters.Add(new RotateFilter(10, RotateFilter.CropMode.Fit, InterpolationMode.Bilinear));
-filters.Add(new RotateLeftFilter());
-filters.Add(new RotateRightFilter());
 
 const int WIDTH = 4000;
 const int HEIGHT = 3000;
@@ -128,3 +135,7 @@ foreach (var f in filters)
     }
     Console.WriteLine($"{f}\t{total / n}");
 }
+
+foreach(var f in ReflectiveApi.GetFilterTypes())
+    if (!filters.Any(f0 => f0.GetType() == f))
+        Console.WriteLine($"Warning: no test for {f}");
