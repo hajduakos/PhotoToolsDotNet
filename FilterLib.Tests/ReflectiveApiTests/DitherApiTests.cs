@@ -73,6 +73,19 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestFanDitherParCnt() => Assert.That(Common.ParamCount(typeof(FanDitherFilter)), Is.EqualTo(1));
 
         [Test]
+        public void TestFilterLiteDither()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("FilterLiteDither");
+            Assert.That(f, Is.InstanceOf<FilterLiteDitherFilter>());
+            ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
+            FilterLiteDitherFilter ff = f as FilterLiteDitherFilter;
+            Assert.That(ff.Levels, Is.EqualTo(50));
+        }
+
+        [Test]
+        public void TestFilterLiteDitherParCnt() => Assert.That(Common.ParamCount(typeof(FilterLiteDitherFilter)), Is.EqualTo(1));
+
+        [Test]
         public void TestShiauFanDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("ShiauFanDither");

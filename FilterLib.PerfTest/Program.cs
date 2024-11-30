@@ -61,6 +61,7 @@ List<IFilter> filters =
     new BurkesDitherFilter(4),
     new ClusterDotDitherFilter(),
     new FanDitherFilter(4),
+    new FilterLiteDitherFilter(4),
     new FloydSteinbergDitherFilter(4),
     new JarvisJudiceNinkeDitherFilter(4),
     new RandomDitherFilter(4, 0),

@@ -160,6 +160,9 @@ namespace FilterLib.Tests.FilterTests
                 new FanDitherFilter(123),
                 "FanDitherFilter(Levels: 123)");
             yield return new TestCaseData(
+                new FilterLiteDitherFilter(123),
+                "FilterLiteDitherFilter(Levels: 123)");
+            yield return new TestCaseData(
                 new FloydSteinbergDitherFilter(123),
                 "FloydSteinbergDitherFilter(Levels: 123)");
             yield return new TestCaseData(

@@ -52,6 +52,13 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("Grayscale_30_59_11.bmp", "FanDither_2_bw.bmp", new FanDitherFilter(2), 1);
             yield return new TestCaseData("Grayscale_30_59_11.bmp", "FanDither_4_bw.bmp", new FanDitherFilter(4), 1);
 
+            yield return new TestCaseData("_input.bmp", "FilterLiteDither_2.bmp", new FilterLiteDitherFilter(2), 1);
+            yield return new TestCaseData("_input.bmp", "FilterLiteDither_4.bmp", new FilterLiteDitherFilter(4), 1);
+            yield return new TestCaseData("_input.bmp", "_input.bmp", new FilterLiteDitherFilter(256), 1);
+            yield return new TestCaseData("_input.bmp", "_input.bmp", new FilterLiteDitherFilter(128), 2);
+            yield return new TestCaseData("Grayscale_30_59_11.bmp", "FilterLiteDither_2_bw.bmp", new FilterLiteDitherFilter(2), 1);
+            yield return new TestCaseData("Grayscale_30_59_11.bmp", "FilterLiteDither_4_bw.bmp", new FilterLiteDitherFilter(4), 1);
+
             yield return new TestCaseData("_input.bmp", "ShiauFanDither_2.bmp", new ShiauFanDitherFilter(2), 1);
             yield return new TestCaseData("_input.bmp", "ShiauFanDither_4.bmp", new ShiauFanDitherFilter(4), 1);
             yield return new TestCaseData("_input.bmp", "_input.bmp", new ShiauFanDitherFilter(256), 1);
