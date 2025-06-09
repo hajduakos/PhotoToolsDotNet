@@ -1,4 +1,5 @@
 ﻿using FilterLib.Reporting;
+using FilterLib.Util;
 using Math = System.Math;
 using MathF = System.MathF;
 using Parallel = System.Threading.Tasks.Parallel;
@@ -11,11 +12,6 @@ namespace FilterLib.Filters.Other
     [Filter]
     public sealed class WavesFilter : FilterBase
     {
-        /// <summary>
-        /// Wave directions.
-        /// </summary>
-        public enum WaveDirection { Horizontal, Vertical }
-
         /// <summary>
         /// Wavelength.
         /// </summary>
@@ -32,7 +28,7 @@ namespace FilterLib.Filters.Other
         /// Direction.
         /// </summary>
         [FilterParam]
-        public WaveDirection Direction { get; set; }
+        public Direction Direction { get; set; }
 
         /// <summary>
         /// Constructor.
@@ -45,7 +41,7 @@ namespace FilterLib.Filters.Other
         /// <param name="wavelength">Wavelength</param>
         /// <param name="amplitude">Amplitude</param>
         /// <param name="direction">Direction</param>
-        public WavesFilter(Util.Size wavelength, Util.Size amplitude, WaveDirection direction = WaveDirection.Horizontal)
+        public WavesFilter(Util.Size wavelength, Util.Size amplitude, Direction direction = Direction.Horizontal)
         {
             Wavelength = wavelength;
             Amplitude = amplitude;
@@ -58,13 +54,13 @@ namespace FilterLib.Filters.Other
             reporter?.Start();
             Image result;
 
-            int waveLengthPx = Wavelength.ToAbsolute(Direction == WaveDirection.Horizontal ? image.Width : image.Height);
-            int amplitudePx = Amplitude.ToAbsolute(Direction == WaveDirection.Horizontal ? image.Height : image.Width);
+            int waveLengthPx = Wavelength.ToAbsolute(Direction == Direction.Horizontal ? image.Width : image.Height);
+            int amplitudePx = Amplitude.ToAbsolute(Direction == Direction.Horizontal ? image.Height : image.Width);
 
             if (waveLengthPx == 0) throw new System.ArgumentException("Wavelength cannot be zero.");
 
-            if (Direction == WaveDirection.Horizontal) result = new(image.Width, image.Height + 2 * amplitudePx);
-            else if (Direction == WaveDirection.Vertical) result = new(image.Width + 2 * amplitudePx, image.Height);
+            if (Direction == Direction.Horizontal) result = new(image.Width, image.Height + 2 * amplitudePx);
+            else if (Direction == Direction.Vertical) result = new(image.Width + 2 * amplitudePx, image.Height);
             else throw new System.ArgumentException($"Unknown wave direction: {Direction}.");
 
             int oldWidth_3 = image.Width * 3;
@@ -76,7 +72,7 @@ namespace FilterLib.Filters.Other
             {
                 byte* newStart0 = newStart;
                 byte* oldStart0 = oldStart;
-                if (Direction == WaveDirection.Horizontal)
+                if (Direction == Direction.Horizontal)
                 {
                     // Iterate through columns
                     for (int x = 0; x < oldWidth_3; ++x)
@@ -95,7 +91,7 @@ namespace FilterLib.Filters.Other
                         reporter?.Report(x + 3, 0, oldWidth_3);
                     }
                 }
-                else if (Direction == WaveDirection.Vertical)
+                else if (Direction == Direction.Vertical)
                 {
                     // Iterate through rows
                     for (int y = 0; y < image.Height; ++y)

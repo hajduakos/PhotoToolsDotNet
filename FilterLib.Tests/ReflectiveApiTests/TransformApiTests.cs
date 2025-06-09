@@ -66,7 +66,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
             ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "Bilinear");
             PerspectiveFilter ff = f as PerspectiveFilter;
             Assert.That(ff.Scale, Is.EqualTo(12.34f));
-            Assert.That(ff.Direction, Is.EqualTo(PerspectiveFilter.PerspectiveDirection.Vertical));
+            Assert.That(ff.Direction, Is.EqualTo(Util.Direction.Vertical));
             Assert.That(ff.Interpolation, Is.EqualTo(Util.InterpolationMode.Bilinear));
         }
 
@@ -139,7 +139,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
             ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "NearestNeighbor");
             SkewFilter ff = f as SkewFilter;
             Assert.That(ff.Angle, Is.EqualTo(12.34f));
-            Assert.That(ff.Direction, Is.EqualTo(SkewFilter.SkewDirection.Vertical));
+            Assert.That(ff.Direction, Is.EqualTo(Util.Direction.Vertical));
             Assert.That(ff.Interpolation, Is.EqualTo(Util.InterpolationMode.NearestNeighbor));
         }
 

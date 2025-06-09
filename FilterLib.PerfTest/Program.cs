@@ -91,7 +91,7 @@ List<IFilter> filters =
     new ConvertToPolarFilter(30),
     new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } }, 9, 30)),
     new EquirectangularToStereographicFilter(90, 30, InterpolationMode.Bilinear),
-    new WavesFilter(Size.Relative(.5f), Size.Relative(.3f), WavesFilter.WaveDirection.Horizontal),
+    new WavesFilter(Size.Relative(.5f), Size.Relative(.3f), Direction.Horizontal),
     // Sharpen
     new MeanRemovalFilter(),
     new SharpenFilter(),

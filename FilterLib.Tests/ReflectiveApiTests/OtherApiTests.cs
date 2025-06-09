@@ -71,7 +71,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
             WavesFilter ff = f as WavesFilter;
             Assert.That(ff.Wavelength.ToAbsolute(400), Is.EqualTo(200));
             Assert.That(ff.Amplitude.ToAbsolute(0), Is.EqualTo(40));
-            Assert.That(ff.Direction, Is.EqualTo(WavesFilter.WaveDirection.Vertical));
+            Assert.That(ff.Direction, Is.EqualTo(Util.Direction.Vertical));
         }
 
         [Test]

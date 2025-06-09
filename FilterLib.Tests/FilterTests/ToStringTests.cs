@@ -258,7 +258,7 @@ namespace FilterLib.Tests.FilterTests
                 new EquirectangularToStereographicFilter(12, 34, InterpolationMode.NearestNeighbor),
                 "EquirectangularToStereographicFilter(AOV: 12, Spin: 34, Interpolation: NearestNeighbor)");
             yield return new TestCaseData(
-                new WavesFilter(Size.Absolute(12), Size.Absolute(34), WavesFilter.WaveDirection.Vertical),
+                new WavesFilter(Size.Absolute(12), Size.Absolute(34), Direction.Vertical),
                 "WavesFilter(Wavelength: 12px, Amplitude: 34px, Direction: Vertical)");
         }
 
@@ -287,7 +287,7 @@ namespace FilterLib.Tests.FilterTests
                 new FlipVerticalFilter(),
                 "FlipVerticalFilter");
             yield return new TestCaseData(
-                new PerspectiveFilter(12.34f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.NearestNeighbor),
+                new PerspectiveFilter(12.34f, Direction.Vertical, InterpolationMode.NearestNeighbor),
                 "PerspectiveFilter(Scale: 12.34, Direction: Vertical, Interpolation: NearestNeighbor)");
             yield return new TestCaseData(
                 new ResizeFilter(Size.Absolute(12), Size.Absolute(34), InterpolationMode.NearestNeighbor),
@@ -305,7 +305,7 @@ namespace FilterLib.Tests.FilterTests
                 new RotateRightFilter(),
                 "RotateRightFilter");
             yield return new TestCaseData(
-                new SkewFilter(12.34f, SkewFilter.SkewDirection.Vertical, InterpolationMode.NearestNeighbor),
+                new SkewFilter(12.34f, Direction.Vertical, InterpolationMode.NearestNeighbor),
                 "SkewFilter(Angle: 12.34, Direction: Vertical, Interpolation: NearestNeighbor)");
         }
 

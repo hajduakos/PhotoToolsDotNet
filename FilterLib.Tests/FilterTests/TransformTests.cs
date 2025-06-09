@@ -1,5 +1,6 @@
 ﻿using FilterLib.Filters;
 using FilterLib.Filters.Transform;
+using FilterLib.Util;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -35,16 +36,16 @@ namespace FilterLib.Tests.FilterTests
 
             yield return new TestCaseData("FlipVertical.bmp", new FlipVerticalFilter(), 0);
 
-            yield return new TestCaseData("_input.bmp", new PerspectiveFilter(1f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.NearestNeighbor), 1);
-            yield return new TestCaseData("Perspective_1.5_Horizontal_BL.bmp", new PerspectiveFilter(1.5f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.Bilinear), 1);
-            yield return new TestCaseData("Perspective_0.5_Horizontal_NN.bmp", new PerspectiveFilter(0.5f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.NearestNeighbor), 1);
-            yield return new TestCaseData("Perspective_-1.8_Horizontal_NN.bmp", new PerspectiveFilter(-1.8f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.NearestNeighbor), 1);
-            yield return new TestCaseData("Perspective_-0.8_Horizontal_BL.bmp", new PerspectiveFilter(-0.8f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.Bilinear), 1);
-            yield return new TestCaseData("_input.bmp", new PerspectiveFilter(1f, PerspectiveFilter.PerspectiveDirection.Vertical), 1);
-            yield return new TestCaseData("Perspective_1.5_Vertical_BL.bmp", new PerspectiveFilter(1.5f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.Bilinear), 1);
-            yield return new TestCaseData("Perspective_0.5_Vertical_NN.bmp", new PerspectiveFilter(0.5f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.NearestNeighbor), 1);
-            yield return new TestCaseData("Perspective_-1.8_Vertical_NN.bmp", new PerspectiveFilter(-1.8f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.NearestNeighbor), 1);
-            yield return new TestCaseData("Perspective_-0.8_Vertical_BL.bmp", new PerspectiveFilter(-0.8f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("_input.bmp", new PerspectiveFilter(1f, Direction.Horizontal, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_1.5_Horizontal_BL.bmp", new PerspectiveFilter(1.5f, Direction.Horizontal, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Perspective_0.5_Horizontal_NN.bmp", new PerspectiveFilter(0.5f, Direction.Horizontal, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_-1.8_Horizontal_NN.bmp", new PerspectiveFilter(-1.8f, Direction.Horizontal, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_-0.8_Horizontal_BL.bmp", new PerspectiveFilter(-0.8f, Direction.Horizontal, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("_input.bmp", new PerspectiveFilter(1f, Direction.Vertical), 1);
+            yield return new TestCaseData("Perspective_1.5_Vertical_BL.bmp", new PerspectiveFilter(1.5f, Direction.Vertical, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Perspective_0.5_Vertical_NN.bmp", new PerspectiveFilter(0.5f, Direction.Vertical, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_-1.8_Vertical_NN.bmp", new PerspectiveFilter(-1.8f, Direction.Vertical, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_-0.8_Vertical_BL.bmp", new PerspectiveFilter(-0.8f, Direction.Vertical, InterpolationMode.Bilinear), 1);
 
             yield return new TestCaseData("_input.bmp",
                 new ResizeFilter(Size.Relative(1), Size.Relative(1), InterpolationMode.NearestNeighbor), 1);
@@ -78,12 +79,12 @@ namespace FilterLib.Tests.FilterTests
 
             yield return new TestCaseData("RotateRight.bmp", new RotateRightFilter(), 0);
 
-            yield return new TestCaseData("_input.bmp", new SkewFilter(0, SkewFilter.SkewDirection.Horizontal), 1);
-            yield return new TestCaseData("_input.bmp", new SkewFilter(0, SkewFilter.SkewDirection.Vertical), 1);
-            yield return new TestCaseData("Skew_30_Horizontal_BL.bmp", new SkewFilter(30, SkewFilter.SkewDirection.Horizontal, InterpolationMode.Bilinear), 1);
-            yield return new TestCaseData("Skew_-45_Horizontal_NN.bmp", new SkewFilter(-45, SkewFilter.SkewDirection.Horizontal, InterpolationMode.NearestNeighbor), 1);
-            yield return new TestCaseData("Skew_30_Vertical_NN.bmp", new SkewFilter(30, SkewFilter.SkewDirection.Vertical, InterpolationMode.NearestNeighbor), 1);
-            yield return new TestCaseData("Skew_-10_Vertical_BL.bmp", new SkewFilter(-10, SkewFilter.SkewDirection.Vertical, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("_input.bmp", new SkewFilter(0, Direction.Horizontal), 1);
+            yield return new TestCaseData("_input.bmp", new SkewFilter(0, Direction.Vertical), 1);
+            yield return new TestCaseData("Skew_30_Horizontal_BL.bmp", new SkewFilter(30, Direction.Horizontal, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Skew_-45_Horizontal_NN.bmp", new SkewFilter(-45, Direction.Horizontal, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Skew_30_Vertical_NN.bmp", new SkewFilter(30, Direction.Vertical, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Skew_-10_Vertical_BL.bmp", new SkewFilter(-10, Direction.Vertical, InterpolationMode.Bilinear), 1);
         }
 
         internal static IEnumerable<TestCaseData> Exceptions()

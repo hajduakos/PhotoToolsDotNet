@@ -12,11 +12,6 @@ namespace FilterLib.Filters.Transform
     [Filter]
     public class SkewFilter : FilterBase
     {
-        /// <summary>
-        /// Skew direction.
-        /// </summary>
-        public enum SkewDirection { Horizontal, Vertical }
-
         private float angle;
 
         /// <summary>
@@ -35,7 +30,7 @@ namespace FilterLib.Filters.Transform
         /// Direction.
         /// </summary>
         [FilterParam]
-        public SkewDirection Direction { get; set; }
+        public Direction Direction { get; set; }
 
         /// <summary>
         /// Interpolation mode.
@@ -48,7 +43,7 @@ namespace FilterLib.Filters.Transform
         /// </summary>
         /// <param name="angle">Skew angle in degrees ]-90;90[</param>
         /// <param name="interpolation">Interpolation mode</param>
-        public SkewFilter(float angle = 0, SkewDirection direction = SkewDirection.Horizontal, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
+        public SkewFilter(float angle = 0, Direction direction = Direction.Horizontal, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
         {
             Angle = angle;
             Direction = direction;
@@ -61,9 +56,9 @@ namespace FilterLib.Filters.Transform
             float angleRad = Angle * MathF.PI / 180f;
             float angleTan = MathF.Tan(angleRad);
             Image result;
-            if (Direction == SkewDirection.Horizontal)
+            if (Direction == Direction.Horizontal)
                 result = new(image.Width + (int)Math.Round(image.Height * MathF.Abs(angleTan)), image.Height);
-            else if (Direction == SkewDirection.Vertical)
+            else if (Direction == Direction.Vertical)
                 result = new(image.Width, image.Height + (int)Math.Round(image.Width * MathF.Abs(angleTan)));
             else
                 throw new ArgumentException($"Unknown skew direction: {Direction}.");
@@ -72,7 +67,7 @@ namespace FilterLib.Filters.Transform
             {
                 byte* newStart0 = newStart;
                 byte* oldStart0 = oldStart;
-                if (Direction == SkewDirection.Horizontal)
+                if (Direction == Direction.Horizontal)
                 {
                     int newWidth_3 = result.Width * 3;
                     int oldWidth_3 = image.Width * 3;
@@ -111,7 +106,7 @@ namespace FilterLib.Filters.Transform
                         reporter?.Report(y + 1, 0, result.Height);
                     }
                 }
-                else if (Direction == SkewDirection.Vertical)
+                else if (Direction == Direction.Vertical)
                 {
                     int width_3 = image.Width * 3;
                     // Iterate through columns

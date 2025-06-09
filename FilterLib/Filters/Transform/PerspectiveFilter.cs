@@ -13,11 +13,6 @@ namespace FilterLib.Filters.Transform
     public class PerspectiveFilter : FilterBase
     {
         /// <summary>
-        /// Direction of transformation.
-        /// </summary>
-        public enum PerspectiveDirection { Horizontal, Vertical }
-
-        /// <summary>
         /// Scale percentage.
         /// </summary>
         [FilterParam]
@@ -27,7 +22,7 @@ namespace FilterLib.Filters.Transform
         /// Direction.
         /// </summary>
         [FilterParam]
-        public PerspectiveDirection Direction { get; set; }
+        public Direction Direction { get; set; }
 
         /// <summary>
         /// Interpolation mode.
@@ -41,7 +36,7 @@ namespace FilterLib.Filters.Transform
         /// <param name="scale">Scale percentage</param>
         /// <param name="direction">Direction</param>
         /// <param name="interpolation">Interpolation mode</param>
-        public PerspectiveFilter(float scale = 1, PerspectiveDirection direction = PerspectiveDirection.Horizontal, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
+        public PerspectiveFilter(float scale = 1, Direction direction = Direction.Horizontal, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
         {
             Scale = scale;
             Direction = direction;
@@ -53,9 +48,9 @@ namespace FilterLib.Filters.Transform
             float scaleAbs = MathF.Abs(Scale);
             reporter?.Start();
             Image result;
-            if (Direction == PerspectiveDirection.Horizontal)
+            if (Direction == Direction.Horizontal)
                 result = new(Math.Max(image.Width, (int)(image.Width * scaleAbs)), image.Height);
-            else if (Direction == PerspectiveDirection.Vertical)
+            else if (Direction == Direction.Vertical)
                 result = new(image.Width, Math.Max(image.Height, (int)(image.Height * scaleAbs)));
             else
                 throw new ArgumentException($"Unknown perspective direction: {Direction}.");
@@ -64,7 +59,7 @@ namespace FilterLib.Filters.Transform
             {
                 byte* newStart0 = newStart;
                 byte* oldStart0 = oldStart;
-                if (Direction == PerspectiveDirection.Horizontal)
+                if (Direction == Direction.Horizontal)
                 {
                     int topLeft = 0, bottomLeft = 0;
                     int smallerSide = Math.Min(image.Width, (int)(image.Width * scaleAbs));
@@ -112,7 +107,7 @@ namespace FilterLib.Filters.Transform
                     }
 
                 }
-                else if (Direction == PerspectiveDirection.Vertical)
+                else if (Direction == Direction.Vertical)
                 {
                     int leftTop = 0, rightTop = 0;
                     int smallerSide = Math.Min(image.Height, (int)(image.Height * scaleAbs));
