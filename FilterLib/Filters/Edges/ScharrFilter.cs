@@ -4,7 +4,7 @@
     /// SCharr filter combining two convolutions.
     /// </summary>
     [Filter]
-    public class ScharrFilter : DualConvolutionBase
+    public sealed class ScharrFilter : DualConvolutionBase
     {
         /// <summary>
         /// Constructor.

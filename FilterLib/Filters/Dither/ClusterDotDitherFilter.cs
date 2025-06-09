@@ -4,7 +4,7 @@
     /// Cluster dot dither is an ordered dither with a specifically defined matrix
     /// </summary>
     [Filter]
-    public class ClusterDotDitherFilter : OrderedDitherFilterBase
+    public sealed class ClusterDotDitherFilter : OrderedDitherFilterBase
     {
         /// <summary>
         /// Cluster dot dither matrix

@@ -11,7 +11,7 @@ namespace FilterLib.Filters.Transform
     /// Perspective transformation filter.
     /// </summary>
     [Filter]
-    public class PerspectiveFilter : FilterBase
+    public sealed class PerspectiveFilter : FilterBase
     {
         /// <summary>
         /// Scale percentage.

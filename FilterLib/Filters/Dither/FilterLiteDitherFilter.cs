@@ -4,7 +4,7 @@
     /// Filter lite error diffusion dither filter.
     /// </summary>
     [Filter]
-    public class FilterLiteDitherFilter : ErrorDiffusionDitherFilterBase
+    public sealed class FilterLiteDitherFilter : ErrorDiffusionDitherFilterBase
     {
         /// <summary>
         /// Constructor.

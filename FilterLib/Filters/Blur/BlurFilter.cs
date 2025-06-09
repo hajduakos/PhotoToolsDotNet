@@ -8,7 +8,7 @@ namespace FilterLib.Filters.Blur
     /// Apply a small amount of blur with a 3x3 convolution.
     /// </summary>
     [Filter]
-    public class BlurFilter : FilterInPlaceBase
+    public sealed class BlurFilter : FilterInPlaceBase
     {
         private readonly ConvolutionFilter conv = new(new ConvolutionMatrix(new int[,] { { 1, 1, 1 }, { 1, 8, 1 }, { 1, 1, 1 } }, 16, 0));
 

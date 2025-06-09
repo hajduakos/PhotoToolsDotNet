@@ -10,7 +10,7 @@ namespace FilterLib.Filters.Transform
     /// Skew filter.
     /// </summary>
     [Filter]
-    public class SkewFilter : FilterBase
+    public sealed class SkewFilter : FilterBase
     {
         private float angle;
 

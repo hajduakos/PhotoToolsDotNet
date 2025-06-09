@@ -4,7 +4,7 @@
     /// Bayer dither is an ordered dither with a specific recursively defined matrix.
     /// </summary>
     [Filter]
-    public class BayerDitherFilter : OrderedDitherFilterBase
+    public sealed class BayerDitherFilter : OrderedDitherFilterBase
     {
         /// <summary>
         /// Class representing a Bayer (ordered) dither matrix. The width and height of the matrix
