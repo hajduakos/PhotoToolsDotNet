@@ -54,7 +54,7 @@ namespace FilterLib.Tests
             return ok;
         }
 
-        private static bool Compare(Image actual, Image expected, int tolerance)
+        public static bool Compare(Image actual, Image expected, int tolerance)
         {
             if (actual.Width != expected.Width) return false;
             if (actual.Height != expected.Height) return false;

@@ -1,4 +1,6 @@
-﻿using Parallel = System.Threading.Tasks.Parallel;
+﻿using System;
+using System.Linq;
+using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Util
 {
@@ -47,6 +49,28 @@ namespace FilterLib.Util
                 for (int t = 0; t < threads; ++t) merged[i] += histogram[t, i];
             });
             return merged;
+        }
+
+        public unsafe static Image Draw(Image image, int height = 100)
+        {
+            Image res = new(256, height);
+            int[] hist = GetLuminanceHistogram(image);
+            int max = hist.Max();
+            fixed (byte* start = res)
+            {
+                byte* start0 = start;
+                int w_3 = res.Width * 3;
+                Parallel.For(0, 256, x =>
+                {
+                    int barHeight = (int)Math.Round(hist[x] / (float)max * height);
+                    for (int y = height - barHeight; y < height; ++y)
+                    {
+                        start0[y * w_3 + x * 3] = start0[y * w_3 + x * 3 + 1] = start0[y * w_3 + x * 3 + 2] = 255;
+                    }
+                });
+            }
+
+            return res;
         }
     }
 }

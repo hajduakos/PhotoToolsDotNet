@@ -1,3 +1,4 @@
+using FilterLib.IO;
 using FilterLib.Util;
 using NUnit.Framework;
 using System;
@@ -247,6 +248,19 @@ namespace FilterLib.Tests
             Assert.That(hist.Length, Is.EqualTo(256));
             Assert.That(hist[0], Is.EqualTo(5));
             Assert.That(hist[100], Is.EqualTo(1));
+        }
+
+        [Test]
+        public void TestHistogramDraw()
+        {
+            BitmapCodec codec = new();
+            string path = TestContext.CurrentContext.TestDirectory + "/TestImages/";
+            Image bmpOriginal = codec.Read(path + "_input.bmp");
+            Image hist = Histogram.Draw(bmpOriginal);
+            Image hist_expected = codec.Read(path + "_input_hist.bmp");
+            bool ok = Common.Compare(hist, hist_expected, 0);
+            if (!ok) codec.Write(hist, path + "_input_hist_actual.bmp");
+            Assert.That(ok);
         }
     }
 }
