@@ -2,7 +2,6 @@ using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
 using System.Diagnostics;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace FilterLib.Filters.Transform
