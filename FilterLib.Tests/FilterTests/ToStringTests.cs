@@ -287,6 +287,9 @@ namespace FilterLib.Tests.FilterTests
                 new FlipVerticalFilter(),
                 "FlipVerticalFilter");
             yield return new TestCaseData(
+                new PerspectiveFilter(12.34f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.NearestNeighbor),
+                "PerspectiveFilter(Scale: 12.34, Direction: Vertical, Interpolation: NearestNeighbor)");
+            yield return new TestCaseData(
                 new ResizeFilter(Size.Absolute(12), Size.Absolute(34), InterpolationMode.NearestNeighbor),
                 "ResizeFilter(Width: 12px, Height: 34px, Interpolation: NearestNeighbor)");
             yield return new TestCaseData(

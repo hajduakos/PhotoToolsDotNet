@@ -35,6 +35,17 @@ namespace FilterLib.Tests.FilterTests
 
             yield return new TestCaseData("FlipVertical.bmp", new FlipVerticalFilter(), 0);
 
+            yield return new TestCaseData("_input.bmp", new PerspectiveFilter(1f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_1.5_Horizontal_BL.bmp", new PerspectiveFilter(1.5f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Perspective_0.5_Horizontal_NN.bmp", new PerspectiveFilter(0.5f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_-1.8_Horizontal_NN.bmp", new PerspectiveFilter(-1.8f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_-0.8_Horizontal_BL.bmp", new PerspectiveFilter(-0.8f, PerspectiveFilter.PerspectiveDirection.Horizontal, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("_input.bmp", new PerspectiveFilter(1f, PerspectiveFilter.PerspectiveDirection.Vertical), 1);
+            yield return new TestCaseData("Perspective_1.5_Vertical_BL.bmp", new PerspectiveFilter(1.5f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Perspective_0.5_Vertical_NN.bmp", new PerspectiveFilter(0.5f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_-1.8_Vertical_NN.bmp", new PerspectiveFilter(-1.8f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Perspective_-0.8_Vertical_BL.bmp", new PerspectiveFilter(-0.8f, PerspectiveFilter.PerspectiveDirection.Vertical, InterpolationMode.Bilinear), 1);
+
             yield return new TestCaseData("_input.bmp",
                 new ResizeFilter(Size.Relative(1), Size.Relative(1), InterpolationMode.NearestNeighbor), 1);
             yield return new TestCaseData("Resize_200pct_30px_NN.bmp",

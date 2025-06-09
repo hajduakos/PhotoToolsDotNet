@@ -114,6 +114,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new CropFilter());
             yield return new TestCaseData(new FlipHorizontalFilter());
             yield return new TestCaseData(new FlipVerticalFilter());
+            yield return new TestCaseData(new PerspectiveFilter());
             yield return new TestCaseData(new ResizeFilter());
             yield return new TestCaseData(new Rotate180Filter());
             yield return new TestCaseData(new RotateFilter(10));
