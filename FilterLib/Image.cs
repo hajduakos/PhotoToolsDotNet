@@ -1,4 +1,6 @@
-﻿namespace FilterLib
+﻿using Debug = System.Diagnostics.Debug;
+
+namespace FilterLib
 {
     /// <summary>
     /// Represents an image with a particular width and height in the RGB color
@@ -41,22 +43,22 @@
         {
             get
             {
-                System.Diagnostics.Debug.Assert(x >= 0, "x must be >= 0.");
-                System.Diagnostics.Debug.Assert(x < Width, "x must be < Width.");
-                System.Diagnostics.Debug.Assert(y >= 0, "y must be >= 0.");
-                System.Diagnostics.Debug.Assert(y < Height, "y must be < Height.");
-                System.Diagnostics.Debug.Assert(c >= 0, "c must be >= 0.");
-                System.Diagnostics.Debug.Assert(c < 3, "c must be < 3.");
+                Debug.Assert(x >= 0, "x must be >= 0.");
+                Debug.Assert(x < Width, "x must be < Width.");
+                Debug.Assert(y >= 0, "y must be >= 0.");
+                Debug.Assert(y < Height, "y must be < Height.");
+                Debug.Assert(c >= 0, "c must be >= 0.");
+                Debug.Assert(c < 3, "c must be < 3.");
                 return data[y * Width * 3 + x * 3 + c];
             }
             set
             {
-                System.Diagnostics.Debug.Assert(x >= 0, "x must be >= 0.");
-                System.Diagnostics.Debug.Assert(x < Width, "x must be < Width.");
-                System.Diagnostics.Debug.Assert(y >= 0, "y must be >= 0.");
-                System.Diagnostics.Debug.Assert(y < Height, "y must be < Height.");
-                System.Diagnostics.Debug.Assert(c >= 0, "c must be >= 0.");
-                System.Diagnostics.Debug.Assert(c < 3, "c must be < 3.");
+                Debug.Assert(x >= 0, "x must be >= 0.");
+                Debug.Assert(x < Width, "x must be < Width.");
+                Debug.Assert(y >= 0, "y must be >= 0.");
+                Debug.Assert(y < Height, "y must be < Height.");
+                Debug.Assert(c >= 0, "c must be >= 0.");
+                Debug.Assert(c < 3, "c must be < 3.");
                 data[y * Width * 3 + x * 3 + c] = value;
             }
         }
