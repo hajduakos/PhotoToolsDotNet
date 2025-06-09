@@ -2,6 +2,7 @@ using FilterLib.Reporting;
 using FilterLib.Util;
 using System;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace FilterLib.Filters.Transform
@@ -47,13 +48,12 @@ namespace FilterLib.Filters.Transform
         {
             float scaleAbs = MathF.Abs(Scale);
             reporter?.Start();
-            Image result;
-            if (Direction == Direction.Horizontal)
-                result = new(Math.Max(image.Width, (int)(image.Width * scaleAbs)), image.Height);
-            else if (Direction == Direction.Vertical)
-                result = new(image.Width, Math.Max(image.Height, (int)(image.Height * scaleAbs)));
-            else
-                throw new ArgumentException($"Unknown perspective direction: {Direction}.");
+            Image result = Direction switch
+            {
+                Direction.Horizontal => new(Math.Max(image.Width, (int)(image.Width * scaleAbs)), image.Height),
+                Direction.Vertical => new(image.Width, Math.Max(image.Height, (int)(image.Height * scaleAbs))),
+                _ => throw new ArgumentException($"Unknown perspective direction: {Direction}.")
+            };
 
             fixed (byte* oldStart = image, newStart = result)
             {

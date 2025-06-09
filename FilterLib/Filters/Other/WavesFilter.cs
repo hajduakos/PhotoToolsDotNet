@@ -52,16 +52,17 @@ namespace FilterLib.Filters.Other
         public override unsafe Image Apply(Image image, IReporter reporter = null)
         {
             reporter?.Start();
-            Image result;
 
             int waveLengthPx = Wavelength.ToAbsolute(Direction == Direction.Horizontal ? image.Width : image.Height);
             int amplitudePx = Amplitude.ToAbsolute(Direction == Direction.Horizontal ? image.Height : image.Width);
-
             if (waveLengthPx == 0) throw new System.ArgumentException("Wavelength cannot be zero.");
 
-            if (Direction == Direction.Horizontal) result = new(image.Width, image.Height + 2 * amplitudePx);
-            else if (Direction == Direction.Vertical) result = new(image.Width + 2 * amplitudePx, image.Height);
-            else throw new System.ArgumentException($"Unknown wave direction: {Direction}.");
+            Image result = Direction switch
+            {
+                Direction.Horizontal => new(image.Width, image.Height + 2 * amplitudePx),
+                Direction.Vertical => new(image.Width + 2 * amplitudePx, image.Height),
+                _ => throw new System.ArgumentException($"Unknown wave direction: {Direction}.")
+            };
 
             int oldWidth_3 = image.Width * 3;
             int newWidth_3 = result.Width * 3;

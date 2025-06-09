@@ -55,13 +55,12 @@ namespace FilterLib.Filters.Transform
             reporter?.Start();
             float angleRad = Angle * MathF.PI / 180f;
             float angleTan = MathF.Tan(angleRad);
-            Image result;
-            if (Direction == Direction.Horizontal)
-                result = new(image.Width + (int)Math.Round(image.Height * MathF.Abs(angleTan)), image.Height);
-            else if (Direction == Direction.Vertical)
-                result = new(image.Width, image.Height + (int)Math.Round(image.Width * MathF.Abs(angleTan)));
-            else
-                throw new ArgumentException($"Unknown skew direction: {Direction}.");
+            Image result = Direction switch
+            {
+                Direction.Horizontal => new(image.Width + (int)Math.Round(image.Height * MathF.Abs(angleTan)), image.Height),
+                Direction.Vertical => new(image.Width, image.Height + (int)Math.Round(image.Width * MathF.Abs(angleTan))),
+                _ => throw new ArgumentException($"Unknown skew direction: {Direction}.")
+            };
 
             fixed (byte* oldStart = image, newStart = result)
             {
