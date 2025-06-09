@@ -136,12 +136,14 @@ namespace FilterLib.Tests.ReflectiveApiTests
             Assert.That(f, Is.InstanceOf<SkewFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Angle", "12.34");
             ReflectiveApi.SetFilterPropertyByName(f, "Direction", "Vertical");
+            ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "NearestNeighbor");
             SkewFilter ff = f as SkewFilter;
             Assert.That(ff.Angle, Is.EqualTo(12.34f));
             Assert.That(ff.Direction, Is.EqualTo(SkewFilter.SkewDirection.Vertical));
+            Assert.That(ff.Interpolation, Is.EqualTo(Util.InterpolationMode.NearestNeighbor));
         }
 
         [Test]
-        public void TestSkewParCnt() => Assert.That(Common.ParamCount(typeof(SkewFilter)), Is.EqualTo(2));
+        public void TestSkewParCnt() => Assert.That(Common.ParamCount(typeof(SkewFilter)), Is.EqualTo(3));
     }
 }

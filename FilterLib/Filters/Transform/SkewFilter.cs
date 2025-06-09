@@ -38,13 +38,21 @@ namespace FilterLib.Filters.Transform
         public SkewDirection Direction { get; set; }
 
         /// <summary>
+        /// Interpolation mode.
+        /// </summary>
+        [FilterParam]
+        public InterpolationMode Interpolation { get; set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="angle">Skew angle in degrees ]-90;90[</param>
-        public SkewFilter(float angle = 0, SkewDirection direction = SkewDirection.Horizontal)
+        /// <param name="interpolation">Interpolation mode</param>
+        public SkewFilter(float angle = 0, SkewDirection direction = SkewDirection.Horizontal, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
         {
             Angle = angle;
             Direction = direction;
+            Interpolation = interpolation;
         }
 
         public override unsafe Image Apply(Image image, IReporter reporter = null)
@@ -70,15 +78,35 @@ namespace FilterLib.Filters.Transform
                     int oldWidth_3 = image.Width * 3;
                     // Iterate through rows
                     Debug.Assert(image.Height == result.Height);
-                    int offset_3 = Angle < 0 ? (int)(image.Height * MathF.Abs(angleTan)) * 3 : 0;
+                    float offset = Angle < 0 ? image.Height * MathF.Abs(angleTan) : 0;
                     for (int y = 0; y < result.Height; ++y)
                     {
                         // Skew each column
-                        int dx_3 = (int)(y * angleTan) * 3;
+                        float dx = y * angleTan;
                         Parallel.For(0, newWidth_3, x =>
                         {
-                            int old_x = x - dx_3 - offset_3;
-                            if (0 <= old_x && old_x < oldWidth_3) newStart0[y * newWidth_3 + x] = oldStart0[y * oldWidth_3 + old_x];
+                            int x_div_3 = x / 3;
+                            float old_x = x_div_3 - dx - offset;
+                            int x0, x1;
+                            switch (Interpolation)
+                            {
+                                case InterpolationMode.NearestNeighbor:
+                                    x0 = (int)MathF.Round(old_x);
+                                    if (0 <= x0 && x0 < image.Width) newStart0[y * newWidth_3 + x] = oldStart0[y * oldWidth_3 + x0 * 3 + x % 3];
+                                    break;
+                                case InterpolationMode.Bilinear:
+                                    x0 = (int)MathF.Floor(old_x);
+                                    x1 = (int)MathF.Ceiling(old_x);
+                                    float xRatio1 = old_x - x0;
+                                    float xRatio0 = 1 - xRatio1;
+                                    float val = 0;
+                                    if (0 <= x0 && x0 < image.Width) val += xRatio0 * oldStart0[y * oldWidth_3 + x0 * 3 + x % 3];
+                                    if (0 <= x1 && x1 < image.Width) val += xRatio1 * oldStart0[y * oldWidth_3 + x1 * 3 + x % 3];
+                                    newStart0[y * newWidth_3 + x] = val.ClampToByte();
+                                    break;
+                                default:
+                                    throw new ArgumentException($"Unknown interpolation mode: {Interpolation}");
+                            }
                         });
                         reporter?.Report(y + 1, 0, result.Height);
                     }
@@ -88,16 +116,33 @@ namespace FilterLib.Filters.Transform
                     int width_3 = image.Width * 3;
                     // Iterate through columns
                     Debug.Assert(image.Width == result.Width);
-                    int offset = Angle < 0 ? (int)(image.Width * MathF.Abs(angleTan)) : 0;
+                    float offset = Angle < 0 ? image.Width * MathF.Abs(angleTan) : 0;
                     for (int x = 0; x < width_3; ++x)
                     {
                         // Skew each row
                         int x_div_3 = x / 3;
-                        int dy = (int)(x_div_3 * angleTan);
+                        float dy = x_div_3 * angleTan;
                         Parallel.For(0, result.Height, y =>
                         {
-                            int old_y = y - dy - offset;
-                            if (0 <= old_y && old_y < image.Height) newStart0[y * width_3 + x] = oldStart0[old_y * width_3 + x];
+                            float old_y = y - dy - offset;
+                            int y0, y1;
+                            switch (Interpolation)
+                            {
+                                case InterpolationMode.NearestNeighbor:
+                                    y0 = (int)MathF.Round(old_y);
+                                    if (0 <= y0 && y0 < image.Height) newStart0[y * width_3 + x] = oldStart0[y0 * width_3 + x];
+                                    break;
+                                case InterpolationMode.Bilinear:
+                                    y0 = (int)MathF.Floor(old_y);
+                                    y1 = (int)MathF.Ceiling(old_y);
+                                    float yRatio1 = old_y - y0;
+                                    float yRatio0 = 1 - yRatio1;
+                                    float val = 0;
+                                    if (0 <= y0 && y0 < image.Height) val += yRatio0 * oldStart0[y0 * width_3 + x];
+                                    if (0 <= y1 && y1 < image.Height) val += yRatio1 * oldStart0[y1 * width_3 + x];
+                                    newStart0[y * width_3 + x] = val.ClampToByte();
+                                    break;
+                            }
                         });
                         reporter?.Report(x + 1, 0, width_3);
                     }

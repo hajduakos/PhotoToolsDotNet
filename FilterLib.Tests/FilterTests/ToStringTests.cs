@@ -305,8 +305,8 @@ namespace FilterLib.Tests.FilterTests
                 new RotateRightFilter(),
                 "RotateRightFilter");
             yield return new TestCaseData(
-                new SkewFilter(12.34f, SkewFilter.SkewDirection.Vertical),
-                "SkewFilter(Angle: 12.34, Direction: Vertical)");
+                new SkewFilter(12.34f, SkewFilter.SkewDirection.Vertical, InterpolationMode.NearestNeighbor),
+                "SkewFilter(Angle: 12.34, Direction: Vertical, Interpolation: NearestNeighbor)");
         }
 
         [Test]

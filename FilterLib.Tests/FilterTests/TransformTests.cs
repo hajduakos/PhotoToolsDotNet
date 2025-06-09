@@ -80,10 +80,10 @@ namespace FilterLib.Tests.FilterTests
 
             yield return new TestCaseData("_input.bmp", new SkewFilter(0, SkewFilter.SkewDirection.Horizontal), 1);
             yield return new TestCaseData("_input.bmp", new SkewFilter(0, SkewFilter.SkewDirection.Vertical), 1);
-            yield return new TestCaseData("Skew_30_Horizontal.bmp", new SkewFilter(30, SkewFilter.SkewDirection.Horizontal), 1);
-            yield return new TestCaseData("Skew_-45_Horizontal.bmp", new SkewFilter(-45, SkewFilter.SkewDirection.Horizontal), 1);
-            yield return new TestCaseData("Skew_30_Vertical.bmp", new SkewFilter(30, SkewFilter.SkewDirection.Vertical), 1);
-            yield return new TestCaseData("Skew_-10_Vertical.bmp", new SkewFilter(-10, SkewFilter.SkewDirection.Vertical), 1);
+            yield return new TestCaseData("Skew_30_Horizontal_BL.bmp", new SkewFilter(30, SkewFilter.SkewDirection.Horizontal, InterpolationMode.Bilinear), 1);
+            yield return new TestCaseData("Skew_-45_Horizontal_NN.bmp", new SkewFilter(-45, SkewFilter.SkewDirection.Horizontal, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Skew_30_Vertical_NN.bmp", new SkewFilter(30, SkewFilter.SkewDirection.Vertical, InterpolationMode.NearestNeighbor), 1);
+            yield return new TestCaseData("Skew_-10_Vertical_BL.bmp", new SkewFilter(-10, SkewFilter.SkewDirection.Vertical, InterpolationMode.Bilinear), 1);
         }
 
         internal static IEnumerable<TestCaseData> Exceptions()
