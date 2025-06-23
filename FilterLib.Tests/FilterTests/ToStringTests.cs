@@ -178,6 +178,9 @@ namespace FilterLib.Tests.FilterTests
                 new SierraDitherFilter(123),
                 "SierraDitherFilter(Levels: 123)");
             yield return new TestCaseData(
+                new SierraDitherTwoRowFilter(123),
+                "SierraDitherTwoRowFilter(Levels: 123)");
+            yield return new TestCaseData(
                 new StuckiDitherFilter(123),
                 "StuckiDitherFilter(Levels: 123)");
         }

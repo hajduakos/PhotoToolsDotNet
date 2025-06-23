@@ -94,6 +94,13 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("Grayscale_30_59_11.bmp", "SierraDither_2_bw.bmp", new SierraDitherFilter(2), 1);
             yield return new TestCaseData("Grayscale_30_59_11.bmp", "SierraDither_4_bw.bmp", new SierraDitherFilter(4), 1);
 
+            yield return new TestCaseData("_input.bmp", "SierraDitherTwoRow_2.bmp", new SierraDitherTwoRowFilter(2), 1);
+            yield return new TestCaseData("_input.bmp", "SierraDitherTwoRow_4.bmp", new SierraDitherTwoRowFilter(4), 1);
+            yield return new TestCaseData("_input.bmp", "_input.bmp", new SierraDitherTwoRowFilter(256), 1);
+            yield return new TestCaseData("_input.bmp", "_input.bmp", new SierraDitherTwoRowFilter(128), 2);
+            yield return new TestCaseData("Grayscale_30_59_11.bmp", "SierraDitherTwoRow_2_bw.bmp", new SierraDitherTwoRowFilter(2), 1);
+            yield return new TestCaseData("Grayscale_30_59_11.bmp", "SierraDitherTwoRow_4_bw.bmp", new SierraDitherTwoRowFilter(4), 1);
+
             yield return new TestCaseData("_input.bmp", "StuckiDither_2.bmp", new StuckiDitherFilter(2), 1);
             yield return new TestCaseData("_input.bmp", "StuckiDither_4.bmp", new StuckiDitherFilter(4), 1);
             yield return new TestCaseData("_input.bmp", "_input.bmp", new StuckiDitherFilter(256), 1);
