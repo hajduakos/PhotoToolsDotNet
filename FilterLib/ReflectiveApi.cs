@@ -29,8 +29,9 @@ namespace FilterLib
         /// <returns>Filter type</returns>
         private static Type GetFilterTypeByName(string name)
         {
+            string extendedName = name + "Filter";
             foreach (Type type in GetFilterTypes())
-                if (type.Name == name || type.Name == name + "Filter")
+                if (type.Name == name || type.Name == extendedName)
                     return type;
 
             return null;
@@ -68,7 +69,7 @@ namespace FilterLib
         /// <returns>List of properties</returns>
         public static IEnumerable<PropertyInfo> GetFilterProperties(Type type) =>
             type.GetProperties().Where(p => p.GetCustomAttributes(typeof(FilterParamAttribute), false).Length > 0);
-    
+
         /// <summary>
         /// Get a filter property by name. Throws an exception if not found.
         /// </summary>
