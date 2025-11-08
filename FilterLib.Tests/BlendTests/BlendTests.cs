@@ -155,12 +155,30 @@ namespace FilterLib.Tests.BlendTests
         [Test]
         public void TestBlendWithSelf()
         {
-            Image img = new(1, 1);
-            (img[0, 0, 0], img[0, 0, 1], img[0, 0, 2]) = (1, 2, 3);
+            Image img = new(1, 1, new(1, 2, 3));
             Image result = new NormalBlend(100).Apply(img, img);
             Assert.That(result[0, 0, 0], Is.EqualTo(1));
             Assert.That(result[0, 0, 1], Is.EqualTo(2));
             Assert.That(result[0, 0, 2], Is.EqualTo(3));
+        }
+
+        [Test]
+        public void TestDifferentSize()
+        {
+            Image black = new(5, 5, new(0, 0, 0));
+            Image white = new(3, 3, new(255, 255, 255));
+            Image result = new NormalBlend(100).Apply(black, white);
+            // Size should be bottom image
+            Assert.That(result.Width, Is.EqualTo(black.Width));
+            Assert.That(result.Height, Is.EqualTo(black.Height));
+            // Top left is top image
+            Assert.That(result[0, 0, 0], Is.EqualTo(255));
+            Assert.That(result[0, 0, 1], Is.EqualTo(255));
+            Assert.That(result[0, 0, 2], Is.EqualTo(255));
+            // Bottom right is bottom image
+            Assert.That(result[4, 4, 0], Is.EqualTo(0));
+            Assert.That(result[4, 4, 1], Is.EqualTo(0));
+            Assert.That(result[4, 4, 2], Is.EqualTo(0));
         }
     }
 }
