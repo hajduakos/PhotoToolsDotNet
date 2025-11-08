@@ -21,6 +21,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("_input.bmp", new ColorHSLFilter(0, 0, 0), 5);
             yield return new TestCaseData("ColorHSL_0_0_50.bmp", new ColorHSLFilter(0, 0, 50), 1);
             yield return new TestCaseData("ColorHSL_0_0_-50.bmp", new ColorHSLFilter(0, 0, -50), 1);
+            yield return new TestCaseData("ColorHSL_0_50_0.bmp", new ColorHSLFilter(0, 50, 0), 1);
             yield return new TestCaseData("ColorHSL_0_100_0.bmp", new ColorHSLFilter(0, 100, 0), 1);
             yield return new TestCaseData("ColorHSL_0_-100_0.bmp", new ColorHSLFilter(0, -100, 0), 1);
             yield return new TestCaseData("ColorHSL_50_40_-30.bmp", new ColorHSLFilter(50, 40, -30), 1);
