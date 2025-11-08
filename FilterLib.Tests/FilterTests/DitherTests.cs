@@ -66,6 +66,13 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("Grayscale_30_59_11.bmp", "ShiauFanDither_2_bw.bmp", new ShiauFanDitherFilter(2), 1);
             yield return new TestCaseData("Grayscale_30_59_11.bmp", "ShiauFanDither_4_bw.bmp", new ShiauFanDitherFilter(4), 1);
 
+            yield return new TestCaseData("_input.bmp", "ShiauFanDitherWide_2.bmp", new ShiauFanDitherWideFilter(2), 1);
+            yield return new TestCaseData("_input.bmp", "ShiauFanDitherWide_4.bmp", new ShiauFanDitherWideFilter(4), 1);
+            yield return new TestCaseData("_input.bmp", "_input.bmp", new ShiauFanDitherWideFilter(256), 1);
+            yield return new TestCaseData("_input.bmp", "_input.bmp", new ShiauFanDitherWideFilter(128), 2);
+            yield return new TestCaseData("Grayscale_30_59_11.bmp", "ShiauFanDitherWide_2_bw.bmp", new ShiauFanDitherWideFilter(2), 1);
+            yield return new TestCaseData("Grayscale_30_59_11.bmp", "ShiauFanDitherWide_4_bw.bmp", new ShiauFanDitherWideFilter(4), 1);
+
             yield return new TestCaseData("_input.bmp", "FloydSteinbergDither_2.bmp", new FloydSteinbergDitherFilter(2), 1);
             yield return new TestCaseData("_input.bmp", "FloydSteinbergDither_4.bmp", new FloydSteinbergDitherFilter(4), 1);
             yield return new TestCaseData("_input.bmp", "_input.bmp", new FloydSteinbergDitherFilter(256), 1);

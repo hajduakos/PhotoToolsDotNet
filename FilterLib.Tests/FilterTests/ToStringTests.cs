@@ -178,6 +178,9 @@ namespace FilterLib.Tests.FilterTests
                 new ShiauFanDitherFilter(123),
                 "ShiauFanDitherFilter(Levels: 123)");
             yield return new TestCaseData(
+                new ShiauFanDitherWideFilter(123),
+                "ShiauFanDitherWideFilter(Levels: 123)");
+            yield return new TestCaseData(
                 new SierraDitherFilter(123),
                 "SierraDitherFilter(Levels: 123)");
             yield return new TestCaseData(

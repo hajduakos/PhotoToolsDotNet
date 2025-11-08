@@ -67,6 +67,7 @@ List<IFilter> filters =
     new JarvisJudiceNinkeDitherFilter(4),
     new RandomDitherFilter(4, 0),
     new ShiauFanDitherFilter(4),
+    new ShiauFanDitherWideFilter(4),
     new SierraDitherFilter(4),
     new StuckiDitherFilter(4),
     // Edges

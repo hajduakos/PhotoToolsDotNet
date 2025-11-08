@@ -99,6 +99,19 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestShiauFanDitherParCnt() => Assert.That(Common.ParamCount(typeof(ShiauFanDitherFilter)), Is.EqualTo(1));
 
         [Test]
+        public void TestShiauFanDitherWide()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("ShiauFanDitherWide");
+            Assert.That(f, Is.InstanceOf<ShiauFanDitherWideFilter>());
+            ReflectiveApi.SetFilterPropertyByName(f, "Levels", "50");
+            ShiauFanDitherWideFilter ff = f as ShiauFanDitherWideFilter;
+            Assert.That(ff.Levels, Is.EqualTo(50));
+        }
+
+        [Test]
+        public void TestShiauFanDitherWideParCnt() => Assert.That(Common.ParamCount(typeof(ShiauFanDitherWideFilter)), Is.EqualTo(1));
+
+        [Test]
         public void TestFloydSteinbergDither()
         {
             IFilter f = ReflectiveApi.ConstructFilterByName("FloydSteinbergDither");

@@ -81,6 +81,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new JarvisJudiceNinkeDitherFilter());
             yield return new TestCaseData(new RandomDitherFilter());
             yield return new TestCaseData(new ShiauFanDitherFilter());
+            yield return new TestCaseData(new ShiauFanDitherWideFilter());
             yield return new TestCaseData(new SierraDitherFilter());
             yield return new TestCaseData(new SierraDitherTwoRowFilter());
             yield return new TestCaseData(new StuckiDitherFilter());
