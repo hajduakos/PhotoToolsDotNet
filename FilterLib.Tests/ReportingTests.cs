@@ -41,6 +41,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new GammaFilter());
             yield return new TestCaseData(new LevelsFilter());
             yield return new TestCaseData(new ShadowsHighlightsFilter());
+            yield return new TestCaseData(new VibranceFilter());
 
             yield return new TestCaseData(new AdaptiveTresholdFilter());
             yield return new TestCaseData(new OilPaintFilter());

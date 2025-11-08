@@ -52,6 +52,9 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData(
                 new ShadowsHighlightsFilter(12, 34),
                 "ShadowsHighlightsFilter(Brighten: 12, Darken: 34)");
+            yield return new TestCaseData(
+                new VibranceFilter(12),
+                "VibranceFilter(Vibrance: 12)");
         }
 
         internal static IEnumerable<TestCaseData> Artistic()

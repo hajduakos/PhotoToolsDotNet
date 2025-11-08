@@ -12,7 +12,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
         [Test]
         public void TestAutoLevelsParCnt() => Assert.That(Common.ParamCount(typeof(AutoLevelsFilter)), Is.EqualTo(0));
-        
+
         [Test]
         public void TestBrightness()
         {
@@ -115,5 +115,18 @@ namespace FilterLib.Tests.ReflectiveApiTests
 
         [Test]
         public void TestShadowsHighlightsParCnt() => Assert.That(Common.ParamCount(typeof(ShadowsHighlightsFilter)), Is.EqualTo(2));
+
+        [Test]
+        public void TestVibrance()
+        {
+            IFilter f = ReflectiveApi.ConstructFilterByName("Vibrance");
+            Assert.That(f, Is.InstanceOf<VibranceFilter>());
+            ReflectiveApi.SetFilterPropertyByName(f, "Vibrance", "10");
+            VibranceFilter ff = f as VibranceFilter;
+            Assert.That(ff.Vibrance, Is.EqualTo(10));
+        }
+
+        [Test]
+        public void TestVibranceParCnt() => Assert.That(Common.ParamCount(typeof(VibranceFilter)), Is.EqualTo(1));
     }
 }

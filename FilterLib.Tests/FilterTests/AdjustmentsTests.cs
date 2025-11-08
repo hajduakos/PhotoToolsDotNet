@@ -49,6 +49,10 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("ShadowsHighlights_10_40.bmp", new ShadowsHighlightsFilter(10, 40), 1);
             yield return new TestCaseData("ShadowsHighlights_100_0.bmp", new ShadowsHighlightsFilter(100, 0), 1);
             yield return new TestCaseData("ShadowsHighlights_0_100.bmp", new ShadowsHighlightsFilter(0, 100), 1);
+
+            yield return new TestCaseData("_input.bmp", new VibranceFilter(0), 5);
+            yield return new TestCaseData("Vibrance_50.bmp", new VibranceFilter(50), 1);
+            yield return new TestCaseData("Vibrance_100.bmp", new VibranceFilter(100), 1);
         }
 
         internal static IEnumerable<TestCaseData> Exceptions()

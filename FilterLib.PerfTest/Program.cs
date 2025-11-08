@@ -27,6 +27,7 @@ List<IFilter> filters =
     new GammaFilter(3f),
     new LevelsFilter(40, 120),
     new ShadowsHighlightsFilter(20, 40),
+    new VibranceFilter(50),
     // Artistic
     new AdaptiveTresholdFilter(10),
     new OilPaintFilter(10, 127),
