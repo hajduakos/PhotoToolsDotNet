@@ -21,16 +21,30 @@ namespace FilterLib
         public int Height { get; private set; }
 
         /// <summary>
-        /// Create a new, blank image.
+        /// Create a new, blank image, initialized with a default color.
         /// </summary>
         /// <param name="width">Width</param>
         /// <param name="height">Height</param>
-        public Image(int width, int height)
+        /// <param name="defaultColor">Default color</param>
+        public Image(int width, int height, Util.RGB defaultColor)
         {
             Width = width;
             Height = height;
             data = new byte[Width * Height * 3];
+            for (int i = 0; i < data.Length; i += 3)
+            {
+                data[i] = defaultColor.R;
+                data[i + 1] = defaultColor.G;
+                data[i + 2] = defaultColor.B;
+            }
         }
+
+        /// <summary>
+        /// Create a new, blank image, initialized black.
+        /// </summary>
+        /// <param name="width">Width</param>
+        /// <param name="height">Height</param>
+        public Image(int width, int height) : this(width, height, new(0, 0, 0)) { }
 
         /// <summary>
         /// Get a given component of a given pixel. Checks on bounds are only performed in debug mode.
