@@ -35,7 +35,7 @@ namespace FilterLib.IO
 
         private static void WriteZeros(Stream stream, int n)
         {
-            for (int i=0; i < n; i++) stream.WriteByte(0);
+            for (int i = 0; i < n; i++) stream.WriteByte(0);
         }
 
         private static void WriteBMPHeader(Image img, Stream stream)
@@ -131,7 +131,8 @@ namespace FilterLib.IO
                 throw new CodecException($"Unsupported bits per pixel: {bpp}");
             if (ReadUint(dibHeader[16..20]) != 0)
                 throw new CodecException("Unsupported compression");
-            /*uint pixelArraySize =*/ ReadUint(dibHeader[20..24]);
+            /*uint pixelArraySize =*/
+            ReadUint(dibHeader[20..24]);
             // Ignore horizontal resolution (bytes 24..28)
             // Ignore vertical resolution (bytes 28..32)
             if (ReadUint(dibHeader[32..36]) != 0)
@@ -161,11 +162,11 @@ namespace FilterLib.IO
                     img[x, y, 1] = bgr[1];
                     img[x, y, 2] = bgr[0];
                 }
-                for (int i = 0; i <padding; ++i)
+                for (int i = 0; i < padding; ++i)
                     if (stream.ReadByte() == -1)
                         throw new EndOfStreamException("Stream ended inside pixel array");
             }
-             return img;
+            return img;
         }
     }
 }

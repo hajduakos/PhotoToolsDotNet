@@ -17,7 +17,7 @@ namespace FilterLib.Filters.Color
     public sealed class OctreeQuantizerFilter : FilterInPlaceBase
     {
         private int levels;
-        
+
         /// <summary>
         /// Number of colors in the resulting palette.
         /// </summary>

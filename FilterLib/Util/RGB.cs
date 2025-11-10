@@ -59,7 +59,7 @@ namespace FilterLib.Util
             float max = rf > gf ? rf : gf;
             max = max > bf ? max : bf;
             l = (max + min) / 2;
-            if (MathF.Abs(max-min) > EPS)
+            if (MathF.Abs(max - min) > EPS)
             {
                 if (MathF.Abs(rf - max) <= EPS) h = (gf - bf) / (max - min);
                 if (MathF.Abs(gf - max) <= EPS) h = 2 + (bf - rf) / (max - min);

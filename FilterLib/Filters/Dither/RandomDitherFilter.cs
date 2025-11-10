@@ -45,7 +45,7 @@ namespace FilterLib.Filters.Dither
             Levels = levels;
             Seed = seed;
         }
-        
+
         /// <inheritdoc/>
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
         {

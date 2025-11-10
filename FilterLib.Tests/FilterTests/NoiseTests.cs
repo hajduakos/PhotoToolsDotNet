@@ -16,7 +16,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("_input.bmp", new AddNoiseFilter(0, 255, NoiseType.Color, 0), 0);
             yield return new TestCaseData("AddNoise_500_200_Color_0.bmp", new AddNoiseFilter(500, 200, NoiseType.Color, 0), 0);
             yield return new TestCaseData("AddNoise_500_200_Mono_0.bmp", new AddNoiseFilter(500, 200, NoiseType.Monochrome, 0), 0);
-        
+
             yield return new TestCaseData("_input.bmp", new MedianFilter(0, 1), 0);
             yield return new TestCaseData("_input.bmp", new MedianFilter(80, 0), 0);
             yield return new TestCaseData("Median_80_1.bmp", new MedianFilter(80, 1), 0);

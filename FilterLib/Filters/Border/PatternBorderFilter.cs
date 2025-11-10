@@ -41,7 +41,7 @@ namespace FilterLib.Filters.Border
         /// <inheritdoc/>
         public override string ParamToString(object param)
         {
-            if (param is Image img)  return $"Image({img.Width}x{img.Height})";
+            if (param is Image img) return $"Image({img.Width}x{img.Height})";
             return base.ParamToString(param);
         }
     }

@@ -25,7 +25,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         [Test]
         public void TestGrayscale()
         {
-             IFilter f = ReflectiveApi.ConstructFilterByName("Grayscale" );
+            IFilter f = ReflectiveApi.ConstructFilterByName("Grayscale");
             Assert.That(f, Is.InstanceOf<GrayscaleFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Red", "10");
             ReflectiveApi.SetFilterPropertyByName(f, "Green", "20");
@@ -40,7 +40,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestGrayscaleParCnt() => Assert.That(Common.ParamCount(typeof(GrayscaleFilter)), Is.EqualTo(3));
 
         [Test]
-        public void TestInvert() => 
+        public void TestInvert() =>
             Assert.That(ReflectiveApi.ConstructFilterByName("Invert"), Is.InstanceOf<InvertFilter>());
 
         [Test]
@@ -77,7 +77,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         [Test]
         public void TestPosterize()
         {
-             IFilter f = ReflectiveApi.ConstructFilterByName("Posterize");
+            IFilter f = ReflectiveApi.ConstructFilterByName("Posterize");
             Assert.That(f, Is.InstanceOf<PosterizeFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Levels", "8");
             PosterizeFilter ff = f as PosterizeFilter;
@@ -104,7 +104,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         [Test]
         public void TestTreshold()
         {
-             IFilter f = ReflectiveApi.ConstructFilterByName("Treshold");
+            IFilter f = ReflectiveApi.ConstructFilterByName("Treshold");
             Assert.That(f, Is.InstanceOf<TresholdFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Treshold", "127");
             TresholdFilter ff = f as TresholdFilter;
@@ -117,7 +117,7 @@ namespace FilterLib.Tests.ReflectiveApiTests
         [Test]
         public void TestVintage()
         {
-             IFilter f = ReflectiveApi.ConstructFilterByName("Vintage");
+            IFilter f = ReflectiveApi.ConstructFilterByName("Vintage");
             Assert.That(f, Is.InstanceOf<VintageFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "Strength", "80");
             VintageFilter ff = f as VintageFilter;

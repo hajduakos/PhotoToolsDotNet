@@ -18,7 +18,7 @@ namespace FilterLib.Tests.FilterTests
                 new JitterBorderFilter(Size.Absolute(0), new RGB(0, 0, 0), 0), 0);
             yield return new TestCaseData("JitterBorder_20_Red_0.bmp",
                 new JitterBorderFilter(Size.Absolute(20), new RGB(255, 0, 0), 0), 1);
-        
+
             yield return new TestCaseData("_input.bmp",
                 new FadeBorderFilter(Size.Absolute(0), new RGB(0, 0, 0)), 0);
             yield return new TestCaseData("FadeBorder_1_Blue.bmp",
@@ -34,12 +34,12 @@ namespace FilterLib.Tests.FilterTests
                 new PatternBorderFilter(Size.Absolute(0), Size.Absolute(0), pattern, BorderPosition.Inside, AntiAliasQuality.Medium), 0);
             yield return new TestCaseData("PatternBorder_30px_0_Green_Inside.bmp",
                 new PatternBorderFilter(Size.Absolute(30), Size.Absolute(0), pattern, BorderPosition.Inside, AntiAliasQuality.Medium), 1);
-        
+
             yield return new TestCaseData("PatternBorder_10pct_8px_Outside.bmp",
                     new PatternBorderFilter(Size.Relative(.1f), Size.Absolute(8), pattern, BorderPosition.Outside, AntiAliasQuality.Medium), 1);
             yield return new TestCaseData("PatternBorder_20px_10pct_Center.bmp",
                 new PatternBorderFilter(Size.Absolute(20), Size.Relative(.1f), pattern, BorderPosition.Center, AntiAliasQuality.Medium), 1);
-        
+
             yield return new TestCaseData("_input.bmp",
                 new SimpleBorderFilter(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium), 0);
             yield return new TestCaseData("SimpleBorder_30px_0_Green_Inside_Med.bmp",
@@ -76,10 +76,10 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("_input.bmp", new VignetteFilter(Size.Absolute(5), Size.Absolute(10), new RGB(0, 0, 0)));
         }
 
-            [Test]
+        [Test]
         [TestCaseSource("Data")]
         public void Test(string expected, IFilter filter, int tolerance) =>
-            Assert.That(Common.CheckFilter("_input.bmp", expected, filter, tolerance));
+        Assert.That(Common.CheckFilter("_input.bmp", expected, filter, tolerance));
 
         [Test]
         [TestCaseSource("Exceptions")]

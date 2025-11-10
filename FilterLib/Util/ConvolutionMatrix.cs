@@ -89,7 +89,7 @@ namespace FilterLib.Util
             Height = mx[0].Count;
             if (Height == 0) throw new ArgumentException("Columns cannot be empty");
 
-            weights = new int[Width,Height];
+            weights = new int[Width, Height];
             for (int x = 0; x < Width; x++)
                 for (int y = 0; y < Height; y++)
                     weights[x, y] = mx[x][y];

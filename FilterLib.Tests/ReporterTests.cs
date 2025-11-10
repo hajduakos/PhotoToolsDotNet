@@ -8,7 +8,7 @@ namespace FilterLib.Tests
     {
         private class ReporterStub : IReporter
         {
-            public List<int> Reports { get;  private set; }
+            public List<int> Reports { get; private set; }
 
             public ReporterStub() => Reports = new List<int>();
 

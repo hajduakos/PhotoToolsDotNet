@@ -69,7 +69,7 @@ namespace FilterLib.Filters.Generate
             if (len == 0) throw new ArgumentException("Start and endpoints are the same.");
             float lenF = len;
 
-            fixed(byte* start = image)
+            fixed (byte* start = image)
             {
                 byte* start0 = start;
                 Parallel.For(0, image.Height, y =>

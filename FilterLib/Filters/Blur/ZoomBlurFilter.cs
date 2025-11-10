@@ -26,7 +26,7 @@ namespace FilterLib.Filters.Blur
         /// </summary>
         [FilterParam]
         public Size CenterY { get; set; }
-        
+
         /// <summary>
         /// Blur amount [0;100].
         /// </summary>
@@ -36,7 +36,7 @@ namespace FilterLib.Filters.Blur
         public int Amount
         {
             get { return amount; }
-            set { amount = value.Clamp(0,100); }
+            set { amount = value.Clamp(0, 100); }
         }
 
         /// <summary>

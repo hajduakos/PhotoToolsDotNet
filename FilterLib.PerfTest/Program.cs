@@ -139,6 +139,6 @@ foreach (var f in filters)
     Console.WriteLine($"{f}\t{total / n}");
 }
 
-foreach(var f in ReflectiveApi.GetFilterTypes())
+foreach (var f in ReflectiveApi.GetFilterTypes())
     if (!filters.Any(f0 => f0.GetType() == f))
         Console.WriteLine($"Warning: no test for {f}");

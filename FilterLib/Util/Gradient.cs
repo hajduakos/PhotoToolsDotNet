@@ -53,7 +53,7 @@ namespace FilterLib.Util
             str = Regex.Replace(str, @"\s+", " ").Trim();
             string[] tokens = str.Split(',');
             if (tokens.Length < 2) throw new FormatException("Expected at least two components.");
-            foreach(string comp in tokens)
+            foreach (string comp in tokens)
             {
                 string[] compTokens = comp.Trim().Replace("(", "").Replace(")", "").Split(' ');
                 if (compTokens.Length != 4)

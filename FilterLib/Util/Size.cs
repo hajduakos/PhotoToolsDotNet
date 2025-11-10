@@ -62,7 +62,7 @@ namespace FilterLib.Util
 
             public override int ToAbsolute(int reference) => (int)(reference * pct);
 
-            public override string ToString() => $"{pct*100}%";
+            public override string ToString() => $"{pct * 100}%";
         }
     }
 }

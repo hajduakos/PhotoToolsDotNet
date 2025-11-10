@@ -15,7 +15,8 @@ namespace FilterLib.Filters.Border
         public RGB Color { get; set; }
 
         public SimpleBorderFilter() :
-            this(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium) { }
+            this(Size.Absolute(0), Size.Absolute(0), new RGB(0, 0, 0), BorderPosition.Inside, AntiAliasQuality.Medium)
+        { }
 
         /// <summary>
         /// Constructor.

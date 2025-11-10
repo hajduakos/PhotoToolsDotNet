@@ -15,6 +15,6 @@
         /// <inheritdoc/>
         protected override byte BlendComponent(byte compBottom, byte compTop) =>
             (byte)(compTop < 255 - compBottom ? 0 : 255);
-        
+
     }
 }

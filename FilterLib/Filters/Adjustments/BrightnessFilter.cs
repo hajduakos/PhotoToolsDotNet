@@ -22,7 +22,7 @@ namespace FilterLib.Filters.Adjustments
             get { return brightness; }
             set { brightness = value.Clamp(-255, 255); }
         }
-        
+
         /// <summary>
         /// Constructor.
         /// </summary>
