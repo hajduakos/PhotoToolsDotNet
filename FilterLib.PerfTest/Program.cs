@@ -69,6 +69,7 @@ List<IFilter> filters =
     new ShiauFanDitherFilter(4),
     new ShiauFanDitherWideFilter(4),
     new SierraDitherFilter(4),
+    new SierraDitherTwoRowFilter(4),
     new StuckiDitherFilter(4),
     // Edges
     new EdgeDetectionFilter(),
@@ -102,6 +103,7 @@ List<IFilter> filters =
     new CropFilter(Size.Relative(.1f), Size.Relative(.1f), Size.Relative(.9f), Size.Relative(.9f)),
     new FlipHorizontalFilter(),
     new FlipVerticalFilter(),
+    new PerspectiveFilter(1.5f, Direction.Horizontal, InterpolationMode.Bilinear),
     new ResizeFilter(Size.Relative(1.1f), Size.Relative(1.1f), InterpolationMode.Bilinear),
     new Rotate180Filter(),
     new RotateFilter(10, RotateFilter.CropMode.Fit, InterpolationMode.Bilinear),
