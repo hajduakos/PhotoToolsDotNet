@@ -7,9 +7,6 @@ namespace FilterLib.Filters.Artistic
     [Filter("Create oil paint effect by replacing each pixel with the most frequent intensity in a given radius.")]
     public sealed class OilPaintFilter : FilterInPlaceBase
     {
-        private int radius;
-        private int intensityLevels;
-
         /// <summary>
         /// Brush radius [0;...].
         /// </summary>
@@ -17,8 +14,8 @@ namespace FilterLib.Filters.Artistic
         [FilterParamMin(0)]
         public int Radius
         {
-            get { return radius; }
-            set { radius = System.Math.Max(0, value); }
+            get;
+            set { field = System.Math.Max(0, value); }
         }
 
         /// <summary>
@@ -29,8 +26,8 @@ namespace FilterLib.Filters.Artistic
         [FilterParamMax(255)]
         public int IntensityLevels
         {
-            get { return intensityLevels; }
-            set { intensityLevels = value.Clamp(0, 255); }
+            get;
+            set { field = value.Clamp(0, 255); }
         }
 
         /// <summary>
@@ -54,8 +51,8 @@ namespace FilterLib.Filters.Artistic
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
             int width_3 = image.Width * 3;
-            int radius_3 = radius * 3;
-            float iMult = intensityLevels / 255f;
+            int radius_3 = Radius * 3;
+            float iMult = IntensityLevels / 255f;
             // For each pixel we calculate the frequency of each intensity level within the radius,
             // and also the average R, G and B values corresponding to the intensity levels. Then
             // we replace the current pixel with the R, G, B values corresponding to the most
@@ -80,9 +77,9 @@ namespace FilterLib.Filters.Artistic
                     for (int i = 0; i < 256; ++i) red[i] = green[i] = blue[i] = intensities[i] = 0;
 
                     // Calculate full window around first column of current row
-                    for (int xSub = 0; xSub <= radius && xSub < image.Width; ++xSub)
+                    for (int xSub = 0; xSub <= Radius && xSub < image.Width; ++xSub)
                     {
-                        for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
+                        for (int ySub = y < Radius ? -y : -Radius; y + ySub < image.Height && ySub <= Radius; ++ySub)
                         {
                             int idx = ySub * width_3 + xSub * 3;
                             int lum = (int)(RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
@@ -103,9 +100,9 @@ namespace FilterLib.Filters.Artistic
                     for (int x = 3; x < width_3; x += 3)
                     {
                         // Remove a column from the left
-                        if (x / 3 - radius - 1 >= 0)
+                        if (x / 3 - Radius - 1 >= 0)
                         {
-                            for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
+                            for (int ySub = y < Radius ? -y : -Radius; y + ySub < image.Height && ySub <= Radius; ++ySub)
                             {
                                 int idx = ySub * width_3 + x - radius_3 - 3;
                                 int lum = (int)(RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);
@@ -116,9 +113,9 @@ namespace FilterLib.Filters.Artistic
                             }
                         }
                         // Add column to right
-                        if (x / 3 + radius < image.Width)
+                        if (x / 3 + Radius < image.Width)
                         {
-                            for (int ySub = y < radius ? -y : -radius; y + ySub < image.Height && ySub <= radius; ++ySub)
+                            for (int ySub = y < Radius ? -y : -Radius; y + ySub < image.Height && ySub <= Radius; ++ySub)
                             {
                                 int idx = ySub * width_3 + x + radius_3;
                                 int lum = (int)(RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]) * iMult);

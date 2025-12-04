@@ -6,8 +6,6 @@ namespace FilterLib.Filters.Artistic
     [Filter("Map each pixel to black or white based on a treshold calculated from pixels in a given radius.")]
     public sealed class AdaptiveTresholdFilter : FilterInPlaceBase
     {
-        private int sqSize;
-
         /// <summary>
         /// Square size [1;...].
         /// </summary>
@@ -15,8 +13,8 @@ namespace FilterLib.Filters.Artistic
         [FilterParamMin(1)]
         public int SquareSize
         {
-            get { return sqSize; }
-            set { sqSize = System.Math.Max(1, value); }
+            get;
+            set { field = System.Math.Max(1, value); }
         }
 
         /// <summary>
@@ -35,7 +33,7 @@ namespace FilterLib.Filters.Artistic
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
             int width_3 = image.Width * 3;
-            int sqSize_3 = sqSize * 3;
+            int sqSize_3 = SquareSize * 3;
 
             fixed (byte* newStart = image, oldStart = original)
             {
@@ -54,9 +52,9 @@ namespace FilterLib.Filters.Artistic
                     int n = 0;
 
                     // Calculate full window around first column of current row
-                    for (int xSub = 0; xSub <= sqSize && xSub < image.Width; ++xSub)
+                    for (int xSub = 0; xSub <= SquareSize && xSub < image.Width; ++xSub)
                     {
-                        for (int ySub = y < sqSize ? -y : -sqSize; y + ySub < image.Height && ySub <= sqSize; ++ySub)
+                        for (int ySub = y < SquareSize ? -y : -SquareSize; y + ySub < image.Height && ySub <= SquareSize; ++ySub)
                         {
                             int idx = ySub * width_3 + xSub * 3;
                             sum += Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
@@ -72,9 +70,9 @@ namespace FilterLib.Filters.Artistic
                     for (int x = 3; x < width_3; x += 3)
                     {
                         // Remove a column from the left
-                        if (x / 3 - sqSize - 1 >= 0)
+                        if (x / 3 - SquareSize - 1 >= 0)
                         {
-                            for (int ySub = y < sqSize ? -y : -sqSize; y + ySub < image.Height && ySub <= sqSize; ++ySub)
+                            for (int ySub = y < SquareSize ? -y : -SquareSize; y + ySub < image.Height && ySub <= SquareSize; ++ySub)
                             {
                                 int idx = ySub * width_3 + x - sqSize_3 - 3;
                                 sum -= Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);
@@ -82,9 +80,9 @@ namespace FilterLib.Filters.Artistic
                             }
                         }
                         // Add column to right
-                        if (x / 3 + sqSize < image.Width)
+                        if (x / 3 + SquareSize < image.Width)
                         {
-                            for (int ySub = y < sqSize ? -y : -sqSize; y + ySub < image.Height && ySub <= sqSize; ++ySub)
+                            for (int ySub = y < SquareSize ? -y : -SquareSize; y + ySub < image.Height && ySub <= SquareSize; ++ySub)
                             {
                                 int idx = ySub * width_3 + x + sqSize_3;
                                 sum += Util.RGB.GetLuminance(oldRow[idx], oldRow[idx + 1], oldRow[idx + 2]);

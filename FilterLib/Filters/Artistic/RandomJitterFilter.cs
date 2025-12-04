@@ -11,8 +11,6 @@ namespace FilterLib.Filters.Artistic
     {
         private const int MAX_THREADS = 128;
 
-        private int radius;
-
         /// <summary>
         /// Jitter radius [0;...].
         /// </summary>
@@ -20,8 +18,8 @@ namespace FilterLib.Filters.Artistic
         [FilterParamMin(0)]
         public int Radius
         {
-            get { return radius; }
-            set { radius = System.Math.Max(0, value); }
+            get;
+            set { field = System.Math.Max(0, value); }
         }
 
         /// <summary>
@@ -71,8 +69,8 @@ namespace FilterLib.Filters.Artistic
                         for (int x = 0; x < width_3; x += 3)
                         {
                             // Random numbers between -radius and +radius
-                            int dx = rnd.Next(2 * radius + 1) - radius;
-                            int dy = rnd.Next(2 * radius + 1) - radius;
+                            int dx = rnd.Next(2 * Radius + 1) - Radius;
+                            int dy = rnd.Next(2 * Radius + 1) - Radius;
 
                             // When out of range, take zero instead
                             if (x / 3 + dx < 0 || x / 3 + dx >= image.Width) dx = 0;
