@@ -39,8 +39,9 @@ namespace FilterLib.Filters.Adjustments
             vibMap = new int[101];
             for (int x = 0; x <= 100; ++x)
             {
-                // Smaller multiplier for already saturated pixels
-                float mult = (1 - x / 100f) * (1 - x / 100f);
+                // When increasing, give a smaller multiplier to already saturated pixels
+                // When decreasing, give a larger multiplier to already saturated pixels
+                float mult = vibrance > 0 ? (1 - x / 100f) * (1 - x / 100f) : (x * x / 10000f);
                 vibMap[x] = System.Convert.ToInt32(x + vibrance * mult).Clamp(0, 100);
             }
         }

@@ -53,6 +53,7 @@ namespace FilterLib.Tests.FilterTests
             yield return new TestCaseData("_input.bmp", new VibranceFilter(0), 5);
             yield return new TestCaseData("Vibrance_50.bmp", new VibranceFilter(50), 1);
             yield return new TestCaseData("Vibrance_100.bmp", new VibranceFilter(100), 1);
+            yield return new TestCaseData("Vibrance_-100.bmp", new VibranceFilter(-100), 1);
         }
 
         internal static IEnumerable<TestCaseData> Exceptions()
