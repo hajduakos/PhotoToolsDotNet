@@ -2,12 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments
 {
-    /// <summary>
-    /// Automatic levels adjustment by histogram stretching. The idea is to maximalize the
-    /// dark and light levels while limiting the number of pixels that turn completely
-    /// black or white.
-    /// </summary>
-    [Filter]
+    [Filter("Automatic levels adjustment by histogram stretching.")]
     public sealed class AutoLevelsFilter : FilterInPlaceBase
     {
         private const float LocalLimitPct = 1f / 256;

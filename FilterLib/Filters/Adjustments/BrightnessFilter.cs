@@ -2,11 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments
 {
-    /// <summary>
-    /// Adjust brightness by increasing/decreasing the value of each component
-    /// with a fixed amount.
-    /// </summary>
-    [Filter]
+    [Filter("Increase/decrease each component of each pixel by a fixed amount.")]
     public sealed class BrightnessFilter : PerComponentFilterBase
     {
         private int brightness;

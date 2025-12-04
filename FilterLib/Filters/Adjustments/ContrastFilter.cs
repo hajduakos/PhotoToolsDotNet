@@ -2,10 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments
 {
-    /// <summary>
-    /// Adjust contrast by darkening/brightening tones below/above the midpoint.
-    /// </summary>
-    [Filter]
+    [Filter("Adjust contrast by darkening tones below the midpoint and brightening tones above.")]
     public sealed class ContrastFilter : PerComponentFilterBase
     {
         private int contrast;

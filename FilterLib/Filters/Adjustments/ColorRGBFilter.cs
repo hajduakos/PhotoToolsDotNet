@@ -2,11 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments
 {
-    /// <summary>
-    /// Adjust color in red-green-blue (RGB) color space by increasing/decreasing the value
-    /// of each component by a fixed amount.
-    /// </summary>
-    [Filter]
+    [Filter("Adjust the red, green and blue values of each pixel by a fixed amount.")]
     public sealed class ColorRGBFilter : PerPixelFilterBase
     {
         private int red, green, blue;

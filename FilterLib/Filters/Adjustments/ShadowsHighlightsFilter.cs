@@ -2,10 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments
 {
-    /// <summary>
-    /// Brighten shadows and darken highlights.
-    /// </summary>
-    [Filter]
+    [Filter("Brighten darker tones and darken lighter tones.")]
     public sealed class ShadowsHighlightsFilter : PerComponentFilterBase
     {
         private int darken, brighten;

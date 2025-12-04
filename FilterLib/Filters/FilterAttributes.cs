@@ -6,7 +6,12 @@ namespace FilterLib.Filters
     /// Attribute for marking classes that are filters.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class FilterAttribute : Attribute { }
+    public class FilterAttribute : Attribute
+    {
+        public string Description { get; private set; }
+
+        public FilterAttribute(string description = "") => this.Description = description;
+    }
 
 
     /// <summary>

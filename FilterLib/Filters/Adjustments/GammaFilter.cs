@@ -2,10 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments
 {
-    /// <summary>
-    /// Adjust gamma with an exponential transformation over pixel values.
-    /// </summary>
-    [Filter]
+    [Filter("Adjust gamma of each pixel with an exponential function.")]
     public sealed class GammaFilter : PerComponentFilterBase
     {
         private float gamma;

@@ -5,7 +5,7 @@ namespace FilterLib.Filters.Adjustments
     /// <summary>
     /// Adjust color in the hue-saturation-lightness (HSL) space.
     /// </summary>
-    [Filter]
+    [Filter("Adjust the hue, saturation and lightness of each pixel.")]
     public sealed class ColorHSLFilter : PerPixelFilterBase
     {
         private int hue, saturation, lightness;

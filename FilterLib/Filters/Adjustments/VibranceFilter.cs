@@ -2,10 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments
 {
-    /// <summary>
-    /// Adjust vibrance, which is essentially an adaptive saturation.
-    /// </summary>
-    [Filter]
+    [Filter("Adjust saturation in an adaptive way to avoid oversaturating.")]
     public sealed class VibranceFilter : PerPixelFilterBase
     {
         private int vibrance;
