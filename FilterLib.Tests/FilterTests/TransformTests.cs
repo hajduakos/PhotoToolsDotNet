@@ -111,6 +111,11 @@ namespace FilterLib.Tests.FilterTests
                 new ResizeFilter(Size.Relative(0), Size.Relative(1), InterpolationMode.NearestNeighbor));
             yield return new TestCaseData("_input.bmp",
                 new ResizeFilter(Size.Relative(1), Size.Relative(0), InterpolationMode.NearestNeighbor));
+
+            yield return new TestCaseData("_input.bmp",
+                new ResizeFilter(Size.Relative(-1), Size.Relative(1), InterpolationMode.NearestNeighbor));
+            yield return new TestCaseData("_input.bmp",
+                new ResizeFilter(Size.Relative(1), Size.Relative(-1), InterpolationMode.NearestNeighbor));
         }
 
         [Test]
