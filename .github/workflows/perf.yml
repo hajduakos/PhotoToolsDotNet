@@ -16,13 +16,13 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
     - name: Restore NuGet dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Perf tests
-      run: FilterLib.PerfTest\bin\Release\net8.0\FilterLib.PerfTest.exe
+      run: FilterLib.PerfTest\bin\Release\net10.0\FilterLib.PerfTest.exe
 
   perf-test-parent:
     runs-on: windows-latest
@@ -35,10 +35,10 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
     - name: Restore NuGet dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Perf tests
-      run: FilterLib.PerfTest\bin\Release\net8.0\FilterLib.PerfTest.exe
+      run: FilterLib.PerfTest\bin\Release\net10.0\FilterLib.PerfTest.exe
