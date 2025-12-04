@@ -8,8 +8,6 @@ namespace FilterLib.Filters.Adjustments
     [Filter("Adjust the hue, saturation and lightness of each pixel.")]
     public sealed class ColorHSLFilter : PerPixelFilterBase
     {
-        private int hue, saturation, lightness;
-
         /// <summary>
         /// Hue adjustment [-180;180]
         /// </summary>
@@ -18,8 +16,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(180)]
         public int Hue
         {
-            get { return hue; }
-            set { hue = value.Clamp(-180, 180); }
+            get ;
+            set { field = value.Clamp(-180, 180); }
         }
 
         /// <summary>
@@ -30,8 +28,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(100)]
         public int Saturation
         {
-            get { return saturation; }
-            set { saturation = value.Clamp(-100, 100); }
+            get;
+            set { field = value.Clamp(-100, 100); }
         }
 
         /// <summary>
@@ -42,8 +40,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(100)]
         public int Lightness
         {
-            get { return lightness; }
-            set { lightness = value.Clamp(-100, 100); }
+            get;
+            set { field = value.Clamp(-100, 100); }
         }
 
         /// <summary>
@@ -74,12 +72,12 @@ namespace FilterLib.Filters.Adjustments
             hueMap = new int[361];
             for (int x = 0; x <= 100; ++x)
             {
-                satMap[x] = (x + saturation).Clamp(0, 100);
-                lightMap[x] = (x + lightness).Clamp(0, 100);
+                satMap[x] = (x + Saturation).Clamp(0, 100);
+                lightMap[x] = (x + Lightness).Clamp(0, 100);
             }
             for (int x = 0; x <= 360; ++x)
             {
-                hueMap[x] = x + hue;
+                hueMap[x] = x + Hue;
                 if (hueMap[x] > 360) hueMap[x] %= 360;
                 else if (hueMap[x] < 0) hueMap[x] += 360;
             }

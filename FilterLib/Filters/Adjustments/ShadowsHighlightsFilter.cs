@@ -5,8 +5,6 @@ namespace FilterLib.Filters.Adjustments
     [Filter("Brighten darker tones and darken lighter tones.")]
     public sealed class ShadowsHighlightsFilter : PerComponentFilterBase
     {
-        private int darken, brighten;
-
         /// <summary>
         /// Brighten shadows amount [0;100].
         /// </summary>
@@ -15,8 +13,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(100)]
         public int Brighten
         {
-            get { return brighten; }
-            set { brighten = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -27,8 +25,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(100)]
         public int Darken
         {
-            get { return darken; }
-            set { darken = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -45,22 +43,22 @@ namespace FilterLib.Filters.Adjustments
         /// <inheritdoc/>
         protected override byte MapComponent(byte comp)
         {
-            if (brighten == 0 && darken == 0) return comp;
+            if (Brighten == 0 && Darken == 0) return comp;
 
             // Mulitply pixel with itself (darkening)
             float mult = comp * comp / 255f;
             // Blend with original value
-            float darkPct = darken / 100f;
+            float darkPct = Darken / 100f;
             mult = comp * (1 - darkPct) + mult * darkPct;
 
             // Screen pixel with itself (brightening)
             float screen = (255 - comp) * comp / 255f + comp;
             // Blend with original value
-            float brightPct = brighten / 100f;
+            float brightPct = Brighten / 100f;
             screen = comp * (1 - brightPct) + screen * brightPct;
 
             // Blend darkened and brightened pixels together
-            float darkRatio = darken / (float)(brighten + darken);
+            float darkRatio = Darken / (float)(Brighten + Darken);
             float brightRatio = 1 - darkRatio;
             return (darkRatio * mult + brightRatio * screen).ClampToByte();
         }

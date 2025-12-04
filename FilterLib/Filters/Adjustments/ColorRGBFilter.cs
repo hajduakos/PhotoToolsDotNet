@@ -5,8 +5,6 @@ namespace FilterLib.Filters.Adjustments
     [Filter("Adjust the red, green and blue values of each pixel by a fixed amount.")]
     public sealed class ColorRGBFilter : PerPixelFilterBase
     {
-        private int red, green, blue;
-
         /// <summary>
         /// Adjustment to red component [-255;255].
         /// </summary>
@@ -15,8 +13,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(255)]
         public int Red
         {
-            get { return red; }
-            set { red = value.Clamp(-255, 255); }
+            get;
+            set { field = value.Clamp(-255, 255); }
         }
 
         /// <summary>
@@ -27,8 +25,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(255)]
         public int Green
         {
-            get { return green; }
-            set { green = value.Clamp(-255, 255); }
+            get;
+            set { field = value.Clamp(-255, 255); }
         }
 
         /// <summary>
@@ -39,8 +37,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(255)]
         public int Blue
         {
-            get { return blue; }
-            set { blue = value.Clamp(-255, 255); }
+            get;
+            set { field = value.Clamp(-255, 255); }
         }
 
         /// <summary>
@@ -71,9 +69,9 @@ namespace FilterLib.Filters.Adjustments
             blueMap = new byte[256];
             for (int x = 0; x < 256; ++x)
             {
-                redMap[x] = (x + red).ClampToByte();
-                greenMap[x] = (x + green).ClampToByte();
-                blueMap[x] = (x + blue).ClampToByte();
+                redMap[x] = (x + Red).ClampToByte();
+                greenMap[x] = (x + Green).ClampToByte();
+                blueMap[x] = (x + Blue).ClampToByte();
             }
         }
 

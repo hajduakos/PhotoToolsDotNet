@@ -5,8 +5,6 @@ namespace FilterLib.Filters.Adjustments
     [Filter("Adjust gamma of each pixel with an exponential function.")]
     public sealed class GammaFilter : PerComponentFilterBase
     {
-        private float gamma;
-
         /// <summary>
         /// Gamma adjustment amount ]0;...]
         /// </summary>
@@ -14,8 +12,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMinF(0.001f)]
         public float Gamma
         {
-            get { return gamma; }
-            set { gamma = System.MathF.Max(value, 0.001f); }
+            get;
+            set { field = System.MathF.Max(value, 0.001f); }
         }
 
         /// <summary>
@@ -25,6 +23,6 @@ namespace FilterLib.Filters.Adjustments
         public GammaFilter(float gamma = 1f) => Gamma = gamma;
 
         /// <inheritdoc/>
-        protected override byte MapComponent(byte comp) => (255 * System.MathF.Pow(comp / 255f, 1f / gamma)).ClampToByte();
+        protected override byte MapComponent(byte comp) => (255 * System.MathF.Pow(comp / 255f, 1f / Gamma)).ClampToByte();
     }
 }

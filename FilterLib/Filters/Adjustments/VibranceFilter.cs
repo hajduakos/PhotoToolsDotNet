@@ -5,8 +5,6 @@ namespace FilterLib.Filters.Adjustments
     [Filter("Adjust saturation in an adaptive way to avoid oversaturating.")]
     public sealed class VibranceFilter : PerPixelFilterBase
     {
-        private int vibrance;
-
         /// <summary>
         /// Vibrance adjustment [-100;100]
         /// </summary>
@@ -15,8 +13,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(100)]
         public int Vibrance
         {
-            get { return vibrance; }
-            set { vibrance = value.Clamp(-100, 100); }
+            get;
+            set { field = value.Clamp(-100, 100); }
         }
 
         /// <summary>
@@ -41,8 +39,8 @@ namespace FilterLib.Filters.Adjustments
             {
                 // When increasing, give a smaller multiplier to already saturated pixels
                 // When decreasing, give a larger multiplier to already saturated pixels
-                float mult = vibrance > 0 ? (1 - x / 100f) * (1 - x / 100f) : (x * x / 10000f);
-                vibMap[x] = System.Convert.ToInt32(x + vibrance * mult).Clamp(0, 100);
+                float mult = Vibrance > 0 ? (1 - x / 100f) * (1 - x / 100f) : (x * x / 10000f);
+                vibMap[x] = System.Convert.ToInt32(x + Vibrance * mult).Clamp(0, 100);
             }
         }
 

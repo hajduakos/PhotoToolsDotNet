@@ -5,8 +5,6 @@ namespace FilterLib.Filters.Adjustments
     [Filter("Increase/decrease each component of each pixel by a fixed amount.")]
     public sealed class BrightnessFilter : PerComponentFilterBase
     {
-        private int brightness;
-
         /// <summary>
         /// Brightness adjustment amount [-255;255]
         /// </summary>
@@ -15,8 +13,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(255)]
         public int Brightness
         {
-            get { return brightness; }
-            set { brightness = value.Clamp(-255, 255); }
+            get ;
+            set { field = value.Clamp(-255, 255); }
         }
 
         /// <summary>
@@ -26,6 +24,6 @@ namespace FilterLib.Filters.Adjustments
         public BrightnessFilter(int brightness = 0) => Brightness = brightness;
 
         /// <inheritdoc/>
-        protected override byte MapComponent(byte comp) => (comp + brightness).ClampToByte();
+        protected override byte MapComponent(byte comp) => (comp + Brightness).ClampToByte();
     }
 }

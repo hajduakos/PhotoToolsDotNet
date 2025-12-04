@@ -5,8 +5,6 @@ namespace FilterLib.Filters.Adjustments
     [Filter("Adjust contrast by darkening tones below the midpoint and brightening tones above.")]
     public sealed class ContrastFilter : PerComponentFilterBase
     {
-        private int contrast;
-
         /// <summary>
         /// Contrast adjustment amount [-100;100].
         /// </summary>
@@ -15,8 +13,8 @@ namespace FilterLib.Filters.Adjustments
         [FilterParamMax(100)]
         public int Contrast
         {
-            get { return contrast; }
-            set { contrast = value.Clamp(-100, 100); }
+            get;
+            set { field = value.Clamp(-100, 100); }
         }
 
         /// <summary>
@@ -28,7 +26,7 @@ namespace FilterLib.Filters.Adjustments
         /// <inheritdoc/>
         protected override byte MapComponent(byte comp)
         {
-            float normalized = (100 + contrast) / 100f;
+            float normalized = (100 + Contrast) / 100f;
             return (((comp / 255f - .5f) * normalized + .5f) * 255f).ClampToByte();
         }
     }
