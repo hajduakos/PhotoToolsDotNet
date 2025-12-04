@@ -6,11 +6,7 @@ using Random = System.Random;
 
 namespace FilterLib.Filters.Artistic
 {
-    /// <summary>
-    /// Create a jitter effect by replacing each pixel
-    /// by a random one within a given radius.
-    /// </summary>
-    [Filter]
+    [Filter("Replace each pixel with a random one within a given radius.")]
     public sealed class RandomJitterFilter : FilterInPlaceBase
     {
         private const int MAX_THREADS = 128;

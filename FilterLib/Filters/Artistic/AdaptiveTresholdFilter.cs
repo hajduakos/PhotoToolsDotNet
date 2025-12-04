@@ -3,11 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Artistic
 {
-    /// <summary>
-    /// Map each pixel to black or white based on an adaptive treshold: the average
-    /// intensity is calculated in a given radius and used as a treshold.
-    /// </summary>
-    [Filter]
+    [Filter("Map each pixel to black or white based on a treshold calculated from pixels in a given radius.")]
     public sealed class AdaptiveTresholdFilter : FilterInPlaceBase
     {
         private int sqSize;
