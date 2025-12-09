@@ -57,8 +57,6 @@
             private static readonly int[] baseMatrix = new[] { 0, 2, 3, 1 };
         }
 
-        private int size;
-
         /// <summary>
         /// Size of the matrix [1;...].
         /// </summary>
@@ -66,11 +64,11 @@
         [FilterParamMin(1)]
         public int Size
         {
-            get { return size; }
+            get;
             set
             {
-                size = System.Math.Max(1, value);
-                Matrix = new BayerDitherMatrix(size);
+                field = System.Math.Max(1, value);
+                Matrix = new BayerDitherMatrix(field);
             }
         }
 

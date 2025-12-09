@@ -75,7 +75,6 @@ namespace FilterLib.Filters.Dither
             }
         }
 
-        private int levels;
         private readonly ErrorDiffusionMatrix matrix;
 
         /// <summary>
@@ -86,8 +85,8 @@ namespace FilterLib.Filters.Dither
         [FilterParamMax(256)]
         public int Levels
         {
-            get { return levels; }
-            set { levels = value.Clamp(2, 256); }
+            get;
+            set { field = value.Clamp(2, 256); }
         }
 
         /// <summary>
@@ -108,7 +107,7 @@ namespace FilterLib.Filters.Dither
             object reporterLock = new();
             int progress = 0;
             int width_3 = image.Width * 3;
-            float intervalSize = 255f / (levels - 1);
+            float intervalSize = 255f / (Levels - 1);
             float[,] quantErrArray = new float[width_3, image.Height];
             for (int x = 0; x < width_3; x++)
                 for (int y = 0; y < image.Height; y++)

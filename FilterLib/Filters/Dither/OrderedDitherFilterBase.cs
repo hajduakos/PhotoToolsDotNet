@@ -33,8 +33,6 @@ namespace FilterLib.Filters.Dither
             int Height { get; }
         }
 
-        private int levels;
-
         /// <summary>
         /// Number of levels [2:256].
         /// </summary>
@@ -43,8 +41,8 @@ namespace FilterLib.Filters.Dither
         [FilterParamMax(256)]
         public int Levels
         {
-            get { return levels; }
-            set { levels = value.Clamp(2, 256); }
+            get;
+            set { field = value.Clamp(2, 256); }
         }
 
         /// <summary>
@@ -69,7 +67,7 @@ namespace FilterLib.Filters.Dither
             reporter?.Start();
             object reporterLock = new();
             int progress = 0;
-            float intervalSize = 255f / (levels - 1);
+            float intervalSize = 255f / (Levels - 1);
             int width_3 = image.Width * 3;
             fixed (byte* start = image)
             {

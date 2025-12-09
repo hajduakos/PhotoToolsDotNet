@@ -14,8 +14,6 @@ namespace FilterLib.Filters.Dither
     {
         private const int MAX_THREADS = 128;
 
-        private int levels;
-
         /// <summary>
         /// Number of levels [2:256].
         /// </summary>
@@ -24,8 +22,8 @@ namespace FilterLib.Filters.Dither
         [FilterParamMax(256)]
         public int Levels
         {
-            get { return levels; }
-            set { levels = value.Clamp(2, 256); }
+            get;
+            set { field = value.Clamp(2, 256); }
         }
 
 
@@ -55,7 +53,7 @@ namespace FilterLib.Filters.Dither
             int threads = Math.Min(image.Height, MAX_THREADS);
             int threadSize = image.Height / threads;
             RandomPool rndp = new(threads, Seed);
-            float intervalSize = 255f / (levels - 1);
+            float intervalSize = 255f / (Levels - 1);
             fixed (byte* start = image)
             {
                 byte* start0 = start;
