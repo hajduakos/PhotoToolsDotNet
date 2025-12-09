@@ -14,9 +14,6 @@ namespace FilterLib.Filters.Noise
     {
         private const int MAX_THREADS = 128;
 
-        private int intensity;
-        private int strength;
-
         /// <summary>
         /// Possible noise types.
         /// </summary>
@@ -30,8 +27,8 @@ namespace FilterLib.Filters.Noise
         [FilterParamMax(1000)]
         public int Intensity
         {
-            get { return intensity; }
-            set { intensity = value.Clamp(0, 1000); }
+            get;
+            set { field = value.Clamp(0, 1000); }
         }
 
         /// <summary>
@@ -42,8 +39,8 @@ namespace FilterLib.Filters.Noise
         [FilterParamMax(255)]
         public int Strength
         {
-            get { return strength; }
-            set { strength = value.ClampToByte(); }
+            get;
+            set { field = value.ClampToByte(); }
         }
 
         /// <summary>
@@ -98,20 +95,20 @@ namespace FilterLib.Filters.Noise
                         for (int x = 0; x < image.Width; ++x)
                         {
                             // Decide to add noise to this pixel or not
-                            if (rnd.Next(1000) < intensity)
+                            if (rnd.Next(1000) < Intensity)
                             {
                                 if (Type == NoiseType.Monochrome) // Monochrome noise -> same noise added to each channel
                                 {
-                                    int noise = (int)((rnd.NextSingle() * 2 - 1) * strength);
+                                    int noise = (int)((rnd.NextSingle() * 2 - 1) * Strength);
                                     rn = ptr[0] + noise;
                                     gn = ptr[1] + noise;
                                     bn = ptr[2] + noise;
                                 }
                                 else // Color noise -> separate values added to each channel
                                 {
-                                    rn = ptr[0] + (int)((rnd.NextSingle() * 2 - 1) * strength);
-                                    gn = ptr[1] + (int)((rnd.NextSingle() * 2 - 1) * strength);
-                                    bn = ptr[2] + (int)((rnd.NextSingle() * 2 - 1) * strength);
+                                    rn = ptr[0] + (int)((rnd.NextSingle() * 2 - 1) * Strength);
+                                    gn = ptr[1] + (int)((rnd.NextSingle() * 2 - 1) * Strength);
+                                    bn = ptr[2] + (int)((rnd.NextSingle() * 2 - 1) * Strength);
                                 }
                                 // Overwrite old values
                                 ptr[0] = rn.ClampToByte();

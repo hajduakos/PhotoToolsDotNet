@@ -11,9 +11,6 @@ namespace FilterLib.Filters.Noise
     [Filter]
     public sealed class MedianFilter : FilterInPlaceBase
     {
-        private int strength;
-        private int radius;
-
         /// <summary>
         /// Strength [0;100].
         /// </summary>
@@ -22,8 +19,8 @@ namespace FilterLib.Filters.Noise
         [FilterParamMax(100)]
         public int Strength
         {
-            get { return strength; }
-            set { strength = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -33,8 +30,8 @@ namespace FilterLib.Filters.Noise
         [FilterParamMin(0)]
         public int Radius
         {
-            get { return radius; }
-            set { radius = Math.Max(0, value); }
+            get;
+            set { field = Math.Max(0, value); }
         }
 
         /// <summary>
@@ -58,10 +55,10 @@ namespace FilterLib.Filters.Noise
             Image original = (Image)image.Clone();
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
             int width_3 = image.Width * 3;
-            int radius_3 = radius * 3;
-            int area = (2 * radius + 1) * (2 * radius + 1);
+            int radius_3 = Radius * 3;
+            int area = (2 * Radius + 1) * (2 * Radius + 1);
 
-            float op1 = strength / 100.0f;
+            float op1 = Strength / 100.0f;
             float op0 = 1 - op1;
 
             fixed (byte* newStart = image, oldStart = original)
@@ -78,7 +75,7 @@ namespace FilterLib.Filters.Noise
                     {
                         // Collect pixel and surroundings
                         int n = 0;
-                        for (int y0 = Math.Max(0, y - radius); y0 < image.Height && y0 <= y + radius; ++y0)
+                        for (int y0 = Math.Max(0, y - Radius); y0 < image.Height && y0 <= y + Radius; ++y0)
                         {
                             for (int x0 = Math.Max(0, x - radius_3); x0 < width_3 && x0 <= x + radius_3; x0 += 3)
                             {
