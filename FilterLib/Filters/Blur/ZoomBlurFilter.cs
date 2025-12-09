@@ -8,9 +8,6 @@ namespace FilterLib.Filters.Blur
     [Filter("Blur by replacing each pixel with the average calculated along the line connecting the point to the center.")]
     public sealed class ZoomBlurFilter : FilterInPlaceBase
     {
-        private int amount;
-        private int maxSamples;
-
         /// <summary>
         /// X coordinate of the center.
         /// </summary>
@@ -31,8 +28,8 @@ namespace FilterLib.Filters.Blur
         [FilterParamMax(100)]
         public int Amount
         {
-            get { return amount; }
-            set { amount = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -42,8 +39,8 @@ namespace FilterLib.Filters.Blur
         [FilterParamMin(2)]
         public int MaxSamples
         {
-            get { return maxSamples; }
-            set { maxSamples = Math.Max(2, value); }
+            get;
+            set { field = Math.Max(2, value); }
         }
 
         /// <summary>
@@ -77,7 +74,7 @@ namespace FilterLib.Filters.Blur
             System.Diagnostics.Debug.Assert(image.Width == original.Width);
             float cx = CenterX.ToAbsolute(image.Width);
             float cy = CenterY.ToAbsolute(image.Height);
-            float amountF = amount / 100f;
+            float amountF = Amount / 100f;
             int width_3 = image.Width * 3;
             fixed (byte* newStart = image, oldStart = original)
             {
@@ -91,7 +88,7 @@ namespace FilterLib.Filters.Blur
                         float distanceFromCenter = MathF.Sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy));
                         float len = distanceFromCenter * amountF;
                         // Number of samples are based on the length (but at least two)
-                        int samples = Math.Max(2, Math.Min(maxSamples, (int)Math.Ceiling(len)));
+                        int samples = Math.Max(2, Math.Min(MaxSamples, (int)Math.Ceiling(len)));
                         float xLen = (cx - x) * amountF;
                         float yLen = (cy - y) * amountF;
                         float dx = xLen / (samples - 1);

@@ -6,8 +6,6 @@ namespace FilterLib.Filters.Blur
     [Filter("Blur by replacing each pixel with the average of the surrounding rectangle of a given size.")]
     public sealed class BoxBlurFilter : FilterInPlaceBase
     {
-        private int radiusX, radiusY;
-
         /// <summary>
         /// Horizontal radius [0;...]
         /// </summary>
@@ -15,8 +13,8 @@ namespace FilterLib.Filters.Blur
         [FilterParamMin(0)]
         public int RadiusX
         {
-            get { return radiusX; }
-            set { radiusX = System.Math.Max(0, value); }
+            get;
+            set { field = System.Math.Max(0, value); }
         }
 
         /// <summary>
@@ -26,8 +24,8 @@ namespace FilterLib.Filters.Blur
         [FilterParamMin(0)]
         public int RadiusY
         {
-            get { return radiusY; }
-            set { radiusY = System.Math.Max(0, value); }
+            get;
+            set { field = System.Math.Max(0, value); }
         }
 
         /// <summary>
@@ -51,7 +49,7 @@ namespace FilterLib.Filters.Blur
             Image tmp = new(image.Width, image.Height); // Intermediate result between the 2 steps
             System.Diagnostics.Debug.Assert(image.Width == tmp.Width);
             int width_3 = image.Width * 3;
-            int radiusX_3 = radiusX * 3;
+            int radiusX_3 = RadiusX * 3;
             fixed (byte* imgStart = image, tmpStart = tmp)
             {
                 byte* imgStart0 = imgStart;
@@ -66,7 +64,7 @@ namespace FilterLib.Filters.Blur
 
                     // First fill the window
                     int rSum = 0, gSum = 0, bSum = 0, n = 0;
-                    for (int x = 0; x < width_3 && n <= radiusX; x += 3)
+                    for (int x = 0; x < width_3 && n <= RadiusX; x += 3)
                     {
                         rSum += imgRow[x];
                         gSum += imgRow[x + 1];
@@ -82,7 +80,7 @@ namespace FilterLib.Filters.Blur
                     for (int x = 3; x < width_3; x += 3)
                     {
                         // Add element to right
-                        if (x / 3 + radiusX < image.Width)
+                        if (x / 3 + RadiusX < image.Width)
                         {
                             rSum += imgRow[x + radiusX_3];
                             gSum += imgRow[x + radiusX_3 + 1];
@@ -90,7 +88,7 @@ namespace FilterLib.Filters.Blur
                             ++n;
                         }
                         // Remove an element from the left
-                        if (x / 3 - radiusX - 1 >= 0)
+                        if (x / 3 - RadiusX - 1 >= 0)
                         {
                             rSum -= imgRow[x - radiusX_3 - 3];
                             gSum -= imgRow[x - radiusX_3 - 3 + 1];
@@ -108,7 +106,7 @@ namespace FilterLib.Filters.Blur
 
                 // Vertical blur, the result is in 'image'
                 progress = 0;
-                int radiusRowOffset = radiusY * width_3;
+                int radiusRowOffset = RadiusY * width_3;
                 Parallel.For(0, image.Width, x =>
                 {
                     x *= 3;
@@ -117,7 +115,7 @@ namespace FilterLib.Filters.Blur
 
                     // First fill the window
                     int rSum = 0, gSum = 0, bSum = 0, n = 0;
-                    for (int y = 0; y < image.Height && n <= radiusY; ++y)
+                    for (int y = 0; y < image.Height && n <= RadiusY; ++y)
                     {
                         rSum += tmpCol[y * width_3];
                         gSum += tmpCol[y * width_3 + 1];
@@ -134,7 +132,7 @@ namespace FilterLib.Filters.Blur
                     {
                         int rowOffset = y * width_3;
                         // Add element to bottom
-                        if (y + radiusY < image.Height)
+                        if (y + RadiusY < image.Height)
                         {
                             rSum += tmpCol[rowOffset + radiusRowOffset];
                             gSum += tmpCol[rowOffset + radiusRowOffset + 1];
@@ -143,7 +141,7 @@ namespace FilterLib.Filters.Blur
                         }
 
                         // Remove an element from the top
-                        if (y - radiusY - 1 >= 0)
+                        if (y - RadiusY - 1 >= 0)
                         {
                             rSum -= tmpCol[rowOffset - radiusRowOffset - width_3];
                             gSum -= tmpCol[rowOffset - radiusRowOffset - width_3 + 1];

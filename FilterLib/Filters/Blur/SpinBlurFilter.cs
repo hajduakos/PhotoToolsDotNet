@@ -20,9 +20,6 @@ namespace FilterLib.Filters.Blur
         [FilterParam]
         public Size CenterY { get; set; }
 
-        private float angle;
-        private int samples;
-
         /// <summary>
         /// Blur angle [0;360].
         /// </summary>
@@ -31,12 +28,12 @@ namespace FilterLib.Filters.Blur
         [FilterParamMaxF(360)]
         public float Angle
         {
-            get { return angle; }
+            get;
             set
             {
-                angle = value;
-                while (angle > 360) angle -= 360;
-                while (angle < 0) angle += 360;
+                field = value;
+                if (field > 360) field %= 360;
+                while (field < 0) field += 360;
             }
         }
 
@@ -47,8 +44,8 @@ namespace FilterLib.Filters.Blur
         [FilterParamMin(2)]
         public int Samples
         {
-            get { return samples; }
-            set { samples = Math.Max(2, value); }
+            get;
+            set { field = Math.Max(2, value); }
         }
 
         /// <summary>
@@ -83,7 +80,7 @@ namespace FilterLib.Filters.Blur
             float cx = CenterX.ToAbsolute(image.Width);
             float cy = CenterY.ToAbsolute(image.Height);
             int width_3 = image.Width * 3;
-            float da = angle / (samples - 1);
+            float da = Angle / (Samples - 1);
             fixed (byte* newStart = image, oldStart = original)
             {
                 byte* newStart0 = newStart;
@@ -97,9 +94,9 @@ namespace FilterLib.Filters.Blur
                         // side of the pixel, and half on the other side
                         float r = 0, g = 0, b = 0;
                         int n = 0;
-                        for (int i = 0; i < samples; ++i)
+                        for (int i = 0; i < Samples; ++i)
                         {
-                            float a = (-angle / 2f + da * i) * MathF.PI / 180;
+                            float a = (-Angle / 2f + da * i) * MathF.PI / 180;
                             int x0 = (int)MathF.Round(MathF.Cos(a) * (x - cx) - MathF.Sin(a) * (y - cy) + cx);
                             int y0 = (int)MathF.Round(MathF.Sin(a) * (x - cx) + MathF.Cos(a) * (y - cy) + cy);
                             if (0 <= x0 && x0 < image.Width && 0 <= y0 && y0 < image.Height)

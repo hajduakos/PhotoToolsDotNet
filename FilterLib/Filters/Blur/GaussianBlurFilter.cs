@@ -8,8 +8,6 @@ namespace FilterLib.Filters.Blur
     [Filter("Blur by replacing each pixel with the Gaussian average of the surrounding rectangle of a given size.")]
     public sealed class GaussianBlurFilter : FilterInPlaceBase
     {
-        private int radius;
-
         /// <summary>
         /// Blur radius [0,...].
         /// </summary>
@@ -17,8 +15,8 @@ namespace FilterLib.Filters.Blur
         [FilterParamMin(0)]
         public int Radius
         {
-            get { return radius; }
-            set { radius = Math.Max(0, value); }
+            get;
+            set { field = Math.Max(0, value); }
         }
 
         /// <summary>
@@ -39,10 +37,10 @@ namespace FilterLib.Filters.Blur
             System.Diagnostics.Debug.Assert(image.Width == tmp.Width);
             int width_3 = image.Width * 3;
             // Calculate the kernel
-            float[] kernel = new float[radius * 2 + 1];
-            int r0 = -radius;
-            float sqrt2piR = 1f / (MathF.Sqrt(2 * MathF.PI) * radius);
-            float rsquare2 = 1f / (2 * radius * radius);
+            float[] kernel = new float[Radius * 2 + 1];
+            int r0 = -Radius;
+            float sqrt2piR = 1f / (MathF.Sqrt(2 * MathF.PI) * Radius);
+            float rsquare2 = 1f / (2 * Radius * Radius);
             float kernelSum = 0;
             for (int i = 0; i < kernel.Length; ++i)
             {
@@ -67,16 +65,16 @@ namespace FilterLib.Filters.Blur
                     {
                         int x_div3 = x / 3;
                         float rSum = 0, gSum = 0, bSum = 0;
-                        for (int r = -radius; r <= radius; ++r)
+                        for (int r = -Radius; r <= Radius; ++r)
                         {
                             // Determine index: if we are outside on the left/right, take leftmost/rightmost
                             int idx;
                             if (x_div3 + r < 0) idx = 0;
                             else if (x_div3 + r >= image.Width) idx = width_3 - 3;
                             else idx = x + r * 3;
-                            rSum += kernel[r + radius] * imgRow[idx];
-                            gSum += kernel[r + radius] * imgRow[idx + 1];
-                            bSum += kernel[r + radius] * imgRow[idx + 2];
+                            rSum += kernel[r + Radius] * imgRow[idx];
+                            gSum += kernel[r + Radius] * imgRow[idx + 1];
+                            bSum += kernel[r + Radius] * imgRow[idx + 2];
                         }
                         tmpRow[x] = (byte)rSum;
                         tmpRow[x + 1] = (byte)gSum;
@@ -98,7 +96,7 @@ namespace FilterLib.Filters.Blur
                     {
                         float rSum = 0, gSum = 0, bSum = 0;
                         int yOffset = y * width_3;
-                        for (int r = -radius; r <= radius; ++r)
+                        for (int r = -Radius; r <= Radius; ++r)
                         {
                             // Determine index: if we are outside on the top/bottom, take topmost/bottommost
                             int idx;
@@ -106,9 +104,9 @@ namespace FilterLib.Filters.Blur
                             else if (y + r >= image.Height) idx = (image.Height - 1) * width_3;
                             else idx = (y + r) * width_3;
 
-                            rSum += kernel[r + radius] * tmpCol[idx];
-                            gSum += kernel[r + radius] * tmpCol[idx + 1];
-                            bSum += kernel[r + radius] * tmpCol[idx + 2];
+                            rSum += kernel[r + Radius] * tmpCol[idx];
+                            gSum += kernel[r + Radius] * tmpCol[idx + 1];
+                            bSum += kernel[r + Radius] * tmpCol[idx + 2];
                         }
                         imgCol[yOffset] = (byte)rSum;
                         imgCol[yOffset + 1] = (byte)gSum;

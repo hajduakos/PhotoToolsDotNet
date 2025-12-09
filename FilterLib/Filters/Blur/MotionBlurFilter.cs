@@ -8,8 +8,6 @@ namespace FilterLib.Filters.Blur
     [Filter("Blur by replacing each pixel with the average calculated along a line.")]
     public sealed class MotionBlurFilter : FilterInPlaceBase
     {
-        private int length;
-
         /// <summary>
         /// Blur length [0;...].
         /// </summary>
@@ -17,8 +15,8 @@ namespace FilterLib.Filters.Blur
         [FilterParamMin(0)]
         public int Length
         {
-            get { return length; }
-            set { length = Math.Max(0, value); }
+            get;
+            set { field = Math.Max(0, value); }
         }
 
         /// <summary>
@@ -65,7 +63,7 @@ namespace FilterLib.Filters.Blur
                         float bSum = 0, gSum = 0, rSum = 0;
                         int n = 0;
                         // Iterate through each pixel of the line
-                        for (int k = -length; k <= length; ++k)
+                        for (int k = -Length; k <= Length; ++k)
                         {
                             int dx = (int)MathF.Round(k * cosAngle);
                             int dy = (int)MathF.Round(k * sinAngle);
