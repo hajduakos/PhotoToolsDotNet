@@ -12,8 +12,6 @@ namespace FilterLib.Filters.Mosaic
     {
         public enum PixelateMode { Average, MidPoint }
 
-        private int size;
-
         /// <summary>
         /// Pixel size [1;...].
         /// </summary>
@@ -21,8 +19,8 @@ namespace FilterLib.Filters.Mosaic
         [FilterParamMin(1)]
         public int Size
         {
-            get { return size; }
-            set { size = Math.Max(1, value); }
+            get;
+            set { field = Math.Max(1, value); }
         }
 
         /// <summary>
@@ -49,16 +47,16 @@ namespace FilterLib.Filters.Mosaic
             object reporterLock = new();
             int progress = 0;
             int width_3 = image.Width * 3;
-            int size_3 = size * 3;
+            int size_3 = Size * 3;
             fixed (byte* start = image)
             {
                 byte* start0 = start;
-                int yMax = image.Height / size;
-                if (yMax * size < image.Height) yMax++;
+                int yMax = image.Height / Size;
+                if (yMax * Size < image.Height) yMax++;
                 // Iterate through block rows
                 Parallel.For(0, yMax, y =>
                 {
-                    y *= size;
+                    y *= Size;
                     byte rNew, gNew, bNew;
                     // Iterate through block columns
                     for (int x = 0; x < width_3; x += size_3)
@@ -70,7 +68,7 @@ namespace FilterLib.Filters.Mosaic
                             case PixelateMode.Average:
                                 float rSum = 0, gSum = 0, bSum = 0;
                                 int n = 0;
-                                for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                                for (int ySub = 0; ySub < Size && y + ySub < image.Height; ++ySub)
                                 {
                                     row = start0 + ((y + ySub) * width_3);
                                     for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
@@ -86,8 +84,8 @@ namespace FilterLib.Filters.Mosaic
                                 bNew = (byte)(bSum / n);
                                 break;
                             case PixelateMode.MidPoint:
-                                row = start0 + (Math.Min(y + size / 2, image.Height - 1) * width_3);
-                                int xMid = Math.Min(x + (size / 2) * 3, width_3 - 3);
+                                row = start0 + (Math.Min(y + Size / 2, image.Height - 1) * width_3);
+                                int xMid = Math.Min(x + (Size / 2) * 3, width_3 - 3);
                                 rNew = row[xMid];
                                 gNew = row[xMid + 1];
                                 bNew = row[xMid + 2];
@@ -97,7 +95,7 @@ namespace FilterLib.Filters.Mosaic
                         }
 
                         // Fill block
-                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                        for (int ySub = 0; ySub < Size && y + ySub < image.Height; ++ySub)
                         {
                             row = start0 + ((y + ySub) * width_3);
                             for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)

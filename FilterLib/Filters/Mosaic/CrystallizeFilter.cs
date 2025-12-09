@@ -12,9 +12,6 @@ namespace FilterLib.Filters.Mosaic
     [Filter]
     public sealed class CrystallizeFilter : FilterInPlaceBase
     {
-        private int size;
-        private int averaging;
-
         /// <summary>
         /// Crystal size [1;...].
         /// </summary>
@@ -22,8 +19,8 @@ namespace FilterLib.Filters.Mosaic
         [FilterParamMin(1)]
         public int Size
         {
-            get { return size; }
-            set { size = Math.Max(1, value); }
+            get;
+            set { field = Math.Max(1, value); }
         }
 
         /// <summary>
@@ -34,8 +31,8 @@ namespace FilterLib.Filters.Mosaic
         [FilterParamMax(100)]
         public int Averaging
         {
-            get { return averaging; }
-            set { averaging = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -87,8 +84,8 @@ namespace FilterLib.Filters.Mosaic
             // First step: divide the image into a grid with the given size
             // and generate one crystal point in each square
             // Additional points required if the width/height is not dividible by the size
-            int crystalsX = image.Width / size + ((image.Width % size) == 0 ? 0 : 1);
-            int crystalsY = image.Height / size + ((image.Height % size) == 0 ? 0 : 1);
+            int crystalsX = image.Width / Size + ((image.Width % Size) == 0 ? 0 : 1);
+            int crystalsY = image.Height / Size + ((image.Height % Size) == 0 ? 0 : 1);
             Cpoint[,] crystalPts = new Cpoint[crystalsX, crystalsY];
             RandomPool rndp = new(crystalsX, Seed);
             Parallel.For(0, crystalsX, xSub =>
@@ -96,30 +93,30 @@ namespace FilterLib.Filters.Mosaic
                 Random rnd = rndp[xSub];
                 for (int ySub = 0; ySub < crystalsY; ++ySub)
                 {
-                    int cx = Math.Min(xSub * size + rnd.Next() % size, image.Width - 1);
-                    int cy = Math.Min(ySub * size + rnd.Next() % size, image.Height - 1);
+                    int cx = Math.Min(xSub * Size + rnd.Next() % Size, image.Width - 1);
+                    int cy = Math.Min(ySub * Size + rnd.Next() % Size, image.Height - 1);
                     crystalPts[xSub, ySub] = new Cpoint(cx, cy);
                 }
             });
 
             int width_3 = image.Width * 3;
-            int size_3 = size * 3;
-            float avg = averaging / 100.0f;
+            int size_3 = Size * 3;
+            float avg = Averaging / 100.0f;
             byte[,,] avgColors = new byte[crystalsX, crystalsY, 3];
             fixed (byte* start = image)
             {
                 byte* start0 = start;
-                int yMax = image.Height / size;
-                if (yMax * size < image.Height) yMax++;
+                int yMax = image.Height / Size;
+                if (yMax * Size < image.Height) yMax++;
                 // Second step: calculate avarege color of a square in the grid
                 Parallel.For(0, yMax, y =>
                 {
-                    y *= size;
+                    y *= Size;
                     for (int x = 0; x < width_3; x += size_3)
                     {
                         float rSum = 0, gSum = 0, bSum = 0;
                         int n = 0;
-                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                        for (int ySub = 0; ySub < Size && y + ySub < image.Height; ++ySub)
                         {
                             for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
                             {
@@ -130,10 +127,10 @@ namespace FilterLib.Filters.Mosaic
                             }
                         }
                         // Set average color as a combination of the average color and the representative point
-                        Cpoint pnt = crystalPts[x / size_3, y / size];
-                        avgColors[x / size_3, y / size, 0] = (byte)(avg * rSum / n + (1 - avg) * start0[pnt.y * width_3 + pnt.x * 3]);
-                        avgColors[x / size_3, y / size, 1] = (byte)(avg * gSum / n + (1 - avg) * start0[pnt.y * width_3 + pnt.x * 3 + 1]);
-                        avgColors[x / size_3, y / size, 2] = (byte)(avg * bSum / n + (1 - avg) * start0[pnt.y * width_3 + pnt.x * 3 + 2]);
+                        Cpoint pnt = crystalPts[x / size_3, y / Size];
+                        avgColors[x / size_3, y / Size, 0] = (byte)(avg * rSum / n + (1 - avg) * start0[pnt.y * width_3 + pnt.x * 3]);
+                        avgColors[x / size_3, y / Size, 1] = (byte)(avg * gSum / n + (1 - avg) * start0[pnt.y * width_3 + pnt.x * 3 + 1]);
+                        avgColors[x / size_3, y / Size, 2] = (byte)(avg * bSum / n + (1 - avg) * start0[pnt.y * width_3 + pnt.x * 3 + 2]);
                     }
                     if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, yMax * 2);
                 });
@@ -146,8 +143,8 @@ namespace FilterLib.Filters.Mosaic
                     for (int x = 0; x < width_3; x += 3)
                     {
                         int x_div3 = x / 3;
-                        int blockX = x_div3 / size;
-                        int blockY = y / size;
+                        int blockX = x_div3 / Size;
+                        int blockY = y / Size;
                         // Optimization: closest point must belong to the surrounding 5x5 square of blocks
                         Cpoint minPoint = crystalPts[blockX, blockY];
                         int minDistance = minPoint.Dist(x_div3, y);
@@ -166,7 +163,7 @@ namespace FilterLib.Filters.Mosaic
 
                         // Set the same color as the closest point color
                         for (int i = 0; i < 3; i++)
-                            start0[y * width_3 + x + i] = avgColors[minPoint.x / size, minPoint.y / size, i];
+                            start0[y * width_3 + x + i] = avgColors[minPoint.x / Size, minPoint.y / Size, i];
                     }
                     if (reporter != null) lock (reporterLock) reporter.Report(image.Height + ++progress, 0, 2 * image.Height);
                 });

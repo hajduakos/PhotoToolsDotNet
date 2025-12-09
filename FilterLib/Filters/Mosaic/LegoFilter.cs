@@ -11,8 +11,6 @@ namespace FilterLib.Filters.Mosaic
     [Filter]
     public sealed class LegoFilter : FilterInPlaceBase
     {
-        private int size;
-
         /// <summary>
         /// Block size property [8;...].
         /// </summary>
@@ -20,8 +18,8 @@ namespace FilterLib.Filters.Mosaic
         [FilterParamMin(8)]
         public int Size
         {
-            get { return size; }
-            set { size = Math.Max(8, value); }
+            get;
+            set { field = Math.Max(8, value); }
         }
 
         /// <summary>
@@ -48,25 +46,25 @@ namespace FilterLib.Filters.Mosaic
             object reporterLock = new();
             int progress = 0;
             int width_3 = image.Width * 3;
-            int size_3 = size * 3;
+            int size_3 = Size * 3;
             (float, byte)[,] oc = GetOuterCircle();
             float[,] ic = GetInnerCircle();
             fixed (byte* start = image)
             {
                 byte* start0 = start;
                 // Iterate through block rows
-                int yMax = image.Height / size;
-                if (yMax * size < image.Height) yMax++;
+                int yMax = image.Height / Size;
+                if (yMax * Size < image.Height) yMax++;
                 Parallel.For(0, yMax, y =>
                 {
-                    y *= size;
+                    y *= Size;
                     // Iterate through block columns
                     for (int x = 0; x < width_3; x += size_3)
                     {
                         // Calculate average color in block
                         float rSum = 0, gSum = 0, bSum = 0;
                         int n = 0;
-                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                        for (int ySub = 0; ySub < Size && y + ySub < image.Height; ++ySub)
                         {
                             byte* row = start0 + ((y + ySub) * width_3);
                             for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
@@ -82,7 +80,7 @@ namespace FilterLib.Filters.Mosaic
                         byte bAvg = (bSum / n).ClampToByte();
 
                         // Use average color as basis and add outer circle on top of that
-                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                        for (int ySub = 0; ySub < Size && y + ySub < image.Height; ++ySub)
                         {
                             byte* row = start0 + ((y + ySub) * width_3);
                             for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
@@ -95,7 +93,7 @@ namespace FilterLib.Filters.Mosaic
                         }
 
                         // Fill inner circle with average color
-                        for (int ySub = 0; ySub < size && y + ySub < image.Height; ++ySub)
+                        for (int ySub = 0; ySub < Size && y + ySub < image.Height; ++ySub)
                         {
                             byte* row = start0 + ((y + ySub) * width_3);
                             for (int xSub = 0; xSub < size_3 && x + xSub < width_3; xSub += 3)
@@ -144,7 +142,7 @@ namespace FilterLib.Filters.Mosaic
             int bottomHalfFadeLength = Size / 4;
             int bottomHalfStart = Size / 2 + 1;
             float center = Size / 2f;
-            int half = size % 2 == 0 ? size / 2 : size / 2 + 1;
+            int half = Size % 2 == 0 ? Size / 2 : Size / 2 + 1;
 
             // Calculate top half
             for (int x = 0; x < half; x++)
@@ -202,7 +200,7 @@ namespace FilterLib.Filters.Mosaic
             float samplingDelta = nSamples == 1 ? 0 : 1f / (nSamples - 1);
             float radius_squared = MathF.Pow(Size / 4f, 2);
             float center = Size / 2f;
-            int half = size % 2 == 0 ? size / 2 : size / 2 + 1;
+            int half = Size % 2 == 0 ? Size / 2 : Size / 2 + 1;
 
             // Calculate top half
             for (int x = 0; x < half; x++)
