@@ -12,9 +12,6 @@ namespace FilterLib.Filters.Other
     [Filter]
     public sealed class EquirectangularToStereographicFilter : FilterBase
     {
-        private float aov;
-        private float spin;
-
         /// <summary>
         /// Angle of view [0;180[
         /// </summary>
@@ -23,8 +20,8 @@ namespace FilterLib.Filters.Other
         [FilterParamMaxF(179.999f)]
         public float AOV
         {
-            get { return aov; }
-            set { aov = value.Clamp(0, 179.999f); }
+            get;
+            set { field = value.Clamp(0, 179.999f); }
         }
 
         /// <summary>
@@ -35,12 +32,12 @@ namespace FilterLib.Filters.Other
         [FilterParamMaxF(360)]
         public float Spin
         {
-            get { return spin; }
+            get;
             set
             {
-                spin = value;
-                while (spin > 360) spin -= 360;
-                while (spin < 0) spin += 360;
+                field = value;
+                while (field > 360) field -= 360;
+                while (field < 0) field += 360;
             }
         }
 
@@ -76,7 +73,7 @@ namespace FilterLib.Filters.Other
             int progress = 0;
             int newSize = Math.Min(image.Width, image.Height);
             Image result = new(newSize, newSize);
-            float radius = newSize / 4f / MathF.Tan(aov * MathF.PI / 360f); // Radius of the projection sphere
+            float radius = newSize / 4f / MathF.Tan(AOV * MathF.PI / 360f); // Radius of the projection sphere
             float radiusMult2 = radius * 2;
             int newSize_div2 = newSize / 2;
             int newSize_3 = newSize * 3;
@@ -98,7 +95,7 @@ namespace FilterLib.Filters.Other
 
                         // Get latitude and longitude on the sphere
                         float lat = 180 - 2 * MathF.Atan2(MathF.Sqrt(xCorr * xCorr + yCorr * yCorr), radiusMult2) * 180 / MathF.PI;
-                        float lng = MathF.Atan2(yCorr, xCorr) * 180 / MathF.PI + 180 + spin;
+                        float lng = MathF.Atan2(yCorr, xCorr) * 180 / MathF.PI + 180 + Spin;
                         if (lng > 360) lng -= 360;
 
                         float xOrg = lng * xMult;

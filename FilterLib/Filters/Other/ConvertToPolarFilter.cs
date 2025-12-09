@@ -10,8 +10,6 @@ namespace FilterLib.Filters.Other
     [Filter]
     public sealed class ConvertToPolarFilter : FilterInPlaceBase
     {
-        private float phase;
-
         /// <summary>
         /// Phase [0;360].
         /// </summary>
@@ -20,12 +18,12 @@ namespace FilterLib.Filters.Other
         [FilterParamMaxF(360)]
         public float Phase
         {
-            get { return phase; }
+            get;
             set
             {
-                phase = value;
-                while (phase > 360) phase -= 360;
-                while (phase < 0) phase += 360;
+                field = value;
+                while (field > 360) field -= 360;
+                while (field < 0) field += 360;
             }
         }
 
@@ -65,7 +63,7 @@ namespace FilterLib.Filters.Other
                         float yCorr = halfHeight - y;
                         // Get radius and angle
                         float r = MathF.Sqrt(xCorr * xCorr + yCorr * yCorr);
-                        float fi = (-MathF.Atan2(xCorr, yCorr) + MathF.PI + phase / 180f * MathF.PI);
+                        float fi = (-MathF.Atan2(xCorr, yCorr) + MathF.PI + Phase / 180f * MathF.PI);
 
                         if (fi >= 2 * MathF.PI) fi -= 2 * MathF.PI;
 
