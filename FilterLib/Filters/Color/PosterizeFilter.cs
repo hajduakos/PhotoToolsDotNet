@@ -10,7 +10,6 @@ namespace FilterLib.Filters.Color
     [Filter]
     public sealed class PosterizeFilter : PerComponentFilterBase
     {
-        private int levels;
         private float div;
 
         /// <summary>
@@ -21,11 +20,11 @@ namespace FilterLib.Filters.Color
         [FilterParamMax(256)]
         public int Levels
         {
-            get { return levels; }
+            get;
             set
             {
-                levels = value.Clamp(2, 256);
-                div = 255f / (levels - 1);
+                field = value.Clamp(2, 256);
+                div = 255f / (field - 1);
             }
         }
 

@@ -16,8 +16,6 @@ namespace FilterLib.Filters.Color
     [Filter]
     public sealed class OctreeQuantizerFilter : FilterInPlaceBase
     {
-        private int levels;
-
         /// <summary>
         /// Number of colors in the resulting palette.
         /// </summary>
@@ -26,8 +24,8 @@ namespace FilterLib.Filters.Color
         [FilterParamMax(256 * 256 * 256)]
         public int Levels
         {
-            get { return levels; }
-            set { levels = value.Clamp(1, 256 * 256 * 256); }
+            get;
+            set { field = value.Clamp(1, 256 * 256 * 256); }
         }
 
         /// <summary>

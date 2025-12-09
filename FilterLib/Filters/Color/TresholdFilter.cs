@@ -9,8 +9,6 @@ namespace FilterLib.Filters.Color
     [Filter]
     public sealed class TresholdFilter : PerPixelFilterBase
     {
-        private int treshold;
-
         /// <summary>
         /// Treshold value [0;255].
         /// </summary>
@@ -19,8 +17,8 @@ namespace FilterLib.Filters.Color
         [FilterParamMax(255)]
         public int Treshold
         {
-            get { return treshold; }
-            set { treshold = value.ClampToByte(); }
+            get;
+            set { field = value.ClampToByte(); }
         }
 
         /// <summary>
@@ -38,7 +36,7 @@ namespace FilterLib.Filters.Color
             base.ApplyStart();
             // Fill cache
             map = new byte[256];
-            for (int i = 0; i < 256; ++i) map[i] = (byte)(i < treshold ? 0 : 255);
+            for (int i = 0; i < 256; ++i) map[i] = (byte)(i < Treshold ? 0 : 255);
         }
 
         /// <inheritdoc/>

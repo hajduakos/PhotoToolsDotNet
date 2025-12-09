@@ -13,8 +13,6 @@ namespace FilterLib.Filters.Color
     [Filter]
     public sealed class OrtonFilter : FilterInPlaceBase
     {
-        private int strength, radius;
-
         /// <summary>
         /// Strength [0;100].
         /// </summary>
@@ -23,8 +21,8 @@ namespace FilterLib.Filters.Color
         [FilterParamMax(100)]
         public int Strength
         {
-            get { return strength; }
-            set { strength = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -34,8 +32,8 @@ namespace FilterLib.Filters.Color
         [FilterParamMin(0)]
         public int Radius
         {
-            get { return radius; }
-            set { radius = System.Math.Max(0, value); }
+            get;
+            set { field = System.Math.Max(0, value); }
         }
 
         /// <summary>
@@ -54,9 +52,9 @@ namespace FilterLib.Filters.Color
         {
             reporter?.Start();
             Image screened = new ScreenBlend(100).Apply(image, image, new SubReporter(reporter, 0, 25, 0, 100));
-            Image blurred = new GaussianBlurFilter(radius).Apply(screened, new SubReporter(reporter, 25, 50, 0, 100));
+            Image blurred = new GaussianBlurFilter(Radius).Apply(screened, new SubReporter(reporter, 25, 50, 0, 100));
             Image multiplied = new MultiplyBlend(100).Apply(screened, blurred, new SubReporter(reporter, 50, 75, 0, 100));
-            new NormalBlend(strength).ApplyInPlace(image, multiplied, new SubReporter(reporter, 75, 100, 0, 100));
+            new NormalBlend(Strength).ApplyInPlace(image, multiplied, new SubReporter(reporter, 75, 100, 0, 100));
             reporter?.Done();
         }
     }

@@ -13,8 +13,6 @@ namespace FilterLib.Filters.Color
     [Filter]
     public sealed class VintageFilter : FilterInPlaceBase
     {
-        private int strength;
-
         /// <summary>
         /// Strength [0;100].
         /// </summary>
@@ -23,8 +21,8 @@ namespace FilterLib.Filters.Color
         [FilterParamMax(100)]
         public int Strength
         {
-            get { return strength; }
-            set { strength = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -44,8 +42,8 @@ namespace FilterLib.Filters.Color
             new MultiplyBlend(50).ApplyInPlace(image, sepia);
             new ContrastFilter(15).ApplyInPlace(image, new SubReporter(reporter, 40, 60, 0, 100));
             new ColorHSLFilter(0, 5, 0).ApplyInPlace(image, new SubReporter(reporter, 60, 80, 0, 100));
-            if (strength != 100)
-                new NormalBlend(100 - strength).ApplyInPlace(image, original, new SubReporter(reporter, 80, 100, 0, 100));
+            if (Strength != 100)
+                new NormalBlend(100 - Strength).ApplyInPlace(image, original, new SubReporter(reporter, 80, 100, 0, 100));
 
             reporter?.Done();
         }

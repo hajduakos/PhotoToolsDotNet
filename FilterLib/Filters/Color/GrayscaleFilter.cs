@@ -8,8 +8,6 @@ namespace FilterLib.Filters.Color
     [Filter]
     public sealed class GrayscaleFilter : PerPixelFilterBase
     {
-        private int red, green, blue;
-
         /// <summary>
         /// Red ratio [0;100]
         /// </summary>
@@ -18,8 +16,8 @@ namespace FilterLib.Filters.Color
         [FilterParamMax(100)]
         public int Red
         {
-            get { return red; }
-            set { red = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -30,8 +28,8 @@ namespace FilterLib.Filters.Color
         [FilterParamMax(100)]
         public int Green
         {
-            get { return green; }
-            set { green = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -42,8 +40,8 @@ namespace FilterLib.Filters.Color
         [FilterParamMax(100)]
         public int Blue
         {
-            get { return blue; }
-            set { blue = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
@@ -65,9 +63,9 @@ namespace FilterLib.Filters.Color
         protected override void ApplyStart()
         {
             base.ApplyStart();
-            redF = red / 100f;
-            greenF = green / 100f;
-            blueF = blue / 100f;
+            redF = Red / 100f;
+            greenF = Green / 100f;
+            blueF = Blue / 100f;
         }
 
         /// <inheritdoc/>
