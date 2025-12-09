@@ -12,8 +12,6 @@ namespace FilterLib.Filters.Transform
     [Filter]
     public sealed class SkewFilter : FilterBase
     {
-        private float angle;
-
         /// <summary>
         /// Skew angle in degrees ]-90;90[.
         /// </summary>
@@ -22,8 +20,8 @@ namespace FilterLib.Filters.Transform
         [FilterParamMaxF(90)]
         public float Angle
         {
-            get { return angle; }
-            set { angle = value.Clamp(-89.99f, 89.99f); }
+            get;
+            set { field = value.Clamp(-89.99f, 89.99f); }
         }
 
         /// <summary>
