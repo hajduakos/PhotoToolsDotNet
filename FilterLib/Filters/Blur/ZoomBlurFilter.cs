@@ -5,11 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur
 {
-    /// <summary>
-    /// Create a blur effect as if the camera was zooming: for each pixel, sample pixels along
-    /// the line connecting the pixel to the center point of the blur.
-    /// </summary>
-    [Filter]
+    [Filter("Blur by replacing each pixel with the average calculated along the line connecting the point to the center.")]
     public sealed class ZoomBlurFilter : FilterInPlaceBase
     {
         private int amount;

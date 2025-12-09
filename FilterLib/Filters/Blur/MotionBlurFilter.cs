@@ -5,11 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur
 {
-    /// <summary>
-    /// Apply motion blur by replacing each pixel with the averag
-    /// calculated along a line with a given angle and length.
-    /// </summary>
-    [Filter]
+    [Filter("Blur by replacing each pixel with the average calculated along a line.")]
     public sealed class MotionBlurFilter : FilterInPlaceBase
     {
         private int length;

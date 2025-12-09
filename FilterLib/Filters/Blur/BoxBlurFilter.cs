@@ -3,11 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur
 {
-    /// <summary>
-    /// Apply blur by replacing each pixel with the average weighted
-    /// uniformly within a given horizontal and vertical radius.
-    /// </summary>
-    [Filter]
+    [Filter("Blur by replacing each pixel with the average of the surrounding rectangle of a given size.")]
     public sealed class BoxBlurFilter : FilterInPlaceBase
     {
         private int radiusX, radiusY;

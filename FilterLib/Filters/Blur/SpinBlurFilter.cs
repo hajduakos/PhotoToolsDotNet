@@ -5,11 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur
 {
-    /// <summary>
-    /// Create a blur effect as if the camera was spinning: for each pixel, sample pixels along
-    /// an arc around the center point of the blur.
-    /// </summary>
-    [Filter]
+    [Filter("Blur by replacing each pixel with the average calculated along an arc.")]
     public sealed class SpinBlurFilter : FilterInPlaceBase
     {
         /// <summary>
