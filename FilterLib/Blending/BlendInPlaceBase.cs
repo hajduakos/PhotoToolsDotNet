@@ -7,13 +7,11 @@ namespace FilterLib.Blending
     /// </summary>
     public abstract class BlendInPlaceBase : IBlendInPlace
     {
-        private int opacity;
-
         /// <inheritdoc/>
         public int Opacity
         {
-            get { return opacity; }
-            set { opacity = value.Clamp(0, 100); }
+            get;
+            set { field = value.Clamp(0, 100); }
         }
 
         /// <summary>
