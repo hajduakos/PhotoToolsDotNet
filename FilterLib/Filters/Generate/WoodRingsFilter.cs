@@ -11,9 +11,6 @@ namespace FilterLib.Filters.Generate
     [Filter]
     public sealed class WoodRingsFilter : GeneratorBase
     {
-        private int rings;
-        private float twist;
-
         /// <summary>
         /// Twist factor.
         /// </summary>
@@ -21,8 +18,8 @@ namespace FilterLib.Filters.Generate
         [FilterParamMinF(0)]
         public float Twist
         {
-            get { return twist; }
-            set { twist = Math.Max(0, value); }
+            get;
+            set { field = Math.Max(0, value); }
         }
 
         /// <summary>
@@ -32,8 +29,8 @@ namespace FilterLib.Filters.Generate
         [FilterParamMin(0)]
         public int Rings
         {
-            get { return rings; }
-            set { rings = Math.Max(0, value); }
+            get;
+            set { field = Math.Max(0, value); }
         }
 
         /// <summary>
@@ -56,7 +53,7 @@ namespace FilterLib.Filters.Generate
             reporter?.Start();
             object reporterLock = new();
             int progress = 0;
-            float sin_mult = MathF.PI * 2 * rings;
+            float sin_mult = MathF.PI * 2 * Rings;
             reporter?.Report(0, 0, 2 * image.Height);
             float[,] turb = GenerateTurbulence(image.Width, image.Height);
             reporter?.Report(image.Height, 0, 2 * image.Height);
@@ -72,7 +69,7 @@ namespace FilterLib.Filters.Generate
                         float y0 = (y - image.Height / 2) / (float)image.Height;
 
                         ptr[0] = ptr[1] = ptr[2] =
-                            (byte)(255 * Math.Abs(MathF.Sin(sin_mult * (MathF.Sqrt(x0 * x0 + y0 * y0) + twist * turb[x, y]))));
+                            (byte)(255 * Math.Abs(MathF.Sin(sin_mult * (MathF.Sqrt(x0 * x0 + y0 * y0) + Twist * turb[x, y]))));
                         ptr += 3;
                     }
                     if (reporter != null) lock (reporterLock) reporter.Report(image.Height + ++progress, 0, 2 * image.Height);

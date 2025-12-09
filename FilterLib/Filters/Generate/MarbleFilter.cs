@@ -11,9 +11,6 @@ namespace FilterLib.Filters.Generate
     [Filter]
     public sealed class MarbleFilter : GeneratorBase
     {
-        private int horizLines, vertLines;
-        private float twist;
-
         /// <summary>
         /// Number of horizontal lines.
         /// </summary>
@@ -21,8 +18,8 @@ namespace FilterLib.Filters.Generate
         [FilterParamMin(0)]
         public int HorizontalLines
         {
-            get { return horizLines; }
-            set { horizLines = Math.Max(0, value); }
+            get;
+            set { field = Math.Max(0, value); }
         }
 
         /// <summary>
@@ -32,8 +29,8 @@ namespace FilterLib.Filters.Generate
         [FilterParamMin(0)]
         public int VerticalLines
         {
-            get { return vertLines; }
-            set { vertLines = Math.Max(0, value); }
+            get;
+            set { field = Math.Max(0, value); }
         }
 
         /// <summary>
@@ -43,8 +40,8 @@ namespace FilterLib.Filters.Generate
         [FilterParamMinF(0)]
         public float Twist
         {
-            get { return twist; }
-            set { twist = Math.Max(0, value); }
+            get;
+            set { field = Math.Max(0, value); }
         }
 
         /// <summary>
@@ -69,8 +66,8 @@ namespace FilterLib.Filters.Generate
             reporter?.Start();
             object reporterLock = new();
             int progress = 0;
-            float xMul = horizLines / (float)image.Width;
-            float yMul = vertLines / (float)image.Height;
+            float xMul = HorizontalLines / (float)image.Width;
+            float yMul = VerticalLines / (float)image.Height;
             reporter?.Report(0, 0, 2 * image.Height);
             float[,] turb = GenerateTurbulence(image.Width, image.Height);
             reporter?.Report(image.Height, 0, 2 * image.Height);
@@ -84,7 +81,7 @@ namespace FilterLib.Filters.Generate
                     for (int x = 0; x < image.Width; ++x)
                     {
                         ptr[0] = ptr[1] = ptr[2] =
-                            (byte)(255 * Math.Abs(MathF.Sin(MathF.PI * (x * xMul + y * yMul + twist * turb[x, y]))));
+                            (byte)(255 * Math.Abs(MathF.Sin(MathF.PI * (x * xMul + y * yMul + Twist * turb[x, y]))));
                         ptr += 3;
                     }
                     if (reporter != null) lock (reporterLock) reporter.Report(image.Height + ++progress, 0, 2 * image.Height);

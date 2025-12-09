@@ -12,8 +12,6 @@ namespace FilterLib.Filters.Generate
     {
         private const int MAX_THREADS = 128;
 
-        private int iterations;
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -32,8 +30,8 @@ namespace FilterLib.Filters.Generate
         [FilterParamMin(1)]
         public int Iterations
         {
-            get { return iterations; }
-            set { iterations = Math.Max(1, value); }
+            get;
+            set { field = Math.Max(1, value); }
         }
 
         /// <summary>
@@ -50,7 +48,7 @@ namespace FilterLib.Filters.Generate
         /// <returns>Random turbulence map</returns>
         protected float[,] GenerateTurbulence(int width, int height)
         {
-            int pow = 1 << iterations;
+            int pow = 1 << Iterations;
             float[,] noise = new float[width, height];
             float[,] turbulence = new float[width, height];
             int threads = Math.Min(width, MAX_THREADS);
