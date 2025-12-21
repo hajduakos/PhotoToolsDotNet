@@ -5,10 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Border
 {
-    /// <summary>
-    /// Add an ellipse shaped vignette that gradually ades off towards the center.
-    /// </summary>
-    [Filter]
+    [Filter("Ellipse shaped vignette that gradually ades off towards the center.")]
     public sealed class VignetteFilter : FilterInPlaceBase
     {
 

@@ -2,10 +2,7 @@
 
 namespace FilterLib.Filters.Border
 {
-    /// <summary>
-    /// Add a border using an other image.
-    /// </summary>
-    [Filter]
+    [Filter("Add a border that uses another image as a repeating pattern.")]
     public sealed class PatternBorderFilter : BorderFilterBase
     {
         /// <summary>

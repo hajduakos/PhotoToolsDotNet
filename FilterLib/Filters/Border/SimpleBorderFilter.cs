@@ -2,10 +2,7 @@
 
 namespace FilterLib.Filters.Border
 {
-    /// <summary>
-    /// Add a border using a solid color.
-    /// </summary>
-    [Filter]
+    [Filter("Border with a uniform color.")]
     public sealed class SimpleBorderFilter : BorderFilterBase
     {
         /// <summary>
