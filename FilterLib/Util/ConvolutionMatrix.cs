@@ -10,8 +10,17 @@ namespace FilterLib.Util;
 /// and a bias. The center of the matrix is assumed to be the element
 /// at index floor(Width/2), floor(Height/2).
 /// </summary>
-public readonly struct ConvolutionMatrix
+public readonly partial struct ConvolutionMatrix
 {
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex WhitespaceRegex();
+
+    [GeneratedRegex(@"\[(.*)\]\s*/\s*(-?\d+)\s*\+\s*(-?\d+)")]
+    private static partial Regex MatrixRegex();
+
+    [GeneratedRegex(@"\[([^\]]+)\]")]
+    private static partial Regex ColumnRegex();
+
     private readonly int[,] weights;
 
     /// <summary>
@@ -66,11 +75,11 @@ public readonly struct ConvolutionMatrix
     /// <param name="str">String to be parsed</param>
     public ConvolutionMatrix(string str)
     {
-        str = Regex.Replace(str, @"\s+", " ").Trim();
-        Match match = Regex.Match(str, @"\[(.*)\]\s*\/\s*(-?\d+)\s*\+\s*(-?\d+)");
+        str = WhitespaceRegex().Replace(str, " ").Trim();
+        Match match = MatrixRegex().Match(str);
         if (!match.Success) throw new ArgumentException("String does not match expected format");
         List<List<int>> mx = [];
-        Match subMatch = Regex.Match(match.Groups[1].Value, @"\[([^\]]+)\]");
+        Match subMatch = ColumnRegex().Match(match.Groups[1].Value);
         while (subMatch.Success)
         {
             List<int> col = [];

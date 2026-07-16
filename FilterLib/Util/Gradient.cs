@@ -8,8 +8,11 @@ namespace FilterLib.Util;
 /// <summary>
 /// Linear gradient with multiple stops.
 /// </summary>
-public sealed class Gradient
+public sealed partial class Gradient
 {
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex WhitespaceRegex();
+
     private readonly List<RGB> colors;
     private readonly List<float> stops;
 
@@ -50,7 +53,7 @@ public sealed class Gradient
     {
         colors = new List<RGB>();
         stops = new List<float>();
-        str = Regex.Replace(str, @"\s+", " ").Trim();
+        str = WhitespaceRegex().Replace(str, " ").Trim();
         string[] tokens = str.Split(',');
         if (tokens.Length < 2) throw new FormatException("Expected at least two components.");
         foreach (string comp in tokens)
