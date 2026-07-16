@@ -4,121 +4,120 @@ using Math = System.Math;
 using Parallel = System.Threading.Tasks.Parallel;
 using Random = System.Random;
 
-namespace FilterLib.Filters.Noise
+namespace FilterLib.Filters.Noise;
+
+[Filter("Add random uniform noise to the image, either monochrome or independently per color channel.")]
+public sealed class AddNoiseFilter : FilterInPlaceBase
 {
-    [Filter("Add random uniform noise to the image, either monochrome or independently per color channel.")]
-    public sealed class AddNoiseFilter : FilterInPlaceBase
+    private const int MAX_THREADS = 128;
+
+    /// <summary>
+    /// Possible noise types.
+    /// </summary>
+    public enum NoiseType { Monochrome, Color }
+
+    /// <summary>
+    /// Intensity of the noise [0;1000].
+    /// </summary>
+    [FilterParam]
+    [FilterParamMin(0)]
+    [FilterParamMax(1000)]
+    public int Intensity
     {
-        private const int MAX_THREADS = 128;
+        get;
+        set { field = value.Clamp(0, 1000); }
+    }
 
-        /// <summary>
-        /// Possible noise types.
-        /// </summary>
-        public enum NoiseType { Monochrome, Color }
+    /// <summary>
+    /// Strength of the noise [0;255].
+    /// </summary>
+    [FilterParam]
+    [FilterParamMin(0)]
+    [FilterParamMax(255)]
+    public int Strength
+    {
+        get;
+        set { field = value.ClampToByte(); }
+    }
 
-        /// <summary>
-        /// Intensity of the noise [0;1000].
-        /// </summary>
-        [FilterParam]
-        [FilterParamMin(0)]
-        [FilterParamMax(1000)]
-        public int Intensity
+    /// <summary>
+    /// Type of noise.
+    /// </summary>
+    [FilterParam]
+    public NoiseType Type { get; set; }
+
+    /// <summary>
+    /// Random number generator seed.
+    /// </summary>
+    [FilterParam]
+    public int Seed { get; set; }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="intensity">Intensity of the noise [0;1000]</param>
+    /// <param name="strength">Strength of the noise [0;255]</param>
+    /// <param name="type">Type of noise</param>
+    /// <param name="seed">Random number generator seed</param>
+    public AddNoiseFilter(int intensity = 0, int strength = 0, NoiseType type = NoiseType.Color, int seed = 0)
+    {
+        Intensity = intensity;
+        Strength = strength;
+        Type = type;
+        Seed = seed;
+    }
+
+    /// <inheritdoc/>
+    public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
+    {
+        reporter?.Start();
+        object reporterLock = new();
+        int progress = 0;
+        int threads = Math.Min(image.Height, MAX_THREADS);
+        int threadSize = image.Height / threads;
+        RandomPool rndp = new(threads, Seed);
+        fixed (byte* start = image)
         {
-            get;
-            set { field = value.Clamp(0, 1000); }
-        }
+            byte* start0 = start;
 
-        /// <summary>
-        /// Strength of the noise [0;255].
-        /// </summary>
-        [FilterParam]
-        [FilterParamMin(0)]
-        [FilterParamMax(255)]
-        public int Strength
-        {
-            get;
-            set { field = value.ClampToByte(); }
-        }
-
-        /// <summary>
-        /// Type of noise.
-        /// </summary>
-        [FilterParam]
-        public NoiseType Type { get; set; }
-
-        /// <summary>
-        /// Random number generator seed.
-        /// </summary>
-        [FilterParam]
-        public int Seed { get; set; }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="intensity">Intensity of the noise [0;1000]</param>
-        /// <param name="strength">Strength of the noise [0;255]</param>
-        /// <param name="type">Type of noise</param>
-        /// <param name="seed">Random number generator seed</param>
-        public AddNoiseFilter(int intensity = 0, int strength = 0, NoiseType type = NoiseType.Color, int seed = 0)
-        {
-            Intensity = intensity;
-            Strength = strength;
-            Type = type;
-            Seed = seed;
-        }
-
-        /// <inheritdoc/>
-        public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
-        {
-            reporter?.Start();
-            object reporterLock = new();
-            int progress = 0;
-            int threads = Math.Min(image.Height, MAX_THREADS);
-            int threadSize = image.Height / threads;
-            RandomPool rndp = new(threads, Seed);
-            fixed (byte* start = image)
+            Parallel.For(0, threads, i =>
             {
-                byte* start0 = start;
-
-                Parallel.For(0, threads, i =>
+                int yStart = threadSize * i;
+                int yEnd = (i == threads - 1) ? image.Height : yStart + threadSize;
+                byte* ptr = start0 + yStart * image.Width * 3;
+                Random rnd = rndp[i];
+                int rn, gn, bn;
+                for (int y = yStart; y < yEnd; ++y)
                 {
-                    int yStart = threadSize * i;
-                    int yEnd = (i == threads - 1) ? image.Height : yStart + threadSize;
-                    byte* ptr = start0 + yStart * image.Width * 3;
-                    Random rnd = rndp[i];
-                    int rn, gn, bn;
-                    for (int y = yStart; y < yEnd; ++y)
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        for (int x = 0; x < image.Width; ++x)
+                        // Decide to add noise to this pixel or not
+                        if (rnd.Next(1000) < Intensity)
                         {
-                            // Decide to add noise to this pixel or not
-                            if (rnd.Next(1000) < Intensity)
+                            if (Type == NoiseType.Monochrome) // Monochrome noise -> same noise added to each channel
                             {
-                                if (Type == NoiseType.Monochrome) // Monochrome noise -> same noise added to each channel
-                                {
-                                    int noise = (int)((rnd.NextSingle() * 2 - 1) * Strength);
-                                    rn = ptr[0] + noise;
-                                    gn = ptr[1] + noise;
-                                    bn = ptr[2] + noise;
-                                }
-                                else // Color noise -> separate values added to each channel
-                                {
-                                    rn = ptr[0] + (int)((rnd.NextSingle() * 2 - 1) * Strength);
-                                    gn = ptr[1] + (int)((rnd.NextSingle() * 2 - 1) * Strength);
-                                    bn = ptr[2] + (int)((rnd.NextSingle() * 2 - 1) * Strength);
-                                }
-                                // Overwrite old values
-                                ptr[0] = rn.ClampToByte();
-                                ptr[1] = gn.ClampToByte();
-                                ptr[2] = bn.ClampToByte();
+                                int noise = (int)((rnd.NextSingle() * 2 - 1) * Strength);
+                                rn = ptr[0] + noise;
+                                gn = ptr[1] + noise;
+                                bn = ptr[2] + noise;
                             }
-                            ptr += 3;
+                            else // Color noise -> separate values added to each channel
+                            {
+                                rn = ptr[0] + (int)((rnd.NextSingle() * 2 - 1) * Strength);
+                                gn = ptr[1] + (int)((rnd.NextSingle() * 2 - 1) * Strength);
+                                bn = ptr[2] + (int)((rnd.NextSingle() * 2 - 1) * Strength);
+                            }
+                            // Overwrite old values
+                            ptr[0] = rn.ClampToByte();
+                            ptr[1] = gn.ClampToByte();
+                            ptr[2] = bn.ClampToByte();
                         }
+                        ptr += 3;
                     }
-                    if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, threads);
-                });
-            }
-            reporter?.Done();
+                }
+                if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, threads);
+            });
         }
+        reporter?.Done();
     }
 }

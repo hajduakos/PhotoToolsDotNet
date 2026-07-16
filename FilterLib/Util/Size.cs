@@ -1,68 +1,67 @@
 ﻿using System;
 
-namespace FilterLib.Util
+namespace FilterLib.Util;
+
+/// <summary>
+/// Represents a size that can be absolute (px) or relative (%).
+/// </summary>
+public abstract class Size
 {
+    private Size() { }
+
     /// <summary>
-    /// Represents a size that can be absolute (px) or relative (%).
+    /// Convert the size to absolute with respect to a reference.
     /// </summary>
-    public abstract class Size
+    /// <param name="reference">Reference</param>
+    /// <returns></returns>
+    public abstract int ToAbsolute(int reference);
+
+    /// <summary>
+    /// Create new absolute size.
+    /// </summary>
+    /// <param name="value">Size in pixels</param>
+    /// <returns></returns>
+    public static Size Absolute(int value) => new AbsoluteSize(value);
+
+    /// <summary>
+    /// Create new relative size.
+    /// </summary>
+    /// <param name="percentage">Size in percentage (1 is 100%)</param>
+    /// <returns></returns>
+    public static Size Relative(float percentage) => new RelativeSize(percentage);
+
+    /// <summary>
+    /// Parse size of format '123px' or '123%'.
+    /// </summary>
+    /// <param name="str">String to be parsed</param>
+    /// <returns>A new absolute or relative size</returns>
+    public static Size FromString(string str)
     {
-        private Size() { }
+        str = str.Trim().ToLower();
+        if (str.EndsWith('%'))
+            return Relative(float.Parse(str[0..^1].Trim(), System.Globalization.CultureInfo.InvariantCulture.NumberFormat) / 100);
+        else if (str.EndsWith("px"))
+            return Absolute(int.Parse(str[0..^2].Trim()));
+        throw new FormatException("Size must end with '%' or 'px' as unit.");
+    }
 
-        /// <summary>
-        /// Convert the size to absolute with respect to a reference.
-        /// </summary>
-        /// <param name="reference">Reference</param>
-        /// <returns></returns>
-        public abstract int ToAbsolute(int reference);
+    private sealed class AbsoluteSize : Size
+    {
+        private readonly int val;
+        public AbsoluteSize(int val) => this.val = val;
 
-        /// <summary>
-        /// Create new absolute size.
-        /// </summary>
-        /// <param name="value">Size in pixels</param>
-        /// <returns></returns>
-        public static Size Absolute(int value) => new AbsoluteSize(value);
+        public override int ToAbsolute(int reference) => val;
 
-        /// <summary>
-        /// Create new relative size.
-        /// </summary>
-        /// <param name="percentage">Size in percentage (1 is 100%)</param>
-        /// <returns></returns>
-        public static Size Relative(float percentage) => new RelativeSize(percentage);
+        public override string ToString() => $"{val}px";
+    }
 
-        /// <summary>
-        /// Parse size of format '123px' or '123%'.
-        /// </summary>
-        /// <param name="str">String to be parsed</param>
-        /// <returns>A new absolute or relative size</returns>
-        public static Size FromString(string str)
-        {
-            str = str.Trim().ToLower();
-            if (str.EndsWith('%'))
-                return Relative(float.Parse(str[0..^1].Trim(), System.Globalization.CultureInfo.InvariantCulture.NumberFormat) / 100);
-            else if (str.EndsWith("px"))
-                return Absolute(int.Parse(str[0..^2].Trim()));
-            throw new FormatException("Size must end with '%' or 'px' as unit.");
-        }
+    private sealed class RelativeSize : Size
+    {
+        private readonly float pct;
+        public RelativeSize(float percentage) => this.pct = percentage;
 
-        private sealed class AbsoluteSize : Size
-        {
-            private readonly int val;
-            public AbsoluteSize(int val) => this.val = val;
+        public override int ToAbsolute(int reference) => (int)(reference * pct);
 
-            public override int ToAbsolute(int reference) => val;
-
-            public override string ToString() => $"{val}px";
-        }
-
-        private sealed class RelativeSize : Size
-        {
-            private readonly float pct;
-            public RelativeSize(float percentage) => this.pct = percentage;
-
-            public override int ToAbsolute(int reference) => (int)(reference * pct);
-
-            public override string ToString() => $"{pct * 100}%";
-        }
+        public override string ToString() => $"{pct * 100}%";
     }
 }

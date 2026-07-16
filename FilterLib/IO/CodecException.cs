@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace FilterLib.IO
+namespace FilterLib.IO;
+
+public class CodecException : Exception
 {
-    public class CodecException : Exception
-    {
-        public CodecException(string message) : base(message) { }
-    }
+    public CodecException(string message) : base(message) { }
 }

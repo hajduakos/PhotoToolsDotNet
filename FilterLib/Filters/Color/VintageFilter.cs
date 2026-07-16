@@ -5,44 +5,43 @@ using FilterLib.Filters.Adjustments;
 using FilterLib.Reporting;
 using FilterLib.Util;
 
-namespace FilterLib.Filters.Color
+namespace FilterLib.Filters.Color;
+
+[Filter("Create a vintage look by various color transformations.")]
+public sealed class VintageFilter : FilterInPlaceBase
 {
-    [Filter("Create a vintage look by various color transformations.")]
-    public sealed class VintageFilter : FilterInPlaceBase
+    /// <summary>
+    /// Strength [0;100].
+    /// </summary>
+    [FilterParam]
+    [FilterParamMin(0)]
+    [FilterParamMax(100)]
+    public int Strength
     {
-        /// <summary>
-        /// Strength [0;100].
-        /// </summary>
-        [FilterParam]
-        [FilterParamMin(0)]
-        [FilterParamMax(100)]
-        public int Strength
-        {
-            get;
-            set { field = value.Clamp(0, 100); }
-        }
+        get;
+        set { field = value.Clamp(0, 100); }
+    }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="strength">Strength [0;100]</param>
-        public VintageFilter(int strength = 0) => Strength = strength;
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="strength">Strength [0;100]</param>
+    public VintageFilter(int strength = 0) => Strength = strength;
 
-        /// <inheritdoc/>
-        public override void ApplyInPlace(Image image, IReporter reporter = null)
-        {
-            reporter?.Start();
-            Image original = (Image)image.Clone();
+    /// <inheritdoc/>
+    public override void ApplyInPlace(Image image, IReporter reporter = null)
+    {
+        reporter?.Start();
+        Image original = (Image)image.Clone();
 
-            new ColorDodgeBlend(60).ApplyInPlace(image, original, new SubReporter(reporter, 0, 20, 0, 100));
-            Image sepia = new SepiaFilter().Apply(original, new SubReporter(reporter, 20, 40, 0, 100));
-            new MultiplyBlend(50).ApplyInPlace(image, sepia);
-            new ContrastFilter(15).ApplyInPlace(image, new SubReporter(reporter, 40, 60, 0, 100));
-            new ColorHSLFilter(0, 5, 0).ApplyInPlace(image, new SubReporter(reporter, 60, 80, 0, 100));
-            if (Strength != 100)
-                new NormalBlend(100 - Strength).ApplyInPlace(image, original, new SubReporter(reporter, 80, 100, 0, 100));
+        new ColorDodgeBlend(60).ApplyInPlace(image, original, new SubReporter(reporter, 0, 20, 0, 100));
+        Image sepia = new SepiaFilter().Apply(original, new SubReporter(reporter, 20, 40, 0, 100));
+        new MultiplyBlend(50).ApplyInPlace(image, sepia);
+        new ContrastFilter(15).ApplyInPlace(image, new SubReporter(reporter, 40, 60, 0, 100));
+        new ColorHSLFilter(0, 5, 0).ApplyInPlace(image, new SubReporter(reporter, 60, 80, 0, 100));
+        if (Strength != 100)
+            new NormalBlend(100 - Strength).ApplyInPlace(image, original, new SubReporter(reporter, 80, 100, 0, 100));
 
-            reporter?.Done();
-        }
+        reporter?.Done();
     }
 }

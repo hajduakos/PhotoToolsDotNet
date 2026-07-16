@@ -1,7 +1,6 @@
-﻿namespace FilterLib.Util
+﻿namespace FilterLib.Util;
+
+public enum AntiAliasQuality
 {
-    public enum AntiAliasQuality
-    {
-        None, Low, Medium, High
-    }
+    None, Low, Medium, High
 }
