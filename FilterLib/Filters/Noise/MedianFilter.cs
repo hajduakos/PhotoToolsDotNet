@@ -5,10 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Noise
 {
-    /// <summary>
-    /// Median filter.
-    /// </summary>
-    [Filter]
+    [Filter("Replace each pixel with the median intensity of its neighborhood, useful for removing noise.")]
     public sealed class MedianFilter : FilterInPlaceBase
     {
         /// <summary>
