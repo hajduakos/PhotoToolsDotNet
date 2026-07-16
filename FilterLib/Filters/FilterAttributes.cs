@@ -6,11 +6,9 @@ namespace FilterLib.Filters;
 /// Attribute for marking classes that are filters.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class FilterAttribute : Attribute
+public class FilterAttribute(string description = "") : Attribute
 {
-    public string Description { get; private set; }
-
-    public FilterAttribute(string description = "") => this.Description = description;
+    public string Description { get; } = description;
 }
 
 
@@ -24,42 +22,34 @@ public class FilterParamAttribute : Attribute { }
 /// Attribute for marking the minimum value for a parameter.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class FilterParamMinAttribute : Attribute
+public class FilterParamMinAttribute(int value) : Attribute
 {
-    public int Value { get; private set; }
-
-    public FilterParamMinAttribute(int value) => this.Value = value;
+    public int Value { get; } = value;
 }
 
 /// <summary>
 /// Attribute for marking the maximum value for a parameter.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class FilterParamMaxAttribute : Attribute
+public class FilterParamMaxAttribute(int value) : Attribute
 {
-    public int Value { get; private set; }
-
-    public FilterParamMaxAttribute(int value) => this.Value = value;
+    public int Value { get; } = value;
 }
 
 /// <summary>
 /// Attribute for marking the minimum value for a parameter.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class FilterParamMinFAttribute : Attribute
+public class FilterParamMinFAttribute(float value) : Attribute
 {
-    public float Value { get; private set; }
-
-    public FilterParamMinFAttribute(float value) => this.Value = value;
+    public float Value { get; } = value;
 }
 
 /// <summary>
 /// Attribute for marking the maximum value for a parameter.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class FilterParamMaxFAttribute : Attribute
+public class FilterParamMaxFAttribute(float value) : Attribute
 {
-    public float Value { get; private set; }
-
-    public FilterParamMaxFAttribute(float value) => this.Value = value;
+    public float Value { get; } = value;
 }

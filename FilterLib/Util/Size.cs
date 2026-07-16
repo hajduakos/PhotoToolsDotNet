@@ -45,23 +45,17 @@ public abstract class Size
         throw new FormatException("Size must end with '%' or 'px' as unit.");
     }
 
-    private sealed class AbsoluteSize : Size
+    private sealed class AbsoluteSize(int val) : Size
     {
-        private readonly int val;
-        public AbsoluteSize(int val) => this.val = val;
-
         public override int ToAbsolute(int reference) => val;
 
         public override string ToString() => $"{val}px";
     }
 
-    private sealed class RelativeSize : Size
+    private sealed class RelativeSize(float percentage) : Size
     {
-        private readonly float pct;
-        public RelativeSize(float percentage) => this.pct = percentage;
+        public override int ToAbsolute(int reference) => (int)(reference * percentage);
 
-        public override int ToAbsolute(int reference) => (int)(reference * pct);
-
-        public override string ToString() => $"{pct * 100}%";
+        public override string ToString() => $"{percentage * 100}%";
     }
 }
