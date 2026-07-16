@@ -81,8 +81,8 @@ namespace FilterLib.Filters.Dither
                         // The precise threshold depends on the matrix, so that values in between are sometimes
                         // rounded down, and sometimes rounded up.
                         float roundedColor = System.MathF.Floor(*ptr / intervalSize) * intervalSize;
-                        float treshold = roundedColor + Matrix[(x / 3) % Matrix.Width, y % Matrix.Height] * intervalSize;
-                        *ptr = (treshold > *ptr ? roundedColor : (roundedColor + intervalSize)).ClampToByte();
+                        float threshold = roundedColor + Matrix[(x / 3) % Matrix.Width, y % Matrix.Height] * intervalSize;
+                        *ptr = (threshold > *ptr ? roundedColor : (roundedColor + intervalSize)).ClampToByte();
                         ++ptr;
                     }
                     if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);

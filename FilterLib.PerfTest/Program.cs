@@ -29,7 +29,7 @@ List<IFilter> filters =
     new ShadowsHighlightsFilter(20, 40),
     new VibranceFilter(50),
     // Artistic
-    new AdaptiveTresholdFilter(10),
+    new AdaptiveThresholdFilter(10),
     new OilPaintFilter(10, 127),
     new RandomJitterFilter(20, 0),
     // Blur
@@ -54,7 +54,7 @@ List<IFilter> filters =
     new PosterizeFilter(4),
     new SepiaFilter(),
     new SolarizeFilter(),
-    new TresholdFilter(127),
+    new ThresholdFilter(127),
     new VintageFilter(50),
     // Dither
     new AtkinsonDitherFilter(4),

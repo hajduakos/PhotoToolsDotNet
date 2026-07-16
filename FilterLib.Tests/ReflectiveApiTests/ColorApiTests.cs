@@ -102,17 +102,17 @@ namespace FilterLib.Tests.ReflectiveApiTests
         public void TestSolarizeParCnt() => Assert.That(Common.ParamCount(typeof(SolarizeFilter)), Is.EqualTo(0));
 
         [Test]
-        public void TestTreshold()
+        public void TestThreshold()
         {
-            IFilter f = ReflectiveApi.ConstructFilterByName("Treshold");
-            Assert.That(f, Is.InstanceOf<TresholdFilter>());
-            ReflectiveApi.SetFilterPropertyByName(f, "Treshold", "127");
-            TresholdFilter ff = f as TresholdFilter;
-            Assert.That(ff.Treshold, Is.EqualTo(127));
+            IFilter f = ReflectiveApi.ConstructFilterByName("Threshold");
+            Assert.That(f, Is.InstanceOf<ThresholdFilter>());
+            ReflectiveApi.SetFilterPropertyByName(f, "Threshold", "127");
+            ThresholdFilter ff = f as ThresholdFilter;
+            Assert.That(ff.Threshold, Is.EqualTo(127));
         }
 
         [Test]
-        public void TestTresholdParCnt() => Assert.That(Common.ParamCount(typeof(TresholdFilter)), Is.EqualTo(1));
+        public void TestThresholdParCnt() => Assert.That(Common.ParamCount(typeof(ThresholdFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestVintage()

@@ -59,9 +59,9 @@ namespace FilterLib.Tests.FilterTests
 
             yield return new TestCaseData("Solarize.bmp", new SolarizeFilter(), 0);
 
-            yield return new TestCaseData("Treshold_63.bmp", new TresholdFilter(63), 1);
-            yield return new TestCaseData("Treshold_127.bmp", new TresholdFilter(127), 1);
-            yield return new TestCaseData("Treshold_191.bmp", new TresholdFilter(191), 1);
+            yield return new TestCaseData("Threshold_63.bmp", new ThresholdFilter(63), 1);
+            yield return new TestCaseData("Threshold_127.bmp", new ThresholdFilter(127), 1);
+            yield return new TestCaseData("Threshold_191.bmp", new ThresholdFilter(191), 1);
 
             yield return new TestCaseData("Vintage_80.bmp", new VintageFilter(80), 1);
             yield return new TestCaseData("_input.bmp", new VintageFilter(0), 1);

@@ -60,8 +60,8 @@ namespace FilterLib.Tests.FilterTests
         internal static IEnumerable<TestCaseData> Artistic()
         {
             yield return new TestCaseData(
-                new AdaptiveTresholdFilter(4),
-                "AdaptiveTresholdFilter(SquareSize: 4)");
+                new AdaptiveThresholdFilter(4),
+                "AdaptiveThresholdFilter(SquareSize: 4)");
             yield return new TestCaseData(
                 new OilPaintFilter(5, 67),
                 "OilPaintFilter(Radius: 5, IntensityLevels: 67)");
@@ -138,8 +138,8 @@ namespace FilterLib.Tests.FilterTests
                 new SolarizeFilter(),
                 "SolarizeFilter");
             yield return new TestCaseData(
-                new TresholdFilter(123),
-                "TresholdFilter(Treshold: 123)");
+                new ThresholdFilter(123),
+                "ThresholdFilter(Threshold: 123)");
             yield return new TestCaseData(
                 new VintageFilter(12),
                 "VintageFilter(Strength: 12)");

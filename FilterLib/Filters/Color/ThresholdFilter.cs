@@ -3,7 +3,7 @@
 namespace FilterLib.Filters.Color
 {
     [Filter("Threshold filter that maps each pixel to pure black or white based on a given (and fixed) threshold.")]
-    public sealed class TresholdFilter : PerPixelFilterBase
+    public sealed class ThresholdFilter : PerPixelFilterBase
     {
         /// <summary>
         /// Threshold value [0;255].
@@ -11,7 +11,7 @@ namespace FilterLib.Filters.Color
         [FilterParam]
         [FilterParamMin(0)]
         [FilterParamMax(255)]
-        public int Treshold
+        public int Threshold
         {
             get;
             set { field = value.ClampToByte(); }
@@ -20,8 +20,8 @@ namespace FilterLib.Filters.Color
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="treshold">Threshold value [0:255]</param>
-        public TresholdFilter(int treshold = 127) => Treshold = treshold;
+        /// <param name="threshold">Threshold value [0:255]</param>
+        public ThresholdFilter(int threshold = 127) => Threshold = threshold;
 
         // Cache
         private byte[] map;
@@ -32,7 +32,7 @@ namespace FilterLib.Filters.Color
             base.ApplyStart();
             // Fill cache
             map = new byte[256];
-            for (int i = 0; i < 256; ++i) map[i] = (byte)(i < Treshold ? 0 : 255);
+            for (int i = 0; i < 256; ++i) map[i] = (byte)(i < Threshold ? 0 : 255);
         }
 
         /// <inheritdoc/>

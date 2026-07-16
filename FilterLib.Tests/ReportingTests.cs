@@ -43,7 +43,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new ShadowsHighlightsFilter());
             yield return new TestCaseData(new VibranceFilter());
 
-            yield return new TestCaseData(new AdaptiveTresholdFilter());
+            yield return new TestCaseData(new AdaptiveThresholdFilter());
             yield return new TestCaseData(new OilPaintFilter());
             yield return new TestCaseData(new RandomJitterFilter());
 
@@ -68,7 +68,7 @@ namespace FilterLib.Tests
             yield return new TestCaseData(new PosterizeFilter());
             yield return new TestCaseData(new SepiaFilter());
             yield return new TestCaseData(new SolarizeFilter());
-            yield return new TestCaseData(new TresholdFilter());
+            yield return new TestCaseData(new ThresholdFilter());
             yield return new TestCaseData(new VintageFilter());
 
             yield return new TestCaseData(new AtkinsonDitherFilter());

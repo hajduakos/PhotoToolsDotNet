@@ -4,7 +4,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 namespace FilterLib.Filters.Artistic
 {
     [Filter("Map each pixel to black or white based on a threshold calculated from pixels in a given radius.")]
-    public sealed class AdaptiveTresholdFilter : FilterInPlaceBase
+    public sealed class AdaptiveThresholdFilter : FilterInPlaceBase
     {
         /// <summary>
         /// Square size [1;...].
@@ -21,7 +21,7 @@ namespace FilterLib.Filters.Artistic
         /// Constructor.
         /// </summary>
         /// <param name="squareSize">Square size [1;...]</param>
-        public AdaptiveTresholdFilter(int squareSize = 1) => SquareSize = squareSize;
+        public AdaptiveThresholdFilter(int squareSize = 1) => SquareSize = squareSize;
 
         /// <inheritdoc/>
         public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)

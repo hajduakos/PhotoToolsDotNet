@@ -7,17 +7,17 @@ namespace FilterLib.Tests.ReflectiveApiTests
     public class ArtisticApiTests
     {
         [Test]
-        public void TestAdaptiveTreshold()
+        public void TestAdaptiveThreshold()
         {
-            IFilter f = ReflectiveApi.ConstructFilterByName("AdaptiveTreshold");
-            Assert.That(f, Is.InstanceOf<AdaptiveTresholdFilter>());
+            IFilter f = ReflectiveApi.ConstructFilterByName("AdaptiveThreshold");
+            Assert.That(f, Is.InstanceOf<AdaptiveThresholdFilter>());
             ReflectiveApi.SetFilterPropertyByName(f, "SquareSize", "8");
-            AdaptiveTresholdFilter ff = f as AdaptiveTresholdFilter;
+            AdaptiveThresholdFilter ff = f as AdaptiveThresholdFilter;
             Assert.That(ff.SquareSize, Is.EqualTo(8));
         }
 
         [Test]
-        public void TestAdaptiveTresholdParCnt() => Assert.That(Common.ParamCount(typeof(AdaptiveTresholdFilter)), Is.EqualTo(1));
+        public void TestAdaptiveThresholdParCnt() => Assert.That(Common.ParamCount(typeof(AdaptiveThresholdFilter)), Is.EqualTo(1));
 
         [Test]
         public void TestOilPaint()
