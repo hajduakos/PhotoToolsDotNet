@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Border
 {
-    [Filter("Ellipse shaped vignette that gradually fades off towards the center.")]
+    [Filter("Ellipse shaped vignette that gradually fades off toward the center.")]
     public sealed class VignetteFilter : FilterInPlaceBase
     {
 

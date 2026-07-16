@@ -9,7 +9,7 @@ namespace FilterLib.IO
     {
         private const uint BMP_HEADER_SIZE = 14;
         private const uint DIB_HEADER_SIZE = 40;
-        private const int RESOLUTION = 2835; // 72 DPI converted to pixels/metre
+        private const int RESOLUTION = 2835; // 72 DPI converted to pixels/meter
 
         private static uint GetRowSize(Image img)
         {

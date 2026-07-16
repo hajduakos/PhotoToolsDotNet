@@ -65,7 +65,7 @@ namespace FilterLib.Filters.Other
             // We assume that the input image represents an equirectangular projection of a sphere, where the
             // X coordinate corresponds to longitudes (0 to 360°) and the y coordinate corresponds to latitudes
             // (0 to 180°). Then, we reproject this sphere using stereographic projection: we put the sphere
-            // on a plane and project lines from the North pole towards the plane. The lines hit both the
+            // on a plane and project lines from the North pole toward the plane. The lines hit both the
             // sphere and the plane. The color on the plane (the result) will take the color from the sphere
             // intersection.
             reporter?.Start();
