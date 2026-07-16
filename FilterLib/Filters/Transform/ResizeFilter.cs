@@ -5,10 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
-    /// <summary>
-    /// Resize the image (both up- and downscale).
-    /// </summary>
-    [Filter]
+    [Filter("Resize the image (both up- and downscale).")]
     public sealed class ResizeFilter : FilterBase
     {
         /// <summary>

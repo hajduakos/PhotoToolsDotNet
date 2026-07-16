@@ -6,11 +6,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
-    /// <summary>
-    /// Downscale an image by averaging all the pixels in the original image that
-    /// correspond to a pixel in the new image.
-    /// </summary>
-    [Filter]
+    [Filter("Downscale an image by averaging all the pixels in the original image that correspond to a pixel in the new image.")]
     public sealed class BoxDownscaleFilter : FilterBase
     {
         /// <summary>

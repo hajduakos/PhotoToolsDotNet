@@ -3,10 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
-    /// <summary>
-    /// Flip the image vertically (along a horizontal axis).
-    /// </summary>
-    [Filter]
+    [Filter("Flip the image vertically (along a horizontal axis).")]
     public sealed class FlipVerticalFilter : FilterInPlaceBase
     {
         /// <inheritdoc/>

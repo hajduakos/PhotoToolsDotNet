@@ -6,10 +6,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
-    /// <summary>
-    /// Rotate filter.
-    /// </summary>
-    [Filter]
+    [Filter("Rotate the image by an arbitrary angle, with configurable crop and interpolation modes.")]
     public sealed class RotateFilter : FilterBase
     {
         public enum CropMode { Fit, Fill }

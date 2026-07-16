@@ -3,10 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
-    /// <summary>
-    /// Rotate the image with 180 degrees in a lossless way.
-    /// </summary>
-    [Filter]
+    [Filter("Rotate the image with 180 degrees in a lossless way.")]
     public sealed class Rotate180Filter : FilterInPlaceBase
     {
         /// <inheritdoc/>

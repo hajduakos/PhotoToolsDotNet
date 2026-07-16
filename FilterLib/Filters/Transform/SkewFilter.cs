@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace FilterLib.Filters.Transform
 {
-    /// <summary>
-    /// Skew filter.
-    /// </summary>
-    [Filter]
+    [Filter("Skew the image horizontally or vertically by a given angle.")]
     public sealed class SkewFilter : FilterBase
     {
         /// <summary>

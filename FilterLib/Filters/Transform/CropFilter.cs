@@ -5,10 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
-    /// <summary>
-    /// Crop the image to a given rectangular area.
-    /// </summary>
-    [Filter]
+    [Filter("Crop the image to a given rectangular area.")]
     public sealed class CropFilter : FilterBase
     {
         /// <summary>

@@ -3,10 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Transform
 {
-    /// <summary>
-    /// Rotate the image left (counter clockwise) in a lossless way.
-    /// </summary>
-    [Filter]
+    [Filter("Rotate the image left (counter clockwise) in a lossless way.")]
     public sealed class RotateLeftFilter : FilterBase
     {
         /// <inheritdoc/>

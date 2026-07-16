@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace FilterLib.Filters.Transform
 {
-    /// <summary>
-    /// Perspective transformation filter.
-    /// </summary>
-    [Filter]
+    [Filter("Apply a perspective effect by scaling one side of the image along a given direction.")]
     public sealed class PerspectiveFilter : FilterBase
     {
         /// <summary>
