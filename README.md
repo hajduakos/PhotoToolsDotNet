@@ -7,7 +7,7 @@
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=hajduakos_PhotoToolsDotNet&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=hajduakos_PhotoToolsDotNet)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=hajduakos_PhotoToolsDotNet&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=hajduakos_PhotoToolsDotNet)
 
-Cross platform tools for processing photos. Implemented in .NET 8.0.
+Cross platform tools for processing photos. Implemented in .NET 10.0.
 
 ![Sample](FilterLib.Tests/TestImages/_input.bmp)
 ![Sample](FilterLib.Tests/TestImages/Brightness_50.bmp)
