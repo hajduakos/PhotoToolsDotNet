@@ -53,23 +53,12 @@ public sealed class CrystallizeFilter : FilterInPlaceBase
     }
 
     /// <summary>
-    /// Private helper class representing a point
+    /// Private helper struct representing a point
     /// </summary>
-    private readonly struct Cpoint : System.IEquatable<Cpoint>
+    private readonly record struct Cpoint(int x = 0, int y = 0)
     {
-        public readonly int x, y; // Coordinates
-
-        // Constructor
-        public Cpoint(int x = 0, int y = 0) { this.x = x; this.y = y; }
-
         // Get distance from other point (without square root)
         public int Dist(int x1, int y1) => (x - x1) * (x - x1) + (y - y1) * (y - y1);
-
-        public bool Equals(Cpoint other) => x == other.x && y == other.y;
-
-        public override bool Equals(object obj) => obj is Cpoint cpoint && Equals(cpoint);
-
-        public override int GetHashCode() => x.GetHashCode() ^ y.GetHashCode();
     }
 
     /// <inheritdoc/>

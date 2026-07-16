@@ -1,18 +1,18 @@
-﻿namespace FilterLib.Util;
+namespace FilterLib.Util;
 
 /// <summary>
 /// Represent a color in the HSL (hue, saturation, lightness) color space.
 /// </summary>
-public struct HSL : System.IEquatable<HSL>
+public readonly record struct HSL
 {
     /// <summary> Hue </summary>
-    public int H { get; private set; }
+    public int H { get; }
 
     /// <summary> Saturation </summary>
-    public int S { get; private set; }
+    public int S { get; }
 
     /// <summary> Lightness </summary>
-    public int L { get; private set; }
+    public int L { get; }
 
     /// <summary>
     /// Constructor with HSL values.
@@ -33,7 +33,7 @@ public struct HSL : System.IEquatable<HSL>
     /// Convert to RGB color.
     /// </summary>
     /// <returns>RGB color</returns>
-    public readonly RGB ToRGB()
+    public RGB ToRGB()
     {
         float r, g, b, v;
         float lf = L / 100f;
@@ -64,15 +64,6 @@ public struct HSL : System.IEquatable<HSL>
         }
         return new RGB((int)(r * 255), (int)(g * 255), (int)(b * 255));
     }
-    public override readonly bool Equals(object obj) => obj is HSL h && this == h;
 
-    public readonly bool Equals(HSL other) => this == other;
-
-    public override readonly int GetHashCode() => H.GetHashCode() ^ S.GetHashCode() ^ L.GetHashCode();
-
-    public static bool operator ==(HSL c1, HSL c2) => c1.H == c2.H && c1.S == c2.S && c1.L == c2.L;
-
-    public static bool operator !=(HSL c1, HSL c2) => !(c1 == c2);
-
-    public override readonly string ToString() => $"HSL({H}, {S}, {L})";
+    public override string ToString() => $"HSL({H}, {S}, {L})";
 }

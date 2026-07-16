@@ -1,20 +1,20 @@
-﻿using MathF = System.MathF;
+using MathF = System.MathF;
 
 namespace FilterLib.Util;
 
 /// <summary>
 /// Represents a color in the RGB (red, green, blue) color space.
 /// </summary>
-public struct RGB : System.IEquatable<RGB>
+public readonly record struct RGB
 {
     /// <summary> Red component </summary>
-    public byte R { get; private set; }
+    public byte R { get; }
 
     /// <summary> Green component </summary>
-    public byte G { get; private set; }
+    public byte G { get; }
 
     /// <summary> Blue component </summary>
-    public byte B { get; private set; }
+    public byte B { get; }
 
     /// <summary>
     /// Constructor with RGB components.
@@ -47,7 +47,7 @@ public struct RGB : System.IEquatable<RGB>
     /// Convert to HSL color.
     /// </summary>
     /// <returns>HSL color</returns>
-    public readonly HSL ToHSL()
+    public HSL ToHSL()
     {
         const float EPS = .00001f;
         float h = 0, s = 0, l;
@@ -75,17 +75,11 @@ public struct RGB : System.IEquatable<RGB>
         return new HSL((int)h, (int)s, (int)l);
     }
 
-    public override readonly bool Equals(object obj) => obj is RGB r && this == r;
+    // Custom hash packs the three bytes into a perfect hash (better distribution
+    // than the compiler-generated one when RGB is used as a dictionary key).
+    public override int GetHashCode() => (R << 16) | (G << 8) | B;
 
-    public readonly bool Equals(RGB other) => this == other;
-
-    public override readonly int GetHashCode() => (R << 16) | (G << 8) | B;
-
-    public static bool operator ==(RGB c1, RGB c2) => c1.R == c2.R && c1.G == c2.G && c1.B == c2.B;
-
-    public static bool operator !=(RGB c1, RGB c2) => !(c1 == c2);
-
-    public override readonly string ToString() => $"RGB({R}, {G}, {B})";
+    public override string ToString() => $"RGB({R}, {G}, {B})";
 
     private const float RRatio = .299f;
     private const float GRatio = .587f;

@@ -55,11 +55,11 @@ public class UtilTests
         Assert.That(new RGB(20, 10, 50).R, Is.EqualTo(20));
         Assert.That(new RGB(20, 10, 50).G, Is.EqualTo(10));
         Assert.That(new RGB(20, 10, 50).B, Is.EqualTo(50));
+        // Constructor clamps each component into [0;255]
         Assert.That(new RGB(-10, 270, 1000), Is.EqualTo(new RGB(0, 255, 255)));
-        Assert.That(new RGB(0, 255, 255).Equals(new RGB(-10, 270, 1000)));
-        Assert.That(new RGB(0, 255, 255) == new RGB(-10, 270, 1000));
-        Assert.That(new RGB(0, 255, 255) != new RGB(1, 2, 3));
-        Assert.That(new RGB(12, 34, 56).GetHashCode() == new RGB(12, 34, 56).GetHashCode());
+        Assert.That(new RGB(0, 255, 255), Is.Not.EqualTo(new RGB(1, 2, 3)));
+        // Custom (non-generated) hash: equal colors must share a hash
+        Assert.That(new RGB(12, 34, 56).GetHashCode(), Is.EqualTo(new RGB(12, 34, 56).GetHashCode()));
     }
 
     [Test]
@@ -77,12 +77,10 @@ public class UtilTests
         Assert.That(new HSL(20, 10, 50).H, Is.EqualTo(20));
         Assert.That(new HSL(20, 10, 50).S, Is.EqualTo(10));
         Assert.That(new HSL(20, 10, 50).L, Is.EqualTo(50));
+        // Constructor normalizes H into [0;360) and clamps S/L into [0;100]
         Assert.That(new HSL(370, 200, -10), Is.EqualTo(new HSL(10, 100, 0)));
-        Assert.That(new HSL(10, 100, 0).Equals(new HSL(370, 200, -10)));
-        Assert.That(new HSL(10, 100, 0) == new HSL(370, 200, -10));
-        Assert.That(new HSL(10, 100, 0) != new HSL(1, 2, 3));
+        Assert.That(new HSL(10, 100, 0), Is.Not.EqualTo(new HSL(1, 2, 3)));
         Assert.That(new HSL(-10, 0, 0).H, Is.EqualTo(350));
-        Assert.That(new HSL(12, 34, 56).GetHashCode() == new HSL(12, 34, 56).GetHashCode());
     }
 
     [Test]
