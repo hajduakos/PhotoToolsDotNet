@@ -4,10 +4,7 @@ using MathF = System.MathF;
 
 namespace FilterLib.Filters.Color
 {
-    /// <summary>
-    /// Posterize image by reducing the number of levels for each component.
-    /// </summary>
-    [Filter]
+    [Filter("Posterize image by reducing the number of levels for each component.")]
     public sealed class PosterizeFilter : PerComponentFilterBase
     {
         private float div;

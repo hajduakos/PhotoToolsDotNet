@@ -7,10 +7,7 @@ using FilterLib.Util;
 
 namespace FilterLib.Filters.Color
 {
-    /// <summary>
-    /// Orton filter, creating a soft glow look.
-    /// </summary>
-    [Filter]
+    [Filter("Orton filter, creating a soft glow look.")]
     public sealed class OrtonFilter : FilterInPlaceBase
     {
         /// <summary>

@@ -7,10 +7,7 @@ using FilterLib.Util;
 
 namespace FilterLib.Filters.Color
 {
-    /// <summary>
-    /// Craete a vintage look by various color transformations.
-    /// </summary>
-    [Filter]
+    [Filter("Create a vintage look by various color transformations.")]
     public sealed class VintageFilter : FilterInPlaceBase
     {
         /// <summary>

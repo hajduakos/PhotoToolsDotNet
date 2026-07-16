@@ -2,10 +2,7 @@
 
 namespace FilterLib.Filters.Color
 {
-    /// <summary>
-    /// Convert to grayscale using custom weights for the different components.
-    /// </summary>
-    [Filter]
+    [Filter("Convert to grayscale using custom weights for the different components.")]
     public sealed class GrayscaleFilter : PerPixelFilterBase
     {
         /// <summary>

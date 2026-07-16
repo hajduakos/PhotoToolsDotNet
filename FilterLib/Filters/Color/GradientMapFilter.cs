@@ -2,10 +2,7 @@
 
 namespace FilterLib.Filters.Color
 {
-    /// <summary>
-    /// Map each color to a value in a given gradient based on its luminance.
-    /// </summary>
-    [Filter]
+    [Filter("Map each color to a value in a given gradient based on its luminance.")]
     public sealed class GradientMapFilter : PerPixelFilterBase
     {
         /// <summary>

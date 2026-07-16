@@ -2,10 +2,7 @@
 
 namespace FilterLib.Filters.Color
 {
-    /// <summary>
-    /// Sepia filter creating an old looking brownish color.
-    /// </summary>
-    [Filter]
+    [Filter("Sepia filter creating an old looking brownish color.")]
     public sealed class SepiaFilter : PerPixelFilterBase
     {
         /// <inheritdoc/>

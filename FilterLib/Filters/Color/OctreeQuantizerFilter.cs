@@ -6,16 +6,13 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Color
 {
-    /// <summary>
-    /// Reduce colors (quantize) to a palette of given size, using an octree (a tree
-    /// with 8 children per node). Colors are grouped by their bits (per channel)
-    /// starting from the most significant to the least significant. Each color gets
-    /// a leaf in the tree and then nodes are merged bottom-up until the desired
-    /// number is reached.
-    /// </summary>
-    [Filter]
+    [Filter("Reduce colors (quantize) to a palette of given size, using an octree (a tree with 8 children per node).")]
     public sealed class OctreeQuantizerFilter : FilterInPlaceBase
     {
+        // Colors are grouped by their bits (per channel) starting from the most
+        // significant to the least significant. Each color gets a leaf in the tree
+        // and then nodes are merged bottom-up until the desired number is reached.
+
         /// <summary>
         /// Number of colors in the resulting palette.
         /// </summary>

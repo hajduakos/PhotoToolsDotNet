@@ -2,11 +2,7 @@
 
 namespace FilterLib.Filters.Color
 {
-    /// <summary>
-    /// Treshold filter that maps each pixel to pure black or white based on
-    /// a given (and fixed) treshold.
-    /// </summary>
-    [Filter]
+    [Filter("Treshold filter that maps each pixel to pure black or white based on a given (and fixed) treshold.")]
     public sealed class TresholdFilter : PerPixelFilterBase
     {
         /// <summary>
