@@ -78,7 +78,7 @@ namespace FilterLib.Filters.Dither
                     for (int x = 0; x < width_3; ++x)
                     {
                         // We need to round down or up to the nearest multiply of intervalSize.
-                        // The precise treshold depends on the matrix, so that values inbetween are sometimes
+                        // The precise threshold depends on the matrix, so that values in between are sometimes
                         // rounded down, and sometimes rounded up.
                         float roundedColor = System.MathF.Floor(*ptr / intervalSize) * intervalSize;
                         float treshold = roundedColor + Matrix[(x / 3) % Matrix.Width, y % Matrix.Height] * intervalSize;

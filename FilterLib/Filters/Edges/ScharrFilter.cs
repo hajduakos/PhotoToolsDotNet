@@ -1,7 +1,7 @@
 ﻿namespace FilterLib.Filters.Edges
 {
     /// <summary>
-    /// SCharr filter combining two convolutions.
+    /// Scharr filter combining two convolutions.
     /// </summary>
     [Filter]
     public sealed class ScharrFilter : DualConvolutionBase

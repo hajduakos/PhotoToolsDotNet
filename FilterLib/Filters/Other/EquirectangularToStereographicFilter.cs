@@ -7,7 +7,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 namespace FilterLib.Filters.Other
 {
     /// <summary>
-    /// Assume the input to have an equirectangular projection and re-project as stereoraphic.
+    /// Assume the input to have an equirectangular projection and re-project as stereographic.
     /// </summary>
     [Filter]
     public sealed class EquirectangularToStereographicFilter : FilterBase

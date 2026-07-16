@@ -3,7 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Artistic
 {
-    [Filter("Map each pixel to black or white based on a treshold calculated from pixels in a given radius.")]
+    [Filter("Map each pixel to black or white based on a threshold calculated from pixels in a given radius.")]
     public sealed class AdaptiveTresholdFilter : FilterInPlaceBase
     {
         /// <summary>
@@ -62,7 +62,7 @@ namespace FilterLib.Filters.Artistic
                         }
                     }
                     float avg = sum / n;
-                    // Treshold first column of current row
+                    // Threshold first column of current row
                     float lum = Util.RGB.GetLuminance(oldRow[0], oldRow[1], oldRow[2]);
                     newRow[0] = newRow[1] = newRow[2] = (byte)(avg < lum ? 255 : 0);
 
@@ -90,7 +90,7 @@ namespace FilterLib.Filters.Artistic
                             }
                         }
                         avg = sum / n;
-                        // Treshold current column of current row
+                        // Threshold current column of current row
                         lum = Util.RGB.GetLuminance(oldRow[x], oldRow[x + 1], oldRow[x + 2]);
                         newRow[x] = newRow[x + 1] = newRow[x + 2] = (byte)(avg < lum ? 255 : 0);
                     }

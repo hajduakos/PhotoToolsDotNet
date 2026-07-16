@@ -83,7 +83,7 @@ namespace FilterLib.Filters.Mosaic
             int progress = 0;
             // First step: divide the image into a grid with the given size
             // and generate one crystal point in each square
-            // Additional points required if the width/height is not dividible by the size
+            // Additional points required if the width/height is not divisible by the size
             int crystalsX = image.Width / Size + ((image.Width % Size) == 0 ? 0 : 1);
             int crystalsY = image.Height / Size + ((image.Height % Size) == 0 ? 0 : 1);
             Cpoint[,] crystalPts = new Cpoint[crystalsX, crystalsY];
@@ -108,7 +108,7 @@ namespace FilterLib.Filters.Mosaic
                 byte* start0 = start;
                 int yMax = image.Height / Size;
                 if (yMax * Size < image.Height) yMax++;
-                // Second step: calculate avarege color of a square in the grid
+                // Second step: calculate average color of a square in the grid
                 Parallel.For(0, yMax, y =>
                 {
                     y *= Size;

@@ -8,7 +8,7 @@ namespace FilterLib.Filters.Generate
     /// <summary>
     /// Create a radial gradient with a given center and inner/outer radius. Everything inside
     /// the inner radius is black, everything outside the outer radius is black and there is
-    /// a linear transition inbetween.
+    /// a linear transition in between.
     /// </summary>
     [Filter]
     public sealed class RadialGradientFilter : FilterInPlaceBase

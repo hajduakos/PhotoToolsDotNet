@@ -150,7 +150,7 @@ namespace FilterLib.Tests
         }
 
         [Test]
-        public void TestConcolutionMatrixParseInvalid()
+        public void TestConvolutionMatrixParseInvalid()
         {
             Assert.Throws<ArgumentException>(() => new ConvolutionMatrix(""));
             Assert.Throws<ArgumentException>(() => new ConvolutionMatrix("this is not valid"));

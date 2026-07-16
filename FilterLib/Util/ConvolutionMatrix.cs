@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 namespace FilterLib.Util
 {
     /// <summary>
-    /// Convoluion matrix with a 2 dimensional matrix of weights, a divisor
+    /// Convolution matrix with a 2 dimensional matrix of weights, a divisor
     /// and a bias. The center of the matrix is assumed to be the element
     /// at index floor(Width/2), floor(Height/2).
     /// </summary>

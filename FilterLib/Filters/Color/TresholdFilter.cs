@@ -2,11 +2,11 @@
 
 namespace FilterLib.Filters.Color
 {
-    [Filter("Treshold filter that maps each pixel to pure black or white based on a given (and fixed) treshold.")]
+    [Filter("Threshold filter that maps each pixel to pure black or white based on a given (and fixed) threshold.")]
     public sealed class TresholdFilter : PerPixelFilterBase
     {
         /// <summary>
-        /// Treshold value [0;255].
+        /// Threshold value [0;255].
         /// </summary>
         [FilterParam]
         [FilterParamMin(0)]
@@ -20,7 +20,7 @@ namespace FilterLib.Filters.Color
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="treshold">Treshold value [0:255]</param>
+        /// <param name="treshold">Threshold value [0:255]</param>
         public TresholdFilter(int treshold = 127) => Treshold = treshold;
 
         // Cache

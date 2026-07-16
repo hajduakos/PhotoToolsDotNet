@@ -45,7 +45,7 @@ namespace FilterLib.Filters.Adjustments
         {
             if (Brighten == 0 && Darken == 0) return comp;
 
-            // Mulitply pixel with itself (darkening)
+            // Multiply pixel with itself (darkening)
             float mult = comp * comp / 255f;
             // Blend with original value
             float darkPct = Darken / 100f;

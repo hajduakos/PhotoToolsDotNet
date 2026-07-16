@@ -10,7 +10,7 @@ namespace FilterLib.Util
         private Size() { }
 
         /// <summary>
-        /// Convert the size to absoute with repsect to a reference.
+        /// Convert the size to absolute with respect to a reference.
         /// </summary>
         /// <param name="reference">Reference</param>
         /// <returns></returns>

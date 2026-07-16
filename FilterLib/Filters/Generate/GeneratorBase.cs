@@ -6,7 +6,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 namespace FilterLib.Filters.Generate
 {
     /// <summary>
-    /// Base class for turbulance-based generators.
+    /// Base class for turbulence-based generators.
     /// </summary>
     public abstract class GeneratorBase : FilterInPlaceBase
     {
