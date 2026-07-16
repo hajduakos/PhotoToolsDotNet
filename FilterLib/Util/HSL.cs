@@ -51,16 +51,16 @@ public readonly record struct HSL
             float vsf = v * sv * fract;
             float mid1 = m + vsf;
             float mid2 = v - vsf;
-            switch (sextant)
+            (r, g, b) = sextant switch
             {
-                case 0: r = v; g = mid1; b = m; break;
-                case 1: r = mid2; g = v; b = m; break;
-                case 2: r = m; g = v; b = mid1; break;
-                case 3: r = m; g = mid2; b = v; break;
-                case 4: r = mid1; g = m; b = v; break;
-                case 5: r = v; g = m; b = mid2; break;
-                default: throw new System.InvalidOperationException($"Sextant {sextant} should be between 0 and 5.");
-            }
+                0 => (v, mid1, m),
+                1 => (mid2, v, m),
+                2 => (m, v, mid1),
+                3 => (m, mid2, v),
+                4 => (mid1, m, v),
+                5 => (v, m, mid2),
+                _ => throw new System.InvalidOperationException($"Sextant {sextant} should be between 0 and 5."),
+            };
         }
         return new RGB((int)(r * 255), (int)(g * 255), (int)(b * 255));
     }
