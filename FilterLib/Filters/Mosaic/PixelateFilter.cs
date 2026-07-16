@@ -4,10 +4,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Mosaic
 {
-    /// <summary>
-    /// Pixelate the image to bigger blocks.
-    /// </summary>
-    [Filter]
+    [Filter("Pixelate the image to bigger blocks.")]
     public sealed class PixelateFilter : FilterInPlaceBase
     {
         public enum PixelateMode { Average, MidPoint }
