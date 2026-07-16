@@ -4,10 +4,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other
 {
-    /// <summary>
-    /// Convert cartesian coordinates to polar to get a circular effect.
-    /// </summary>
-    [Filter]
+    [Filter("Convert cartesian coordinates to polar to get a circular effect.")]
     public sealed class ConvertToPolarFilter : FilterInPlaceBase
     {
         /// <summary>

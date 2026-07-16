@@ -6,10 +6,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other
 {
-    /// <summary>
-    /// Distort the image as if waves were going through it.
-    /// </summary>
-    [Filter]
+    [Filter("Distort the image as if waves were going through it.")]
     public sealed class WavesFilter : FilterBase
     {
         /// <summary>

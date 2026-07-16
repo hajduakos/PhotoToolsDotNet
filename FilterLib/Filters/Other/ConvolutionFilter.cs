@@ -4,10 +4,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other
 {
-    /// <summary>
-    /// Convolution filter using a given 3x3 kernel (matrix).
-    /// </summary>
-    [Filter]
+    [Filter("Convolution filter using a given 3x3 kernel (matrix).")]
     public sealed class ConvolutionFilter : FilterInPlaceBase
     {
         /// <summary>
