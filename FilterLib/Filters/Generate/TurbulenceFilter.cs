@@ -3,10 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Generate
 {
-    /// <summary>
-    /// Generate turbulence.
-    /// </summary>
-    [Filter]
+    [Filter("Generate turbulence.")]
     public sealed class TurbulenceFilter : GeneratorBase
     {
         /// <summary>

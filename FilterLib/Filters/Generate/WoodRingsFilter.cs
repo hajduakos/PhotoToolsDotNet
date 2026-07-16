@@ -5,10 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Generate
 {
-    /// <summary>
-    /// Generate wood rings looking pattern.
-    /// </summary>
-    [Filter]
+    [Filter("Generate wood rings looking pattern.")]
     public sealed class WoodRingsFilter : GeneratorBase
     {
         /// <summary>

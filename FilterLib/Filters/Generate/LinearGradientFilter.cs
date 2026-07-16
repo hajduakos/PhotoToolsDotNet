@@ -5,10 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Generate
 {
-    /// <summary>
-    /// Generate a linear gradient from black to white defined by a start and an end point.
-    /// </summary>
-    [Filter]
+    [Filter("Generate a linear gradient from black to white defined by a start and an end point.")]
     public sealed class LinearGradientFilter : FilterInPlaceBase
     {
         /// <summary>
