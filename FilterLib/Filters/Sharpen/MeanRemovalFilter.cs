@@ -4,10 +4,7 @@ using IReporter = FilterLib.Reporting.IReporter;
 
 namespace FilterLib.Filters.Sharpen
 {
-    /// <summary>
-    /// Mean removal filter using a 3x3 convolution.
-    /// </summary>
-    [Filter]
+    [Filter("Mean removal filter using a 3x3 convolution.")]
     public sealed class MeanRemovalFilter : FilterInPlaceBase
     {
         private readonly ConvolutionFilter conv = new(new ConvolutionMatrix(new int[,] { { -1, -1, -1 }, { -1, 9, -1 }, { -1, -1, -1 } }, 1, 0));

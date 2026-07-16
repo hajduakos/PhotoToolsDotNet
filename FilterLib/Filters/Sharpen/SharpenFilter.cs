@@ -4,10 +4,7 @@ using IReporter = FilterLib.Reporting.IReporter;
 
 namespace FilterLib.Filters.Sharpen
 {
-    /// <summary>
-    /// Sharpen image using 3x3 convolution.
-    /// </summary>
-    [Filter]
+    [Filter("Sharpen image using 3x3 convolution.")]
     public sealed class SharpenFilter : FilterInPlaceBase
     {
         private readonly ConvolutionFilter conv = new(new ConvolutionMatrix(new int[,] { { 0, -2, 0 }, { -2, 11, -2 }, { 0, -2, 0 } }, 3, 0));
