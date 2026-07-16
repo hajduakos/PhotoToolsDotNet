@@ -6,10 +6,7 @@ using Random = System.Random;
 
 namespace FilterLib.Filters.Dither
 {
-    /// <summary>
-    /// Random dither filter.
-    /// </summary>
-    [Filter]
+    [Filter("Random dither.")]
     public sealed class RandomDitherFilter : FilterInPlaceBase
     {
         private const int MAX_THREADS = 128;

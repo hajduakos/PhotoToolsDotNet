@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither
 {
-    /// <summary>
-    /// Burkes error diffusion dither filter.
-    /// </summary>
-    [Filter]
+    [Filter("Burkes error diffusion dither.")]
     public sealed class BurkesDitherFilter : ErrorDiffusionDitherFilterBase
     {
         /// <summary>

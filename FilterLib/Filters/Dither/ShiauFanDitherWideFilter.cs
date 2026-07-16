@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither
 {
-    /// <summary>
-    /// Shiau-Fan error diffusion dither filter, wider variant.
-    /// </summary>
-    [Filter]
+    [Filter("Shiau-Fan error diffusion dither, wider variant.")]
     public sealed class ShiauFanDitherWideFilter : ErrorDiffusionDitherFilterBase
     {
         /// <summary>

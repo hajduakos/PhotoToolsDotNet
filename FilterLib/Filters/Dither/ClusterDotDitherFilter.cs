@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither
 {
-    /// <summary>
-    /// Cluster dot dither is an ordered dither with a specifically defined matrix
-    /// </summary>
-    [Filter]
+    [Filter("Cluster dot dither is an ordered dither with a specifically defined matrix.")]
     public sealed class ClusterDotDitherFilter : OrderedDitherFilterBase
     {
         /// <summary>

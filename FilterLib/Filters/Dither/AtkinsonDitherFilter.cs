@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither
 {
-    /// <summary>
-    /// Atkinson error diffusion dither filter.
-    /// </summary>
-    [Filter]
+    [Filter("Atkinson error diffusion dither.")]
     public sealed class AtkinsonDitherFilter : ErrorDiffusionDitherFilterBase
     {
         /// <summary>

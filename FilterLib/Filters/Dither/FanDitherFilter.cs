@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither
 {
-    /// <summary>
-    /// Fan error diffusion dither filter.
-    /// </summary>
-    [Filter]
+    [Filter("Fan error diffusion dither.")]
     public sealed class FanDitherFilter : ErrorDiffusionDitherFilterBase
     {
         /// <summary>

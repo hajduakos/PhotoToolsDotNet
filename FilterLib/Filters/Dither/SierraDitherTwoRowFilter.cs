@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither
 {
-    /// <summary>
-    /// Sierra error diffusion dither filter with two rows only.
-    /// </summary>
-    [Filter]
+    [Filter("Sierra error diffusion dither with two rows only.")]
     public sealed class SierraDitherTwoRowFilter : ErrorDiffusionDitherFilterBase
     {
         /// <summary>
