@@ -4,10 +4,7 @@ using IReporter = FilterLib.Reporting.IReporter;
 
 namespace FilterLib.Filters.Edges
 {
-    /// <summary>
-    /// Edge detection filter using a 3x3 convolution.
-    /// </summary>
-    [Filter]
+    [Filter("Edge detection filter using a 3x3 convolution.")]
     public sealed class EdgeDetectionFilter : FilterInPlaceBase
     {
         private readonly ConvolutionFilter conv = new(new ConvolutionMatrix(new int[,] { { -1, 0, -1 }, { 0, 4, 0 }, { -1, 0, -1 } }, 1, 127));

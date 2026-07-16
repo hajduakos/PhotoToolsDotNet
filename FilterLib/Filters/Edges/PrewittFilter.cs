@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Filters.Edges
 {
-    /// <summary>
-    /// Prewitt filter combining two convolutions.
-    /// </summary>
-    [Filter]
+    [Filter("Prewitt filter combining two convolutions.")]
     public sealed class PrewittFilter : DualConvolutionBase
     {
         /// <summary>

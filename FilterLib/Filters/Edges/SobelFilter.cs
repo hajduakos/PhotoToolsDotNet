@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Filters.Edges
 {
-    /// <summary>
-    /// Sobel filter combining two convolutions.
-    /// </summary>
-    [Filter]
+    [Filter("Sobel filter combining two convolutions.")]
     public sealed class SobelFilter : DualConvolutionBase
     {
         /// <summary>
