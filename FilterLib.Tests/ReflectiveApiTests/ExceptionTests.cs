@@ -2,54 +2,53 @@
 using NUnit.Framework;
 using System;
 
-namespace FilterLib.Tests.ReflectiveApiTests
+namespace FilterLib.Tests.ReflectiveApiTests;
+
+public class ExceptionTests
 {
-    public class ExceptionTests
+    [Test]
+    public void TestNonExistingFilter() =>
+        Assert.Throws<ArgumentException>(() => ReflectiveApi.ConstructFilterByName("NoSuchFilter"));
+
+    [Test]
+    public void TestNonExistingParam()
     {
-        [Test]
-        public void TestNonExistingFilter() =>
-            Assert.Throws<ArgumentException>(() => ReflectiveApi.ConstructFilterByName("NoSuchFilter"));
+        IFilter f = ReflectiveApi.ConstructFilterByName("Brightness");
+        Assert.Throws<ArgumentException>(() => ReflectiveApi.SetFilterPropertyByName(f, "NoSuchProperty", "0"));
+    }
 
-        [Test]
-        public void TestNonExistingParam()
-        {
-            IFilter f = ReflectiveApi.ConstructFilterByName("Brightness");
-            Assert.Throws<ArgumentException>(() => ReflectiveApi.SetFilterPropertyByName(f, "NoSuchProperty", "0"));
-        }
+    [Test]
+    public void TestParamInvalidValue()
+    {
+        IFilter f = ReflectiveApi.ConstructFilterByName("Brightness");
+        Assert.Throws<FormatException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Brightness", "abc"));
+    }
 
-        [Test]
-        public void TestParamInvalidValue()
-        {
-            IFilter f = ReflectiveApi.ConstructFilterByName("Brightness");
-            Assert.Throws<FormatException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Brightness", "abc"));
-        }
+    [Test]
+    public void TestParamGreater()
+    {
+        IFilter f = ReflectiveApi.ConstructFilterByName("Brightness");
+        Assert.Throws<ArgumentOutOfRangeException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Brightness", "256"));
+    }
 
-        [Test]
-        public void TestParamGreater()
-        {
-            IFilter f = ReflectiveApi.ConstructFilterByName("Brightness");
-            Assert.Throws<ArgumentOutOfRangeException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Brightness", "256"));
-        }
+    [Test]
+    public void TestParamLess()
+    {
+        IFilter f = ReflectiveApi.ConstructFilterByName("Brightness");
+        Assert.Throws<ArgumentOutOfRangeException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Brightness", "-256"));
+    }
 
-        [Test]
-        public void TestParamLess()
-        {
-            IFilter f = ReflectiveApi.ConstructFilterByName("Brightness");
-            Assert.Throws<ArgumentOutOfRangeException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Brightness", "-256"));
-        }
+    [Test]
+    public void TestParamGreaterF()
+    {
+        IFilter f = ReflectiveApi.ConstructFilterByName("Skew");
+        Assert.Throws<ArgumentOutOfRangeException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Angle", "91"));
+    }
 
-        [Test]
-        public void TestParamGreaterF()
-        {
-            IFilter f = ReflectiveApi.ConstructFilterByName("Skew");
-            Assert.Throws<ArgumentOutOfRangeException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Angle", "91"));
-        }
-
-        [Test]
-        public void TestParamLessF()
-        {
-            IFilter f = ReflectiveApi.ConstructFilterByName("Gamma");
-            Assert.Throws<ArgumentOutOfRangeException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Gamma", "-0.1"));
-        }
+    [Test]
+    public void TestParamLessF()
+    {
+        IFilter f = ReflectiveApi.ConstructFilterByName("Gamma");
+        Assert.Throws<ArgumentOutOfRangeException>(() => ReflectiveApi.SetFilterPropertyByName(f, "Gamma", "-0.1"));
     }
 }

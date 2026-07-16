@@ -1,11 +1,10 @@
 ﻿using FilterLib;
 
-namespace FilterScript.Model
-{
-    interface ITask
-    {
-        public Image Execute();
+namespace FilterScript.Model;
 
-        public void Clear();
-    }
+interface ITask
+{
+    public Image Execute();
+
+    public void Clear();
 }

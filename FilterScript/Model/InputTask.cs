@@ -1,15 +1,14 @@
 ﻿using FilterLib;
 
-namespace FilterScript.Model
+namespace FilterScript.Model;
+
+sealed class InputTask : ITask
 {
-    sealed class InputTask : ITask
-    {
-        public Image Input { get; set; }
+    public Image Input { get; set; }
 
-        public InputTask(Image input = null) => this.Input = input;
+    public InputTask(Image input = null) => this.Input = input;
 
-        public Image Execute() => Input;
+    public Image Execute() => Input;
 
-        public void Clear() { }
-    }
+    public void Clear() { }
 }
