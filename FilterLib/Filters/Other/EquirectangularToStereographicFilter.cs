@@ -45,10 +45,11 @@ public sealed class EquirectangularToStereographicFilter : FilterBase
     public InterpolationMode Interpolation { get; set; }
 
     /// <summary>
-    /// Constructor with parameter
+    /// Constructor.
     /// </summary>
     /// <param name="aov">Angle of view [0;180[</param>
     /// <param name="spin">Spin [0;360]</param>
+    /// <param name="interpolation">Interpolation mode</param>
     public EquirectangularToStereographicFilter(float aov = 120, float spin = 0, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
     {
         AOV = aov;

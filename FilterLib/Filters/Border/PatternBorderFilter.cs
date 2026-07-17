@@ -25,6 +25,7 @@ public sealed class PatternBorderFilter : BorderFilterBase
     /// <param name="radius">Border radius</param>
     /// <param name="pattern">Border pattern</param>
     /// <param name="position">Border position</param>
+    /// <param name="antiAlias">Quality of anti-aliasing the rounded corners</param>
     public PatternBorderFilter(Size width, Size radius, Image pattern, BorderPosition position, AntiAliasQuality antiAlias)
         : base(width, radius, position, antiAlias) => Pattern = pattern;
 

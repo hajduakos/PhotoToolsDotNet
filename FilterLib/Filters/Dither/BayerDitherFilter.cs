@@ -25,7 +25,7 @@ public sealed class BayerDitherFilter : OrderedDitherFilterBase
         /// <summary>
         /// Constructor with size: width and height will be 2^size.
         /// </summary>
-        /// <param name="size"></param>
+        /// <param name="size">Matrix size, width and height will be 2^size</param>
         public BayerDitherMatrix(int size)
         {
             this.size = size;

@@ -37,6 +37,7 @@ public sealed class SkewFilter : FilterBase
     /// Constructor
     /// </summary>
     /// <param name="angle">Skew angle in degrees ]-90;90[</param>
+    /// <param name="direction">Skew direction</param>
     /// <param name="interpolation">Interpolation mode</param>
     public SkewFilter(float angle = 0, Direction direction = Direction.Horizontal, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
     {
