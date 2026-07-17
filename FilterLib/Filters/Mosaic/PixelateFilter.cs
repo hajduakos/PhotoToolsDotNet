@@ -7,6 +7,9 @@ namespace FilterLib.Filters.Mosaic;
 [Filter("Pixelate the image to bigger blocks.")]
 public sealed class PixelateFilter : FilterInPlaceBase
 {
+    /// <summary>
+    /// Mode for determining the color of each block.
+    /// </summary>
     public enum PixelateMode { Average, MidPoint }
 
     /// <summary>

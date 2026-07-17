@@ -9,6 +9,9 @@ namespace FilterLib.Filters.Transform;
 [Filter("Rotate the image by an arbitrary angle, with configurable crop and interpolation modes.")]
 public sealed class RotateFilter : FilterBase
 {
+    /// <summary>
+    /// Mode for cropping the rotated image.
+    /// </summary>
     public enum CropMode { Fit, Fill }
 
     /// <summary>
