@@ -13,21 +13,21 @@ public abstract class Size
     /// Convert the size to absolute with respect to a reference.
     /// </summary>
     /// <param name="reference">Reference</param>
-    /// <returns></returns>
+    /// <returns>Absolute size in pixels</returns>
     public abstract int ToAbsolute(int reference);
 
     /// <summary>
     /// Create new absolute size.
     /// </summary>
     /// <param name="value">Size in pixels</param>
-    /// <returns></returns>
+    /// <returns>A new absolute size</returns>
     public static Size Absolute(int value) => new AbsoluteSize(value);
 
     /// <summary>
     /// Create new relative size.
     /// </summary>
     /// <param name="percentage">Size in percentage (1 is 100%)</param>
-    /// <returns></returns>
+    /// <returns>A new relative size</returns>
     public static Size Relative(float percentage) => new RelativeSize(percentage);
 
     /// <summary>

@@ -28,7 +28,7 @@ public readonly partial struct ConvolutionMatrix
     /// </summary>
     /// <param name="x">Column index</param>
     /// <param name="y">Row index</param>
-    /// <returns></returns>
+    /// <returns>Weight at the given position</returns>
     public readonly int this[int x, int y] => weights[x, y];
 
     /// <summary> Width of the matrix </summary>

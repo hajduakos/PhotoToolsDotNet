@@ -52,7 +52,7 @@ public sealed class Image : System.ICloneable
     /// <param name="x">X coordinate of the pixel, must be between 0 and Width-1</param>
     /// <param name="y">Y coordinate of the pixel, must be between 0 and Height-1</param>
     /// <param name="c">Component index, must be 0 (Red), 1 (Green) or 2 (Blue)</param>
-    /// <returns></returns>
+    /// <returns>Value of the requested component [0;255]</returns>
     public byte this[int x, int y, int c]
     {
         get
