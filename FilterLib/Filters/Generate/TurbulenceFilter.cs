@@ -19,9 +19,8 @@ public sealed class TurbulenceFilter : GeneratorBase
         reporter?.Start();
         object reporterLock = new();
         int progress = 0;
-        reporter?.Report(0, 0, 2 * image.Height);
-        float[,] turb = GenerateTurbulence(image.Width, image.Height);
-        reporter?.Report(image.Height, 0, 2 * image.Height);
+        float[,] turb = GenerateTurbulence(image.Width, image.Height,
+            reporter is null ? null : new SubReporter(reporter, 0, image.Height, 0, 2 * image.Height));
         fixed (byte* start = image)
         {
             byte* start0 = start;

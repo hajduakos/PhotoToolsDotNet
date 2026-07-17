@@ -1,4 +1,5 @@
-﻿using FilterLib.Util;
+﻿using FilterLib.Reporting;
+using FilterLib.Util;
 using Math = System.Math;
 using MathF = System.MathF;
 using Parallel = System.Threading.Tasks.Parallel;
@@ -45,9 +46,11 @@ public abstract class GeneratorBase : FilterInPlaceBase
     /// </summary>
     /// <param name="width">Width of the map</param>
     /// <param name="height">Height of the map</param>
+    /// <param name="reporter">Reporter (can be null)</param>
     /// <returns>Random turbulence map</returns>
-    protected float[,] GenerateTurbulence(int width, int height)
+    protected float[,] GenerateTurbulence(int width, int height, IReporter reporter = null)
     {
+        reporter?.Start();
         int pow = 1 << Iterations;
         float[,] noise = new float[width, height];
         float[,] turbulence = new float[width, height];
@@ -64,6 +67,8 @@ public abstract class GeneratorBase : FilterInPlaceBase
                     noise[x, y] = rnd.NextSingle();
         });
 
+        object reporterLock = new();
+        int progress = 0;
         Parallel.For(0, width, x =>
         {
             for (int y = 0; y < height; ++y)
@@ -91,8 +96,10 @@ public abstract class GeneratorBase : FilterInPlaceBase
                 }
                 turbulence[x, y] = sum / pow * .5f;
             }
+            if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, width);
         });
 
+        reporter?.Done();
         return turbulence;
     }
 }

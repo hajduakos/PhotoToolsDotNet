@@ -65,9 +65,8 @@ public sealed class MarbleFilter : GeneratorBase
         int progress = 0;
         float xMul = HorizontalLines / (float)image.Width;
         float yMul = VerticalLines / (float)image.Height;
-        reporter?.Report(0, 0, 2 * image.Height);
-        float[,] turb = GenerateTurbulence(image.Width, image.Height);
-        reporter?.Report(image.Height, 0, 2 * image.Height);
+        float[,] turb = GenerateTurbulence(image.Width, image.Height,
+            reporter is null ? null : new SubReporter(reporter, 0, image.Height, 0, 2 * image.Height));
 
         fixed (byte* start = image)
         {
