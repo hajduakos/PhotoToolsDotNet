@@ -7,6 +7,52 @@ namespace FilterLib.IO;
 /// </summary>
 public class BitmapCodec : CodecBase
 {
+    /*
+     * Example: a 3×2 pixel, 24-bit bitmap (BITMAPINFOHEADER, RGB24).
+     *
+     * The image:
+     *
+     *     +--------+--------+--------+
+     *     | Red    | Green  | Blue   |  y=0
+     *     +--------+--------+--------+
+     *     | White  | Black  | Yellow |  y=1
+     *     +--------+--------+--------+
+     *       x=0      x=1      x=2
+     *
+     * Rows are stored bottom-to-top, pixels as BGR, each row padded to a
+     * multiple of 4 bytes (3×3 = 9 data bytes + 3 padding = 12 bytes/row).
+     *
+     * Offset  Size  Hex value      Value          Description
+     * ------  ----  -----------    -----------    --------------------------------------
+     * BMP header
+     * 00      2     42 4D          "BM"           ID field
+     * 02      4     4E 00 00 00    78 bytes       Size of the BMP file (54 header + 24 data)
+     * 06      2     00 00          Unused         Application specific
+     * 08      2     00 00          Unused         Application specific
+     * 0A      4     36 00 00 00    54 bytes       Offset where the pixel array can be found
+     * DIB header
+     * 0E      4     28 00 00 00    40 bytes       Number of bytes in the DIB header
+     * 12      4     03 00 00 00    3 pixels       Width of the bitmap (left to right order)
+     * 16      4     02 00 00 00    2 pixels       Height (positive = bottom to top order)
+     * 1A      2     01 00          1 plane        Number of color planes
+     * 1C      2     18 00          24 bits        Number of bits per pixel
+     * 1E      4     00 00 00 00    0              BI_RGB, no compression used
+     * 22      4     18 00 00 00    24 bytes       Size of the raw pixel data (with padding)
+     * 26      4     13 0B 00 00    2835 px/m      Horizontal resolution (72 DPI)
+     * 2A      4     13 0B 00 00    2835 px/m      Vertical resolution (72 DPI)
+     * 2E      4     00 00 00 00    0 colors       Number of colors in the palette
+     * 32      4     00 00 00 00    0 colors       Important colors (0 = all)
+     * Start of pixel array (bitmap data)
+     * 36      3     FF FF FF       255 255 255    White,  Pixel (x=0, y=1)
+     * 39      3     00 00 00       0 0 0          Black,  Pixel (x=1, y=1)
+     * 3C      3     00 FF FF       0 255 255      Yellow, Pixel (x=2, y=1)
+     * 3F      3     00 00 00       0 0 0          Padding for 4 byte alignment
+     * 42      3     00 00 FF       0 0 255        Red,    Pixel (x=0, y=0)
+     * 45      3     00 FF 00       0 255 0        Green,  Pixel (x=1, y=0)
+     * 48      3     FF 00 00       255 0 0        Blue,   Pixel (x=2, y=0)
+     * 4B      3     00 00 00       0 0 0          Padding for 4 byte alignment
+     */
+
     private const uint BMP_HEADER_SIZE = 14;
     private const uint DIB_HEADER_SIZE = 40;
     private const int RESOLUTION = 2835; // 72 DPI converted to pixels/meter
