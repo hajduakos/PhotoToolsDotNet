@@ -26,11 +26,14 @@ public sealed class SubReporter : IReporter
         this.smin = smin;
         this.smax = smax;
     }
+    /// <inheritdoc/>
     public void Done() => parent?.Report(smax, pmin, pmax);
 
+    /// <inheritdoc/>
     public void Report(int value, int min = 0, int max = 100) =>
         parent?.Report((int)((value - min) / (float)(max - min) * (smax - smin) + smin), pmin, pmax);
 
 
+    /// <inheritdoc/>
     public void Start() => parent?.Report(smin, pmin, pmax);
 }
