@@ -255,8 +255,8 @@ public class ToStringTests
     internal static IEnumerable<TestCaseData> Other()
     {
         yield return new TestCaseData(
-            new ConvertToPolarFilter(12),
-            "ConvertToPolarFilter(Phase: 12)");
+            new ConvertToPolarFilter(12, InterpolationMode.NearestNeighbor),
+            "ConvertToPolarFilter(Phase: 12, Interpolation: NearestNeighbor)");
         yield return new TestCaseData(
             new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } }, 10, 11)),
             "ConvolutionFilter(Matrix: [[1, 2, 3], [4, 5, 6], [7, 8, 9]] / 10 + 11)");

@@ -12,12 +12,14 @@ public class OtherApiTests
         IFilter f = ReflectiveApi.ConstructFilterByName("ConvertToPolar");
         Assert.That(f, Is.InstanceOf<ConvertToPolarFilter>());
         ReflectiveApi.SetFilterPropertyByName(f, "Phase", "123.45");
+        ReflectiveApi.SetFilterPropertyByName(f, "Interpolation", "Bilinear");
         ConvertToPolarFilter ff = f as ConvertToPolarFilter;
         Assert.That(ff.Phase, Is.EqualTo(123.45f));
+        Assert.That(ff.Interpolation, Is.EqualTo(Util.InterpolationMode.Bilinear));
     }
 
     [Test]
-    public void TestConvertToPolarParCnt() => Assert.That(Common.ParamCount(typeof(ConvertToPolarFilter)), Is.EqualTo(1));
+    public void TestConvertToPolarParCnt() => Assert.That(Common.ParamCount(typeof(ConvertToPolarFilter)), Is.EqualTo(2));
 
     [Test]
     public void TestConvolution()

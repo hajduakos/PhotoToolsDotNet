@@ -13,7 +13,8 @@ public class OtherTests
 {
     internal static IEnumerable<TestCaseData> Data()
     {
-        yield return new TestCaseData("_input_eq.bmp", "ConvertToPolar_72.bmp", new ConvertToPolarFilter(72), 1);
+        yield return new TestCaseData("_input_eq.bmp", "ConvertToPolar_20_NN.bmp", new ConvertToPolarFilter(20, InterpolationMode.NearestNeighbor), 1);
+        yield return new TestCaseData("_input_eq.bmp", "ConvertToPolar_72_BL.bmp", new ConvertToPolarFilter(72, InterpolationMode.Bilinear), 1);
 
         yield return new TestCaseData("_input.bmp", "_input.bmp",
             new ConvolutionFilter(new ConvolutionMatrix(new int[,] { { 1, }, }, 1, 0)), 1);

@@ -1,4 +1,5 @@
 ﻿using FilterLib.Reporting;
+using FilterLib.Util;
 using MathF = System.MathF;
 using Parallel = System.Threading.Tasks.Parallel;
 
@@ -25,10 +26,21 @@ public sealed class ConvertToPolarFilter : FilterInPlaceBase
     }
 
     /// <summary>
+    /// Interpolation mode.
+    /// </summary>
+    [FilterParam]
+    public InterpolationMode Interpolation { get; set; }
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="phase">Phase [0;360]</param>
-    public ConvertToPolarFilter(float phase = 0) => Phase = phase;
+    /// <param name="interpolation">Interpolation mode</param>
+    public ConvertToPolarFilter(float phase = 0, InterpolationMode interpolation = InterpolationMode.NearestNeighbor)
+    {
+        Phase = phase;
+        Interpolation = interpolation;
+    }
 
     /// <inheritdoc/>
     public override unsafe void ApplyInPlace(Image image, IReporter reporter = null)
@@ -64,42 +76,57 @@ public sealed class ConvertToPolarFilter : FilterInPlaceBase
 
                     if (fi >= 2 * MathF.PI) fi -= 2 * MathF.PI;
 
-                    // Get X coordinate and points for interpolation in the original image
+                    // Get coordinates in the original image
                     float xOrg = fi * xMul;
-
-                    int x0 = (int)MathF.Floor(xOrg);
-                    float xFrac = xOrg - x0;
-                    if (x0 >= image.Width) x0 = image.Width - 1;
-                    x0 *= 3;
-
-                    int x1 = (int)MathF.Ceiling(xOrg);
-                    if (x1 >= image.Width) x1 = image.Width - 1;
-                    x1 *= 3;
-
-                    // Get Y coordinate and points for interpolation in the original image
                     float yOrg = r * yMul;
 
-                    int y0 = (int)MathF.Floor(yOrg);
-                    float yFrac = yOrg - y0;
+                    switch (Interpolation)
+                    {
+                        case InterpolationMode.NearestNeighbor:
+                            int xn = (int)MathF.Round(xOrg);
+                            if (xn >= image.Width) xn = image.Width - 1;
+                            xn *= 3;
+                            int yn = (int)MathF.Round(yOrg);
+                            if (yn >= image.Height) yn = image.Height - 1;
+                            byte* oldRow = oldStart0 + yn * width_3;
+                            newRow[x] = oldRow[xn];
+                            newRow[x + 1] = oldRow[xn + 1];
+                            newRow[x + 2] = oldRow[xn + 2];
+                            break;
+                        case InterpolationMode.Bilinear:
+                            int x0 = (int)MathF.Floor(xOrg);
+                            float xFrac = xOrg - x0;
+                            if (x0 >= image.Width) x0 = image.Width - 1;
+                            x0 *= 3;
 
-                    if (y0 >= image.Height) y0 = image.Height - 1;
+                            int x1 = (int)MathF.Ceiling(xOrg);
+                            if (x1 >= image.Width) x1 = image.Width - 1;
+                            x1 *= 3;
 
-                    int y1 = (int)MathF.Ceiling(yOrg);
-                    if (y1 >= image.Height) y1 = image.Height - 1;
+                            int y0 = (int)MathF.Floor(yOrg);
+                            float yFrac = yOrg - y0;
 
-                    // Bilinear interpolation
-                    newRow[x] = (byte)(oldStart0[y0 * width_3 + x0] * (1 - xFrac) * (1 - yFrac)
-                        + oldStart0[y1 * width_3 + x0] * (1 - xFrac) * yFrac
-                        + oldStart0[y0 * width_3 + x1] * xFrac * (1 - yFrac)
-                        + oldStart0[y1 * width_3 + x1] * xFrac * yFrac);
-                    newRow[x + 1] = (byte)(oldStart0[y0 * width_3 + x0 + 1] * (1 - xFrac) * (1 - yFrac)
-                        + oldStart0[y1 * width_3 + x0 + 1] * (1 - xFrac) * yFrac
-                        + oldStart0[y0 * width_3 + x1 + 1] * xFrac * (1 - yFrac)
-                        + oldStart0[y1 * width_3 + x1 + 1] * xFrac * yFrac);
-                    newRow[x + 2] = (byte)(oldStart0[y0 * width_3 + x0 + 2] * (1 - xFrac) * (1 - yFrac)
-                        + oldStart0[y1 * width_3 + x0 + 2] * (1 - xFrac) * yFrac
-                        + oldStart0[y0 * width_3 + x1 + 2] * xFrac * (1 - yFrac)
-                        + oldStart0[y1 * width_3 + x1 + 2] * xFrac * yFrac);
+                            if (y0 >= image.Height) y0 = image.Height - 1;
+
+                            int y1 = (int)MathF.Ceiling(yOrg);
+                            if (y1 >= image.Height) y1 = image.Height - 1;
+
+                            newRow[x] = (byte)(oldStart0[y0 * width_3 + x0] * (1 - xFrac) * (1 - yFrac)
+                                + oldStart0[y1 * width_3 + x0] * (1 - xFrac) * yFrac
+                                + oldStart0[y0 * width_3 + x1] * xFrac * (1 - yFrac)
+                                + oldStart0[y1 * width_3 + x1] * xFrac * yFrac);
+                            newRow[x + 1] = (byte)(oldStart0[y0 * width_3 + x0 + 1] * (1 - xFrac) * (1 - yFrac)
+                                + oldStart0[y1 * width_3 + x0 + 1] * (1 - xFrac) * yFrac
+                                + oldStart0[y0 * width_3 + x1 + 1] * xFrac * (1 - yFrac)
+                                + oldStart0[y1 * width_3 + x1 + 1] * xFrac * yFrac);
+                            newRow[x + 2] = (byte)(oldStart0[y0 * width_3 + x0 + 2] * (1 - xFrac) * (1 - yFrac)
+                                + oldStart0[y1 * width_3 + x0 + 2] * (1 - xFrac) * yFrac
+                                + oldStart0[y0 * width_3 + x1 + 2] * xFrac * (1 - yFrac)
+                                + oldStart0[y1 * width_3 + x1 + 2] * xFrac * yFrac);
+                            break;
+                        default:
+                            throw new System.ArgumentException($"Unknown interpolation mode: {Interpolation}.");
+                    }
                 }
                 if (reporter != null) lock (reporterLock) reporter.Report(++progress, 0, image.Height);
             });
