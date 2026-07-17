@@ -114,6 +114,7 @@ public sealed partial class Gradient
             (byte)(colors[gid].B + (colors[gid + 1].B - colors[gid].B) * ratio));
     }
 
+    /// <inheritdoc/>
     public override string ToString()
     {
         List<string> stopsStr = new();

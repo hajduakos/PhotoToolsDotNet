@@ -77,8 +77,10 @@ public readonly record struct RGB
 
     // Custom hash packs the three bytes into a perfect hash (better distribution
     // than the compiler-generated one when RGB is used as a dictionary key).
+    /// <inheritdoc/>
     public override int GetHashCode() => (R << 16) | (G << 8) | B;
 
+    /// <inheritdoc/>
     public override string ToString() => $"RGB({R}, {G}, {B})";
 
     private const float RRatio = .299f;

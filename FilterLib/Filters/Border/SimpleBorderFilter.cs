@@ -26,5 +26,6 @@ public sealed class SimpleBorderFilter : BorderFilterBase
     public SimpleBorderFilter(Size width, Size radius, RGB color, BorderPosition position, AntiAliasQuality antiAlias)
         : base(width, radius, position, antiAlias) => Color = color;
 
+    /// <inheritdoc/>
     protected override (byte, byte, byte) GetBorderAt(int x, int y) => (Color.R, Color.G, Color.B);
 }

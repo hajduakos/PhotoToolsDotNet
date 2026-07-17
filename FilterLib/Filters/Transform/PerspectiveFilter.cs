@@ -40,6 +40,7 @@ public sealed class PerspectiveFilter : FilterBase
         Interpolation = interpolation;
     }
 
+    /// <inheritdoc/>
     public override unsafe Image Apply(Image image, IReporter reporter = null)
     {
         float scaleAbs = MathF.Abs(Scale);

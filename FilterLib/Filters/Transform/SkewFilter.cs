@@ -45,6 +45,7 @@ public sealed class SkewFilter : FilterBase
         Interpolation = interpolation;
     }
 
+    /// <inheritdoc/>
     public override unsafe Image Apply(Image image, IReporter reporter = null)
     {
         reporter?.Start();

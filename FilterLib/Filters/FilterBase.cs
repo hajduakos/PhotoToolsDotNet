@@ -12,6 +12,7 @@ public abstract class FilterBase : IFilter
     /// <inheritdoc/>
     public abstract Image Apply(Image image, IReporter reporter = null);
 
+    /// <inheritdoc/>
     public override string ToString()
     {
         StringBuilder sb = new();

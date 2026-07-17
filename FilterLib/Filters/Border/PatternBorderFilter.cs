@@ -28,6 +28,7 @@ public sealed class PatternBorderFilter : BorderFilterBase
     public PatternBorderFilter(Size width, Size radius, Image pattern, BorderPosition position, AntiAliasQuality antiAlias)
         : base(width, radius, position, antiAlias) => Pattern = pattern;
 
+    /// <inheritdoc/>
     protected override (byte, byte, byte) GetBorderAt(int x, int y)
     {
         int x1 = x % Pattern.Width;

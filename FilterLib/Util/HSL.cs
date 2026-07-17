@@ -65,5 +65,6 @@ public readonly record struct HSL
         return new RGB((int)(r * 255), (int)(g * 255), (int)(b * 255));
     }
 
+    /// <inheritdoc/>
     public override string ToString() => $"HSL({H}, {S}, {L})";
 }
