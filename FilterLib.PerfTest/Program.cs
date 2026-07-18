@@ -54,6 +54,7 @@ List<IFilter> filters =
     new PosterizeFilter(4),
     new SepiaFilter(),
     new SolarizeFilter(),
+    new TemperatureFilter(5000),
     new ThresholdFilter(127),
     new VintageFilter(50),
     // Dither

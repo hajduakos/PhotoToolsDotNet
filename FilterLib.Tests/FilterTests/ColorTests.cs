@@ -59,6 +59,10 @@ public class ColorTests
 
         yield return new TestCaseData("Solarize.bmp", new SolarizeFilter(), 0);
 
+        yield return new TestCaseData("Temperature_3000.bmp", new TemperatureFilter(3000), 1);
+        yield return new TestCaseData("_input.bmp", new TemperatureFilter(6500), 1);
+        yield return new TestCaseData("Temperature_15000.bmp", new TemperatureFilter(15000), 1);
+
         yield return new TestCaseData("Threshold_63.bmp", new ThresholdFilter(63), 1);
         yield return new TestCaseData("Threshold_127.bmp", new ThresholdFilter(127), 1);
         yield return new TestCaseData("Threshold_191.bmp", new ThresholdFilter(191), 1);

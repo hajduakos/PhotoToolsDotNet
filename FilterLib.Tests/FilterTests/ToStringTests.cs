@@ -138,6 +138,9 @@ public class ToStringTests
             new SolarizeFilter(),
             "SolarizeFilter");
         yield return new TestCaseData(
+            new TemperatureFilter(5000),
+            "TemperatureFilter(Temperature: 5000)");
+        yield return new TestCaseData(
             new ThresholdFilter(123),
             "ThresholdFilter(Threshold: 123)");
         yield return new TestCaseData(

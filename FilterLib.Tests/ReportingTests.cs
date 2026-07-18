@@ -68,6 +68,7 @@ public class ReportingTests
         yield return new TestCaseData(new PosterizeFilter());
         yield return new TestCaseData(new SepiaFilter());
         yield return new TestCaseData(new SolarizeFilter());
+        yield return new TestCaseData(new TemperatureFilter());
         yield return new TestCaseData(new ThresholdFilter());
         yield return new TestCaseData(new VintageFilter());
 
