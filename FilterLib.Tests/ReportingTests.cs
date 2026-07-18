@@ -70,6 +70,7 @@ public class ReportingTests
         yield return new TestCaseData(new SolarizeFilter());
         yield return new TestCaseData(new TemperatureFilter());
         yield return new TestCaseData(new ThresholdFilter());
+        yield return new TestCaseData(new TintFilter());
         yield return new TestCaseData(new VintageFilter());
 
         yield return new TestCaseData(new AtkinsonDitherFilter());

@@ -1,5 +1,4 @@
 using FilterLib.Util;
-using System;
 
 namespace FilterLib.Filters.Color;
 
@@ -55,9 +54,9 @@ public sealed class TemperatureFilter : PerPixelFilterBase
         gainB /= gainG;
         gainG = 1.0;
 
-        redMap = BuildMap(gainR);
-        greenMap = BuildMap(gainG);
-        blueMap = BuildMap(gainB);
+        redMap = SRGB.GainMap(gainR);
+        greenMap = SRGB.GainMap(gainG);
+        blueMap = SRGB.GainMap(gainB);
     }
 
     /// <inheritdoc/>
@@ -77,21 +76,6 @@ public sealed class TemperatureFilter : PerPixelFilterBase
     {
         redMap = greenMap = blueMap = null;
         base.ApplyEnd();
-    }
-
-    /// <summary>
-    /// Build a lookup table applying a per-channel gain in linear light, so channel
-    /// scaling is done on decoded values rather than gamma-encoded ones.
-    /// </summary>
-    private static byte[] BuildMap(double gain)
-    {
-        byte[] map = new byte[256];
-        for (int x = 0; x < 256; ++x)
-        {
-            double lin = SrgbDecode(x / 255.0) * gain;
-            map[x] = ((float)(SrgbEncode(lin.Clamp(0.0, 1.0)) * 255.0)).ClampToByte();
-        }
-        return map;
     }
 
     /// <summary>
@@ -128,12 +112,4 @@ public sealed class TemperatureFilter : PerPixelFilterBase
                 : 3.0817580 * x * x * x - 5.87338670 * x * x + 3.75112997 * x - 0.37001483;
         return (x, y);
     }
-
-    // sRGB gamma decode (companding): encoded [0;1] to linear [0;1].
-    private static double SrgbDecode(double u) =>
-        u <= 0.04045 ? u / 12.92 : Math.Pow((u + 0.055) / 1.055, 2.4);
-
-    // sRGB gamma encode (companding): linear [0;1] to encoded [0;1].
-    private static double SrgbEncode(double u) =>
-        u <= 0.0031308 ? 12.92 * u : 1.055 * Math.Pow(u, 1.0 / 2.4) - 0.055;
 }

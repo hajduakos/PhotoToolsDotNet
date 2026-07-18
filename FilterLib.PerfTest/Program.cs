@@ -56,6 +56,7 @@ List<IFilter> filters =
     new SolarizeFilter(),
     new TemperatureFilter(5000),
     new ThresholdFilter(127),
+    new TintFilter(40),
     new VintageFilter(50),
     // Dither
     new AtkinsonDitherFilter(4),

@@ -7,7 +7,7 @@ public class ApiTests
 {
     [Test]
     public void TestListFilters() =>
-        Assert.That(ReflectiveApi.GetFilterTypes().Count(), Is.EqualTo(80));
+        Assert.That(ReflectiveApi.GetFilterTypes().Count(), Is.EqualTo(81));
 
     [Test]
     public void TestListBlends() =>

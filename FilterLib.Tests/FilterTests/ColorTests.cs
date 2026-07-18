@@ -67,6 +67,10 @@ public class ColorTests
         yield return new TestCaseData("Threshold_127.bmp", new ThresholdFilter(127), 1);
         yield return new TestCaseData("Threshold_191.bmp", new ThresholdFilter(191), 1);
 
+        yield return new TestCaseData("Tint_-80.bmp", new TintFilter(-80), 1);
+        yield return new TestCaseData("_input.bmp", new TintFilter(0), 1);
+        yield return new TestCaseData("Tint_80.bmp", new TintFilter(80), 1);
+
         yield return new TestCaseData("Vintage_80.bmp", new VintageFilter(80), 1);
         yield return new TestCaseData("_input.bmp", new VintageFilter(0), 1);
     }

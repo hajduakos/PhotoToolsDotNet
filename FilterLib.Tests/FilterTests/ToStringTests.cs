@@ -144,6 +144,9 @@ public class ToStringTests
             new ThresholdFilter(123),
             "ThresholdFilter(Threshold: 123)");
         yield return new TestCaseData(
+            new TintFilter(40),
+            "TintFilter(Tint: 40)");
+        yield return new TestCaseData(
             new VintageFilter(12),
             "VintageFilter(Strength: 12)");
     }
