@@ -119,16 +119,16 @@ public static class ReflectiveApi
     {
         foreach (var v in pi.GetCustomAttributes<FilterParamMinAttribute>().Select(a => a.Value))
             if (Convert.ToInt32(value) < v)
-                throw new ArgumentOutOfRangeException($"Parameter value {value} is less than minimum ({v})");
+                throw new ArgumentOutOfRangeException(pi.Name, value, $"Parameter value {value} is less than minimum ({v})");
         foreach (var v in pi.GetCustomAttributes<FilterParamMaxAttribute>().Select(a => a.Value))
             if (Convert.ToInt32(value) > v)
-                throw new ArgumentOutOfRangeException($"Parameter value {value} is greater than maximum ({v})");
+                throw new ArgumentOutOfRangeException(pi.Name, value, $"Parameter value {value} is greater than maximum ({v})");
         foreach (var v in pi.GetCustomAttributes<FilterParamMinFAttribute>().Select(a => a.Value))
             if (Convert.ToDouble(value) < v)
-                throw new ArgumentOutOfRangeException($"Parameter value {value} is less than minimum ({v})");
+                throw new ArgumentOutOfRangeException(pi.Name, value, $"Parameter value {value} is less than minimum ({v})");
         foreach (var v in pi.GetCustomAttributes<FilterParamMaxFAttribute>().Select(a => a.Value))
             if (Convert.ToDouble(value) > v)
-                throw new ArgumentOutOfRangeException($"Parameter value {value} is greater than maximum ({v})");
+                throw new ArgumentOutOfRangeException(pi.Name, value, $"Parameter value {value} is greater than maximum ({v})");
     }
 
     /// <summary>
