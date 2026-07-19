@@ -19,7 +19,6 @@ public static class Histogram
         int blockSize = image.Height / threads;
         // Each thread has local data to avoid locking
         int[,] histogram = new int[threads, 256];
-        Parallel.For(0, threads, t => { for (int i = 0; i < 256; ++i) histogram[t, i] = 0; });
 
         fixed (byte* start = image)
         {
@@ -45,7 +44,6 @@ public static class Histogram
         int[] merged = new int[256];
         Parallel.For(0, 256, i =>
         {
-            merged[i] = 0;
             for (int t = 0; t < threads; ++t) merged[i] += histogram[t, i];
         });
         return merged;

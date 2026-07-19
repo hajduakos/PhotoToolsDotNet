@@ -109,9 +109,6 @@ public abstract class ErrorDiffusionDitherFilterBase : FilterInPlaceBase
         int width_3 = image.Width * 3;
         float intervalSize = 255f / (Levels - 1);
         float[,] quantErrArray = new float[width_3, image.Height];
-        for (int x = 0; x < width_3; x++)
-            for (int y = 0; y < image.Height; y++)
-                quantErrArray[x, y] = 0;
 
         fixed (byte* start = image)
         {

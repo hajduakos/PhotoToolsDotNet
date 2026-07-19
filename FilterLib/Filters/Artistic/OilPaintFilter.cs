@@ -74,8 +74,6 @@ public sealed class OilPaintFilter : FilterInPlaceBase
                 int[] blue = new int[256];
                 int[] intensities = new int[256];
 
-                for (int i = 0; i < 256; ++i) red[i] = green[i] = blue[i] = intensities[i] = 0;
-
                 // Calculate full window around first column of current row
                 for (int xSub = 0; xSub <= Radius && xSub < image.Width; ++xSub)
                 {
