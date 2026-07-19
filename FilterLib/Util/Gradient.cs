@@ -119,7 +119,7 @@ public sealed partial class Gradient
     {
         List<string> stopsStr = new();
         for (int i = 0; i < stops.Count; i++)
-            stopsStr.Add($"{stops[i]} {colors[i]}");
+            stopsStr.Add($"{stops[i].ToString(CultureInfo.InvariantCulture)} {colors[i]}");
         return $"Gradient({string.Join(", ", stopsStr)})";
     }
 }

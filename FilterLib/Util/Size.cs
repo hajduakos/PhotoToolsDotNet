@@ -37,7 +37,7 @@ public abstract class Size
     /// <returns>A new absolute or relative size</returns>
     public static Size FromString(string str)
     {
-        str = str.Trim().ToLower();
+        str = str.Trim().ToLowerInvariant();
         if (str.EndsWith('%'))
             return Relative(float.Parse(str[0..^1].Trim(), System.Globalization.CultureInfo.InvariantCulture.NumberFormat) / 100);
         else if (str.EndsWith("px"))
@@ -56,6 +56,6 @@ public abstract class Size
     {
         public override int ToAbsolute(int reference) => (int)(reference * percentage);
 
-        public override string ToString() => $"{percentage * 100}%";
+        public override string ToString() => $"{(percentage * 100).ToString(System.Globalization.CultureInfo.InvariantCulture)}%";
     }
 }
