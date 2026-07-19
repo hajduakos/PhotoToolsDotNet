@@ -14,7 +14,7 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v7
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: 10.0.x
     - name: Restore NuGet dependencies
@@ -33,7 +33,7 @@ jobs:
         fetch-depth: 2
     - run: git reset --hard HEAD~1
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: 10.0.x
     - name: Restore NuGet dependencies
