@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Edges;
 
-[Filter("Prewitt filter combining two convolutions.")]
+[Filter("Highlight edges by combining horizontal and vertical gradients (Prewitt operator).")]
 public sealed class PrewittFilter : DualConvolutionBase
 {
     /// <summary>

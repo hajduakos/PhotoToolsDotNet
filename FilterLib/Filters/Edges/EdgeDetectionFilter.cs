@@ -4,7 +4,7 @@ using IReporter = FilterLib.Reporting.IReporter;
 
 namespace FilterLib.Filters.Edges;
 
-[Filter("Edge detection filter using a 3x3 convolution.")]
+[Filter("Highlight edges by detecting sharp changes in brightness.")]
 public sealed class EdgeDetectionFilter : FilterInPlaceBase
 {
     private readonly ConvolutionFilter conv = new(new ConvolutionMatrix(new int[,] { { -1, 0, -1 }, { 0, 4, 0 }, { -1, 0, -1 } }, 1, 127));

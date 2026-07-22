@@ -4,7 +4,7 @@ using IReporter = FilterLib.Reporting.IReporter;
 
 namespace FilterLib.Filters.Edges;
 
-[Filter("Emboss filter using a 3x3 convolution.")]
+[Filter("Turn the image into a gray relief where edges look raised or engraved.")]
 public sealed class EmbossFilter : FilterInPlaceBase
 {
     private readonly ConvolutionFilter conv = new(new ConvolutionMatrix(new int[,] { { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1 } }, 1, 127));

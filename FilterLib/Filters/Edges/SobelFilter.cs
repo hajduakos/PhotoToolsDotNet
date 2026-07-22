@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Edges;
 
-[Filter("Sobel filter combining two convolutions.")]
+[Filter("Highlight edges by combining horizontal and vertical gradients (Sobel operator).")]
 public sealed class SobelFilter : DualConvolutionBase
 {
     /// <summary>

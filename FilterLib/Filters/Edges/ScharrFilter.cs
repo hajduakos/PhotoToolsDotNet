@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Edges;
 
-[Filter("Scharr filter combining two convolutions.")]
+[Filter("Highlight edges by combining horizontal and vertical gradients (Scharr operator).")]
 public sealed class ScharrFilter : DualConvolutionBase
 {
     /// <summary>
