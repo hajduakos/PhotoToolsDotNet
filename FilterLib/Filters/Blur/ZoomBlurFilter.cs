@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur;
 
-[Filter("Blur by replacing each pixel with the average calculated along the line connecting the point to the center.")]
+[Filter("Simulate zooming by smearing the image radially out from a center point.")]
 public sealed class ZoomBlurFilter : FilterInPlaceBase
 {
     /// <summary>

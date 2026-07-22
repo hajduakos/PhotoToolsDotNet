@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur;
 
-[Filter("Blur by replacing each pixel with the Gaussian average of the surrounding rectangle of a given size.")]
+[Filter("Smoothly blur the image, weighting nearby pixels more than distant ones (Gaussian kernel).")]
 public sealed class GaussianBlurFilter : FilterInPlaceBase
 {
     /// <summary>

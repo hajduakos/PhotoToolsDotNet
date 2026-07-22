@@ -3,7 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur;
 
-[Filter("Blur by replacing each pixel with the average of the surrounding rectangle of a given size.")]
+[Filter("Soften the image by averaging each pixel with its rectangular neighborhood.")]
 public sealed class BoxBlurFilter : FilterInPlaceBase
 {
     /// <summary>

@@ -4,7 +4,7 @@ using IReporter = FilterLib.Reporting.IReporter;
 
 namespace FilterLib.Filters.Blur;
 
-[Filter("Apply a small amount of blur using a 3x3 square around each pixel.")]
+[Filter("Apply a light, fixed-strength blur to gently soften the image.")]
 public sealed class BlurFilter : FilterInPlaceBase
 {
     private readonly ConvolutionFilter conv = new(new ConvolutionMatrix(new int[,] { { 1, 1, 1 }, { 1, 8, 1 }, { 1, 1, 1 } }, 16, 0));

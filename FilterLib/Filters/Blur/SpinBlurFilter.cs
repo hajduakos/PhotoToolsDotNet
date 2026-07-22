@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur;
 
-[Filter("Blur by replacing each pixel with the average calculated along an arc.")]
+[Filter("Simulate rotation by smearing the image in arcs around a center point.")]
 public sealed class SpinBlurFilter : FilterInPlaceBase
 {
     /// <summary>

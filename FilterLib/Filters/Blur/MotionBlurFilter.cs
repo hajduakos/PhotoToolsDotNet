@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Blur;
 
-[Filter("Blur by replacing each pixel with the average calculated along a line.")]
+[Filter("Simulate motion by smearing the image along a given direction.")]
 public sealed class MotionBlurFilter : FilterInPlaceBase
 {
     /// <summary>
