@@ -6,7 +6,7 @@ using Random = System.Random;
 
 namespace FilterLib.Filters.Dither;
 
-[Filter("Random dither.")]
+[Filter("Reduce color levels using random thresholds to scatter pixels.")]
 public sealed class RandomDitherFilter : FilterInPlaceBase
 {
     private const int MAX_THREADS = 128;

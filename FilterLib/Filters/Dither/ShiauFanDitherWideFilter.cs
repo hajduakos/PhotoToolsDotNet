@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Shiau-Fan error diffusion dither, wider variant.")]
+[Filter("Reduce color levels, spreading rounding error to neighbors (wider Shiau-Fan).")]
 public sealed class ShiauFanDitherWideFilter : ErrorDiffusionDitherFilterBase
 {
     /// <summary>

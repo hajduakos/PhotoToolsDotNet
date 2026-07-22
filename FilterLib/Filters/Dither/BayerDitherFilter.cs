@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Bayer dither is an ordered dither with a specific recursively defined matrix.")]
+[Filter("Reduce color levels using an ordered threshold pattern (recursive Bayer matrix).")]
 public sealed class BayerDitherFilter : OrderedDitherFilterBase
 {
     /// <summary>

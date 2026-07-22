@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Sierra error diffusion dither.")]
+[Filter("Reduce color levels, spreading rounding error to neighbors (Sierra).")]
 public sealed class SierraDitherFilter : ErrorDiffusionDitherFilterBase
 {
     /// <summary>

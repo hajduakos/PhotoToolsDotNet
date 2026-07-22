@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Cluster dot dither is an ordered dither with a specifically defined matrix.")]
+[Filter("Reduce color levels using an ordered threshold pattern that clusters into dots.")]
 public sealed class ClusterDotDitherFilter : OrderedDitherFilterBase
 {
     /// <summary>

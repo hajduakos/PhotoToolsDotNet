@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Fan error diffusion dither.")]
+[Filter("Reduce color levels, spreading rounding error to neighbors (Fan).")]
 public sealed class FanDitherFilter : ErrorDiffusionDitherFilterBase
 {
     /// <summary>

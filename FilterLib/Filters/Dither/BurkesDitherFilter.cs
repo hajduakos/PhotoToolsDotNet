@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Burkes error diffusion dither.")]
+[Filter("Reduce color levels, spreading rounding error to neighbors (Burkes).")]
 public sealed class BurkesDitherFilter : ErrorDiffusionDitherFilterBase
 {
     /// <summary>

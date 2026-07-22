@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Sierra error diffusion dither with two rows only.")]
+[Filter("Reduce color levels, spreading rounding error to neighbors (two-row Sierra).")]
 public sealed class SierraDitherTwoRowFilter : ErrorDiffusionDitherFilterBase
 {
     /// <summary>

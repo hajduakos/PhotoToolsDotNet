@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Jarvis-Judice-Ninke error diffusion dither.")]
+[Filter("Reduce color levels, spreading rounding error to neighbors (Jarvis-Judice-Ninke).")]
 public sealed class JarvisJudiceNinkeDitherFilter : ErrorDiffusionDitherFilterBase
 {
     /// <summary>

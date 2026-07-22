@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Filter lite error diffusion dither.")]
+[Filter("Reduce color levels, spreading rounding error to neighbors (Filter Lite).")]
 public sealed class FilterLiteDitherFilter : ErrorDiffusionDitherFilterBase
 {
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Floyd-Steinberg error diffusion dither.")]
+[Filter("Reduce color levels, spreading rounding error to neighbors (Floyd-Steinberg).")]
 public sealed class FloydSteinbergDitherFilter : ErrorDiffusionDitherFilterBase
 {
     /// <summary>

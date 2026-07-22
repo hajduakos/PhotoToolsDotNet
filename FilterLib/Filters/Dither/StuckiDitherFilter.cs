@@ -1,6 +1,6 @@
 ﻿namespace FilterLib.Filters.Dither;
 
-[Filter("Stucki error diffusion dither.")]
+[Filter("Reduce color levels, spreading rounding error to neighbors (Stucki).")]
 public sealed class StuckiDitherFilter : ErrorDiffusionDitherFilterBase
 {
     /// <summary>
