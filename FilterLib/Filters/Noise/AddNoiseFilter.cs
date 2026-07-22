@@ -6,7 +6,7 @@ using Random = System.Random;
 
 namespace FilterLib.Filters.Noise;
 
-[Filter("Add random uniform noise to the image, either monochrome or independently per color channel.")]
+[Filter("Add random noise, either monochrome or independently per color channel.")]
 public sealed class AddNoiseFilter : FilterInPlaceBase
 {
     private const int MAX_THREADS = 128;
