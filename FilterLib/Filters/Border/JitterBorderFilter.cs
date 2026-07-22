@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Border;
 
-[Filter("Border where the probability of coloring a pixel gradually goes from 1 to 0 toward the center.")]
+[Filter("Add a rough, speckled border that dissolves into the image toward the center.")]
 public sealed class JitterBorderFilter : FilterInPlaceBase
 {
     private const int MAX_THREADS = 128;

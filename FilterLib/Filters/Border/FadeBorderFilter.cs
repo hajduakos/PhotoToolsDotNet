@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Border;
 
-[Filter("Border that gradually fades away going toward the center.")]
+[Filter("Add a colored border that fades smoothly inward toward the center.")]
 public sealed class FadeBorderFilter : FilterInPlaceBase
 {
     /// <summary>
