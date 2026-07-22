@@ -6,7 +6,7 @@ using Random = System.Random;
 
 namespace FilterLib.Filters.Mosaic;
 
-[Filter("Create a crystallized look using a variant of the Voronoi diagram.")]
+[Filter("Break the image into irregular, crystal-like cells of solid color (Voronoi diagram).")]
 public sealed class CrystallizeFilter : FilterInPlaceBase
 {
     /// <summary>

@@ -4,7 +4,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Mosaic;
 
-[Filter("Pixelate the image to bigger blocks.")]
+[Filter("Reduce the image to large blocks of solid color.")]
 public sealed class PixelateFilter : FilterInPlaceBase
 {
     /// <summary>

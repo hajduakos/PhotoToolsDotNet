@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Mosaic;
 
-[Filter("Pixelate the image and add circles as if it was made of Lego blocks.")]
+[Filter("Rebuild the image out of Lego-like blocks.")]
 public sealed class LegoFilter : FilterInPlaceBase
 {
     /// <summary>
