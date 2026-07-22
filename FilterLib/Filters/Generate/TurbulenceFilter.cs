@@ -3,7 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Generate;
 
-[Filter("Generate turbulence.")]
+[Filter("Fill the image with random, cloud-like turbulent noise.")]
 public sealed class TurbulenceFilter : GeneratorBase
 {
     /// <summary>

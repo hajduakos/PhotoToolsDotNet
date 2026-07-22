@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Generate;
 
-[Filter("Create a radial gradient with a given center and inner/outer radius. Everything inside the inner radius is black, everything outside the outer radius is black and there is a linear transition in between.")]
+[Filter("Fill the image with a circular gradient: black inside the inner radius, white outside the outer radius, blending between.")]
 public sealed class RadialGradientFilter : FilterInPlaceBase
 {
     /// <summary>

@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Generate;
 
-[Filter("Generate a marble-like pattern.")]
+[Filter("Fill the image with a marble-like pattern.")]
 public sealed class MarbleFilter : GeneratorBase
 {
     /// <summary>
