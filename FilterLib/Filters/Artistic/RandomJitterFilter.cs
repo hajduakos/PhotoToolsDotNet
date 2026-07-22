@@ -6,7 +6,7 @@ using Random = System.Random;
 
 namespace FilterLib.Filters.Artistic;
 
-[Filter("Replace each pixel with a random one within a given radius.")]
+[Filter("Scatter pixels by swapping each with a random nearby one, for a grainy look.")]
 public sealed class RandomJitterFilter : FilterInPlaceBase
 {
     private const int MAX_THREADS = 128;

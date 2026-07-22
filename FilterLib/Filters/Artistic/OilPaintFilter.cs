@@ -4,7 +4,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Artistic;
 
-[Filter("Create oil paint effect by replacing each pixel with the most frequent intensity in a given radius.")]
+[Filter("Give the image a painterly, oil-paint look by flattening each area to its dominant tone.")]
 public sealed class OilPaintFilter : FilterInPlaceBase
 {
     /// <summary>

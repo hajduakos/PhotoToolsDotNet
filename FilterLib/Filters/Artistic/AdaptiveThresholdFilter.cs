@@ -3,7 +3,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Artistic;
 
-[Filter("Map each pixel to black or white based on a threshold calculated from pixels in a given radius.")]
+[Filter("Convert to black and white, choosing the cutoff locally so detail survives uneven lighting.")]
 public sealed class AdaptiveThresholdFilter : FilterInPlaceBase
 {
     /// <summary>
