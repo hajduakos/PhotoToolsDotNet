@@ -4,7 +4,7 @@ using IReporter = FilterLib.Reporting.IReporter;
 
 namespace FilterLib.Filters.Sharpen;
 
-[Filter("Mean removal filter using a 3x3 convolution.")]
+[Filter("Sharpen the image strongly by subtracting the local average from each pixel.")]
 public sealed class MeanRemovalFilter : FilterInPlaceBase
 {
     private readonly ConvolutionFilter conv = new(new ConvolutionMatrix(new int[,] { { -1, -1, -1 }, { -1, 9, -1 }, { -1, -1, -1 } }, 1, 0));
