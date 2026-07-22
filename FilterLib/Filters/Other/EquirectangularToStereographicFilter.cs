@@ -6,7 +6,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other;
 
-[Filter("Assume the input to have an equirectangular projection and re-project as stereographic.")]
+[Filter("Turn a 360° panorama into a \"tiny planet\" by re-projecting it stereographically.")]
 public sealed class EquirectangularToStereographicFilter : FilterBase
 {
     /// <summary>

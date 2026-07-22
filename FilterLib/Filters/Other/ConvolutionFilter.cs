@@ -4,7 +4,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other;
 
-[Filter("Convolution filter using a given 3x3 kernel (matrix).")]
+[Filter("Transform the image with a custom convolution kernel (matrix).")]
 public sealed class ConvolutionFilter : FilterInPlaceBase
 {
     /// <summary>

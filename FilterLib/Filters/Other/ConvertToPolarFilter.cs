@@ -5,7 +5,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Other;
 
-[Filter("Convert cartesian coordinates to polar to get a circular effect.")]
+[Filter("Wrap the image around a center point for a circular, polar effect.")]
 public sealed class ConvertToPolarFilter : FilterInPlaceBase
 {
     /// <summary>
