@@ -2,11 +2,7 @@
 
 namespace FilterLib.Blending.Component;
 
-/// <summary>
-/// Keep the hue and lightness of the bottom layer,
-/// but use the saturation of the top layer.
-/// </summary>
-[Blend]
+[Blend("Keep bottom hue and lightness, take saturation from top.")]
 public sealed class SaturationBlend : HSLBlendBase
 {
     /// <summary>

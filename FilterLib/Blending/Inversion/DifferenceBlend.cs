@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Inversion;
 
-/// <summary>
-/// Calculate the (Absolute value) of the difference of the two layers.
-/// </summary>
-[Blend]
+[Blend("Absolute difference of the two layers.")]
 public sealed class DifferenceBlend : PerComponentBlendBase
 {
     /// <summary>

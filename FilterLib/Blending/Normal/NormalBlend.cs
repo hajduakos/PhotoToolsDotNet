@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Blending.Normal;
 
-/// <summary>
-/// Use the top layer without any arithmetic.
-/// </summary>
-[Blend]
+[Blend("Use the top layer directly, ignoring the bottom.")]
 public sealed class NormalBlend : PerComponentBlendBase
 {
     /// <summary>

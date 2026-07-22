@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Darken;
 
-/// <summary>
-/// Add bottom and top layer, then subtract white.
-/// </summary>
-[Blend]
+[Blend("Add bottom and top layer, then subtract white.")]
 public sealed class LinearBurnBlend : PerComponentBlendBase
 {
     /// <summary>

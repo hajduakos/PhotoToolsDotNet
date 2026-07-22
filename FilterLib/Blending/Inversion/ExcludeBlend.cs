@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Inversion;
 
-/// <summary>
-/// Add layers and subtract double of their multiplication.
-/// </summary>
-[Blend]
+[Blend("Add layers and subtract double their product.")]
 public sealed class ExcludeBlend : PerComponentBlendBase
 {
     /// <summary>

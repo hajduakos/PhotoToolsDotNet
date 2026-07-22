@@ -41,6 +41,16 @@ public class ApiTests
     }
 
     [Test]
+    public void TestBlendDescriptions()
+    {
+        foreach (var type in ReflectiveApi.GetBlendTypes())
+        {
+            var attr = (Blending.BlendAttribute)type.GetCustomAttributes(typeof(Blending.BlendAttribute), false).Single();
+            Assert.That(attr.Description, Is.Not.Empty, $"Blend '{type.Name}' has no description.");
+        }
+    }
+
+    [Test]
     public void TestFilterNotExistsException() =>
         Assert.Throws<System.ArgumentException>(() => ReflectiveApi.ConstructFilterByName("This should not exist..."));
 

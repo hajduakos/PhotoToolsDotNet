@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Blending.Darken;
 
-/// <summary>
-/// For each pixel, pick the darker color (based on luminance).
-/// </summary>
-[Blend]
+[Blend("Pick the darker of the two colors by luminance.")]
 public sealed class DarkerColorBlend : PerPixelBlendBase
 {
 

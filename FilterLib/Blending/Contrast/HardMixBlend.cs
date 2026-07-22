@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Blending.Contrast;
 
-/// <summary>
-/// Set each component to fully bright or dark based on the bottom and top components.
-/// </summary>
-[Blend]
+[Blend("Push each component to fully dark or bright based on bottom and top.")]
 public sealed class HardMixBlend : PerComponentBlendBase
 {
     /// <summary>

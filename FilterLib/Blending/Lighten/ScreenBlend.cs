@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Lighten;
 
-/// <summary>
-/// Multiply inverted top and inverted bottom layer, and invert result.
-/// </summary>
-[Blend]
+[Blend("Invert both layers, multiply, and invert result.")]
 public sealed class ScreenBlend : PerComponentBlendBase
 {
     /// <summary>

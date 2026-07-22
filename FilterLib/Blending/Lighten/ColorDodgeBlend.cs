@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Lighten;
 
-/// <summary>
-/// Divide bottom layer by inverted top layer.
-/// </summary>
-[Blend]
+[Blend("Divide bottom layer by inverted top layer.")]
 public sealed class ColorDodgeBlend : PerComponentBlendBase
 {
     /// <summary>

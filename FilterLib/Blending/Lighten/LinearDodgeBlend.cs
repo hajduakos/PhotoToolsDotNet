@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Lighten;
 
-/// <summary>
-/// Add bottom and top layer.
-/// </summary>
-[Blend]
+[Blend("Add bottom and top layer.")]
 public sealed class LinearDodgeBlend : PerComponentBlendBase
 {
     /// <summary>

@@ -3,11 +3,7 @@ using Math = System.Math;
 
 namespace FilterLib.Blending.Contrast;
 
-/// <summary>
-/// Do a half-strength darken blend for dark top pixels and a half-strength
-/// lighten blend for light top pixels.
-/// </summary>
-[Blend]
+[Blend("Darken where the top is dark and lighten where it is light.")]
 public sealed class PinLightBlend : PerComponentBlendBase
 {
     /// <summary>

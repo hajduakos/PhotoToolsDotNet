@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Blending.Darken;
 
-/// <summary>
-/// Pick the darker value for each component.
-/// </summary>
-[Blend]
+[Blend("Pick the darker value for each component.")]
 public sealed class DarkenBlend : PerComponentBlendBase
 {
     /// <summary>

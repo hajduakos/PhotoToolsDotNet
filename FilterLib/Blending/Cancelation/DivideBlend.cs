@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Cancelation;
 
-/// <summary>
-/// Divide bottom layer by top layer.
-/// </summary>
-[Blend]
+[Blend("Divide bottom layer by top layer.")]
 public sealed class DivideBlend : PerComponentBlendBase
 {
     /// <summary>

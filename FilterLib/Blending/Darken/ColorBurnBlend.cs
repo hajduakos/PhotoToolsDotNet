@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Darken;
 
-/// <summary>
-/// Invert bottom layer, divide by top, and invert result.
-/// </summary>
-[Blend]
+[Blend("Invert bottom layer, divide by top, and invert result.")]
 public sealed class ColorBurnBlend : PerComponentBlendBase
 {
     /// <summary>

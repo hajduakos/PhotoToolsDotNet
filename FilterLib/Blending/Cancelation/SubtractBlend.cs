@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Cancelation;
 
-/// <summary>
-/// Subtract top layer from bottom, negative numbers become black.
-/// </summary>
-[Blend]
+[Blend("Subtract top layer from bottom, clamping negatives to black.")]
 public sealed class SubtractBlend : PerComponentBlendBase
 {
     /// <summary>

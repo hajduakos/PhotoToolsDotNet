@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Blending.Lighten;
 
-/// <summary>
-/// For each pixel, pick the lighter color (based on luminance).
-/// </summary>
-[Blend]
+[Blend("Pick the lighter of the two colors by luminance.")]
 public sealed class LighterColorBlend : PerPixelBlendBase
 {
 

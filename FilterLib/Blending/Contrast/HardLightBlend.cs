@@ -2,11 +2,7 @@
 
 namespace FilterLib.Blending.Contrast;
 
-/// <summary>
-/// Do a half-strength multiply blend for dark top pixels and a half-strength
-/// screen blend for light top pixels.
-/// </summary>
-[Blend]
+[Blend("Multiply where the top is dark and screen where it is light.")]
 public sealed class HardLightBlend : PerComponentBlendBase
 {
     /// <summary>

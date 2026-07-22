@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Contrast;
 
-/// <summary>
-/// Soft light blend based on PS formula.
-/// </summary>
-[Blend]
+[Blend("Gently darken or lighten depending on the top layer.")]
 public sealed class SoftLightBlend : PerComponentBlendBase
 {
     /// <summary>

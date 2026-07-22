@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Darken;
 
-/// <summary>
-/// Multiply top and bottom layers.
-/// </summary>
-[Blend]
+[Blend("Multiply top and bottom layers.")]
 public sealed class MultiplyBlend : PerComponentBlendBase
 {
     /// <summary>

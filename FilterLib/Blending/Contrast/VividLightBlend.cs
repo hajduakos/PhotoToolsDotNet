@@ -2,11 +2,7 @@
 
 namespace FilterLib.Blending.Contrast;
 
-/// <summary>
-/// Do a half-strength color burn blend for dark top pixels and a half-strength
-/// color dodge blend for light top pixels.
-/// </summary>
-[Blend]
+[Blend("Color burn where the top is dark and color dodge where it is light.")]
 public sealed class VividLightBlend : PerComponentBlendBase
 {
     /// <summary>

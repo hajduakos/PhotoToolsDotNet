@@ -6,4 +6,7 @@ namespace FilterLib.Blending;
 /// Attribute for marking classes that are blend modes.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class BlendAttribute : Attribute { }
+public class BlendAttribute(string description = "") : Attribute
+{
+    public string Description { get; } = description;
+}

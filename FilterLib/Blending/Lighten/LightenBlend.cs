@@ -1,9 +1,6 @@
 ﻿namespace FilterLib.Blending.Lighten;
 
-/// <summary>
-/// Pick the lighter value for each component.
-/// </summary>
-[Blend]
+[Blend("Pick the lighter value for each component.")]
 public sealed class LightenBlend : PerComponentBlendBase
 {
     /// <summary>

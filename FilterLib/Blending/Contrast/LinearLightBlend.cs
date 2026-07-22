@@ -2,10 +2,7 @@
 
 namespace FilterLib.Blending.Contrast;
 
-/// <summary>
-/// Do a linear burn blend with twice the effect of the top pixel.
-/// </summary>
-[Blend]
+[Blend("Linear burn with twice the effect of the top layer.")]
 public sealed class LinearLightBlend : PerComponentBlendBase
 {
     /// <summary>
