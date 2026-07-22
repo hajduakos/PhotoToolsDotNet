@@ -2,7 +2,7 @@
 
 namespace FilterLib.Filters.Color;
 
-[Filter("Threshold filter that maps each pixel to pure black or white based on a given (and fixed) threshold.")]
+[Filter("Convert to pure black and white using a single fixed brightness cutoff.")]
 public sealed class ThresholdFilter : PerPixelFilterBase
 {
     /// <summary>

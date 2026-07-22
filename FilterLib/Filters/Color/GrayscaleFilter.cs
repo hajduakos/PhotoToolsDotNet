@@ -2,7 +2,7 @@
 
 namespace FilterLib.Filters.Color;
 
-[Filter("Convert to grayscale using custom weights for the different components.")]
+[Filter("Convert to grayscale, mixing the color channels by adjustable weights.")]
 public sealed class GrayscaleFilter : PerPixelFilterBase
 {
     /// <summary>

@@ -2,7 +2,7 @@
 
 namespace FilterLib.Filters.Color;
 
-[Filter("Sepia filter creating an old looking brownish color.")]
+[Filter("Give the image a warm, brownish, old-photo look.")]
 public sealed class SepiaFilter : PerPixelFilterBase
 {
     /// <inheritdoc/>

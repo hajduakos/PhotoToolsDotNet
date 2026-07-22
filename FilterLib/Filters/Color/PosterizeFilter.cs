@@ -4,7 +4,7 @@ using MathF = System.MathF;
 
 namespace FilterLib.Filters.Color;
 
-[Filter("Posterize image by reducing the number of levels for each component.")]
+[Filter("Flatten each channel to a few levels for a poster-like look.")]
 public sealed class PosterizeFilter : PerComponentFilterBase
 {
     private float div;

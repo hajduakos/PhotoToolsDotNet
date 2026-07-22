@@ -2,7 +2,7 @@
 
 namespace FilterLib.Filters.Color;
 
-[Filter("Map each color to a value in a given gradient based on its luminance.")]
+[Filter("Recolor the image by mapping each pixel's brightness onto a chosen gradient.")]
 public sealed class GradientMapFilter : PerPixelFilterBase
 {
     /// <summary>

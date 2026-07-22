@@ -7,7 +7,7 @@ using FilterLib.Util;
 
 namespace FilterLib.Filters.Color;
 
-[Filter("Create a vintage look by various color transformations.")]
+[Filter("Give the image a faded, aged look with warm sepia tones.")]
 public sealed class VintageFilter : FilterInPlaceBase
 {
     /// <summary>

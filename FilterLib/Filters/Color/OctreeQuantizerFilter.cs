@@ -6,7 +6,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 namespace FilterLib.Filters.Color;
 
-[Filter("Reduce colors (quantize) to a palette of given size, using an octree (a tree with 8 children per node).")]
+[Filter("Reduce the image to a palette of a given number of colors (using an octree).")]
 public sealed class OctreeQuantizerFilter : FilterInPlaceBase
 {
     // Colors are grouped by their bits (per channel) starting from the most
