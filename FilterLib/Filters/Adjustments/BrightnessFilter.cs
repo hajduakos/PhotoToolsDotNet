@@ -2,7 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments;
 
-[Filter("Increase/decrease each component of each pixel by a fixed amount.")]
+[Filter("Brighten or darken the image by adding a fixed amount to every pixel.")]
 public sealed class BrightnessFilter : PerComponentFilterBase
 {
     /// <summary>

@@ -3,7 +3,7 @@ using System;
 
 namespace FilterLib.Filters.Adjustments;
 
-[Filter("Adjust levels by stretching out a range of tones to the full range, and clipping values outside.")]
+[Filter("Stretch a chosen range of tones across the full black-to-white range, clipping the rest.")]
 public sealed class LevelsFilter : PerComponentFilterBase
 {
     /// <summary>

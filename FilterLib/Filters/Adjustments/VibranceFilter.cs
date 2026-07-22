@@ -2,7 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments;
 
-[Filter("Adjust saturation in an adaptive way to avoid oversaturating.")]
+[Filter("Boost saturation of muted colors while sparing already-saturated ones.")]
 public sealed class VibranceFilter : PerPixelFilterBase
 {
     /// <summary>

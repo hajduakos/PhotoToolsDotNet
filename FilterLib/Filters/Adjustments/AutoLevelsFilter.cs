@@ -2,7 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments;
 
-[Filter("Automatic levels adjustment by histogram stretching.")]
+[Filter("Automatically boost contrast by stretching the tonal range to span black to white.")]
 public sealed class AutoLevelsFilter : FilterInPlaceBase
 {
     private const float LocalLimitPct = 1f / 256;

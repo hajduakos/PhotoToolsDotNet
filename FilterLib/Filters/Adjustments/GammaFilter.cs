@@ -2,7 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments;
 
-[Filter("Adjust gamma of each pixel with an exponential function.")]
+[Filter("Brighten or darken midtones with a gamma curve, leaving pure black and white unchanged.")]
 public sealed class GammaFilter : PerComponentFilterBase
 {
     /// <summary>

@@ -2,7 +2,7 @@
 
 namespace FilterLib.Filters.Adjustments;
 
-[Filter("Adjust the red, green and blue values of each pixel by a fixed amount.")]
+[Filter("Shift the red, green, and blue channels each by a fixed amount.")]
 public sealed class ColorRGBFilter : PerPixelFilterBase
 {
     /// <summary>
