@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FilterLib.Filters;
+using NUnit.Framework;
 using System.Linq;
 
 namespace FilterLib.Tests.ReflectiveApiTests;
@@ -28,6 +29,16 @@ public class ApiTests
     [Test]
     public void TestBlendNotExists() =>
         Assert.That(ReflectiveApi.CheckBlendExists("This should not exist..."), Is.False);
+
+    [Test]
+    public void TestFilterDescriptions()
+    {
+        foreach (var type in ReflectiveApi.GetFilterTypes())
+        {
+            var attr = (FilterAttribute)type.GetCustomAttributes(typeof(FilterAttribute), false).Single();
+            Assert.That(attr.Description, Is.Not.Empty, $"Filter '{type.Name}' has no description.");
+        }
+    }
 
     [Test]
     public void TestFilterNotExistsException() =>
